@@ -2,60 +2,899 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>RMS Hospital - Effectifs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMS Hospital - Portail Officiel</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; padding: 20px; }
-        h1 { text-align: center; color: #38bdf8; }
-        table { width: 100%; max-width: 800px; margin: 20px auto; border-collapse: collapse; background: #1e293b; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #334155; }
-        th { background: #0284c7; color: white; }
-        tr:hover { background: #334155; }
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Menu de Navigation Principal */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .section-page {
+            display: none;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        /* Design Accueil */
+        .hero-banner {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .hero-banner h3 { font-size: 2rem; color: white; margin-bottom: 10px; }
+        .hero-banner p { color: #cbd5e1; max-width: 700px; }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .action-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .action-card h4 { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; }
+        .action-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Fil d'Actualité / Annonces */
+        .announcement-card {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .announcement-title {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .announcement-body {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        /* Sub-nav pour les Outils */
+        .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+        .sub-btn.active { background: var(--primary-dark); color: white; border-color: var(--primary); }
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; }
+
+        /* Formulaires & Grilles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        label { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+        input, select, textarea {
+            background: #0f172a; border: 1px solid var(--border); color: var(--text-main);
+            padding: 10px; border-radius: 6px; font-size: 0.95rem;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 80px; }
+
+        /* Facturation Layout */
+        .billing-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .billing-layout { grid-template-columns: 1fr; } }
+
+        .acts-list {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px;
+        }
+        .act-item { background: #0f172a; border: 1px solid var(--border); padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .act-item:hover { border-color: var(--primary); }
+        .act-item.selected { background: rgba(220, 38, 38, 0.15); border-color: var(--primary); }
+        .act-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
+        .act-price { color: #4ade80; font-weight: bold; }
+
+        .cart-summary {
+            background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid var(--border);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .total-display { font-size: 1.6rem; font-weight: bold; color: #4ade80; margin: 15px 0; text-align: right; }
+
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 12px 20px;
+            border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center;
+        }
+        .btn:hover { background: var(--primary-dark); }
+        .btn-secondary { background: #334155; margin-top: 10px; }
+        .btn-secondary:hover { background: #475569; }
+        .btn-danger { background: #7f1d1d; margin-top: 10px; }
+        .btn-danger:hover { background: #991b1b; }
+
+        .output-box {
+            margin-top: 20px; background: #090d16; border: 1px solid var(--border);
+            padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap;
+            font-size: 0.85rem; color: #cbd5e1; max-height: 200px; overflow-y: auto;
+        }
+
+        /* Cartes d'Effectifs */
+        .staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+        .staff-card {
+            background: #0f172a; border: 1px solid var(--border); padding: 15px;
+            border-radius: 8px; display: flex; align-items: center; gap: 15px;
+        }
+        .staff-avatar {
+            width: 50px; height: 50px; border-radius: 50%; background: var(--primary);
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;
+        }
+        .staff-info h5 { font-size: 1rem; color: var(--text-main); }
+        .staff-info p { font-size: 0.85rem; color: var(--text-muted); }
+        .staff-badge {
+            display: inline-block; background: rgba(220, 38, 38, 0.2); color: var(--primary);
+            font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-top: 4px;
+        }
+
+        /* Règlement */
+        .rules-list { line-height: 1.7; color: #cbd5e1; }
+        .rules-list h4 { color: var(--primary); margin: 15px 0 5px 0; font-size: 1.1rem; }
+        .rules-list ul { padding-left: 20px; }
+
+        /* Login Admin Box */
+        .admin-login-box {
+            max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border);
+            padding: 25px; border-radius: 10px; text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Effectifs - RMS Hospital</h1>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Membre Discord</th>
-                <th>Rôle / Grade</th>
-            </tr>
-        </thead>
-        <tbody id="staff-list">
-            <tr><td colspan="2" style="text-align: center;">Chargement des effectifs...</td></tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <header>
+            <h1>🏥 RMS HOSPITAL</h1>
+            <p>Rockford Medical Services - Portail d'Information & d'Administration</p>
+        </header>
+
+        <!-- Menu de Navigation Principal -->
+        <nav class="main-nav">
+            <button class="nav-link active" onclick="showMainSection('accueil')">🏠 Accueil</button>
+            <button class="nav-link" onclick="showMainSection('annonces')">📢 Annonces</button>
+            <button class="nav-link" onclick="showMainSection('outils')">⚡ Outils & Facturation</button>
+            <button class="nav-link" onclick="showMainSection('reglement')">📜 Règlement</button>
+            <button class="nav-link" onclick="showMainSection('effectifs')">👨‍⚕️ Effectifs</button>
+            <button class="nav-link" onclick="showMainSection('admin')">🔒 Admin</button>
+        </nav>
+
+        <!-- SECTION 1 : ACCUEIL -->
+        <section id="accueil" class="section-page active">
+            <div class="hero-banner">
+                <h3>Centre Hospitalier de Rockford</h3>
+                <p>Bienvenue sur le portail officiel du service médical d'urgence RMS Hospital. Engagement, réactivité et professionnalisme au service des citoyens 24/7.</p>
+            </div>
+
+            <h2>Accès Rapide</h2>
+            <div class="quick-actions">
+                <div class="action-card" onclick="showMainSection('annonces')">
+                    <h4>📢 Dernières Annonces</h4>
+                    <p>Consultez les notes de service, réunions et informations importantes de l'hôpital.</p>
+                </div>
+                <div class="action-card" onclick="showMainSection('outils')">
+                    <h4>💰 Facturation & Rapports</h4>
+                    <p>Générez vos factures, rapports chirurgicaux et comptes-rendus pour Discord.</p>
+                </div>
+                <div class="action-card" onclick="showMainSection('effectifs')">
+                    <h4>👨‍⚕️ L'Équipe Médicale</h4>
+                    <p>Retrouvez l'organigramme officiel et le personnel soignant actuellement enregistré.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 : ANNONCES -->
+        <section id="annonces" class="section-page">
+            <h2>📢 Fil d'Actualité & Annonces Officielles</h2>
+            <div id="announcementsContainer"></div>
+        </section>
+
+        <!-- SECTION 3 : OUTILS & FACTURATION -->
+        <section id="outils" class="section-page">
+            <h2>Générateur de Documents & Facturation</h2>
+            
+            <div class="sub-nav">
+                <button class="sub-btn active" onclick="showTool('facture-tool')">💰 Facturation</button>
+                <button class="sub-btn" onclick="showTool('op-tool')">📋 Rapport d'Opération</button>
+                <button class="sub-btn" onclick="showTool('cr-tool')">🩺 Compte-Rendu</button>
+                <button class="sub-btn" onclick="showTool('imp-tool')">⚠️ Impayés</button>
+                <button class="sub-btn" onclick="showTool('dec-tool')">⚰️ Avis de Décès</button>
+            </div>
+
+            <!-- Outil 1: Facturation -->
+            <div id="facture-tool" class="tool-panel active">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nom & Prénom du Patient</label>
+                        <input type="text" id="fact_patient" placeholder="Ex: John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Unique / Carte Vitale</label>
+                        <input type="text" id="fact_id" placeholder="Ex: #EMS-1042">
+                    </div>
+                    <div class="form-group">
+                        <label>Personnel EMS en charge</label>
+                        <input type="text" id="fact_medic" placeholder="Ex: Dr. House">
+                    </div>
+                </div>
+
+                <label style="margin-bottom: 10px; display: block;">Actes médicaux pratiqués :</label>
+                <div class="billing-layout">
+                    <div class="acts-list" id="actsContainer"></div>
+                    <div class="cart-summary">
+                        <div>
+                            <h3>Montant Total</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Les tarifs sélectionnés s'additionnent directement.</p>
+                        </div>
+                        <div>
+                            <div class="total-display" id="totalPrice">0 $</div>
+                            <button class="btn" onclick="generateFacture()">Générer pour Discord</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="output-box" id="output_facturation" style="display:none;"></div>
+                <button class="btn btn-secondary" id="copy_facturation" style="display:none;" onclick="copyToClipboard('output_facturation')">📋 Copier le texte</button>
+            </div>
+
+            <!-- Outil 2: Rapport d'opération -->
+            <div id="op-tool" class="tool-panel">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nom & Prénom du Patient</label>
+                        <input type="text" id="op_patient" placeholder="Ex: John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Unique</label>
+                        <input type="text" id="op_id" placeholder="Ex: #EMS-1042">
+                    </div>
+                    <div class="form-group">
+                        <label>Chirurgien</label>
+                        <input type="text" id="op_medic" placeholder="Ex: Dr. Watson">
+                    </div>
+                    <div class="form-group">
+                        <label>Date de l'intervention</label>
+                        <input type="date" id="op_date">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Motif / Diagnostique</label>
+                        <input type="text" id="op_reason" placeholder="Ex: Plaie par balle à la poitrine">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Détails de l'opération</label>
+                        <textarea id="op_desc" placeholder="Procédures et soins apportés..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Montant Payé ($)</label>
+                        <input type="number" id="op_paid" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Montant Dû ($)</label>
+                        <input type="number" id="op_due" value="0">
+                    </div>
+                </div>
+                <button class="btn" onclick="generateOperation()">Générer le Rapport</button>
+                <div class="output-box" id="output_operation" style="display:none;"></div>
+                <button class="btn btn-secondary" id="copy_operation" style="display:none;" onclick="copyToClipboard('output_operation')">📋 Copier pour Discord</button>
+            </div>
+
+            <!-- Outil 3: Compte Rendu -->
+            <div id="cr-tool" class="tool-panel">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nom & Prénom du Patient</label>
+                        <input type="text" id="cr_patient" placeholder="Ex: John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Unique</label>
+                        <input type="text" id="cr_id" placeholder="Ex: #EMS-1042">
+                    </div>
+                    <div class="form-group">
+                        <label>Médecin</label>
+                        <input type="text" id="cr_medic" placeholder="Ex: Dr. Grey">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Diagnostic & Soins</label>
+                        <input type="text" id="cr_care" placeholder="Ex: Examens de contrôle et prescription">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Prescriptions / Recommandations</label>
+                        <textarea id="cr_recom" placeholder="Repos prescrit, médicaments..."></textarea>
+                    </div>
+                </div>
+                <button class="btn" onclick="generateCompteRendu()">Générer le Compte-Rendu</button>
+                <div class="output-box" id="output_compterendu" style="display:none;"></div>
+                <button class="btn btn-secondary" id="copy_compterendu" style="display:none;" onclick="copyToClipboard('output_compterendu')">📋 Copier pour Discord</button>
+            </div>
+
+            <!-- Outil 4: Impayés -->
+            <div id="imp-tool" class="tool-panel">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nom & Prénom du Patient</label>
+                        <input type="text" id="imp_patient" placeholder="Ex: John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Unique</label>
+                        <input type="text" id="imp_id" placeholder="Ex: #EMS-1042">
+                    </div>
+                    <div class="form-group">
+                        <label>Montant Impayé ($)</label>
+                        <input type="number" id="imp_amount" placeholder="Ex: 1500">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Raison / Actes non réglés</label>
+                        <input type="text" id="imp_reason" placeholder="Ex: Transport d'urgence et soins">
+                    </div>
+                </div>
+                <button class="btn" onclick="generateImpaye()">Générer l'Impayé</button>
+                <div class="output-box" id="output_impaye" style="display:none;"></div>
+                <button class="btn btn-secondary" id="copy_impaye" style="display:none;" onclick="copyToClipboard('output_impaye')">📋 Copier pour Discord</button>
+            </div>
+
+            <!-- Outil 5: Décès -->
+            <div id="dec-tool" class="tool-panel">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nom du Défunt</label>
+                        <input type="text" id="dec_patient" placeholder="Ex: John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Date et Heure</label>
+                        <input type="text" id="dec_time" placeholder="Ex: 02/11/2026 à 15:45">
+                    </div>
+                    <div class="form-group">
+                        <label>Lieu du constat</label>
+                        <input type="text" id="dec_place" placeholder="Ex: Rockford Hills">
+                    </div>
+                    <div class="form-group">
+                        <label>Cause apparente</label>
+                        <input type="text" id="dec_cause" placeholder="Ex: Traumatisme sévère">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Personnel EMS</label>
+                        <input type="text" id="dec_medic" placeholder="Nom et Matricule">
+                    </div>
+                </div>
+                <button class="btn" onclick="generateDeces()">Générer le Certificat</button>
+                <div class="output-box" id="output_deces" style="display:none;"></div>
+                <button class="btn btn-secondary" id="copy_deces" style="display:none;" onclick="copyToClipboard('output_deces')">📋 Copier pour Discord</button>
+            </div>
+        </section>
+
+        <!-- SECTION 4 : RÈGLEMENT -->
+        <section id="reglement" class="section-page">
+            <h2>Code de Déontologie & Règlement Interne RMS</h2>
+            <div class="rules-list">
+                <h4>Article 1 - Devoir d'Assistance</h4>
+                <p>Tout agent du RMS Hospital a l'obligation légale et morale d'intervenir et de porter assistance à toute personne blessée ou en danger.</p>
+                <h4>Article 2 - Tenue & Équipement</h4>
+                <p>La tenue officielle doit être portée durant toute la durée de la prise de service. L'utilisation du matériel médical hors service est interdite.</p>
+                <h4>Article 3 - Priorité Radio & Communication</h4>
+                <p>La fréquence radio officielle des EMS doit rester claire. Les annonces de départ en intervention et de transport vers l'hôpital sont obligatoires.</p>
+                <h4>Article 4 - Respect de la Hiérarchie</h4>
+                <p>Les directives transmises par la Direction Médicale ou les Médecins Chefs doivent être scrupuleusement appliquées.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 5 : EFFECTIFS -->
+        <section id="effectifs" class="section-page">
+            <h2>Organigramme & Personnel RMS Hospital</h2>
+            <div class="staff-grid" id="staffContainer"></div>
+        </section>
+
+        <!-- SECTION 6 : ESPACE ADMIN -->
+        <section id="admin" class="section-page">
+            <h2>🔒 Espace d'Administration RMS</h2>
+            
+            <div id="adminLoginBox" class="admin-login-box">
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Entrez le mot de passe administrateur :</p>
+                <input type="password" id="adminPasswordInput" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
+                <button class="btn" onclick="checkAdminPassword()">Se connecter</button>
+            </div>
+
+            <div id="adminPanelContent" style="display:none;">
+                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Connecté en tant qu'Administrateur</p>
+                
+                <h3 style="margin-bottom: 15px; color: var(--primary);">1. Ajouter un Membre Manuel</h3>
+                <div class="form-grid" style="margin-bottom: 30px;">
+                    <div class="form-group">
+                        <label>Nom & Prénom / Indicatif</label>
+                        <input type="text" id="adm_member_name" placeholder="Ex: Dr. John Watson">
+                    </div>
+                    <div class="form-group">
+                        <label>Grade / Fonction</label>
+                        <input type="text" id="adm_member_role" placeholder="Ex: Chirurgien Senior">
+                    </div>
+                    <div class="form-group">
+                        <label>Département / Pôle</label>
+                        <input type="text" id="adm_member_dept" placeholder="Ex: Pôle Chirurgical">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge / Tag Court (ex: CH, DIR)</label>
+                        <input type="text" id="adm_member_tag" placeholder="Ex: CH">
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <button class="btn" onclick="addStaffMember()">Ajouter le membre à l'effectif</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px; color: var(--primary);">2. Publier une Annonce Officielle</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Titre de l'annonce</label>
+                        <input type="text" id="adm_ann_title" placeholder="Ex: Réunion obligatoire ce vendredi">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Contenu de l'annonce</label>
+                        <textarea id="adm_ann_content" placeholder="Détails de l'annonce..."></textarea>
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <button class="btn" onclick="addAnnouncement()">Publier l'annonce sur le portail</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <button class="btn btn-danger" onclick="resetDefaultData()">Réinitialiser les données par défaut</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
 
     <script>
-        async function loadStaff() {
+        // Tarifs RMS Hospital
+        const acts = [
+            { name: "Petit soin", price: 250 },
+            { name: "Gros soin", price: 500 },
+            { name: "Consultation en urgence", price: 500 },
+            { name: "Soins de Réhabilitation", price: 1000 },
+            { name: "Surveillance à Domicile", price: 500 },
+            { name: "Équipement Médical Spécifique", price: 2500 },
+            { name: "Services de Transport", price: 500 },
+            { name: "Consultation en Télémédecine", price: 2000 },
+            { name: "Soins Pédiatriques", price: 500 },
+            { name: "Tests de Diagnostic Avancés", price: 3000 },
+            { name: "Suture des plaies", price: 500 },
+            { name: "Plâtre ou attelle", price: 500 },
+            { name: "Traitement des brûlures", price: 1000 },
+            { name: "Désintoxication d'urgence", price: 1500 },
+            { name: "Gestion des blessures par balle", price: 2000 },
+            { name: "Extraction d'éclats (verre/métal)", price: 500 },
+            { name: "Test de toxicologie", price: 500 },
+            { name: "Réhydratation (perfusion)", price: 500 },
+            { name: "Traitement post-traumatique", price: 1000 },
+            { name: "Accouchement d'urgence", price: 2000 }
+        ];
+
+        let selectedActs = [];
+
+        function initActs() {
+            const container = document.getElementById('actsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            acts.forEach((act, index) => {
+                const div = document.createElement('div');
+                div.className = 'act-item';
+                div.onclick = () => toggleAct(index, div);
+                div.innerHTML = `
+                    <div class="act-name">${act.name}</div>
+                    <div class="act-price">${act.price} $</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleAct(index, element) {
+            const act = acts[index];
+            const idx = selectedActs.findIndex(a => a.name === act.name);
+            if (idx > -1) {
+                selectedActs.splice(idx, 1);
+                element.classList.remove('selected');
+            } else {
+                selectedActs.push(act);
+                element.classList.add('selected');
+            }
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const total = selectedActs.reduce((sum, act) => sum + act.price, 0);
+            document.getElementById('totalPrice').innerText = total + " $";
+        }
+
+        // Navigation entre sections principales
+        function showMainSection(sectionId) {
+            document.querySelectorAll('.section-page').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            
+            const targetSection = document.getElementById(sectionId);
+            if(targetSection) targetSection.classList.add('active');
+            
+            // Met en surbrillance le bouton de navigation actif
+            const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => btn.getAttribute('onclick').includes(sectionId));
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Navigation entre onglets d'outils
+        function showTool(toolId) {
+            document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            
+            const targetTool = document.getElementById(toolId);
+            if(targetTool) targetTool.classList.add('active');
+            
+            const activeSubBtn = Array.from(document.querySelectorAll('.sub-btn')).find(b => b.getAttribute('onclick').includes(toolId));
+            if(activeSubBtn) activeSubBtn.classList.add('active');
+        }
+
+        // Récupération des effectifs (Depuis Netlify API ou LocalStorage)
+        async function renderStaff() {
+            const container = document.getElementById('staffContainer');
+            if(!container) return;
+            
+            let staff = [];
+
             try {
+                // Tente de récupérer les membres en direct envoyés par le bot Discord via Netlify
                 const response = await fetch('/.netlify/functions/sync');
-                const data = await response.json();
-                
-                const tableBody = document.getElementById('staff-list');
-                tableBody.innerHTML = "";
-
-                if (!data || data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="2" style="text-align: center;">Aucun effectif synchronisé pour le moment.</td></tr>`;
-                    return;
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        staff = data;
+                    }
                 }
+            } catch (e) {
+                console.log("Lecture API locale ou données de secours.");
+            }
 
-                data.forEach(member => {
-                    const row = `<tr>
-                        <td>${member.name}</td>
-                        <td>${member.role}</td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
-                });
-            } catch (error) {
-                console.error("Erreur :", error);
-                document.getElementById('staff-list').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #ef4444;">Erreur de chargement des effectifs.</td></tr>`;
+            // Si aucune donnée serveur, fallback sur le localStorage / données par défaut
+            if (staff.length === 0) {
+                let stored = localStorage.getItem('rms_staff');
+                staff = stored ? JSON.parse(stored) : [
+                    { name: "Direction RMS", role: "Directeur Général", dept: "Direction", tag: "DIR" },
+                    { name: "Dr. Watson", role: "Chef Médecin", dept: "Pôle Médical", tag: "CH" }
+                ];
+            }
+
+            container.innerHTML = '';
+            staff.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'staff-card';
+                card.innerHTML = `
+                    <div class="staff-avatar">${member.tag || 'RMS'}</div>
+                    <div class="staff-info">
+                        <h5>${member.name}</h5>
+                        <p>${member.role} - ${member.dept}</p>
+                        <span class="staff-badge">Actif</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Gestion des Annonces
+        function getStoredAnnouncements() {
+            let defaultAnn = [
+                { title: "Ouverture officielle du portail RMS", date: "02/11/2026", content: "Bienvenue sur notre nouveau portail de facturation et de rapports médicaux. Pensez à utiliser l'outil pour chaque intervention." },
+                { title: "Rappel : Port de la tenue obligatoire", date: "01/11/2026", content: "Il est rappelé à l'ensemble du personnel que le port de l'uniforme réglementaire est exigé dès la prise de service." }
+            ];
+            let stored = localStorage.getItem('rms_announcements');
+            return stored ? JSON.parse(stored) : defaultAnn;
+        }
+
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsContainer');
+            if(!container) return;
+            const anns = getStoredAnnouncements();
+            container.innerHTML = '';
+            anns.forEach(ann => {
+                const box = document.createElement('div');
+                box.className = 'announcement-card';
+                box.innerHTML = `
+                    <div class="announcement-header">
+                        <span>🏥 Direction RMS Hospital</span>
+                        <span>📅 ${ann.date}</span>
+                    </div>
+                    <div class="announcement-title">${ann.title}</div>
+                    <div class="announcement-body">${ann.content}</div>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        // Générateurs de texte Discord
+        function generateFacture() {
+            const patient = document.getElementById('fact_patient').value || "N/A";
+            const id = document.getElementById('fact_id').value || "N/A";
+            const medic = document.getElementById('fact_medic').value || "N/A";
+            const total = document.getElementById('totalPrice').innerText;
+
+            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n`;
+            text += `👤 Patient : ${patient} (${id})\n`;
+            text += `👨‍⚕️ Soignant : ${medic}\n`;
+            text += `📋 Actes réalisés :\n`;
+            if (selectedActs.length === 0) {
+                text += ` - Consultation / Soins généraux\n`;
+            } else {
+                selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
+            }
+            text += `💵 MONTANT TOTAL : ${total}\n`;
+            text += `==============================`;
+
+            showOutput('output_facturation', 'copy_facturation', text);
+        }
+
+        function generateOperation() {
+            const patient = document.getElementById('op_patient').value || "N/A";
+            const id = document.getElementById('op_id').value || "N/A";
+            const medic = document.getElementById('op_medic').value || "N/A";
+            const date = document.getElementById('op_date').value || "N/A";
+            const reason = document.getElementById('op_reason').value || "N/A";
+            const desc = document.getElementById('op_desc').value || "N/A";
+            const paid = document.getElementById('op_paid').value || "0";
+            const due = document.getElementById('op_due').value || "0";
+
+            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n`;
+            text += `👤 Patient : ${patient} (${id})\n`;
+            text += `👨‍⚕️ Chirurgien : ${medic}\n`;
+            text += `📅 Date : ${date}\n`;
+            text += `🩺 Motif : ${reason}\n`;
+            text += `📝 Procédure : ${desc}\n`;
+            text += `💰 Règlement : ${paid} $ payés | ${due} $ dus\n`;
+            text += `==============================`;
+
+            showOutput('output_operation', 'copy_operation', text);
+        }
+
+        function generateCompteRendu() {
+            const patient = document.getElementById('cr_patient').value || "N/A";
+            const id = document.getElementById('cr_id').value || "N/A";
+            const medic = document.getElementById('cr_medic').value || "N/A";
+            const care = document.getElementById('cr_care').value || "N/A";
+            const recom = document.getElementById('cr_recom').value || "N/A";
+
+            let text = `=== 🩺 COMPTE-RENDU MÉRICAL ===\n`;
+            text += `👤 Patient : ${patient} (${id})\n`;
+            text += `👨‍⚕️ Médecin : ${medic}\n`;
+            text += `🏥 Soins apportés : ${care}\n`;
+            text += `💊 Recommandations : ${recom}\n`;
+            text += `==============================`;
+
+            showOutput('output_compterendu', 'copy_compterendu', text);
+        }
+
+        function generateImpaye() {
+            const patient = document.getElementById('imp_patient').value || "N/A";
+            const id = document.getElementById('imp_id').value || "N/A";
+            const amount = document.getElementById('imp_amount').value || "0";
+            const reason = document.getElementById('imp_reason').value || "N/A";
+
+            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n`;
+            text += `👤 Patient concerné : ${patient} (${id})\n`;
+            text += `💵 Montant dû : ${amount} $\n`;
+            text += `❓ Raison : ${reason}\n`;
+            text += `⚠️ Merci de régulariser la situation auprès de la Direction RMS sous 48h.\n`;
+            text += `====================================`;
+
+            showOutput('output_impaye', 'copy_impaye', text);
+        }
+
+        function generateDeces() {
+            const patient = document.getElementById('dec_patient').value || "N/A";
+            const time = document.getElementById('dec_time').value || "N/A";
+            const place = document.getElementById('dec_place').value || "N/A";
+            const cause = document.getElementById('dec_cause').value || "N/A";
+            const medic = document.getElementById('dec_medic').value || "N/A";
+
+            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n`;
+            text += `👤 Nom du défunt : ${patient}\n`;
+            text += `🕒 Date & Heure : ${time}\n`;
+            text += `📍 Lieu : ${place}\n`;
+            text += `⚠️ Cause apparente : ${cause}\n`;
+            text += `👨‍⚕️ Constaté par : ${medic}\n`;
+            text += `==============================`;
+
+            showOutput('output_deces', 'copy_deces', text);
+        }
+
+        function showOutput(outputId, copyBtnId, text) {
+            const out = document.getElementById(outputId);
+            const btn = document.getElementById(copyBtnId);
+            out.innerText = text;
+            out.style.display = 'block';
+            btn.style.display = 'block';
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Texte copié dans le presse-papier !");
+            });
+        }
+
+        // Section Administration
+        function checkAdminPassword() {
+            const pwd = document.getElementById('adminPasswordInput').value;
+            if (pwd === "20070305") {
+                document.getElementById('adminLoginBox').style.display = 'none';
+                document.getElementById('adminPanelContent').style.display = 'block';
+            } else {
+                alert("Mot de passe incorrect.");
             }
         }
-        
-        loadStaff();
+
+        function addStaffMember() {
+            const name = document.getElementById('adm_member_name').value;
+            const role = document.getElementById('adm_member_role').value;
+            const dept = document.getElementById('adm_member_dept').value;
+            const tag = document.getElementById('adm_member_tag').value || 'RMS';
+
+            if (!name || !role) {
+                alert("Veuillez remplir au moins le nom et le rôle.");
+                return;
+            }
+
+            let staff = JSON.parse(localStorage.getItem('rms_staff')) || [];
+            staff.push({ name, role, dept, tag });
+            localStorage.setItem('rms_staff', JSON.stringify(staff));
+
+            renderStaff();
+            alert(`Membre ${name} ajouté avec succès !`);
+        }
+
+        function addAnnouncement() {
+            const title = document.getElementById('adm_ann_title').value;
+            const content = document.getElementById('adm_ann_content').value;
+            const date = new Date().toLocaleDateString('fr-FR');
+
+            if (!title || !content) {
+                alert("Veuillez remplir le titre et le contenu.");
+                return;
+            }
+
+            let anns = getStoredAnnouncements();
+            anns.unshift({ title, date, content });
+            localStorage.setItem('rms_announcements', JSON.stringify(anns));
+
+            renderAnnouncements();
+            alert("Annonce publiée !");
+        }
+
+        function resetDefaultData() {
+            if (confirm("Voulez-vous réinitialiser toutes les données locales ?")) {
+                localStorage.removeItem('rms_staff');
+                localStorage.removeItem('rms_announcements');
+                renderStaff();
+                renderAnnouncements();
+                alert("Données réinitialisées.");
+            }
+        }
+
+        // Initialisation de la page
+        window.onload = () => {
+            initActs();
+            renderStaff();
+            renderAnnouncements();
+        };
     </script>
 </body>
 </html>
