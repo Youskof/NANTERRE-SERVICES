@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>RMS Hospital - Effectifs</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; padding: 20px; }
+        h1 { text-align: center; color: #38bdf8; }
+        table { width: 100%; max-width: 800px; margin: 20px auto; border-collapse: collapse; background: #1e293b; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #334155; }
+        th { background: #0284c7; color: white; }
+        tr:hover { background: #334155; }
+    </style>
+</head>
+<body>
+
+    <h1>Effectifs - RMS Hospital</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Membre Discord</th>
+                <th>Rôle / Grade</th>
+            </tr>
+        </thead>
+        <tbody id="staff-list">
+            <tr><td colspan="2" style="text-align: center;">Chargement des effectifs...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        async function loadStaff() {
+            try {
+                const response = await fetch('/.netlify/functions/sync');
+                const data = await response.json();
+                
+                const tableBody = document.getElementById('staff-list');
+                tableBody.innerHTML = "";
+
+                if (!data || data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="2" style="text-align: center;">Aucun effectif synchronisé pour le moment.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(member => {
+                    const row = `<tr>
+                        <td>${member.name}</td>
+                        <td>${member.role}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Erreur :", error);
+                document.getElementById('staff-list').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #ef4444;">Erreur de chargement des effectifs.</td></tr>`;
+            }
+        }
+        
+        loadStaff();
+    </script>
+</body>
+</html>
