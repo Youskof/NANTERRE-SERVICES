@@ -831,14 +831,16 @@
             });
         }
 
-        // Section Administration
+        // Section Administration sécurisée
         function checkAdminPassword() {
             const pwd = document.getElementById('adminPasswordInput').value;
-            if (pwd === "20070305") {
+            if (pwd && pwd.trim().length > 0) {
+                // On masque le champ de connexion et on affiche le panneau admin
+                // Le mot de passe sera validé par l'API lors des actions d'administration
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
             } else {
-                alert("Mot de passe incorrect.");
+                alert("Veuillez entrer un mot de passe.");
             }
         }
 
