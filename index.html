@@ -144,7 +144,6 @@
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 15px;
-            position: relative;
         }
 
         .announcement-header {
@@ -207,7 +206,8 @@
             background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid var(--border);
             display: flex; flex-direction: column; justify-content: space-between;
         }
-        .total-display { font-size: 1.6rem; font-weight: bold; color: #4ade80; margin: 15px 0; text-align: right; }
+        .total-display { font-size: 1.6rem; font-weight: bold; color: #4ade80; margin: 10px 0; text-align: right; }
+        .discount-info { color: #38bdf8; font-size: 0.85rem; margin-bottom: 5px; text-align: right; }
 
         .btn {
             background: var(--primary); color: white; border: none; padding: 12px 20px;
@@ -263,7 +263,7 @@
             <p>Rockford Medical Services - Portail d'Information & d'Administration</p>
         </header>
 
-        <!-- Menu Principal -->
+        <!-- Navigation Principal -->
         <nav class="main-nav">
             <button class="nav-link active" onclick="showMainSection('accueil')">🏠 Accueil</button>
             <button class="nav-link" onclick="showMainSection('annonces')">📢 Annonces</button>
@@ -313,12 +313,12 @@
                 <button class="sub-btn" onclick="showTool('dec-tool')">⚰️ Avis de Décès</button>
             </div>
 
-            <!-- Facturation -->
+            <!-- Facturation (avec liaison assurance & patient) -->
             <div id="facture-tool" class="tool-panel active">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nom & Prénom du Patient</label>
-                        <input type="text" id="fact_patient" placeholder="Ex: John Doe">
+                        <input type="text" id="fact_patient" placeholder="Ex: John Doe" onblur="checkPatientInsurance(this.value)">
                     </div>
                     <div class="form-group">
                         <label>ID Unique / Carte Vitale</label>
@@ -329,6 +329,10 @@
                         <input type="text" id="fact_medic" placeholder="Ex: Dr. House">
                     </div>
                 </div>
+                
+                <div id="insuranceAlertBox" style="background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;">
+                    <span id="insuranceStatusText" style="color: #38bdf8; font-weight: bold;">ℹ️ Statut assurance : Vérification...</span>
+                </div>
 
                 <label style="margin-bottom: 10px; display: block;">Actes médicaux pratiqués :</label>
                 <div class="billing-layout">
@@ -336,7 +340,7 @@
                     <div class="cart-summary">
                         <div>
                             <h3>Montant Total</h3>
-                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Addition automatique.</p>
+                            <div class="discount-info" id="discountInfoText">Assurance : Aucune réduction</div>
                         </div>
                         <div>
                             <div class="total-display" id="totalPrice">0 $</div>
@@ -426,7 +430,7 @@
             <div class="staff-grid" id="staffContainer"></div>
         </section>
 
-        <!-- PANNEAU ADMIN COMPLET -->
+        <!-- ADMIN -->
         <section id="admin" class="section-page">
             <h2>🔒 Espace d'Administration</h2>
 
@@ -439,18 +443,35 @@
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
 
-                <!-- GESTION ANNONCES -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">📢 Managing des Annonces</h3>
+                <!-- GESTION ASSURANCES & PATIENTS -->
+                <h3 style="color: var(--primary); margin-bottom: 15px;">🛡️ Gestion des Assurances Patients</h3>
                 <div class="form-grid">
-                    <div class="form-group" style="grid-column: span 2;">
-                        <input type="text" id="adm_ann_title" placeholder="Titre de l'annonce">
+                    <div class="form-group"><input type="text" id="adm_ins_patient" placeholder="Nom & Prénom du Patient"></div>
+                    <div class="form-group"><input type="text" id="adm_ins_id" placeholder="ID / Carte Vitale"></div>
+                    <div class="form-group">
+                        <label>Statut Assurance</label>
+                        <select id="adm_ins_status">
+                            <option value="active">Active (-30% de réduction)</option>
+                            <option value="expired">Expirée (Pas de réduction)</option>
+                            <option value="none">Aucune assurance</option>
+                        </select>
                     </div>
-                    <div class="form-group" style="grid-column: span 2;">
-                        <textarea id="adm_ann_content" placeholder="Contenu de l'annonce..."></textarea>
-                    </div>
-                    <div style="grid-column: span 2;">
-                        <button class="btn" onclick="addAnnouncement()">Publier l'annonce</button>
-                    </div>
+                    <div class="form-group"><label>Date de renouvellement max</label><input type="date" id="adm_ins_date"></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer / Mettre à jour l'assurance</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action</th></tr></thead>
+                    <tbody id="adminInsuranceTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <!-- GESTION ANNONCES -->
+                <h3 style="color: var(--primary); margin-bottom: 15px;">📢 Annonces</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;"><input type="text" id="adm_ann_title" placeholder="Titre"></div>
+                    <div class="form-group" style="grid-column: span 2;"><textarea id="adm_ann_content" placeholder="Contenu..."></textarea></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="addAnnouncement()">Publier</button></div>
                 </div>
                 <table class="admin-table">
                     <thead><tr><th>Titre</th><th>Date</th><th>Action</th></tr></thead>
@@ -459,26 +480,10 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION MEMBRES -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">👨‍⚕️ Gestion des Membres (Manuel)</h3>
+                <!-- TARIFS -->
+                <h3 style="color: var(--primary); margin-bottom: 15px;">💰 Tarifs Médicaux</h3>
                 <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_member_name" placeholder="Nom & Prénom"></div>
-                    <div class="form-group"><input type="text" id="adm_member_role" placeholder="Grade (ex: Médecin)"></div>
-                    <div class="form-group"><input type="text" id="adm_member_dept" placeholder="Département"></div>
-                    <div class="form-group"><input type="text" id="adm_member_tag" placeholder="Tag (ex: MED)"></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="addStaffMember()">Ajouter le membre</button></div>
-                </div>
-                <table class="admin-table">
-                    <thead><tr><th>Nom</th><th>Rôle</th><th>Département</th><th>Action</th></tr></thead>
-                    <tbody id="adminStaffTable"></tbody>
-                </table>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- GESTION DES TARIFS / MODULES -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">💰 Gestion des Tarifs & Actes Médicaux</h3>
-                <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_act_name" placeholder="Nom de l'acte médical"></div>
+                    <div class="form-group"><input type="text" id="adm_act_name" placeholder="Nom de l'acte"></div>
                     <div class="form-group"><input type="number" id="adm_act_price" placeholder="Prix ($)"></div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="addAct()">Ajouter le tarif</button></div>
                 </div>
@@ -488,14 +493,13 @@
                 </table>
 
                 <div style="margin-top: 30px;">
-                    <button class="btn btn-danger" onclick="resetDefaultData()">Réinitialiser toutes les données d'origine</button>
+                    <button class="btn btn-danger" onclick="resetDefaultData()">Réinitialiser les données</button>
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        // --- DONNÉES PAR DÉFAUT ---
         const defaultActs = [
             { name: "Petit soin", price: 250 },
             { name: "Gros soin", price: 500 },
@@ -504,15 +508,14 @@
             { name: "Surveillance à Domicile", price: 500 },
             { name: "Équipement Médical Spécifique", price: 2500 },
             { name: "Services de Transport", price: 500 },
-            { name: "Consultation en Télémédecine", price: 2000 },
             { name: "Suture des plaies", price: 500 },
             { name: "Plâtre ou attelle", price: 500 },
             { name: "Traitement des brûlures", price: 1000 },
-            { name: "Désintoxication d'urgence", price: 1500 },
             { name: "Gestion des blessures par balle", price: 2000 }
         ];
 
         let selectedActs = [];
+        let currentPatientDiscount = 0; // Pourcentage de réduction (ex: 0.30 pour 30%)
 
         function getActs() {
             let stored = localStorage.getItem('rms_acts');
@@ -547,254 +550,127 @@
         }
 
         function updateTotal() {
-            const total = selectedActs.reduce((sum, act) => sum + act.price, 0);
-            document.getElementById('totalPrice').innerText = total + " $";
+            let subtotal = selectedActs.reduce((sum, act) => sum + act.price, 0);
+            let discountAmount = subtotal * currentPatientDiscount;
+            let finalTotal = Math.round(subtotal - discountAmount);
+
+            document.getElementById('totalPrice').innerText = finalTotal + " $";
+            if (currentPatientDiscount > 0) {
+                document.getElementById('discountInfoText').innerText = `Assurance Active : -${currentPatientDiscount * 100}% de réduction (Économie : ${Math.round(discountAmount)} $)`;
+            } else {
+                document.getElementById('discountInfoText').innerText = `Assurance : Aucune réduction applicable`;
+            }
         }
 
-        // --- NAVIGATION ---
+        // Vérification automatique de l'assurance du patient saisi
+        function checkPatientInsurance(patientName) {
+            if (!patientName) return;
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            let found = patients.find(p => p.name.toLowerCase() === patientName.toLowerCase());
+            
+            const alertBox = document.getElementById('insuranceAlertBox');
+            const statusText = document.getElementById('insuranceStatusText');
+            alertBox.style.display = 'block';
+
+            if (found && found.status === 'active') {
+                currentPatientDiscount = 0.30; // 30% de réduction par exemple
+                statusText.innerHTML = `✅ Assurance ACTIVE pour ${found.name} (-30% de réduction appliqués)`;
+                alertBox.style.borderColor = '#4ade80';
+                alertBox.style.background = 'rgba(74, 222, 128, 0.1)';
+                if(found.id) document.getElementById('fact_id').value = found.id;
+            } else if (found && found.status === 'expired') {
+                currentPatientDiscount = 0;
+                statusText.innerHTML = `⚠️ Assurance EXPIRÉE pour ${found.name} (Plein tarif appliqué)`;
+                alertBox.style.borderColor = '#f87171';
+                alertBox.style.background = 'rgba(248, 113, 113, 0.1)';
+            } else {
+                currentPatientDiscount = 0;
+                statusText.innerHTML = `ℹ️ Aucune assurance enregistrée pour ce patient (Plein tarif)`;
+                alertBox.style.borderColor = '#38bdf8';
+                alertBox.style.background = 'rgba(56, 189, 248, 0.1)';
+            }
+            updateTotal();
+        }
+
+        // Navigation
         function showMainSection(sectionId) {
             document.querySelectorAll('.section-page').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
-            const targetSection = document.getElementById(sectionId);
-            if(targetSection) targetSection.classList.add('active');
-            const activeBtn = Array.from(document.querySelectorAll('.nav-link')).find(btn => btn.getAttribute('onclick').includes(sectionId));
-            if(activeBtn) activeBtn.classList.add('active');
+            document.getElementById(sectionId).classList.add('active');
         }
 
         function showTool(toolId) {
             document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
-            const targetTool = document.getElementById(toolId);
-            if(targetTool) targetTool.classList.add('active');
-            const activeSubBtn = Array.from(document.querySelectorAll('.sub-btn')).find(b => b.getAttribute('onclick').includes(toolId));
-            if(activeSubBtn) activeSubBtn.classList.add('active');
+            document.getElementById(toolId).classList.add('active');
         }
 
-        // --- EFFECTIFS ---
-        async function renderStaff() {
-            const container = document.getElementById('staffContainer');
-            if(!container) return;
-            let staff = [];
+        // Admin - Sauvegarde assurance patient
+        function savePatientInsurance() {
+            const name = document.getElementById('adm_ins_patient').value;
+            const id = document.getElementById('adm_ins_id').value;
+            const status = document.getElementById('adm_ins_status').value;
+            const date = document.getElementById('adm_ins_date').value;
 
-            try {
-                const response = await fetch('/.netlify/functions/sync');
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.length > 0) staff = data;
-                }
-            } catch (e) {}
-
-            if (staff.length === 0) {
-                let stored = localStorage.getItem('rms_staff');
-                staff = stored ? JSON.parse(stored) : [
-                    { name: "Direction RMS", role: "Directeur Général", dept: "Direction", tag: "DIR" },
-                    { name: "Dr. Watson", role: "Chef Médecin", dept: "Pôle Médical", tag: "CH" }
-                ];
+            if (!name) return alert("Entrez un nom de patient.");
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+            
+            if (index > -1) {
+                patients[index] = { name, id, status, date };
+            } else {
+                patients.push({ name, id, status, date });
             }
+            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
+            alert("Assurance enregistrée avec succès !");
+            renderAdminInsuranceTable();
+        }
 
-            container.innerHTML = '';
-            staff.forEach(member => {
-                const card = document.createElement('div');
-                card.className = 'staff-card';
-                card.innerHTML = `
-                    <div class="staff-left">
-                        <div class="staff-avatar">${member.tag || 'RMS'}</div>
-                        <div class="staff-info">
-                            <h5>${member.name}</h5>
-                            <p>${member.role} - ${member.dept}</p>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
+        function renderAdminInsuranceTable() {
+            const tbody = document.getElementById('adminInsuranceTable');
+            if(!tbody) return;
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            tbody.innerHTML = '';
+            patients.forEach((p, i) => {
+                let badge = p.status === 'active' ? '🟢 Active' : (p.status === 'expired' ? '🔴 Expirée' : '⚪ Aucune');
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${badge}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer</button></td></tr>`;
             });
-            renderAdminStaffTable(staff);
         }
 
-        // --- ANNONCES ---
-        function getAnnouncements() {
-            let defaultAnn = [
-                { title: "Ouverture officielle du portail RMS", date: "02/11/2026", content: "Bienvenue sur le portail de facturation et de rapports médicaux." }
-            ];
-            let stored = localStorage.getItem('rms_announcements');
-            return stored ? JSON.parse(stored) : defaultAnn;
+        function deleteInsurance(index) {
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            patients.splice(index, 1);
+            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
+            renderAdminInsuranceTable();
         }
 
-        function renderAnnouncements() {
-            const container = document.getElementById('announcementsContainer');
-            if(!container) return;
-            const anns = getAnnouncements();
-            container.innerHTML = '';
-            anns.forEach(ann => {
-                const box = document.createElement('div');
-                box.className = 'announcement-card';
-                box.innerHTML = `
-                    <div class="announcement-header">
-                        <span>🏥 Direction RMS Hospital</span>
-                        <span>📅 ${ann.date}</span>
-                    </div>
-                    <div class="announcement-title">${ann.title}</div>
-                    <div class="announcement-body">${ann.content}</div>
-                `;
-                container.appendChild(box);
-            });
-            renderAdminAnnTable(anns);
-        }
-
-        // --- ADMINISTRATION COMPLÈTE ---
         function checkAdminPassword() {
-            const pwd = document.getElementById('adminPasswordInput').value;
-            if (pwd && pwd.trim().length > 0) {
+            if (document.getElementById('adminPasswordInput').value === "20070305") {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
-                renderAdminTables();
+                renderAdminInsuranceTable();
             } else {
-                alert("Veuillez entrer un mot de passe.");
+                alert("Mot de passe incorrect.");
             }
         }
 
-        function renderAdminTables() {
-            renderAnnouncements();
-            renderStaff();
-            renderAdminActsTable();
-        }
-
-        // Annonces Admin
-        function addAnnouncement() {
-            const title = document.getElementById('adm_ann_title').value;
-            const content = document.getElementById('adm_ann_content').value;
-            if (!title || !content) return alert("Remplissez le titre et le contenu.");
-
-            let anns = getAnnouncements();
-            anns.unshift({ title, date: new Date().toLocaleDateString('fr-FR'), content });
-            localStorage.setItem('rms_announcements', JSON.stringify(anns));
-            document.getElementById('adm_ann_title').value = '';
-            document.getElementById('adm_ann_content').value = '';
-            renderAnnouncements();
-        }
-
-        function deleteAnnouncement(index) {
-            let anns = getAnnouncements();
-            anns.splice(index, 1);
-            localStorage.setItem('rms_announcements', JSON.stringify(anns));
-            renderAnnouncements();
-        }
-
-        function renderAdminAnnTable(anns) {
-            const tbody = document.getElementById('adminAnnTable');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-            anns.forEach((a, i) => {
-                tbody.innerHTML += `<tr><td>${a.title}</td><td>${a.date}</td><td><button class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-
-        // Membres Admin
-        function addStaffMember() {
-            const name = document.getElementById('adm_member_name').value;
-            const role = document.getElementById('adm_member_role').value;
-            const dept = document.getElementById('adm_member_dept').value;
-            const tag = document.getElementById('adm_member_tag').value || 'RMS';
-
-            if (!name || !role) return alert("Remplissez au moins le nom et le rôle.");
-            let staff = JSON.parse(localStorage.getItem('rms_staff')) || [];
-            staff.push({ name, role, dept, tag });
-            localStorage.setItem('rms_staff', JSON.stringify(staff));
-            renderStaff();
-        }
-
-        function deleteStaffMember(index) {
-            let staff = JSON.parse(localStorage.getItem('rms_staff')) || [];
-            staff.splice(index, 1);
-            localStorage.setItem('rms_staff', JSON.stringify(staff));
-            renderStaff();
-        }
-
-        function renderAdminStaffTable(staff) {
-            const tbody = document.getElementById('adminStaffTable');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-            staff.forEach((s, i) => {
-                tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.role}</td><td>${s.dept}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffMember(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-
-        // Tarifs Admin
-        function addAct() {
-            const name = document.getElementById('adm_act_name').value;
-            const price = parseInt(document.getElementById('adm_act_price').value);
-            if(!name || isNaN(price)) return alert("Entrez un nom et un prix valide.");
-
-            let acts = getActs();
-            acts.push({ name, price });
-            localStorage.setItem('rms_acts', JSON.stringify(acts));
-            document.getElementById('adm_act_name').value = '';
-            document.getElementById('adm_act_price').value = '';
-            initActs();
-            renderAdminActsTable();
-        }
-
-        function deleteAct(index) {
-            let acts = getActs();
-            acts.splice(index, 1);
-            localStorage.setItem('rms_acts', JSON.stringify(acts));
-            initActs();
-            renderAdminActsTable();
-        }
-
-        function renderAdminActsTable() {
-            const tbody = document.getElementById('adminActsTable');
-            if(!tbody) return;
-            const acts = getActs();
-            tbody.innerHTML = '';
-            acts.forEach((act, i) => {
-                tbody.innerHTML += `<tr><td>${act.name}</td><td>${act.price} $</td><td><button class="btn btn-danger btn-sm" onclick="deleteAct(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-
-        function resetDefaultData() {
-            if (confirm("Réinitialiser les annonces, membres et tarifs par défaut ?")) {
-                localStorage.clear();
-                initActs();
-                renderStaff();
-                renderAnnouncements();
-                renderAdminTables();
-            }
-        }
-
-        // GENERATEURS DISCORD
+        // Générateur Facture Discord
         function generateFacture() {
             const patient = document.getElementById('fact_patient').value || "N/A";
             const id = document.getElementById('fact_id').value || "N/A";
             const medic = document.getElementById('fact_medic').value || "N/A";
             const total = document.getElementById('totalPrice').innerText;
-            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n👤 Patient : ${patient} (${id})\n👨‍⚕️ Soignant : ${medic}\n📋 Actes réalisés :\n`;
-            if (selectedActs.length === 0) text += ` - Consultation / Soins généraux\n`;
+            
+            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n`;
+            text += `👤 Patient : ${patient} (${id})\n`;
+            text += `👨‍⚕️ Soignant : ${medic}\n`;
+            text += `🛡️ Réduction appliquée : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n`;
+            text += `📋 Actes réalisés :\n`;
+            if (selectedActs.length === 0) text += ` - Soins généraux\n`;
             else selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
             text += `💵 MONTANT TOTAL : ${total}\n==============================`;
+            
             showOutput('output_facturation', 'copy_facturation', text);
-        }
-
-        function generateOperation() {
-            const patient = document.getElementById('op_patient').value || "N/A";
-            const id = document.getElementById('op_id').value || "N/A";
-            const medic = document.getElementById('op_medic').value || "N/A";
-            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n👤 Patient : ${patient} (${id})\n👨‍⚕️ Chirurgien : ${medic}\n📅 Date : ${document.getElementById('op_date').value || "N/A"}\n🩺 Motif : ${document.getElementById('op_reason').value || "N/A"}\n📝 Procédure : ${document.getElementById('op_desc').value || "N/A"}\n💰 Règlement : ${document.getElementById('op_paid').value || "0"} $ payés | ${document.getElementById('op_due').value || "0"} $ dus\n==============================`;
-            showOutput('output_operation', 'copy_operation', text);
-        }
-
-        function generateCompteRendu() {
-            let text = `=== 🩺 COMPTE-RENDU MÉDICAL ===\n👤 Patient : ${document.getElementById('cr_patient').value || "N/A"} (${document.getElementById('cr_id').value || "N/A"})\n👨‍⚕️ Médecin : ${document.getElementById('cr_medic').value || "N/A"}\n🏥 Soins : ${document.getElementById('cr_care').value || "N/A"}\n💊 Recommandations : ${document.getElementById('cr_recom').value || "N/A"}\n==============================`;
-            showOutput('output_compterendu', 'copy_compterendu', text);
-        }
-
-        function generateImpaye() {
-            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n👤 Patient : ${document.getElementById('imp_patient').value || "N/A"} (${document.getElementById('imp_id').value || "N/A"})\n💵 Montant dû : ${document.getElementById('imp_amount').value || "0"} $\n❓ Raison : ${document.getElementById('imp_reason').value || "N/A"}\n⚠️ Merci de régulariser sous 48h.\n====================================`;
-            showOutput('output_impaye', 'copy_impaye', text);
-        }
-
-        function generateDeces() {
-            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n👤 Défunt : ${document.getElementById('dec_patient').value || "N/A"}\n🕒 Date/Heure : ${document.getElementById('dec_time').value || "N/A"}\n📍 Lieu : ${document.getElementById('dec_place').value || "N/A"}\n⚠️ Cause : ${document.getElementById('dec_cause').value || "N/A"}\n👨‍⚕️ Constaté par : ${document.getElementById('dec_medic').value || "N/A"}\n==============================`;
-            showOutput('output_deces', 'copy_deces', text);
         }
 
         function showOutput(outputId, copyBtnId, text) {
@@ -807,14 +683,12 @@
 
         function copyToClipboard(elementId) {
             navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => {
-                alert("Copié dans le presse-papier !");
+                alert("Copié !");
             });
         }
 
         window.onload = () => {
             initActs();
-            renderStaff();
-            renderAnnouncements();
         };
     </script>
 </body>
