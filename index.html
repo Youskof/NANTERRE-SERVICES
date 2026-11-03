@@ -217,6 +217,8 @@
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
         .btn-secondary:hover { background: #475569; }
+        .btn-discord { background: #5865F2; margin-top: 10px; }
+        .btn-discord:hover { background: #4752C4; }
         .btn-danger { background: #7f1d1d; }
         .btn-danger:hover { background: #991b1b; }
 
@@ -265,13 +267,13 @@
 
         <!-- Navigation Principal -->
         <nav class="main-nav">
-            <button class="nav-link active" onclick="showMainSection('accueil')">🏠 Accueil</button>
-            <button class="nav-link" onclick="showMainSection('annonces')">📢 Annonces</button>
-            <button class="nav-link" onclick="showMainSection('outils')">⚡ Outils & Facturation</button>
-            <button class="nav-link" onclick="showMainSection('reglement')">📜 Règlement</button>
-            <button class="nav-link" onclick="showMainSection('effectifs')">👨‍⚕️ Effectifs</button>
-            <button class="nav-link" onclick="showMainSection('staff-login')">🩺 Espace Staff</button>
-            <button class="nav-link" onclick="showMainSection('admin')">🔒 Admin</button>
+            <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil</button>
+            <button class="nav-link" onclick="showMainSection('annonces', event)">📢 Annonces</button>
+            <button class="nav-link" onclick="showMainSection('outils', event)">⚡ Outils & Facturation</button>
+            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlement</button>
+            <button class="nav-link" onclick="showMainSection('effectifs', event)">👨‍⚕️ Effectifs</button>
+            <button class="nav-link" onclick="showMainSection('staff-login', event)">🩺 Espace Staff</button>
+            <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Admin</button>
         </nav>
 
         <!-- ACCUEIL -->
@@ -307,11 +309,11 @@
         <section id="outils" class="section-page">
             <h2>Générateur de Documents & Facturation</h2>
             <div class="sub-nav">
-                <button class="sub-btn active" onclick="showTool('facture-tool')">💰 Facturation</button>
-                <button class="sub-btn" onclick="showTool('op-tool')">📋 Rapport d'Opération</button>
-                <button class="sub-btn" onclick="showTool('cr-tool')">🩺 Compte-Rendu</button>
-                <button class="sub-btn" onclick="showTool('imp-tool')">⚠️ Impayés</button>
-                <button class="sub-btn" onclick="showTool('dec-tool')">⚰️ Avis de Décès</button>
+                <button class="sub-btn active" onclick="showTool('facture-tool', event)">💰 Facturation</button>
+                <button class="sub-btn" onclick="showTool('op-tool', event)">📋 Rapport d'Opération</button>
+                <button class="sub-btn" onclick="showTool('cr-tool', event)">🩺 Compte-Rendu</button>
+                <button class="sub-btn" onclick="showTool('imp-tool', event)">⚠️ Impayés</button>
+                <button class="sub-btn" onclick="showTool('dec-tool', event)">⚰️ Avis de Décès</button>
             </div>
 
             <!-- Facturation -->
@@ -345,12 +347,13 @@
                         </div>
                         <div>
                             <div class="total-display" id="totalPrice">0 $</div>
-                            <button class="btn" onclick="generateFacture()">Générer pour Discord</button>
+                            <button class="btn" onclick="generateFacture()">Générer la facture</button>
                         </div>
                     </div>
                 </div>
                 <div class="output-box" id="output_facturation" style="display:none;"></div>
                 <button class="btn btn-secondary" id="copy_facturation" style="display:none;" onclick="copyToClipboard('output_facturation')">📋 Copier le texte</button>
+                <button class="btn btn-discord" id="send_facturation" style="display:none;" onclick="sendDiscordWebhook('output_facturation')">🚀 Envoyer direct sur Discord</button>
             </div>
 
             <!-- Rapport d'Opération -->
@@ -367,7 +370,8 @@
                 </div>
                 <button class="btn" onclick="generateOperation()">Générer le Rapport</button>
                 <div class="output-box" id="output_operation" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_operation" style="display:none;" onclick="copyToClipboard('output_operation')">📋 Copier pour Discord</button>
+                <button class="btn btn-secondary" id="copy_operation" style="display:none;" onclick="copyToClipboard('output_operation')">📋 Copier</button>
+                <button class="btn btn-discord" id="send_operation" style="display:none;" onclick="sendDiscordWebhook('output_operation')">🚀 Envoyer direct sur Discord</button>
             </div>
 
             <!-- Compte Rendu -->
@@ -381,7 +385,8 @@
                 </div>
                 <button class="btn" onclick="generateCompteRendu()">Générer le Compte-Rendu</button>
                 <div class="output-box" id="output_compterendu" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_compterendu" style="display:none;" onclick="copyToClipboard('output_compterendu')">📋 Copier pour Discord</button>
+                <button class="btn btn-secondary" id="copy_compterendu" style="display:none;" onclick="copyToClipboard('output_compterendu')">📋 Copier</button>
+                <button class="btn btn-discord" id="send_compterendu" style="display:none;" onclick="sendDiscordWebhook('output_compterendu')">🚀 Envoyer direct sur Discord</button>
             </div>
 
             <!-- Impayé -->
@@ -394,7 +399,8 @@
                 </div>
                 <button class="btn" onclick="generateImpaye()">Générer l'Impayé</button>
                 <div class="output-box" id="output_impaye" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_impaye" style="display:none;" onclick="copyToClipboard('output_impaye')">📋 Copier pour Discord</button>
+                <button class="btn btn-secondary" id="copy_impaye" style="display:none;" onclick="copyToClipboard('output_impaye')">📋 Copier</button>
+                <button class="btn btn-discord" id="send_impaye" style="display:none;" onclick="sendDiscordWebhook('output_impaye')">🚀 Envoyer direct sur Discord</button>
             </div>
 
             <!-- Décès -->
@@ -408,7 +414,8 @@
                 </div>
                 <button class="btn" onclick="generateDeces()">Générer le Certificat</button>
                 <div class="output-box" id="output_deces" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_deces" style="display:none;" onclick="copyToClipboard('output_deces')">📋 Copier pour Discord</button>
+                <button class="btn btn-secondary" id="copy_deces" style="display:none;" onclick="copyToClipboard('output_deces')">📋 Copier</button>
+                <button class="btn btn-discord" id="send_deces" style="display:none;" onclick="sendDiscordWebhook('output_deces')">🚀 Envoyer direct sur Discord</button>
             </div>
         </section>
 
@@ -469,6 +476,18 @@
 
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
+
+                <!-- CONFIGURATION DISCORD WEBHOOK -->
+                <h3 style="color: var(--primary); margin-bottom: 15px;">🤖 Configuration Webhook Discord</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>URL du Webhook Discord (Salon de logs/factures)</label>
+                        <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
+                    </div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL Webhook</button></div>
+                </div>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
 
                 <!-- GESTION COMPTES MÉDECINS TEMPORAIRES -->
                 <h3 style="color: var(--primary); margin-bottom: 15px;">🩺 Gestion des Comptes Médecins (Accès Staff)</h3>
@@ -594,18 +613,54 @@
             updateTotal();
         }
 
-        function showMainSection(sectionId) {
+        function showMainSection(sectionId, ev) {
             document.querySelectorAll('.section-page').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
+            if(ev && ev.target) ev.target.classList.add('active');
         }
 
-        function showTool(toolId) {
+        function showTool(toolId, ev) {
             document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active');
-            event.target.classList.add('active');
+            if(ev && ev.target) ev.target.classList.add('active');
+        }
+
+        // --- WEBHOOK DISCORD ---
+        function saveWebhookUrl() {
+            const url = document.getElementById('adm_webhook_url').value.trim();
+            if(!url) return alert("Entrez une URL Webhook valide.");
+            localStorage.setItem('rms_discord_webhook', url);
+            alert("URL Webhook Discord sauvegardée avec succès !");
+        }
+
+        function getWebhookUrl() {
+            return localStorage.getItem('rms_discord_webhook') || "https://discord.com/api/webhooks/1567249938260426862/ISXGwIUI4qtRiGX1cKt0890VGBNZiFAgd4T0gE454-t6_kpsXgmQuQaeGcVV8M60VoB-";
+        }
+
+        async function sendDiscordWebhook(elementId) {
+            const webhookUrl = getWebhookUrl();
+            if (!webhookUrl) return alert("Veuillez d'abord configurer l'URL Webhook dans l'espace Admin.");
+
+            const contentText = document.getElementById(elementId).innerText;
+            if (!contentText) return alert("Aucun texte à envoyer.");
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
+                });
+
+                if (response.ok || response.status === 204) {
+                    alert("🚀 Envoyé avec succès sur Discord !");
+                } else {
+                    alert("⚠️ Erreur lors de l'envoi sur Discord. Vérifiez l'URL du Webhook.");
+                }
+            } catch (err) {
+                alert("Erreur de connexion avec le serveur Discord.");
+            }
         }
 
         // --- GESTION COMPTES STAFF ---
@@ -614,11 +669,11 @@
             const password = document.getElementById('adm_staff_pass').value.trim();
             const name = document.getElementById('adm_staff_name').value.trim();
 
-            if (!username || !password || !name) return alert("Remplissez tous les champs du compte.");
+            if (!username || !password || !name) return alert("Remplissez tous les champs.");
             let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
             accounts.push({ username, password, name });
             localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
-            alert("Compte médecin créé avec succès !");
+            alert("Compte médecin créé !");
             renderStaffAccountsTable();
             document.getElementById('adm_staff_user').value = '';
             document.getElementById('adm_staff_pass').value = '';
@@ -719,6 +774,7 @@
             if (pwd && pwd.trim().length > 0) {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
+                document.getElementById('adm_webhook_url').value = getWebhookUrl();
                 renderAdminInsuranceTable();
                 renderStaffAccountsTable();
             } else {
@@ -726,23 +782,57 @@
             }
         }
 
+        // --- GENERATEURS DE DOCUMENTS ---
         function generateFacture() {
             const patient = document.getElementById('fact_patient').value || "N/A";
+            const id = document.getElementById('fact_id').value || "N/A";
+            const medic = document.getElementById('fact_medic').value || "N/A";
             const total = document.getElementById('totalPrice').innerText;
-            let text = `=== 💰 FACTURE RMS ===\nPatient : ${patient}\nTotal : ${total}\n====================`;
-            showOutput('output_facturation', 'copy_facturation', text);
+            
+            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n`;
+            text += `👤 Patient : ${patient} (${id})\n`;
+            text += `👨‍⚕️ Soignant : ${medic}\n`;
+            text += `🛡️ Réduction : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n`;
+            text += `📋 Actes réalisés :\n`;
+            if (selectedActs.length === 0) text += ` - Soins généraux\n`;
+            else selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
+            text += `💵 MONTANT TOTAL : ${total}\n==============================`;
+            
+            showOutput('output_facturation', 'copy_facturation', 'send_facturation', text);
         }
 
-        function showOutput(outputId, copyBtnId, text) {
+        function generateOperation() {
+            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n👤 Patient : ${document.getElementById('op_patient').value || "N/A"} (${document.getElementById('op_id').value || "N/A"})\n👨‍⚕️ Chirurgien : ${document.getElementById('op_medic').value || "N/A"}\n📅 Date : ${document.getElementById('op_date').value || "N/A"}\n🩺 Motif : ${document.getElementById('op_reason').value || "N/A"}\n📝 Détails : ${document.getElementById('op_desc').value || "N/A"}\n💰 Règlement : ${document.getElementById('op_paid').value || "0"} $ payés | ${document.getElementById('op_due').value || "0"} $ dus\n==============================`;
+            showOutput('output_operation', 'copy_operation', 'send_operation', text);
+        }
+
+        function generateCompteRendu() {
+            let text = `=== 🩺 COMPTE-RENDU MÉDICAL ===\n👤 Patient : ${document.getElementById('cr_patient').value || "N/A"} (${document.getElementById('cr_id').value || "N/A"})\n👨‍⚕️ Médecin : ${document.getElementById('cr_medic').value || "N/A"}\n🏥 Soins : ${document.getElementById('cr_care').value || "N/A"}\n💊 Recommandations : ${document.getElementById('cr_recom').value || "N/A"}\n==============================`;
+            showOutput('output_compterendu', 'copy_compterendu', 'send_compterendu', text);
+        }
+
+        function generateImpaye() {
+            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n👤 Patient : ${document.getElementById('imp_patient').value || "N/A"} (${document.getElementById('imp_id').value || "N/A"})\n💵 Montant dû : ${document.getElementById('imp_amount').value || "0"} $\n❓ Raison : ${document.getElementById('imp_reason').value || "N/A"}\n⚠️ Merci de régulariser sous 48h.\n====================================`;
+            showOutput('output_impaye', 'copy_impaye', 'send_impaye', text);
+        }
+
+        function generateDeces() {
+            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n👤 Défunt : ${document.getElementById('dec_patient').value || "N/A"}\n🕒 Date/Heure : ${document.getElementById('dec_time').value || "N/A"}\n📍 Lieu : ${document.getElementById('dec_place').value || "N/A"}\n⚠️ Cause : ${document.getElementById('dec_cause').value || "N/A"}\n👨‍⚕️ Constaté par : ${document.getElementById('dec_medic').value || "N/A"}\n==============================`;
+            showOutput('output_deces', 'copy_deces', 'send_deces', text);
+        }
+
+        function showOutput(outputId, copyBtnId, sendBtnId, text) {
             const out = document.getElementById(outputId);
-            const btn = document.getElementById(copyBtnId);
+            const copyBtn = document.getElementById(copyBtnId);
+            const sendBtn = document.getElementById(sendBtnId);
             out.innerText = text;
             out.style.display = 'block';
-            btn.style.display = 'block';
+            copyBtn.style.display = 'block';
+            sendBtn.style.display = 'block';
         }
 
         function copyToClipboard(elementId) {
-            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !"));
+            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié dans le presse-papier !"));
         }
 
         window.onload = () => { initActs(); };
