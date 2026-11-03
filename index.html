@@ -87,7 +87,7 @@
         .btn:hover { background: var(--primary-dark); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
-        .btn-secondary:hover { background: #475269; }
+        .btn-secondary:hover { background: #475569; }
         .btn-discord { background: #5865F2; margin-top: 10px; }
         .btn-discord:hover { background: #4752C4; }
         .btn-danger { background: #7f1d1d; }
@@ -814,12 +814,21 @@
             showOutput('output_deces', 'send_deces', text);
         }
 
-        function showOutput(outputId, sendBtnId, text) {
+        function showOutput(outputId, copyBtnId, sendBtnId, text) {
+            if (arguments.length === 3) {
+                text = sendBtnId;
+                sendBtnId = copyBtnId;
+                copyBtnId = null;
+            }
+
             const out = document.getElementById(outputId);
+            const copyBtn = copyBtnId ? document.getElementById(copyBtnId) : null;
             const sendBtn = document.getElementById(sendBtnId);
+
             out.innerText = text;
             out.style.display = 'block';
-            if(sendBtn) sendBtn.style.display = 'block';
+            if (copyBtn) copyBtn.style.display = 'block';
+            if (sendBtn) sendBtn.style.display = 'block';
         }
 
         function copyToClipboard(elementId) { navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !")); }
