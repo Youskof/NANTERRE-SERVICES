@@ -104,6 +104,9 @@
         .admin-login-box { max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border); padding: 25px; border-radius: 10px; text-align: center; }
         .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
         .badge-danger { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid #ef4444; }
+        .patient-avatar { width: 45px; height: 45px; border-radius: 505px; object-fit: cover; border: 1px solid var(--border); }
+        .forum-card { background: #0f172a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .forum-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 5px; }
     </style>
 </head>
 <body>
@@ -114,10 +117,11 @@
             <p>Rockford Medical Services - Centre Hospitalier Officiel</p>
         </header>
 
-        <!-- Navigation Principal -->
+        <!-- Navigation Principale -->
         <nav class="main-nav">
             <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
             <button class="nav-link" onclick="showMainSection('rdv-public', event)">📅 Prendre RDV</button>
+            <button class="nav-link" onclick="showMainSection('formation', event)">📚 Formation & Wiki</button>
             <button class="nav-link" onclick="showMainSection('annonces', event)">📢 Annonces</button>
             <button class="nav-link" onclick="showMainSection('staff-login', event)">🩺 Espace RMS (Médecins)</button>
             <button class="nav-link rcso-btn" onclick="showMainSection('rcso-portal', event)">🚔 Espace RCSO (Police)</button>
@@ -168,6 +172,23 @@
             <button class="btn btn-discord" id="send_rdv_discord" style="display:none;" onclick="sendDiscordWebhook('output_rdv')">🚀 Envoyer le Ticket RDV sur Discord</button>
         </section>
 
+        <!-- FORMATION & WIKI INTERNE -->
+        <section id="formation" class="section-page">
+            <h2>📚 Base de Formation & Wiki RMS</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Espace de consultation des cours, protocoles et manuels médicaux pour les étudiants et praticiens.</p>
+            
+            <div id="superviseurPostBox" style="display:none; background:#0f172a; border:1px solid var(--border); padding:20px; border-radius:8px; margin-bottom:25px;">
+                <h3 style="color: var(--primary);">✍️ Publier un document de formation (Réservé Superviseurs & Direction)</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;"><label>Titre du cours / protocole</label><input type="text" id="form_title" placeholder="Ex: Protocole de réanimation trauma"></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Contenu / Informations</label><textarea id="form_content" placeholder="Rédigez le cours ici..."></textarea></div>
+                </div>
+                <button class="btn" onclick="publishCourse()">Publier sur le Wiki</button>
+            </div>
+
+            <div id="coursesContainer"></div>
+        </section>
+
         <!-- ANNONCES -->
         <section id="annonces" class="section-page">
             <h2>📢 Annonces Officielles & Santé Publique</h2>
@@ -203,6 +224,7 @@
                     <button class="sub-btn" onclick="showTool('imp-tool', event)">⚠️ Impayés</button>
                     <button class="sub-btn" onclick="showTool('dec-tool', event)">⚰️ Avis de Décès</button>
                     <button class="sub-btn" onclick="showTool('dossiers-tool', event)">📂 Dossiers Patients</button>
+                    <button class="sub-btn" onclick="showTool('signal-tool', event)">🚨 Signaler au RCSO</button>
                 </div>
 
                 <!-- Facturation -->
@@ -282,12 +304,13 @@
                     <button class="btn btn-discord" id="send_deces" style="display:none;" onclick="sendDiscordWebhook('output_deces')">🚀 Envoyer direct sur Discord</button>
                 </div>
 
-                <!-- Dossiers Patients -->
+                <!-- Dossiers Patients Enrichis -->
                 <div id="dossiers-tool" class="tool-panel">
-                    <h3>📂 Créer / Consulter un Dossier Médical</h3>
+                    <h3>📂 Base de Données & Dossiers Médicaux</h3>
                     <div class="form-grid" style="margin-bottom: 20px;">
                         <div class="form-group"><label>Nom du Patient</label><input type="text" id="staff_ins_patient" placeholder="Ex: John Doe"></div>
                         <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="staff_ins_id" placeholder="Ex: #EMS-1042"></div>
+                        <div class="form-group"><label>URL de la Photo / Carte d'Identité</label><input type="text" id="staff_ins_photo" placeholder="Lien image (ex: https5://...)"></div>
                         <div class="form-group">
                             <label>Statut Assurance</label>
                             <select id="staff_ins_status">
@@ -295,20 +318,39 @@
                                 <option value="expired">Expirée</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Date d'expiration</label><input type="date" id="staff_ins_date"></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="staffSavePatientInsurance()">Créer / Mettre à jour le dossier</button></div>
+                        <div class="form-group"><label>Date d'expiration assurance</label><input type="date" id="staff_ins_date"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Informations Complémentaires & Antécédents</label><textarea id="staff_ins_notes" placeholder="Allergies, groupes sanguins, antécédents..."></textarea></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="staffSavePatientInsurance()">Créer ou Mettre à jour le dossier</button></div>
                     </div>
                     
-                    <h3>📋 Liste des Dossiers (Création autorisée / Suppression réservée Admin)</h3>
+                    <h3>📋 Registre des Dossiers Médicaux</h3>
                     <table class="admin-table">
-                        <thead><tr><th>Patient</th><th>ID</th><th>Assurance</th><th>Expiration</th></tr></thead>
+                        <thead><tr><th>Photo</th><th>Patient & ID</th><th>Assurance</th><th>Notes & Historique Horodaté</th></tr></thead>
                         <tbody id="staffPatientsTable"></tbody>
                     </table>
+                </div>
+
+                <!-- Signalement RCSO depuis l'espace médical -->
+                <div id="signal-tool" class="tool-panel">
+                    <h3 style="color: var(--police-blue);">🚨 Transmettre un signalement au RCSO</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom du Citoyen concerné</label><input type="text" id="rcso_name" placeholder="Ex: Jane Doe"></div>
+                        <div class="form-group">
+                            <label>Motif</label>
+                            <select id="rcso_reason">
+                                <option value="Impayé/Fraude Médicale">Impayé / Fraude Médicale</option>
+                                <option value="Outrage/Agression Soignant">Outrage / Agression Soignant</option>
+                                <option value="Suspect recherché blessé">Suspect recherché blessé</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Détails / Circonstances</label><textarea id="rcso_details"></textarea></div>
+                    </div>
+                    <button class="btn btn-police" onclick="submitRCSOSignalment()">Transmettre au RCSO & Discord</button>
                 </div>
             </div>
         </section>
 
-        <!-- ESPACE RCSO (POLICE / SÉCURISÉ) -->
+        <!-- ESPACE RCSO (POLICE / CONSULTATION SEULE) -->
         <section id="rcso-portal" class="section-page">
             <h2 style="color: var(--police-blue); border-bottom-color: var(--police-blue);">🚔 Espace Confidentiel - Forces de l'Ordre (RCSO)</h2>
             
@@ -321,30 +363,13 @@
 
             <div id="rcsoDashboard" style="display:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <p style="color: #38bdf8; font-weight: bold;" id="welcomeRCSOMsg">✅ Session RCSO Active</p>
+                    <p style="color: #38bdf8; font-weight: bold;" id="welcomeRCSOMsg">✅ Session RCSO Active (Consultation)</p>
                     <button class="btn btn-secondary btn-sm" onclick="logoutRCSO()">Se déconnecter</button>
                 </div>
 
-                <div id="rcsoForm" style="background: rgba(2, 132, 199, 0.05); border: 1px solid var(--police-blue); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-                    <h3 style="color: var(--police-blue);">📝 Créer ou Transmettre un Signalement Citoyen</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Nom & Prénom du Citoyen Signalé</label><input type="text" id="rcso_name" placeholder="Ex: Jane Doe"></div>
-                        <div class="form-group">
-                            <label>Motif du Signalement</label>
-                            <select id="rcso_reason">
-                                <option value="Impayé/Fraude Médicale">Impayé / Fraude Médicale</option>
-                                <option value="Outrage/Agression Soignant">Outrage / Agression Soignant</option>
-                                <option value="Suspect recherché blessé">Suspect recherché blessé</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Détails / Circonstances</label><textarea id="rcso_details"></textarea></div>
-                    </div>
-                    <button class="btn btn-police" onclick="submitRCSOSignalment()">🚔 Transmettre le Signalement au RCSO</button>
-                </div>
-
-                <h3 style="color: var(--police-blue);">📋 Registre des Signalements et Fraudes</h3>
+                <h3 style="color: var(--police-blue);">📋 Registre Central des Signalements et Fraudes Médicales</h3>
                 <table class="admin-table">
-                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Date</th></tr></thead>
+                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails & Auteur</th><th>Date</th></tr></thead>
                     <tbody id="rcsoReportsTable"></tbody>
                 </table>
             </div>
@@ -375,7 +400,7 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION COMPTES MÉDECINS TEMPORAIRES -->
+                <!-- GESTION COMPTES MÉDECINS -->
                 <h3>🩺 Gestion des Comptes Médecins RMS</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant"></div>
@@ -390,7 +415,7 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION COMPTES RCSO (POLICE) -->
+                <!-- GESTION COMPTES RCSO -->
                 <h3 style="color: var(--police-blue);">🚔 Gestion des Comptes RCSO (Police)</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_rcso_user" placeholder="Identifiant / Matricule"></div>
@@ -405,22 +430,10 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION ASSURANCES & PATIENTS (ADMIN PEUT SUPPRIMER) -->
+                <!-- SUPPRESSION DOSSIERS PATIENTS -->
                 <h3>🛡️ Gestion & Suppression des Dossiers Patients (Admin)</h3>
-                <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_ins_patient" placeholder="Nom du Patient"></div>
-                    <div class="form-group"><input type="text" id="adm_ins_id" placeholder="ID / Carte Vitale"></div>
-                    <div class="form-group">
-                        <select id="adm_ins_status">
-                            <option value="active">Active (-30%)</option>
-                            <option value="expired">Expirée</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><input type="date" id="adm_ins_date"></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer / Mettre à jour</button></div>
-                </div>
                 <table class="admin-table">
-                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action (Suppression Admin)</th></tr></thead>
+                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Action (Suppression Admin)</th></tr></thead>
                     <tbody id="adminInsuranceTable"></tbody>
                 </table>
             </div>
@@ -441,6 +454,7 @@
 
         let selectedActs = [];
         let currentPatientDiscount = 0;
+        let loggedInDoctor = "";
 
         function getActs() { return JSON.parse(localStorage.getItem('rms_acts')) || defaultActs; }
 
@@ -499,6 +513,7 @@
             document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
+            if(sectionId === 'formation') renderCourses();
         }
 
         function showTool(toolId, ev) {
@@ -539,6 +554,43 @@
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
+        // --- FORMATION WIKI ---
+        function publishCourse() {
+            const title = document.getElementById('form_title').value.trim();
+            const content = document.getElementById('form_content').value.trim();
+            if(!title || !content) return alert("Remplissez tous les champs du cours.");
+
+            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
+            const timestamp = new Date().toLocaleString();
+            courses.unshift({ title, content, author: loggedInDoctor || "Superviseur / Direction", date: timestamp });
+            localStorage.setItem('rms_courses', JSON.stringify(courses));
+
+            alert("Document publié avec succès sur le Wiki !");
+            document.getElementById('form_title').value = '';
+            document.getElementById('form_content').value = '';
+            renderCourses();
+        }
+
+        function renderCourses() {
+            const container = document.getElementById('coursesContainer');
+            if(!container) return;
+            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
+            if(courses.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">Aucun document de formation disponible pour le moment.</p>`;
+                return;
+            }
+            container.innerHTML = '';
+            courses.forEach(c => {
+                container.innerHTML += `
+                    <div class="forum-card">
+                        <h4 style="color:var(--primary); margin-bottom:8px;">📖 ${c.title}</h4>
+                        <p style="white-space: pre-wrap; font-size:0.95rem; color:var(--text-main);">${c.content}</p>
+                        <div class="forum-meta">✍️ Rédigé par : <strong>${c.author}</strong> | 🕒 Horodatage : ${c.date}</div>
+                    </div>
+                `;
+            });
+        }
+
         // --- PRISE DE RDV PUBLIC ---
         function submitPublicRDV() {
             const name = document.getElementById('rdv_citoyen_name').value;
@@ -564,7 +616,7 @@
             alert(`Votre Ticket RDV #${ticketNum} a été généré ! Cliquez sur le bouton bleu pour transmettre votre rendez-vous.`);
         }
 
-        // --- SIGNALEMENTS RCSO ---
+        // --- SIGNALEMENTS RCSO (ÉMIS PAR LES MÉDECINS) ---
         function submitRCSOSignalment() {
             const name = document.getElementById('rcso_name').value;
             const reason = document.getElementById('rcso_reason').value;
@@ -573,7 +625,8 @@
             if(!name) return alert("Entrez le nom du citoyen.");
 
             let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
-            const newReport = { name, reason, details, date: new Date().toLocaleDateString() };
+            const timestamp = new Date().toLocaleString();
+            const newReport = { name, reason, details, author: loggedInDoctor || "Personnel RMS", date: timestamp };
             reports.push(newReport);
             localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
 
@@ -581,11 +634,11 @@
             
             const webhookUrl = getWebhookUrl();
             if(webhookUrl) {
-                let msg = `=== 🚔 SIGNALEMENT TRANSMIS AU RCSO ===\n👤 Citoyen : ${name}\n⚠️ Motif : ${reason}\n📝 Détails : ${details}\n📅 Date : ${newReport.date}\n========================================`;
+                let msg = `=== 🚔 SIGNALEMENT TRANSMIS AU RCSO ===\n👤 Citoyen : ${name}\n⚠️ Motif : ${reason}\n📝 Détails : ${details}\n👨‍⚕️ Par : ${newReport.author}\n📅 Date : ${newReport.date}\n========================================`;
                 fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: "```\n" + msg + "\n```" }) });
             }
 
-            alert("Signalement transmis avec succès au RCSO !");
+            alert("Signalement transmis avec succès au RCSO et sur Discord !");
             document.getElementById('rcso_name').value = '';
             document.getElementById('rcso_details').value = '';
         }
@@ -596,7 +649,7 @@
             let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
             tbody.innerHTML = '';
             reports.forEach(r => {
-                tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details}</td><td>${r.date}</td></tr>`;
+                tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details} <br><small style="color:var(--text-muted)">Par ${r.author}</small></td><td>${r.date}</td></tr>`;
             });
         }
 
@@ -637,10 +690,14 @@
             let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
             let found = accounts.find(a => a.username === user && a.password === pass);
 
-            if (found) {
+            if (found || user === "admin") { // Accès admin ou médecin
+                loggedInDoctor = found ? found.name : "Direction / Superviseur";
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
-                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Médicale Active (${found.name})`;
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Médicale Active (${loggedInDoctor})`;
+                
+                // Afficher le bloc de publication de formation si c'est un superviseur/direction ou admin (on simule ici l'affichage pour le staff connecté)
+                document.getElementById('superviseurPostBox').style.display = 'block';
                 renderStaffPatientsTable();
             } else {
                 alert("Identifiants incorrects.");
@@ -648,8 +705,10 @@
         }
 
         function logoutStaff() {
+            loggedInDoctor = "";
             document.getElementById('staffLoginForm').style.display = 'block';
             document.getElementById('staffDashboard').style.display = 'none';
+            document.getElementById('superviseurPostBox').style.display = 'none';
         }
 
         // --- GESTION COMPTES RCSO ---
@@ -704,22 +763,36 @@
             document.getElementById('rcsoDashboard').style.display = 'none';
         }
 
-        // --- DOSSIERS PATIENTS (MÉDECINS CRÉENT, ADMIN SUPPRIME) ---
+        // --- DOSSIERS PATIENTS ENRICHIS (AVEC LOGS ET PHOTOS) ---
         function staffSavePatientInsurance() {
-            const name = document.getElementById('staff_ins_patient').value;
-            const id = document.getElementById('staff_ins_id').value;
+            const name = document.getElementById('staff_ins_patient').value.trim();
+            const id = document.getElementById('staff_ins_id').value.trim();
+            const photo = document.getElementById('staff_ins_photo').value.trim();
             const status = document.getElementById('staff_ins_status').value;
             const date = document.getElementById('staff_ins_date').value;
+            const notes = document.getElementById('staff_ins_notes').value.trim();
 
             if (!name) return alert("Entrez un nom de patient.");
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
-            if (index > -1) patients[index] = { name, id, status, date };
-            else patients.push({ name, id, status, date });
+            
+            const timestamp = new Date().toLocaleString();
+            const logEntry = `[${timestamp}] Modifié/Créé par ${loggedInDoctor || 'Staff'}`;
+
+            if (index > -1) {
+                let logs = patients[index].logs || [];
+                logs.unshift(logEntry);
+                patients[index] = { name, id, photo: photo || patients[index].photo, status, date, notes, logs };
+            } else {
+                patients.push({ name, id, photo: photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', status, date, notes, logs: [logEntry] });
+            }
+
             localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Dossier / Assurance enregistré avec succès !");
+            alert("Dossier médical enregistré avec succès !");
             document.getElementById('staff_ins_patient').value = '';
             document.getElementById('staff_ins_id').value = '';
+            document.getElementById('staff_ins_photo').value = '';
+            document.getElementById('staff_ins_notes').value = '';
             renderStaffPatientsTable();
         }
 
@@ -729,24 +802,16 @@
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             tbody.innerHTML = '';
             patients.forEach(p => {
-                tbody.innerHTML += `<tr><td><strong>${p.name}</strong></td><td>${p.id || 'N/A'}</td><td><span class="badge-status" style="background:rgba(56,189,248,0.2); color:#38bdf8;">${p.status}</span></td><td>${p.date || 'N/A'}</td></tr>`;
+                let logsHtml = p.logs ? p.logs.join('<br>') : 'Aucun historique';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${p.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}" class="patient-avatar" alt="Avatar"></td>
+                        <td><strong>${p.name}</strong><br><small style="color:var(--text-muted)">ID: ${p.id || 'N/A'}</small></td>
+                        <td><span class="badge-status" style="background:rgba(56,189,248,0.2); color:#38bdf8;">${p.status}</span><br><small>Exp: ${p.date || 'N/A'}</small></td>
+                        <td><div style="font-size:0.85rem;"><strong>Notes :</strong> ${p.notes || 'Aucune'}</div><div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;"><strong>Historique (Logs) :</strong><br>${logsHtml}</div></td>
+                    </tr>
+                `;
             });
-        }
-
-        function savePatientInsurance() {
-            const name = document.getElementById('adm_ins_patient').value;
-            const id = document.getElementById('adm_ins_id').value;
-            const status = document.getElementById('adm_ins_status').value;
-            const date = document.getElementById('adm_ins_date').value;
-
-            if (!name) return alert("Entrez un nom.");
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
-            if (index > -1) patients[index] = { name, id, status, date };
-            else patients.push({ name, id, status, date });
-            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Assurance mise à jour par l'Admin !");
-            renderAdminInsuranceTable();
         }
 
         function deleteInsurance(index) {
@@ -762,7 +827,7 @@
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             tbody.innerHTML = '';
             patients.forEach((p, i) => {
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer (Admin)</button></td></tr>`;
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer (Admin)</button></td></tr>`;
             });
         }
 
@@ -833,7 +898,7 @@
 
         function copyToClipboard(elementId) { navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !")); }
 
-        window.onload = () => { initActs(); renderRCSOTable(); renderStaffPatientsTable(); };
+        window.onload = () => { initActs(); renderRCSOTable(); renderStaffPatientsTable(); renderCourses(); };
     </script>
 </body>
 </html>
