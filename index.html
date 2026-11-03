@@ -104,7 +104,7 @@
         .admin-login-box { max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border); padding: 25px; border-radius: 10px; text-align: center; }
         .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
         .badge-danger { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid #ef4444; }
-        .patient-avatar { width: 45px; height: 45px; border-radius: 505px; object-fit: cover; border: 1px solid var(--border); }
+        .patient-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
         .forum-card { background: #0f172a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .forum-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 5px; }
     </style>
@@ -310,7 +310,7 @@
                     <div class="form-grid" style="margin-bottom: 20px;">
                         <div class="form-group"><label>Nom du Patient</label><input type="text" id="staff_ins_patient" placeholder="Ex: John Doe"></div>
                         <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="staff_ins_id" placeholder="Ex: #EMS-1042"></div>
-                        <div class="form-group"><label>URL de la Photo / Carte d'Identité</label><input type="text" id="staff_ins_photo" placeholder="Lien image (ex: https5://...)"></div>
+                        <div class="form-group"><label>URL de la Photo / Carte d'Identité</label><input type="text" id="staff_ins_photo" placeholder="Lien image (ex: https://...)"></div>
                         <div class="form-group">
                             <label>Statut Assurance</label>
                             <select id="staff_ins_status">
@@ -426,6 +426,29 @@
                 <table class="admin-table">
                     <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
                     <tbody id="adminRCSOAccountsTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <!-- GESTION COMPLÈTE DES SIGNALEMENTS RCSO (AJOUT / MODIF / SUPPR) -->
+                <h3 style="color: var(--police-blue);">🚨 Gestion Admin des Signalements RCSO</h3>
+                <div class="form-grid" style="background: rgba(2, 132, 199, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--police-blue);">
+                    <input type="hidden" id="adm_signal_index" value="-1">
+                    <div class="form-group"><label>Citoyen</label><input type="text" id="adm_signal_name" placeholder="Nom du citoyen"></div>
+                    <div class="form-group">
+                        <label>Motif</label>
+                        <select id="adm_signal_reason">
+                            <option value="Impayé/Fraude Médicale">Impayé / Fraude Médicale</option>
+                            <option value="Outrage/Agression Soignant">Outrage / Agression Soignant</option>
+                            <option value="Suspect recherché blessé">Suspect recherché blessé</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Détails</label><textarea id="adm_signal_details"></textarea></div>
+                    <div style="grid-column: span 2;"><button class="btn btn-police" onclick="adminSaveSignal()">Ajouter ou Mettre à jour le Signalement</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Actions Admin</th></tr></thead>
+                    <tbody id="adminSignalsTable"></tbody>
                 </table>
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
@@ -616,7 +639,7 @@
             alert(`Votre Ticket RDV #${ticketNum} a été généré ! Cliquez sur le bouton bleu pour transmettre votre rendez-vous.`);
         }
 
-        // --- SIGNALEMENTS RCSO (ÉMIS PAR LES MÉDECINS) ---
+        // --- SIGNALEMENTS RCSO ---
         function submitRCSOSignalment() {
             const name = document.getElementById('rcso_name').value;
             const reason = document.getElementById('rcso_reason').value;
@@ -650,6 +673,69 @@
             tbody.innerHTML = '';
             reports.forEach(r => {
                 tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details} <br><small style="color:var(--text-muted)">Par ${r.author}</small></td><td>${r.date}</td></tr>`;
+            });
+        }
+
+        function adminSaveSignal() {
+            const index = parseInt(document.getElementById('adm_signal_index').value);
+            const name = document.getElementById('adm_signal_name').value.trim();
+            const reason = document.getElementById('adm_signal_reason').value;
+            const details = document.getElementById('adm_signal_details').value.trim();
+
+            if (!name) return alert("Entrez un nom de citoyen.");
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            const timestamp = new Date().toLocaleString();
+
+            if (index > -1) {
+                reports[index] = { ...reports[index], name, reason, details, date: timestamp };
+            } else {
+                reports.push({ name, reason, details, author: "Administrateur", date: timestamp });
+            }
+
+            localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
+            alert("Signalement enregistré avec succès !");
+            document.getElementById('adm_signal_index').value = "-1";
+            document.getElementById('adm_signal_name').value = "";
+            document.getElementById('adm_signal_details').value = "";
+            renderAdminSignalsTable();
+            renderRCSOTable();
+        }
+
+        function editSignal(index) {
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            let r = reports[index];
+            if(!r) return;
+            document.getElementById('adm_signal_index').value = index;
+            document.getElementById('adm_signal_name').value = r.name;
+            document.getElementById('adm_signal_reason').value = r.reason;
+            document.getElementById('adm_signal_details').value = r.details;
+        }
+
+        function deleteSignal(index) {
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            reports.splice(index, 1);
+            localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
+            renderAdminSignalsTable();
+            renderRCSOTable();
+        }
+
+        function renderAdminSignalsTable() {
+            const tbody = document.getElementById('adminSignalsTable');
+            if(!tbody) return;
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            tbody.innerHTML = '';
+            reports.forEach((r, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${r.name}</strong></td>
+                        <td><span class="badge-status badge-danger">${r.reason}</span></td>
+                        <td>${r.details}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editSignal(${i})">Modifier</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSignal(${i})">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
             });
         }
 
@@ -690,13 +776,11 @@
             let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
             let found = accounts.find(a => a.username === user && a.password === pass);
 
-            if (found || user === "admin") { // Accès admin ou médecin
+            if (found || user === "admin") {
                 loggedInDoctor = found ? found.name : "Direction / Superviseur";
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
                 document.getElementById('welcomeStaffMsg').innerText = `✅ Session Médicale Active (${loggedInDoctor})`;
-                
-                // Afficher le bloc de publication de formation si c'est un superviseur/direction ou admin (on simule ici l'affichage pour le staff connecté)
                 document.getElementById('superviseurPostBox').style.display = 'block';
                 renderStaffPatientsTable();
             } else {
@@ -763,7 +847,7 @@
             document.getElementById('rcsoDashboard').style.display = 'none';
         }
 
-        // --- DOSSIERS PATIENTS ENRICHIS (AVEC LOGS ET PHOTOS) ---
+        // --- DOSSIERS PATIENTS ---
         function staffSavePatientInsurance() {
             const name = document.getElementById('staff_ins_patient').value.trim();
             const id = document.getElementById('staff_ins_id').value.trim();
@@ -840,6 +924,7 @@
                 renderAdminInsuranceTable();
                 renderStaffAccountsTable();
                 renderRCSOAccountsTable();
+                renderAdminSignalsTable();
             } else {
                 alert("Entrez un mot de passe.");
             }
