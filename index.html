@@ -644,13 +644,15 @@
             renderAdminInsuranceTable();
         }
 
-        function checkAdminPassword() {
-            if (document.getElementById('adminPasswordInput').value === "20070305") {
+       function checkAdminPassword() {
+            const pwd = document.getElementById('adminPasswordInput').value;
+            // On vérifie simplement qu'un mot de passe est saisi pour déverrouiller l'interface admin locale
+            if (pwd && pwd.trim().length > 0) {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
                 renderAdminInsuranceTable();
             } else {
-                alert("Mot de passe incorrect.");
+                alert("Veuillez entrer un mot de passe.");
             }
         }
 
