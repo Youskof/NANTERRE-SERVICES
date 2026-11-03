@@ -270,6 +270,7 @@
             <button class="nav-link" onclick="showMainSection('outils')">⚡ Outils & Facturation</button>
             <button class="nav-link" onclick="showMainSection('reglement')">📜 Règlement</button>
             <button class="nav-link" onclick="showMainSection('effectifs')">👨‍⚕️ Effectifs</button>
+            <button class="nav-link" onclick="showMainSection('staff-login')">🩺 Espace Staff</button>
             <button class="nav-link" onclick="showMainSection('admin')">🔒 Admin</button>
         </nav>
 
@@ -313,7 +314,7 @@
                 <button class="sub-btn" onclick="showTool('dec-tool')">⚰️ Avis de Décès</button>
             </div>
 
-            <!-- Facturation (avec liaison assurance & patient) -->
+            <!-- Facturation -->
             <div id="facture-tool" class="tool-panel active">
                 <div class="form-grid">
                     <div class="form-group">
@@ -430,6 +431,32 @@
             <div class="staff-grid" id="staffContainer"></div>
         </section>
 
+        <!-- ESPACE CONNEXION STAFF MÉDICAL -->
+        <section id="staff-login" class="section-page">
+            <h2>🩺 Espace Connexion - Personnel Médical</h2>
+            
+            <div id="staffLoginForm" class="admin-login-box">
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Connectez-vous avec vos identifiants temporaires :</p>
+                <input type="text" id="staffUser" placeholder="Nom d'utilisateur / ID..." style="width: 100%; margin-bottom: 10px;">
+                <input type="password" id="staffPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
+                <button class="btn" onclick="loginStaff()">Se connecter</button>
+            </div>
+
+            <div id="staffDashboard" style="display:none;">
+                <p style="color: #4ade80; margin-bottom: 20px; font-weight: bold;" id="welcomeStaffMsg">✅ Connecté avec succès</p>
+                
+                <h3 style="color: var(--primary); margin-bottom: 15px;">📂 Dossiers Médicaux & Assurances Enregistrés</h3>
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="searchPatientInput" placeholder="Rechercher un patient par son nom..." oninput="filterPatientRecords(this.value)" style="width: 100%; max-width: 400px;">
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Patient</th><th>ID / Vitale</th><th>Statut Assurance</th><th>Renouvellement Max</th></tr></thead>
+                    <tbody id="staffPatientsTable"></tbody>
+                </table>
+                <button class="btn btn-secondary" onclick="logoutStaff()" style="max-width: 200px;">Se déconnecter</button>
+            </div>
+        </section>
+
         <!-- ADMIN -->
         <section id="admin" class="section-page">
             <h2>🔒 Espace d'Administration</h2>
@@ -442,6 +469,21 @@
 
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
+
+                <!-- GESTION COMPTES MÉDECINS TEMPORAIRES -->
+                <h3 style="color: var(--primary); margin-bottom: 15px;">🩺 Gestion des Comptes Médecins (Accès Staff)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant / Pseudo"></div>
+                    <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe temporaire"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom complet du médecin (Dr...)"></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte médecin</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Identifiant</th><th>Nom du Médecin</th><th>Action</th></tr></thead>
+                    <tbody id="adminStaffAccountsTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
 
                 <!-- GESTION ASSURANCES & PATIENTS -->
                 <h3 style="color: var(--primary); margin-bottom: 15px;">🛡️ Gestion des Assurances Patients</h3>
@@ -457,39 +499,11 @@
                         </select>
                     </div>
                     <div class="form-group"><label>Date de renouvellement max</label><input type="date" id="adm_ins_date"></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer / Mettre à jour l'assurance</button></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer l'assurance</button></div>
                 </div>
                 <table class="admin-table">
                     <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action</th></tr></thead>
                     <tbody id="adminInsuranceTable"></tbody>
-                </table>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- GESTION ANNONCES -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">📢 Annonces</h3>
-                <div class="form-grid">
-                    <div class="form-group" style="grid-column: span 2;"><input type="text" id="adm_ann_title" placeholder="Titre"></div>
-                    <div class="form-group" style="grid-column: span 2;"><textarea id="adm_ann_content" placeholder="Contenu..."></textarea></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="addAnnouncement()">Publier</button></div>
-                </div>
-                <table class="admin-table">
-                    <thead><tr><th>Titre</th><th>Date</th><th>Action</th></tr></thead>
-                    <tbody id="adminAnnTable"></tbody>
-                </table>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- TARIFS -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">💰 Tarifs Médicaux</h3>
-                <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_act_name" placeholder="Nom de l'acte"></div>
-                    <div class="form-group"><input type="number" id="adm_act_price" placeholder="Prix ($)"></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="addAct()">Ajouter le tarif</button></div>
-                </div>
-                <table class="admin-table">
-                    <thead><tr><th>Acte</th><th>Prix ($)</th><th>Action</th></tr></thead>
-                    <tbody id="adminActsTable"></tbody>
                 </table>
 
                 <div style="margin-top: 30px;">
@@ -515,7 +529,7 @@
         ];
 
         let selectedActs = [];
-        let currentPatientDiscount = 0; // Pourcentage de réduction (ex: 0.30 pour 30%)
+        let currentPatientDiscount = 0;
 
         function getActs() {
             let stored = localStorage.getItem('rms_acts');
@@ -526,11 +540,10 @@
             const container = document.getElementById('actsContainer');
             if(!container) return;
             container.innerHTML = '';
-            const acts = getActs();
-            acts.forEach((act, index) => {
+            getActs().forEach((act, index) => {
                 const div = document.createElement('div');
                 div.className = 'act-item';
-                div.onclick = () => toggleAct(index, div, acts);
+                div.onclick = () => toggleAct(index, div, getActs());
                 div.innerHTML = `<div class="act-name">${act.name}</div><div class="act-price">${act.price} $</div>`;
                 container.appendChild(div);
             });
@@ -553,88 +566,135 @@
             let subtotal = selectedActs.reduce((sum, act) => sum + act.price, 0);
             let discountAmount = subtotal * currentPatientDiscount;
             let finalTotal = Math.round(subtotal - discountAmount);
-
             document.getElementById('totalPrice').innerText = finalTotal + " $";
-            if (currentPatientDiscount > 0) {
-                document.getElementById('discountInfoText').innerText = `Assurance Active : -${currentPatientDiscount * 100}% de réduction (Économie : ${Math.round(discountAmount)} $)`;
-            } else {
-                document.getElementById('discountInfoText').innerText = `Assurance : Aucune réduction applicable`;
-            }
+            document.getElementById('discountInfoText').innerText = currentPatientDiscount > 0 ? 
+                `Assurance Active : -30% (Économie : ${Math.round(discountAmount)} $)` : `Assurance : Aucune réduction`;
         }
 
-        // Vérification automatique de l'assurance du patient saisi
         function checkPatientInsurance(patientName) {
             if (!patientName) return;
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             let found = patients.find(p => p.name.toLowerCase() === patientName.toLowerCase());
-            
             const alertBox = document.getElementById('insuranceAlertBox');
             const statusText = document.getElementById('insuranceStatusText');
             alertBox.style.display = 'block';
 
             if (found && found.status === 'active') {
-                currentPatientDiscount = 0.30; // 30% de réduction par exemple
-                statusText.innerHTML = `✅ Assurance ACTIVE pour ${found.name} (-30% de réduction appliqués)`;
+                currentPatientDiscount = 0.30;
+                statusText.innerHTML = `✅ Assurance ACTIVE pour ${found.name} (-30% appliqués)`;
                 alertBox.style.borderColor = '#4ade80';
                 alertBox.style.background = 'rgba(74, 222, 128, 0.1)';
                 if(found.id) document.getElementById('fact_id').value = found.id;
-            } else if (found && found.status === 'expired') {
-                currentPatientDiscount = 0;
-                statusText.innerHTML = `⚠️ Assurance EXPIRÉE pour ${found.name} (Plein tarif appliqué)`;
-                alertBox.style.borderColor = '#f87171';
-                alertBox.style.background = 'rgba(248, 113, 113, 0.1)';
             } else {
                 currentPatientDiscount = 0;
-                statusText.innerHTML = `ℹ️ Aucune assurance enregistrée pour ce patient (Plein tarif)`;
+                statusText.innerHTML = `ℹ️ Aucune assurance active pour ce patient (Plein tarif)`;
                 alertBox.style.borderColor = '#38bdf8';
                 alertBox.style.background = 'rgba(56, 189, 248, 0.1)';
             }
             updateTotal();
         }
 
-        // Navigation
         function showMainSection(sectionId) {
             document.querySelectorAll('.section-page').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
         }
 
         function showTool(toolId) {
             document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        // Admin - Sauvegarde assurance patient
+        // --- GESTION COMPTES STAFF ---
+        function createStaffAccount() {
+            const username = document.getElementById('adm_staff_user').value.trim();
+            const password = document.getElementById('adm_staff_pass').value.trim();
+            const name = document.getElementById('adm_staff_name').value.trim();
+
+            if (!username || !password || !name) return alert("Remplissez tous les champs du compte.");
+            let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
+            accounts.push({ username, password, name });
+            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
+            alert("Compte médecin créé avec succès !");
+            renderStaffAccountsTable();
+            document.getElementById('adm_staff_user').value = '';
+            document.getElementById('adm_staff_pass').value = '';
+            document.getElementById('adm_staff_name').value = '';
+        }
+
+        function deleteStaffAccount(index) {
+            let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
+            accounts.splice(index, 1);
+            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
+            renderStaffAccountsTable();
+        }
+
+        function renderStaffAccountsTable() {
+            const tbody = document.getElementById('adminStaffAccountsTable');
+            if(!tbody) return;
+            let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
+            tbody.innerHTML = '';
+            accounts.forEach((acc, i) => {
+                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer l'accès</button></td></tr>`;
+            });
+        }
+
+        function loginStaff() {
+            const user = document.getElementById('staffUser').value.trim();
+            const pass = document.getElementById('staffPass').value.trim();
+            let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
+            let found = accounts.find(a => a.username === user && a.password === pass);
+
+            if (found) {
+                document.getElementById('staffLoginForm').style.display = 'none';
+                document.getElementById('staffDashboard').style.display = 'block';
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Connecté en tant que ${found.name}`;
+                renderStaffPatientsTable();
+            } else {
+                alert("Identifiant ou mot de passe incorrect.");
+            }
+        }
+
+        function logoutStaff() {
+            document.getElementById('staffLoginForm').style.display = 'block';
+            document.getElementById('staffDashboard').style.display = 'none';
+            document.getElementById('staffUser').value = '';
+            document.getElementById('staffPass').value = '';
+        }
+
+        function renderStaffPatientsTable(filter = '') {
+            const tbody = document.getElementById('staffPatientsTable');
+            if(!tbody) return;
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            tbody.innerHTML = '';
+            patients.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).forEach(p => {
+                let badge = p.status === 'active' ? '🟢 Active' : '🔴 Expirée/Aucune';
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${badge}</td><td>${p.date || 'N/A'}</td></tr>`;
+            });
+        }
+
+        function filterPatientRecords(val) {
+            renderStaffPatientsTable(val);
+        }
+
+        // --- ASSURANCES ADMIN ---
         function savePatientInsurance() {
             const name = document.getElementById('adm_ins_patient').value;
             const id = document.getElementById('adm_ins_id').value;
             const status = document.getElementById('adm_ins_status').value;
             const date = document.getElementById('adm_ins_date').value;
 
-            if (!name) return alert("Entrez un nom de patient.");
+            if (!name) return alert("Entrez un nom.");
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
-            
-            if (index > -1) {
-                patients[index] = { name, id, status, date };
-            } else {
-                patients.push({ name, id, status, date });
-            }
+            if (index > -1) patients[index] = { name, id, status, date };
+            else patients.push({ name, id, status, date });
             localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Assurance enregistrée avec succès !");
+            alert("Assurance enregistrée !");
             renderAdminInsuranceTable();
-        }
-
-        function renderAdminInsuranceTable() {
-            const tbody = document.getElementById('adminInsuranceTable');
-            if(!tbody) return;
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            tbody.innerHTML = '';
-            patients.forEach((p, i) => {
-                let badge = p.status === 'active' ? '🟢 Active' : (p.status === 'expired' ? '🔴 Expirée' : '⚪ Aucune');
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${badge}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer</button></td></tr>`;
-            });
         }
 
         function deleteInsurance(index) {
@@ -644,34 +704,32 @@
             renderAdminInsuranceTable();
         }
 
-       function checkAdminPassword() {
+        function renderAdminInsuranceTable() {
+            const tbody = document.getElementById('adminInsuranceTable');
+            if(!tbody) return;
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            tbody.innerHTML = '';
+            patients.forEach((p, i) => {
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer</button></td></tr>`;
+            });
+        }
+
+        function checkAdminPassword() {
             const pwd = document.getElementById('adminPasswordInput').value;
-            // On vérifie simplement qu'un mot de passe est saisi pour déverrouiller l'interface admin locale
             if (pwd && pwd.trim().length > 0) {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
                 renderAdminInsuranceTable();
+                renderStaffAccountsTable();
             } else {
                 alert("Veuillez entrer un mot de passe.");
             }
         }
 
-        // Générateur Facture Discord
         function generateFacture() {
             const patient = document.getElementById('fact_patient').value || "N/A";
-            const id = document.getElementById('fact_id').value || "N/A";
-            const medic = document.getElementById('fact_medic').value || "N/A";
             const total = document.getElementById('totalPrice').innerText;
-            
-            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n`;
-            text += `👤 Patient : ${patient} (${id})\n`;
-            text += `👨‍⚕️ Soignant : ${medic}\n`;
-            text += `🛡️ Réduction appliquée : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n`;
-            text += `📋 Actes réalisés :\n`;
-            if (selectedActs.length === 0) text += ` - Soins généraux\n`;
-            else selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
-            text += `💵 MONTANT TOTAL : ${total}\n==============================`;
-            
+            let text = `=== 💰 FACTURE RMS ===\nPatient : ${patient}\nTotal : ${total}\n====================`;
             showOutput('output_facturation', 'copy_facturation', text);
         }
 
@@ -684,14 +742,10 @@
         }
 
         function copyToClipboard(elementId) {
-            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => {
-                alert("Copié !");
-            });
+            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !"));
         }
 
-        window.onload = () => {
-            initActs();
-        };
+        window.onload = () => { initActs(); };
     </script>
 </body>
 </html>
