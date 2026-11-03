@@ -8,6 +8,8 @@
         :root {
             --primary: #dc2626;
             --primary-dark: #b91c1c;
+            --police-blue: #0284c7;
+            --police-dark: #0369a1;
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
@@ -15,204 +17,73 @@
             --border: #334155;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            padding: 20px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px; }
 
         header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 25px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border-bottom: 4px solid var(--primary);
+            text-align: center; margin-bottom: 25px; padding: 25px;
+            background: var(--card-bg); border-radius: 12px; border-bottom: 4px solid var(--primary);
         }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
+        header h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 1px; }
         header p { color: var(--text-muted); }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-        /* Navigation Principal */
-        .main-nav {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
+        .main-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
         .nav-link {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: all 0.2s;
+            background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);
+            padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: all 0.2s;
         }
+        .nav-link:hover, .nav-link.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .nav-link.rcso-btn { border-color: var(--police-blue); }
+        .nav-link.rcso-btn:hover, .nav-link.rcso-btn.active { background: var(--police-blue); border-color: var(--police-blue); color: white; }
 
-        .nav-link:hover, .nav-link.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        .section-page {
-            display: none;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 30px;
-        }
-
+        .section-page { display: none; background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
         .section-page.active { display: block; }
 
-        h2 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            color: var(--text-main);
-        }
+        h2 { margin-bottom: 20px; font-size: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; color: var(--text-main); }
+        h3 { color: var(--primary); margin-bottom: 15px; }
 
-        /* Design Accueil */
         .hero-banner {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
+            width: 100%; height: 220px;
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover;
+            border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; margin-bottom: 25px; border: 1px solid var(--border);
         }
-
         .hero-banner h3 { font-size: 2rem; color: white; margin-bottom: 10px; }
-        .hero-banner p { color: #cbd5e1; max-width: 700px; }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .action-card {
-            background: #0f172a;
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .action-card { background: #0f172a; border: 1px solid var(--border); padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
         .action-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .action-card h4 { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; }
         .action-card p { color: var(--text-muted); font-size: 0.9rem; }
 
-        /* Annonces */
-        .announcement-card {
-            background: #0f172a;
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .announcement-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .announcement-title {
-            font-size: 1.2rem;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .announcement-body { color: #cbd5e1; line-height: 1.6; }
-
-        /* Sub-nav pour les Outils */
         .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
         .sub-btn.active { background: var(--primary-dark); color: white; border-color: var(--primary); }
         .tool-panel { display: none; }
         .tool-panel.active { display: block; }
 
-        /* Formulaires & Grilles */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
         label { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
-        input, select, textarea {
-            background: #0f172a; border: 1px solid var(--border); color: var(--text-main);
-            padding: 10px; border-radius: 6px; font-size: 0.95rem;
-        }
+        input, select, textarea { background: #0f172a; border: 1px solid var(--border); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.95rem; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
         textarea { resize: vertical; min-height: 80px; }
 
-        /* Facturation Layout */
         .billing-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         @media (max-width: 768px) { .billing-layout { grid-template-columns: 1fr; } }
-
-        .acts-list {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px;
-        }
+        .acts-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
         .act-item { background: #0f172a; border: 1px solid var(--border); padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
         .act-item:hover { border-color: var(--primary); }
         .act-item.selected { background: rgba(220, 38, 38, 0.15); border-color: var(--primary); }
         .act-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
         .act-price { color: #4ade80; font-weight: bold; }
 
-        .cart-summary {
-            background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid var(--border);
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
+        .cart-summary { background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
         .total-display { font-size: 1.6rem; font-weight: bold; color: #4ade80; margin: 10px 0; text-align: right; }
         .discount-info { color: #38bdf8; font-size: 0.85rem; margin-bottom: 5px; text-align: right; }
 
-        .btn {
-            background: var(--primary); color: white; border: none; padding: 12px 20px;
-            border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center;
-        }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; }
         .btn:hover { background: var(--primary-dark); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
@@ -221,40 +92,18 @@
         .btn-discord:hover { background: #4752C4; }
         .btn-danger { background: #7f1d1d; }
         .btn-danger:hover { background: #991b1b; }
+        .btn-police { background: var(--police-blue); }
+        .btn-police:hover { background: var(--police-dark); }
 
-        .output-box {
-            margin-top: 20px; background: #090d16; border: 1px solid var(--border);
-            padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap;
-            font-size: 0.85rem; color: #cbd5e1; max-height: 200px; overflow-y: auto;
-        }
+        .output-box { margin-top: 20px; background: #090d16; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1; max-height: 200px; overflow-y: auto; }
 
-        /* Effectifs */
-        .staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
-        .staff-card {
-            background: #0f172a; border: 1px solid var(--border); padding: 15px;
-            border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 15px;
-        }
-        .staff-left { display: flex; align-items: center; gap: 12px; }
-        .staff-avatar {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--primary);
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem;
-        }
-        .staff-info h5 { font-size: 0.95rem; color: var(--text-main); }
-        .staff-info p { font-size: 0.8rem; color: var(--text-muted); }
-
-        /* Tables Admin */
-        .admin-table {
-            width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px;
-        }
-        .admin-table th, .admin-table td {
-            border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 0.9rem;
-        }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; }
+        .admin-table th, .admin-table td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 0.9rem; }
         .admin-table th { background: #0f172a; color: var(--text-muted); }
 
-        .admin-login-box {
-            max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border);
-            padding: 25px; border-radius: 10px; text-align: center;
-        }
+        .admin-login-box { max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border); padding: 25px; border-radius: 10px; text-align: center; }
+        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .badge-danger { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid #ef4444; }
     </style>
 </head>
 <body>
@@ -262,205 +111,228 @@
     <div class="container">
         <header>
             <h1>🏥 RMS HOSPITAL</h1>
-            <p>Rockford Medical Services - Portail d'Information & d'Administration</p>
+            <p>Rockford Medical Services - Centre Hospitalier Officiel</p>
         </header>
 
         <!-- Navigation Principal -->
         <nav class="main-nav">
-            <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil</button>
+            <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
+            <button class="nav-link" onclick="showMainSection('rdv-public', event)">📅 Prendre RDV</button>
             <button class="nav-link" onclick="showMainSection('annonces', event)">📢 Annonces</button>
-            <button class="nav-link" onclick="showMainSection('outils', event)">⚡ Outils & Facturation</button>
-            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlement</button>
-            <button class="nav-link" onclick="showMainSection('effectifs', event)">👨‍⚕️ Effectifs</button>
-            <button class="nav-link" onclick="showMainSection('staff-login', event)">🩺 Espace Staff</button>
+            <button class="nav-link" onclick="showMainSection('staff-login', event)">🩺 Espace RMS (Médecins)</button>
+            <button class="nav-link rcso-btn" onclick="showMainSection('rcso-portal', event)">🚔 Espace RCSO (Police)</button>
             <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Admin</button>
         </nav>
 
-        <!-- ACCUEIL -->
+        <!-- ACCUEIL PUBLIC -->
         <section id="accueil" class="section-page active">
             <div class="hero-banner">
                 <h3>Centre Hospitalier de Rockford</h3>
-                <p>Bienvenue sur le portail officiel RMS Hospital. Engagement, réactivité et professionnalisme au service des citoyens 24/7.</p>
+                <p>Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7.</p>
             </div>
-            <h2>Accès Rapide</h2>
+            <h2>Services aux Citoyens</h2>
             <div class="quick-actions">
+                <div class="action-card" onclick="showMainSection('rdv-public')">
+                    <h4>📅 Prise de Rendez-vous</h4>
+                    <p>Réservez une consultation médicale avec nos spécialistes en quelques clics.</p>
+                </div>
                 <div class="action-card" onclick="showMainSection('annonces')">
-                    <h4>📢 Dernières Annonces</h4>
-                    <p>Consultez les notes de service et informations importantes.</p>
-                </div>
-                <div class="action-card" onclick="showMainSection('outils')">
-                    <h4>💰 Facturation & Rapports</h4>
-                    <p>Générez vos factures et comptes-rendus pour Discord.</p>
-                </div>
-                <div class="action-card" onclick="showMainSection('effectifs')">
-                    <h4>👨‍⚕️ L'Équipe Médicale</h4>
-                    <p>Retrouvez le personnel soignant actuellement enregistré.</p>
+                    <h4>📢 Annonces Officielles</h4>
+                    <p>Consultez les informations de santé publique et campagnes de prévention.</p>
                 </div>
             </div>
+        </section>
+
+        <!-- RDV PUBLIC CITOYEN -->
+        <section id="rdv-public" class="section-page">
+            <h2>📅 Prise de Rendez-vous Médical (Citoyen)</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Remplissez ce formulaire pour envoyer une demande de rendez-vous directement au secrétariat médical RMS.</p>
+            
+            <div class="form-grid">
+                <div class="form-group"><label>Nom & Prénom du Citoyen</label><input type="text" id="rdv_citoyen_name" placeholder="Ex: John Doe"></div>
+                <div class="form-group"><label>Numéro de Téléphone / Discord</label><input type="text" id="rdv_citoyen_phone" placeholder="Ex: 555-0142"></div>
+                <div class="form-group">
+                    <label>Médecin souhaité (Optionnel)</label>
+                    <select id="rdv_citoyen_medic">
+                        <option value="Premier disponible">Premier disponible</option>
+                        <option value="Dr. House">Dr. House</option>
+                        <option value="Dr. Shepherd">Dr. Shepherd</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Date souhaitée</label><input type="date" id="rdv_citoyen_date"></div>
+                <div class="form-group"><label>Heure souhaitée</label><input type="time" id="rdv_citoyen_time"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Motif de la consultation</label><textarea id="rdv_citoyen_reason" placeholder="Ex: Visite médicale de contrôle, douleurs..."></textarea></div>
+            </div>
+            <button class="btn" onclick="submitPublicRDV()">📩 Soumettre la demande de RDV</button>
+            <div class="output-box" id="output_rdv" style="display:none;"></div>
+            <button class="btn btn-discord" id="send_rdv_discord" style="display:none;" onclick="sendDiscordWebhook('output_rdv')">🚀 Envoyer le Ticket RDV sur Discord</button>
         </section>
 
         <!-- ANNONCES -->
         <section id="annonces" class="section-page">
-            <h2>📢 Fil d'Actualité & Annonces Officielles</h2>
-            <div id="announcementsContainer"></div>
-        </section>
-
-        <!-- OUTILS & FACTURATION -->
-        <section id="outils" class="section-page">
-            <h2>Générateur de Documents & Facturation</h2>
-            <div class="sub-nav">
-                <button class="sub-btn active" onclick="showTool('facture-tool', event)">💰 Facturation</button>
-                <button class="sub-btn" onclick="showTool('op-tool', event)">📋 Rapport d'Opération</button>
-                <button class="sub-btn" onclick="showTool('cr-tool', event)">🩺 Compte-Rendu</button>
-                <button class="sub-btn" onclick="showTool('imp-tool', event)">⚠️ Impayés</button>
-                <button class="sub-btn" onclick="showTool('dec-tool', event)">⚰️ Avis de Décès</button>
-            </div>
-
-            <!-- Facturation -->
-            <div id="facture-tool" class="tool-panel active">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nom & Prénom du Patient</label>
-                        <input type="text" id="fact_patient" placeholder="Ex: John Doe" onblur="checkPatientInsurance(this.value)">
-                    </div>
-                    <div class="form-group">
-                        <label>ID Unique / Carte Vitale</label>
-                        <input type="text" id="fact_id" placeholder="Ex: #EMS-1042">
-                    </div>
-                    <div class="form-group">
-                        <label>Personnel EMS en charge</label>
-                        <input type="text" id="fact_medic" placeholder="Ex: Dr. House">
-                    </div>
+            <h2>📢 Annonces Officielles & Santé Publique</h2>
+            <div id="announcementsContainer">
+                <div class="announcement-card" style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px;">
+                    <h4 style="color:var(--primary);">🏥 Ouverture des souscriptions aux assurances RMS</h4>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Pensez à renouveler votre assurance médicale toutes les deux semaines pour bénéficier de 30% de réduction sur l'ensemble des interventions d'urgence.</p>
                 </div>
-                
-                <div id="insuranceAlertBox" style="background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;">
-                    <span id="insuranceStatusText" style="color: #38bdf8; font-weight: bold;">ℹ️ Statut assurance : Vérification...</span>
-                </div>
-
-                <label style="margin-bottom: 10px; display: block;">Actes médicaux pratiqués :</label>
-                <div class="billing-layout">
-                    <div class="acts-list" id="actsContainer"></div>
-                    <div class="cart-summary">
-                        <div>
-                            <h3>Montant Total</h3>
-                            <div class="discount-info" id="discountInfoText">Assurance : Aucune réduction</div>
-                        </div>
-                        <div>
-                            <div class="total-display" id="totalPrice">0 $</div>
-                            <button class="btn" onclick="generateFacture()">Générer la facture</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="output-box" id="output_facturation" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_facturation" style="display:none;" onclick="copyToClipboard('output_facturation')">📋 Copier le texte</button>
-                <button class="btn btn-discord" id="send_facturation" style="display:none;" onclick="sendDiscordWebhook('output_facturation')">🚀 Envoyer direct sur Discord</button>
-            </div>
-
-            <!-- Rapport d'Opération -->
-            <div id="op-tool" class="tool-panel">
-                <div class="form-grid">
-                    <div class="form-group"><label>Patient</label><input type="text" id="op_patient"></div>
-                    <div class="form-group"><label>ID</label><input type="text" id="op_id"></div>
-                    <div class="form-group"><label>Chirurgien</label><input type="text" id="op_medic"></div>
-                    <div class="form-group"><label>Date</label><input type="date" id="op_date"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Motif</label><input type="text" id="op_reason"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Détails</label><textarea id="op_desc"></textarea></div>
-                    <div class="form-group"><label>Payé ($)</label><input type="number" id="op_paid" value="0"></div>
-                    <div class="form-group"><label>Dû ($)</label><input type="number" id="op_due" value="0"></div>
-                </div>
-                <button class="btn" onclick="generateOperation()">Générer le Rapport</button>
-                <div class="output-box" id="output_operation" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_operation" style="display:none;" onclick="copyToClipboard('output_operation')">📋 Copier</button>
-                <button class="btn btn-discord" id="send_operation" style="display:none;" onclick="sendDiscordWebhook('output_operation')">🚀 Envoyer direct sur Discord</button>
-            </div>
-
-            <!-- Compte Rendu -->
-            <div id="cr-tool" class="tool-panel">
-                <div class="form-grid">
-                    <div class="form-group"><label>Patient</label><input type="text" id="cr_patient"></div>
-                    <div class="form-group"><label>ID</label><input type="text" id="cr_id"></div>
-                    <div class="form-group"><label>Médecin</label><input type="text" id="cr_medic"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Soins</label><input type="text" id="cr_care"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Recommandations</label><textarea id="cr_recom"></textarea></div>
-                </div>
-                <button class="btn" onclick="generateCompteRendu()">Générer le Compte-Rendu</button>
-                <div class="output-box" id="output_compterendu" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_compterendu" style="display:none;" onclick="copyToClipboard('output_compterendu')">📋 Copier</button>
-                <button class="btn btn-discord" id="send_compterendu" style="display:none;" onclick="sendDiscordWebhook('output_compterendu')">🚀 Envoyer direct sur Discord</button>
-            </div>
-
-            <!-- Impayé -->
-            <div id="imp-tool" class="tool-panel">
-                <div class="form-grid">
-                    <div class="form-group"><label>Patient</label><input type="text" id="imp_patient"></div>
-                    <div class="form-group"><label>ID</label><input type="text" id="imp_id"></div>
-                    <div class="form-group"><label>Montant Dû ($)</label><input type="number" id="imp_amount"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Raison</label><input type="text" id="imp_reason"></div>
-                </div>
-                <button class="btn" onclick="generateImpaye()">Générer l'Impayé</button>
-                <div class="output-box" id="output_impaye" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_impaye" style="display:none;" onclick="copyToClipboard('output_impaye')">📋 Copier</button>
-                <button class="btn btn-discord" id="send_impaye" style="display:none;" onclick="sendDiscordWebhook('output_impaye')">🚀 Envoyer direct sur Discord</button>
-            </div>
-
-            <!-- Décès -->
-            <div id="dec-tool" class="tool-panel">
-                <div class="form-grid">
-                    <div class="form-group"><label>Nom Défunt</label><input type="text" id="dec_patient"></div>
-                    <div class="form-group"><label>Date/Heure</label><input type="text" id="dec_time"></div>
-                    <div class="form-group"><label>Lieu</label><input type="text" id="dec_place"></div>
-                    <div class="form-group"><label>Cause</label><input type="text" id="dec_cause"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Médecin</label><input type="text" id="dec_medic"></div>
-                </div>
-                <button class="btn" onclick="generateDeces()">Générer le Certificat</button>
-                <div class="output-box" id="output_deces" style="display:none;"></div>
-                <button class="btn btn-secondary" id="copy_deces" style="display:none;" onclick="copyToClipboard('output_deces')">📋 Copier</button>
-                <button class="btn btn-discord" id="send_deces" style="display:none;" onclick="sendDiscordWebhook('output_deces')">🚀 Envoyer direct sur Discord</button>
             </div>
         </section>
 
-        <!-- RÈGLEMENT -->
-        <section id="reglement" class="section-page">
-            <h2>Code de Déontologie RMS</h2>
-            <div style="line-height: 1.7; color: #cbd5e1;">
-                <h4 style="color:var(--primary); margin:10px 0;">Article 1 - Devoir d'Assistance</h4>
-                <p>Obligation légale d'intervenir et de porter assistance à toute personne blessée.</p>
-                <h4 style="color:var(--primary); margin:10px 0;">Article 2 - Tenue & Matériel</h4>
-                <p>Uniforme réglementaire obligatoire en service. Usage privé du matériel interdit.</p>
-                <h4 style="color:var(--primary); margin:10px 0;">Article 3 - Radio</h4>
-                <p>La fréquence radio EMS doit rester claire pour les urgences vitales.</p>
-            </div>
-        </section>
-
-        <!-- EFFECTIFS -->
-        <section id="effectifs" class="section-page">
-            <h2>Organigramme RMS Hospital</h2>
-            <div class="staff-grid" id="staffContainer"></div>
-        </section>
-
-        <!-- ESPACE CONNEXION STAFF MÉDICAL -->
+        <!-- ESPACE STAFF MÉDICAL RMS (SÉCURISÉ) -->
         <section id="staff-login" class="section-page">
-            <h2>🩺 Espace Connexion - Personnel Médical</h2>
+            <h2>🩺 Espace Confidentiel - Personnel RMS</h2>
             
             <div id="staffLoginForm" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Connectez-vous avec vos identifiants temporaires :</p>
-                <input type="text" id="staffUser" placeholder="Nom d'utilisateur / ID..." style="width: 100%; margin-bottom: 10px;">
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion réservée aux membres de la RMS :</p>
+                <input type="text" id="staffUser" placeholder="Identifiant..." style="width: 100%; margin-bottom: 10px;">
                 <input type="password" id="staffPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
-                <button class="btn" onclick="loginStaff()">Se connecter</button>
+                <button class="btn" onclick="loginStaff()">Se connecter à l'espace médical</button>
             </div>
 
             <div id="staffDashboard" style="display:none;">
-                <p style="color: #4ade80; margin-bottom: 20px; font-weight: bold;" id="welcomeStaffMsg">✅ Connecté avec succès</p>
-                
-                <h3 style="color: var(--primary); margin-bottom: 15px;">📂 Dossiers Médicaux & Assurances Enregistrés</h3>
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="searchPatientInput" placeholder="Rechercher un patient par son nom..." oninput="filterPatientRecords(this.value)" style="width: 100%; max-width: 400px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <p style="color: #4ade80; font-weight: bold;" id="welcomeStaffMsg">✅ Session Médicale Active</p>
+                    <button class="btn btn-secondary btn-sm" onclick="logoutStaff()">Se déconnecter</button>
                 </div>
+                
+                <div class="sub-nav">
+                    <button class="sub-btn active" onclick="showTool('facture-tool', event)">💰 Facturation</button>
+                    <button class="sub-btn" onclick="showTool('op-tool', event)">📋 Rapport d'Opération</button>
+                    <button class="sub-btn" onclick="showTool('cr-tool', event)">🩺 Compte-Rendu</button>
+                    <button class="sub-btn" onclick="showTool('imp-tool', event)">⚠️ Impayés</button>
+                    <button class="sub-btn" onclick="showTool('dec-tool', event)">⚰️ Avis de Décès</button>
+                    <button class="sub-btn" onclick="showTool('dossiers-tool', event)">📂 Dossiers Patients</button>
+                </div>
+
+                <!-- Facturation -->
+                <div id="facture-tool" class="tool-panel active">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Patient</label><input type="text" id="fact_patient" placeholder="Ex: John Doe" onblur="checkPatientInsurance(this.value)"></div>
+                        <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="fact_id" placeholder="Ex: #EMS-1042"></div>
+                        <div class="form-group"><label>Médecin</label><input type="text" id="fact_medic" placeholder="Ex: Dr. House"></div>
+                    </div>
+                    
+                    <div id="insuranceAlertBox" style="background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;">
+                        <span id="insuranceStatusText" style="color: #38bdf8; font-weight: bold;">ℹ️ Statut assurance...</span>
+                    </div>
+
+                    <label style="margin-bottom: 10px; display: block;">Actes pratiqués :</label>
+                    <div class="billing-layout">
+                        <div class="acts-list" id="actsContainer"></div>
+                        <div class="cart-summary">
+                            <div><h3>Total</h3><div class="discount-info" id="discountInfoText">Assurance : Aucune</div></div>
+                            <div><div class="total-display" id="totalPrice">0 $</div><button class="btn" onclick="generateFacture()">Générer la facture</button></div>
+                        </div>
+                    </div>
+                    <div class="output-box" id="output_facturation" style="display:none;"></div>
+                    <button class="btn btn-secondary" id="copy_facturation" style="display:none;" onclick="copyToClipboard('output_facturation')">📋 Copier</button>
+                    <button class="btn btn-discord" id="send_facturation" style="display:none;" onclick="sendDiscordWebhook('output_facturation')">🚀 Envoyer direct sur Discord</button>
+                </div>
+
+                <!-- Rapport d'Opération -->
+                <div id="op-tool" class="tool-panel">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Patient</label><input type="text" id="op_patient"></div>
+                        <div class="form-group"><label>ID</label><input type="text" id="op_id"></div>
+                        <div class="form-group"><label>Chirurgien</label><input type="text" id="op_medic"></div>
+                        <div class="form-group"><label>Date</label><input type="date" id="op_date"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Motif</label><input type="text" id="op_reason"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Détails</label><textarea id="op_desc"></textarea></div>
+                    </div>
+                    <button class="btn" onclick="generateOperation()">Générer le Rapport</button>
+                    <div class="output-box" id="output_operation" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_operation" style="display:none;" onclick="sendDiscordWebhook('output_operation')">🚀 Envoyer direct sur Discord</button>
+                </div>
+
+                <!-- Compte Rendu -->
+                <div id="cr-tool" class="tool-panel">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Patient</label><input type="text" id="cr_patient"></div>
+                        <div class="form-group"><label>ID</label><input type="text" id="cr_id"></div>
+                        <div class="form-group"><label>Médecin</label><input type="text" id="cr_medic"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Soins</label><input type="text" id="cr_care"></div>
+                    </div>
+                    <button class="btn" onclick="generateCompteRendu()">Générer le Compte-Rendu</button>
+                    <div class="output-box" id="output_compterendu" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_compterendu" style="display:none;" onclick="sendDiscordWebhook('output_compterendu')">🚀 Envoyer direct sur Discord</button>
+                </div>
+
+                <!-- Impayé -->
+                <div id="imp-tool" class="tool-panel">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Patient</label><input type="text" id="imp_patient"></div>
+                        <div class="form-group"><label>Montant Dû ($)</label><input type="number" id="imp_amount"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Raison</label><input type="text" id="imp_reason"></div>
+                    </div>
+                    <button class="btn" onclick="generateImpaye()">Générer l'Impayé</button>
+                    <div class="output-box" id="output_impaye" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_impaye" style="display:none;" onclick="sendDiscordWebhook('output_impaye')">🚀 Envoyer direct sur Discord</button>
+                </div>
+
+                <!-- Décès -->
+                <div id="dec-tool" class="tool-panel">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom Défunt</label><input type="text" id="dec_patient"></div>
+                        <div class="form-group"><label>Cause</label><input type="text" id="dec_cause"></div>
+                        <div class="form-group"><label>Médecin</label><input type="text" id="dec_medic"></div>
+                    </div>
+                    <button class="btn" onclick="generateDeces()">Générer le Certificat</button>
+                    <div class="output-box" id="output_deces" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_deces" style="display:none;" onclick="sendDiscordWebhook('output_deces')">🚀 Envoyer direct sur Discord</button>
+                </div>
+
+                <!-- Dossiers Patients -->
+                <div id="dossiers-tool" class="tool-panel">
+                    <h3>📂 Dossiers Médicaux Enregistrés</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Patient</th><th>ID</th><th>Assurance</th><th>Date Expiration</th></tr></thead>
+                        <tbody id="staffPatientsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ESPACE RCSO (POLICE / SÉCURISÉ) -->
+        <section id="rcso-portal" class="section-page">
+            <h2 style="color: var(--police-blue); border-bottom-color: var(--police-blue);">🚔 Espace Confidentiel - Forces de l'Ordre (RCSO)</h2>
+            
+            <div id="rcsoLoginForm" class="admin-login-box" style="border-color: var(--police-blue);">
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion réservée aux agents du RCSO :</p>
+                <input type="text" id="rcsoUser" placeholder="Identifiant / Matricule..." style="width: 100%; margin-bottom: 10px;">
+                <input type="password" id="rcsoPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
+                <button class="btn btn-police" onclick="loginRCSO()">Se connecter au portail RCSO</button>
+            </div>
+
+            <div id="rcsoDashboard" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <p style="color: #38bdf8; font-weight: bold;" id="welcomeRCSOMsg">✅ Session RCSO Active</p>
+                    <button class="btn btn-secondary btn-sm" onclick="logoutRCSO()">Se déconnecter</button>
+                </div>
+
+                <!-- Formulaire de signalement (accessible aux médecins depuis leur espace ou aux agents connectés) -->
+                <div id="rcsoForm" style="background: rgba(2, 132, 199, 0.05); border: 1px solid var(--police-blue); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                    <h3 style="color: var(--police-blue);">📝 Créer ou Transmettre un Signalement Citoyen</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom & Prénom du Citoyen Signalé</label><input type="text" id="rcso_name" placeholder="Ex: Jane Doe"></div>
+                        <div class="form-group">
+                            <label>Motif du Signalement</label>
+                            <select id="rcso_reason">
+                                <option value="Impayé/Fraude Médicale">Impayé / Fraude Médicale</option>
+                                <option value="Outrage/Agression Soignant">Outrage / Agression Soignant</option>
+                                <option value="Suspect recherché blessé">Suspect recherché blessé</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Détails / Circonstances</label><textarea id="rcso_details"></textarea></div>
+                    </div>
+                    <button class="btn btn-police" onclick="submitRCSOSignalment()">🚔 Transmettre le Signalement au RCSO</button>
+                </div>
+
+                <h3 style="color: var(--police-blue);">📋 Registre des Signalements et Fraudes</h3>
                 <table class="admin-table">
-                    <thead><tr><th>Patient</th><th>ID / Vitale</th><th>Statut Assurance</th><th>Renouvellement Max</th></tr></thead>
-                    <tbody id="staffPatientsTable"></tbody>
+                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Date</th></tr></thead>
+                    <tbody id="rcsoReportsTable"></tbody>
                 </table>
-                <button class="btn btn-secondary" onclick="logoutStaff()" style="max-width: 200px;">Se déconnecter</button>
             </div>
         </section>
 
@@ -478,10 +350,10 @@
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
 
                 <!-- CONFIGURATION DISCORD WEBHOOK -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">🤖 Configuration Webhook Discord</h3>
+                <h3>🤖 Configuration Webhook Discord</h3>
                 <div class="form-grid">
                     <div class="form-group" style="grid-column: span 2;">
-                        <label>URL du Webhook Discord (Salon de logs/factures)</label>
+                        <label>URL du Webhook Discord</label>
                         <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
                     </div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL Webhook</button></div>
@@ -490,11 +362,11 @@
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
                 <!-- GESTION COMPTES MÉDECINS TEMPORAIRES -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">🩺 Gestion des Comptes Médecins (Accès Staff)</h3>
+                <h3>🩺 Gestion des Comptes Médecins RMS</h3>
                 <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant / Pseudo"></div>
-                    <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe temporaire"></div>
-                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom complet du médecin (Dr...)"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant"></div>
+                    <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom (Ex: Dr. House)"></div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte médecin</button></div>
                 </div>
                 <table class="admin-table">
@@ -504,30 +376,39 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION ASSURANCES & PATIENTS -->
-                <h3 style="color: var(--primary); margin-bottom: 15px;">🛡️ Gestion des Assurances Patients</h3>
+                <!-- GESTION COMPTES RCSO (POLICE) -->
+                <h3 style="color: var(--police-blue);">🚔 Gestion des Comptes RCSO (Police)</h3>
                 <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_ins_patient" placeholder="Nom & Prénom du Patient"></div>
+                    <div class="form-group"><input type="text" id="adm_rcso_user" placeholder="Identifiant / Matricule"></div>
+                    <div class="form-group"><input type="password" id="adm_rcso_pass" placeholder="Mot de passe"></div>
+                    <div class="form-group"><input type="text" id="adm_rcso_name" placeholder="Nom / Grade de l'agent"></div>
+                    <div style="grid-column: span 2;"><button class="btn btn-police" onclick="createRCSOAccount()">Créer le compte RCSO</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
+                    <tbody id="adminRCSOAccountsTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <!-- GESTION ASSURANCES & PATIENTS -->
+                <h3>🛡️ Gestion des Assurances Patients</h3>
+                <div class="form-grid">
+                    <div class="form-group"><input type="text" id="adm_ins_patient" placeholder="Nom du Patient"></div>
                     <div class="form-group"><input type="text" id="adm_ins_id" placeholder="ID / Carte Vitale"></div>
                     <div class="form-group">
-                        <label>Statut Assurance</label>
                         <select id="adm_ins_status">
-                            <option value="active">Active (-30% de réduction)</option>
-                            <option value="expired">Expirée (Pas de réduction)</option>
-                            <option value="none">Aucune assurance</option>
+                            <option value="active">Active (-30%)</option>
+                            <option value="expired">Expirée</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Date de renouvellement max</label><input type="date" id="adm_ins_date"></div>
+                    <div class="form-group"><input type="date" id="adm_ins_date"></div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer l'assurance</button></div>
                 </div>
                 <table class="admin-table">
                     <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action</th></tr></thead>
                     <tbody id="adminInsuranceTable"></tbody>
                 </table>
-
-                <div style="margin-top: 30px;">
-                    <button class="btn btn-danger" onclick="resetDefaultData()">Réinitialiser les données</button>
-                </div>
             </div>
         </section>
     </div>
@@ -538,22 +419,16 @@
             { name: "Gros soin", price: 500 },
             { name: "Consultation en urgence", price: 500 },
             { name: "Soins de Réhabilitation", price: 1000 },
-            { name: "Surveillance à Domicile", price: 500 },
-            { name: "Équipement Médical Spécifique", price: 2500 },
             { name: "Services de Transport", price: 500 },
             { name: "Suture des plaies", price: 500 },
             { name: "Plâtre ou attelle", price: 500 },
-            { name: "Traitement des brûlures", price: 1000 },
             { name: "Gestion des blessures par balle", price: 2000 }
         ];
 
         let selectedActs = [];
         let currentPatientDiscount = 0;
 
-        function getActs() {
-            let stored = localStorage.getItem('rms_acts');
-            return stored ? JSON.parse(stored) : defaultActs;
-        }
+        function getActs() { return JSON.parse(localStorage.getItem('rms_acts')) || defaultActs; }
 
         function initActs() {
             const container = document.getElementById('actsContainer');
@@ -571,13 +446,8 @@
         function toggleAct(index, element, acts) {
             const act = acts[index];
             const idx = selectedActs.findIndex(a => a.name === act.name);
-            if (idx > -1) {
-                selectedActs.splice(idx, 1);
-                element.classList.remove('selected');
-            } else {
-                selectedActs.push(act);
-                element.classList.add('selected');
-            }
+            if (idx > -1) { selectedActs.splice(idx, 1); element.classList.remove('selected'); } 
+            else { selectedActs.push(act); element.classList.add('selected'); }
             updateTotal();
         }
 
@@ -586,8 +456,7 @@
             let discountAmount = subtotal * currentPatientDiscount;
             let finalTotal = Math.round(subtotal - discountAmount);
             document.getElementById('totalPrice').innerText = finalTotal + " $";
-            document.getElementById('discountInfoText').innerText = currentPatientDiscount > 0 ? 
-                `Assurance Active : -30% (Économie : ${Math.round(discountAmount)} $)` : `Assurance : Aucune réduction`;
+            document.getElementById('discountInfoText').innerText = currentPatientDiscount > 0 ? `Assurance Active : -30%` : `Assurance : Aucune`;
         }
 
         function checkPatientInsurance(patientName) {
@@ -602,13 +471,11 @@
                 currentPatientDiscount = 0.30;
                 statusText.innerHTML = `✅ Assurance ACTIVE pour ${found.name} (-30% appliqués)`;
                 alertBox.style.borderColor = '#4ade80';
-                alertBox.style.background = 'rgba(74, 222, 128, 0.1)';
                 if(found.id) document.getElementById('fact_id').value = found.id;
             } else {
                 currentPatientDiscount = 0;
                 statusText.innerHTML = `ℹ️ Aucune assurance active pour ce patient (Plein tarif)`;
                 alertBox.style.borderColor = '#38bdf8';
-                alertBox.style.background = 'rgba(56, 189, 248, 0.1)';
             }
             updateTotal();
         }
@@ -632,7 +499,7 @@
             const url = document.getElementById('adm_webhook_url').value.trim();
             if(!url) return alert("Entrez une URL Webhook valide.");
             localStorage.setItem('rms_discord_webhook', url);
-            alert("URL Webhook Discord sauvegardée avec succès !");
+            alert("URL Webhook Discord sauvegardée !");
         }
 
         function getWebhookUrl() {
@@ -641,7 +508,7 @@
 
         async function sendDiscordWebhook(elementId) {
             const webhookUrl = getWebhookUrl();
-            if (!webhookUrl) return alert("Veuillez d'abord configurer l'URL Webhook dans l'espace Admin.");
+            if (!webhookUrl) return alert("Configurez le Webhook dans l'Admin.");
 
             const contentText = document.getElementById(elementId).innerText;
             if (!contentText) return alert("Aucun texte à envoyer.");
@@ -653,17 +520,73 @@
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
 
-                if (response.ok || response.status === 204) {
-                    alert("🚀 Envoyé avec succès sur Discord !");
-                } else {
-                    alert("⚠️ Erreur lors de l'envoi sur Discord. Vérifiez l'URL du Webhook.");
-                }
-            } catch (err) {
-                alert("Erreur de connexion avec le serveur Discord.");
-            }
+                if (response.ok || response.status === 204) alert("🚀 Envoyé avec succès sur Discord !");
+                else alert("⚠️ Erreur lors de l'envoi Discord.");
+            } catch (err) { alert("Erreur réseau Discord."); }
         }
 
-        // --- GESTION COMPTES STAFF ---
+        // --- PRISE DE RDV PUBLIC ---
+        function submitPublicRDV() {
+            const name = document.getElementById('rdv_citoyen_name').value;
+            const phone = document.getElementById('rdv_citoyen_phone').value;
+            const medic = document.getElementById('rdv_citoyen_medic').value;
+            const date = document.getElementById('rdv_citoyen_date').value;
+            const time = document.getElementById('rdv_citoyen_time').value;
+            const reason = document.getElementById('rdv_citoyen_reason').value;
+
+            if(!name || !phone) return alert("Veuillez renseigner votre nom et contact.");
+
+            const ticketNum = Math.floor(1000 + Math.random() * 9000);
+            let text = `=== 📅 DEMANDE DE RENDEZ-VOUS (Ticket #${ticketNum}) ===\n`;
+            text += `👤 Citoyen : ${name} (Tel/Discord: ${phone})\n`;
+            text += `👨‍⚕️ Soignant : ${medic}\n`;
+            text += `📅 Horaires souhaités : Le ${date} à ${time}\n`;
+            text += `📝 Motif : ${reason}\n===============================================`;
+
+            const out = document.getElementById('output_rdv');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_rdv_discord').style.display = 'block';
+            alert(`Votre Ticket RDV #${ticketNum} a été généré ! Cliquez sur le bouton bleu pour transmettre votre rendez-vous.`);
+        }
+
+        // --- SIGNALEMENTS RCSO ---
+        function submitRCSOSignalment() {
+            const name = document.getElementById('rcso_name').value;
+            const reason = document.getElementById('rcso_reason').value;
+            const details = document.getElementById('rcso_details').value;
+
+            if(!name) return alert("Entrez le nom du citoyen.");
+
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            const newReport = { name, reason, details, date: new Date().toLocaleDateString() };
+            reports.push(newReport);
+            localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
+
+            renderRCSOTable();
+            
+            const webhookUrl = getWebhookUrl();
+            if(webhookUrl) {
+                let msg = `=== 🚔 SIGNALEMENT TRANSMIS AU RCSO ===\n👤 Citoyen : ${name}\n⚠️ Motif : ${reason}\n📝 Détails : ${details}\n📅 Date : ${newReport.date}\n========================================`;
+                fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: "```\n" + msg + "\n```" }) });
+            }
+
+            alert("Signalement transmis avec succès au RCSO !");
+            document.getElementById('rcso_name').value = '';
+            document.getElementById('rcso_details').value = '';
+        }
+
+        function renderRCSOTable() {
+            const tbody = document.getElementById('rcsoReportsTable');
+            if(!tbody) return;
+            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
+            tbody.innerHTML = '';
+            reports.forEach(r => {
+                tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details}</td><td>${r.date}</td></tr>`;
+            });
+        }
+
+        // --- GESTION COMPTES RMS ---
         function createStaffAccount() {
             const username = document.getElementById('adm_staff_user').value.trim();
             const password = document.getElementById('adm_staff_pass').value.trim();
@@ -675,9 +598,6 @@
             localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
             alert("Compte médecin créé !");
             renderStaffAccountsTable();
-            document.getElementById('adm_staff_user').value = '';
-            document.getElementById('adm_staff_pass').value = '';
-            document.getElementById('adm_staff_name').value = '';
         }
 
         function deleteStaffAccount(index) {
@@ -693,7 +613,7 @@
             let accounts = JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
             tbody.innerHTML = '';
             accounts.forEach((acc, i) => {
-                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer l'accès</button></td></tr>`;
+                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
             });
         }
 
@@ -706,33 +626,78 @@
             if (found) {
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
-                document.getElementById('welcomeStaffMsg').innerText = `✅ Connecté en tant que ${found.name}`;
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Médicale Active (${found.name})`;
                 renderStaffPatientsTable();
             } else {
-                alert("Identifiant ou mot de passe incorrect.");
+                alert("Identifiants incorrects.");
             }
         }
 
         function logoutStaff() {
             document.getElementById('staffLoginForm').style.display = 'block';
             document.getElementById('staffDashboard').style.display = 'none';
-            document.getElementById('staffUser').value = '';
-            document.getElementById('staffPass').value = '';
         }
 
-        function renderStaffPatientsTable(filter = '') {
+        // --- GESTION COMPTES RCSO ---
+        function createRCSOAccount() {
+            const username = document.getElementById('adm_rcso_user').value.trim();
+            const password = document.getElementById('adm_rcso_pass').value.trim();
+            const name = document.getElementById('adm_rcso_name').value.trim();
+
+            if (!username || !password || !name) return alert("Remplissez tous les champs RCSO.");
+            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
+            accounts.push({ username, password, name });
+            localStorage.setItem('rcso_accounts', JSON.stringify(accounts));
+            alert("Compte RCSO créé avec succès !");
+            renderRCSOAccountsTable();
+        }
+
+        function deleteRCSOAccount(index) {
+            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
+            accounts.splice(index, 1);
+            localStorage.setItem('rcso_accounts', JSON.stringify(accounts));
+            renderRCSOAccountsTable();
+        }
+
+        function renderRCSOAccountsTable() {
+            const tbody = document.getElementById('adminRCSOAccountsTable');
+            if(!tbody) return;
+            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
+            tbody.innerHTML = '';
+            accounts.forEach((acc, i) => {
+                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteRCSOAccount(${i})">Supprimer</button></td></tr>`;
+            });
+        }
+
+        function loginRCSO() {
+            const user = document.getElementById('rcsoUser').value.trim();
+            const pass = document.getElementById('rcsoPass').value.trim();
+            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
+            let found = accounts.find(a => a.username === user && a.password === pass);
+
+            if (found) {
+                document.getElementById('rcsoLoginForm').style.display = 'none';
+                document.getElementById('rcsoDashboard').style.display = 'block';
+                document.getElementById('welcomeRCSOMsg').innerText = `✅ Session RCSO Active (${found.name})`;
+                renderRCSOTable();
+            } else {
+                alert("Identifiant ou mot de passe RCSO incorrect.");
+            }
+        }
+
+        function logoutRCSO() {
+            document.getElementById('rcsoLoginForm').style.display = 'block';
+            document.getElementById('rcsoDashboard').style.display = 'none';
+        }
+
+        function renderStaffPatientsTable() {
             const tbody = document.getElementById('staffPatientsTable');
             if(!tbody) return;
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             tbody.innerHTML = '';
-            patients.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).forEach(p => {
-                let badge = p.status === 'active' ? '🟢 Active' : '🔴 Expirée/Aucune';
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${badge}</td><td>${p.date || 'N/A'}</td></tr>`;
+            patients.forEach(p => {
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td></tr>`;
             });
-        }
-
-        function filterPatientRecords(val) {
-            renderStaffPatientsTable(val);
         }
 
         // --- ASSURANCES ADMIN ---
@@ -748,7 +713,7 @@
             if (index > -1) patients[index] = { name, id, status, date };
             else patients.push({ name, id, status, date });
             localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Assurance enregistrée !");
+            alert("Assurance mise à jour !");
             renderAdminInsuranceTable();
         }
 
@@ -777,23 +742,19 @@
                 document.getElementById('adm_webhook_url').value = getWebhookUrl();
                 renderAdminInsuranceTable();
                 renderStaffAccountsTable();
+                renderRCSOAccountsTable();
             } else {
-                alert("Veuillez entrer un mot de passe.");
+                alert("Entrez un mot de passe.");
             }
         }
 
-        // --- GENERATEURS DE DOCUMENTS ---
         function generateFacture() {
             const patient = document.getElementById('fact_patient').value || "N/A";
             const id = document.getElementById('fact_id').value || "N/A";
             const medic = document.getElementById('fact_medic').value || "N/A";
             const total = document.getElementById('totalPrice').innerText;
             
-            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n`;
-            text += `👤 Patient : ${patient} (${id})\n`;
-            text += `👨‍⚕️ Soignant : ${medic}\n`;
-            text += `🛡️ Réduction : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n`;
-            text += `📋 Actes réalisés :\n`;
+            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n👤 Patient : ${patient} (${id})\n👨‍⚕️ Soignant : ${medic}\n🛡️ Réduction : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n📋 Actes réalisés :\n`;
             if (selectedActs.length === 0) text += ` - Soins généraux\n`;
             else selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
             text += `💵 MONTANT TOTAL : ${total}\n==============================`;
@@ -802,40 +763,36 @@
         }
 
         function generateOperation() {
-            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n👤 Patient : ${document.getElementById('op_patient').value || "N/A"} (${document.getElementById('op_id').value || "N/A"})\n👨‍⚕️ Chirurgien : ${document.getElementById('op_medic').value || "N/A"}\n📅 Date : ${document.getElementById('op_date').value || "N/A"}\n🩺 Motif : ${document.getElementById('op_reason').value || "N/A"}\n📝 Détails : ${document.getElementById('op_desc').value || "N/A"}\n💰 Règlement : ${document.getElementById('op_paid').value || "0"} $ payés | ${document.getElementById('op_due').value || "0"} $ dus\n==============================`;
-            showOutput('output_operation', 'copy_operation', 'send_operation', text);
+            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n👤 Patient : ${document.getElementById('op_patient').value || "N/A"}\n👨‍⚕️ Chirurgiens : ${document.getElementById('op_medic').value || "N/A"}\n📅 Date : ${document.getElementById('op_date').value || "N/A"}\n📝 Motif : ${document.getElementById('op_reason').value || "N/A"}\n==============================`;
+            showOutput('output_operation', 'send_operation', text);
         }
 
         function generateCompteRendu() {
-            let text = `=== 🩺 COMPTE-RENDU MÉDICAL ===\n👤 Patient : ${document.getElementById('cr_patient').value || "N/A"} (${document.getElementById('cr_id').value || "N/A"})\n👨‍⚕️ Médecin : ${document.getElementById('cr_medic').value || "N/A"}\n🏥 Soins : ${document.getElementById('cr_care').value || "N/A"}\n💊 Recommandations : ${document.getElementById('cr_recom').value || "N/A"}\n==============================`;
-            showOutput('output_compterendu', 'copy_compterendu', 'send_compterendu', text);
+            let text = `=== 🩺 COMPTE-RENDU MÉDICAL ===\n👤 Patient : ${document.getElementById('cr_patient').value || "N/A"}\n👨‍⚕️ Médecin : ${document.getElementById('cr_medic').value || "N/A"}\n🏥 Soins : ${document.getElementById('cr_care').value || "N/A"}\n==============================`;
+            showOutput('output_compterendu', 'send_compterendu', text);
         }
 
         function generateImpaye() {
-            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n👤 Patient : ${document.getElementById('imp_patient').value || "N/A"} (${document.getElementById('imp_id').value || "N/A"})\n💵 Montant dû : ${document.getElementById('imp_amount').value || "0"} $\n❓ Raison : ${document.getElementById('imp_reason').value || "N/A"}\n⚠️ Merci de régulariser sous 48h.\n====================================`;
-            showOutput('output_impaye', 'copy_impaye', 'send_impaye', text);
+            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n👤 Patient : ${document.getElementById('imp_patient').value || "N/A"}\n💵 Montant : ${document.getElementById('imp_amount').value || "0"} $\n====================================`;
+            showOutput('output_impaye', 'send_impaye', text);
         }
 
         function generateDeces() {
-            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n👤 Défunt : ${document.getElementById('dec_patient').value || "N/A"}\n🕒 Date/Heure : ${document.getElementById('dec_time').value || "N/A"}\n📍 Lieu : ${document.getElementById('dec_place').value || "N/A"}\n⚠️ Cause : ${document.getElementById('dec_cause').value || "N/A"}\n👨‍⚕️ Constaté par : ${document.getElementById('dec_medic').value || "N/A"}\n==============================`;
-            showOutput('output_deces', 'copy_deces', 'send_deces', text);
+            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n👤 Défunt : ${document.getElementById('dec_patient').value || "N/A"}\n⚠️ Cause : ${document.getElementById('dec_cause').value || "N/A"}\n👨‍⚕️ Constaté par : ${document.getElementById('dec_medic').value || "N/A"}\n==============================`;
+            showOutput('output_deces', 'send_deces', text);
         }
 
-        function showOutput(outputId, copyBtnId, sendBtnId, text) {
+        function showOutput(outputId, sendBtnId, text) {
             const out = document.getElementById(outputId);
-            const copyBtn = document.getElementById(copyBtnId);
             const sendBtn = document.getElementById(sendBtnId);
             out.innerText = text;
             out.style.display = 'block';
-            copyBtn.style.display = 'block';
-            sendBtn.style.display = 'block';
+            if(sendBtn) sendBtn.style.display = 'block';
         }
 
-        function copyToClipboard(elementId) {
-            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié dans le presse-papier !"));
-        }
+        function copyToClipboard(elementId) { navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !")); }
 
-        window.onload = () => { initActs(); };
+        window.onload = () => { initActs(); renderRCSOTable(); };
     </script>
 </body>
 </html>
