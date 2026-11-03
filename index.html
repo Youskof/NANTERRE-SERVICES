@@ -87,7 +87,7 @@
         .btn:hover { background: var(--primary-dark); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
-        .btn-secondary:hover { background: #475569; }
+        .btn-secondary:hover { background: #475269; }
         .btn-discord { background: #5865F2; margin-top: 10px; }
         .btn-discord:hover { background: #4752C4; }
         .btn-danger { background: #7f1d1d; }
@@ -284,9 +284,24 @@
 
                 <!-- Dossiers Patients -->
                 <div id="dossiers-tool" class="tool-panel">
-                    <h3>📂 Dossiers Médicaux Enregistrés</h3>
+                    <h3>📂 Créer / Consulter un Dossier Médical</h3>
+                    <div class="form-grid" style="margin-bottom: 20px;">
+                        <div class="form-group"><label>Nom du Patient</label><input type="text" id="staff_ins_patient" placeholder="Ex: John Doe"></div>
+                        <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="staff_ins_id" placeholder="Ex: #EMS-1042"></div>
+                        <div class="form-group">
+                            <label>Statut Assurance</label>
+                            <select id="staff_ins_status">
+                                <option value="active">Active (-30%)</option>
+                                <option value="expired">Expirée</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Date d'expiration</label><input type="date" id="staff_ins_date"></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="staffSavePatientInsurance()">Créer / Mettre à jour le dossier</button></div>
+                    </div>
+                    
+                    <h3>📋 Liste des Dossiers (Création autorisée / Suppression réservée Admin)</h3>
                     <table class="admin-table">
-                        <thead><tr><th>Patient</th><th>ID</th><th>Assurance</th><th>Date Expiration</th></tr></thead>
+                        <thead><tr><th>Patient</th><th>ID</th><th>Assurance</th><th>Expiration</th></tr></thead>
                         <tbody id="staffPatientsTable"></tbody>
                     </table>
                 </div>
@@ -310,7 +325,6 @@
                     <button class="btn btn-secondary btn-sm" onclick="logoutRCSO()">Se déconnecter</button>
                 </div>
 
-                <!-- Formulaire de signalement (accessible aux médecins depuis leur espace ou aux agents connectés) -->
                 <div id="rcsoForm" style="background: rgba(2, 132, 199, 0.05); border: 1px solid var(--police-blue); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
                     <h3 style="color: var(--police-blue);">📝 Créer ou Transmettre un Signalement Citoyen</h3>
                     <div class="form-grid">
@@ -391,8 +405,8 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION ASSURANCES & PATIENTS -->
-                <h3>🛡️ Gestion des Assurances Patients</h3>
+                <!-- GESTION ASSURANCES & PATIENTS (ADMIN PEUT SUPPRIMER) -->
+                <h3>🛡️ Gestion & Suppression des Dossiers Patients (Admin)</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_ins_patient" placeholder="Nom du Patient"></div>
                     <div class="form-group"><input type="text" id="adm_ins_id" placeholder="ID / Carte Vitale"></div>
@@ -403,10 +417,10 @@
                         </select>
                     </div>
                     <div class="form-group"><input type="date" id="adm_ins_date"></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer l'assurance</button></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="savePatientInsurance()">Enregistrer / Mettre à jour</button></div>
                 </div>
                 <table class="admin-table">
-                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Expiration</th><th>Action (Suppression Admin)</th></tr></thead>
                     <tbody id="adminInsuranceTable"></tbody>
                 </table>
             </div>
@@ -503,7 +517,7 @@
         }
 
         function getWebhookUrl() {
-            return localStorage.getItem('rms_discord_webhook') || "https://discord.com/api/webhooks/1567249938260426862/ISXGwIUI4qtRiGX1cKt0890VGBNZiFAgd4T0gE454-t6_kpsXgmQuQaeGcVV8M60VoB-";
+            return localStorage.getItem('rms_discord_webhook') || "https://discord.com/api/webhooks/1567265793832652983/4UYv2QbCR8MZrgG6LcOqJVdO6iBQ_vF7yg4Ld2szDRsUezlEOMRerTOkdc-3xjyEEAv3";
         }
 
         async function sendDiscordWebhook(elementId) {
@@ -690,17 +704,35 @@
             document.getElementById('rcsoDashboard').style.display = 'none';
         }
 
+        // --- DOSSIERS PATIENTS (MÉDECINS CRÉENT, ADMIN SUPPRIME) ---
+        function staffSavePatientInsurance() {
+            const name = document.getElementById('staff_ins_patient').value;
+            const id = document.getElementById('staff_ins_id').value;
+            const status = document.getElementById('staff_ins_status').value;
+            const date = document.getElementById('staff_ins_date').value;
+
+            if (!name) return alert("Entrez un nom de patient.");
+            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
+            let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+            if (index > -1) patients[index] = { name, id, status, date };
+            else patients.push({ name, id, status, date });
+            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
+            alert("Dossier / Assurance enregistré avec succès !");
+            document.getElementById('staff_ins_patient').value = '';
+            document.getElementById('staff_ins_id').value = '';
+            renderStaffPatientsTable();
+        }
+
         function renderStaffPatientsTable() {
             const tbody = document.getElementById('staffPatientsTable');
             if(!tbody) return;
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             tbody.innerHTML = '';
             patients.forEach(p => {
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td></tr>`;
+                tbody.innerHTML += `<tr><td><strong>${p.name}</strong></td><td>${p.id || 'N/A'}</td><td><span class="badge-status" style="background:rgba(56,189,248,0.2); color:#38bdf8;">${p.status}</span></td><td>${p.date || 'N/A'}</td></tr>`;
             });
         }
 
-        // --- ASSURANCES ADMIN ---
         function savePatientInsurance() {
             const name = document.getElementById('adm_ins_patient').value;
             const id = document.getElementById('adm_ins_id').value;
@@ -713,7 +745,7 @@
             if (index > -1) patients[index] = { name, id, status, date };
             else patients.push({ name, id, status, date });
             localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Assurance mise à jour !");
+            alert("Assurance mise à jour par l'Admin !");
             renderAdminInsuranceTable();
         }
 
@@ -730,7 +762,7 @@
             let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
             tbody.innerHTML = '';
             patients.forEach((p, i) => {
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer</button></td></tr>`;
+                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td>${p.date || 'N/A'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer (Admin)</button></td></tr>`;
             });
         }
 
@@ -792,7 +824,7 @@
 
         function copyToClipboard(elementId) { navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !")); }
 
-        window.onload = () => { initActs(); renderRCSOTable(); };
+        window.onload = () => { initActs(); renderRCSOTable(); renderStaffPatientsTable(); };
     </script>
 </body>
 </html>
