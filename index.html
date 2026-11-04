@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -382,9 +383,7 @@
                         <div class="form-group">
                             <label>Motif</label>
                             <select id="rcso_reason">
-                                <option value="Impayé/Fraude Médicale">Impayé / Fraude Médicale</option>
-                                <option value="Outrage/Agression Soignant">Outrage / Agression Soignant</option>
-                                <option value="Suspect recherché blessé">Suspect recherché blessé</option>
+                                <!-- Généré dynamiquement -->
                             </select>
                         </div>
                         <div class="form-group" style="grid-column: span 2;"><label>Détails / Circonstances</label><textarea id="rcso_details"></textarea></div>
@@ -477,10 +476,11 @@
                 <!-- Navigation Interne Admin -->
                 <div class="sub-nav">
                     <button class="sub-btn active" onclick="showAdminTool('adm-accounts-tool', event)">🩺 Accounts & Staff</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-motifs-tool', event)">🚨 Motifs RCSO</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-wiki-tool', event)">📚 Wiki & Cours</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-announces-tool', event)">📢 Annonces</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-acts-tool', event)">💰 Grille Tarifaire</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-signals-tool', event)">🚨 Signalements RCSO</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-signals-tool', event)">🚨 Signalements</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-insurance-tool', event)">🛡️ Dossiers Patients</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-rules-tool', event)">📜 Règlements</button>
                     <button class="sub-btn" onclick="showAdminTool('adm-config-tool', event)">🎨 Design & Discord</button>
@@ -540,6 +540,26 @@
                     <table class="admin-table">
                         <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
                         <tbody id="adminRCSOAccountsTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- ADMIN TOOL: GESTION DES MOTIFS RCSO -->
+                <div id="adm-motifs-tool" class="tool-panel">
+                    <h3 style="color: var(--police-blue);">🚨 Gestion des Motifs de Signalement RCSO</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
+                        <input type="hidden" id="adm_motif_index" value="-1">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Intitulé du motif</label>
+                            <input type="text" id="adm_motif_name" placeholder="Ex: Impayé / Fraude Médicale">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <button class="btn btn-police" onclick="adminSaveMotif()">Ajouter ou Mettre à jour le Motif</button>
+                        </div>
+                    </div>
+                    <h3>📋 Liste des Motifs Actuels</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Motif enregistré</th><th>Actions</th></tr></thead>
+                        <tbody id="adminMotifsTable"></tbody>
                     </table>
                 </div>
 
@@ -654,6 +674,12 @@
             { name: "Gestion des blessures par balle", price: 2000 }
         ];
 
+        const defaultMotifs = [
+            "Impayé / Fraude Médicale",
+            "Outrage / Agression Soignant",
+            "Suspect recherché blessé"
+        ];
+
         let selectedActs = [];
         let currentPatientDiscount = 0;
         let loggedInDoctor = "";
@@ -667,7 +693,79 @@
             return `${day}/${month}/${year} à ${time}`;
         }
 
-        // --- GESTION STRICTE DES COMPTES & EFFECTIFS SANS FAUX MEMBRES ---
+        // --- GESTION DES MOTIFS RCSO ---
+        function getMotifs() {
+            return JSON.parse(localStorage.getItem('rms_rcso_motifs')) || defaultMotifs;
+        }
+
+        function updateMotifsDropdown() {
+            const select = document.getElementById('rcso_reason');
+            if(!select) return;
+            const motifs = getMotifs();
+            select.innerHTML = '';
+            motifs.forEach(motif => {
+                let opt = document.createElement('option');
+                opt.value = motif;
+                opt.textContent = motif;
+                select.appendChild(opt);
+            });
+        }
+
+        function adminSaveMotif() {
+            const index = parseInt(document.getElementById('adm_motif_index').value);
+            const motifName = document.getElementById('adm_motif_name').value.trim();
+
+            if (!motifName) return alert("Veuillez saisir un intitulé de motif.");
+
+            let motifs = getMotifs();
+            if (index > -1) {
+                motifs[index] = motifName;
+            } else {
+                motifs.push(motifName);
+            }
+
+            localStorage.setItem('rms_rcso_motifs', JSON.stringify(motifs));
+            document.getElementById('adm_motif_index').value = '-1';
+            document.getElementById('adm_motif_name').value = '';
+            alert("Motif enregistré avec succès !");
+            renderAdminMotifsTable();
+            updateMotifsDropdown();
+        }
+
+        function editMotif(index) {
+            let motifs = getMotifs();
+            if(!motifs[index]) return;
+            document.getElementById('adm_motif_index').value = index;
+            document.getElementById('adm_motif_name').value = motifs[index];
+        }
+
+        function deleteMotif(index) {
+            let motifs = getMotifs();
+            motifs.splice(index, 1);
+            localStorage.setItem('rms_rcso_motifs', JSON.stringify(motifs));
+            renderAdminMotifsTable();
+            updateMotifsDropdown();
+        }
+
+        function renderAdminMotifsTable() {
+            const tbody = document.getElementById('adminMotifsTable');
+            if(!tbody) return;
+            let motifs = getMotifs();
+            tbody.innerHTML = '';
+            motifs.forEach((motif, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${motif}</strong></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editMotif(${i})">Modifier</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMotif(${i})">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- GESTION STRICTE DES COMPTES & EFFECTIFS ---
         function getStaffAccounts() {
             return JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
         }
@@ -688,7 +786,7 @@
             });
         }
 
-        // --- ANNUAIRE PUBLIC DES EFFECTIFS (RÉEL ET SYNCHRONISÉ) ---
+        // --- ANNUAIRE PUBLIC DES EFFECTIFS ---
         function renderPublicStaff() {
             const tbody = document.getElementById('publicStaffTableBody');
             if(!tbody) return;
@@ -1163,6 +1261,7 @@
             if(sectionId === 'rdv-public') updateDoctorsDropdown();
             if(sectionId === 'effectifs-public') renderPublicStaff();
             if(sectionId === 'annonces') renderAnnouncements();
+            if(sectionId === 'staff-login') updateMotifsDropdown();
         }
 
         function showTool(toolId, ev) {
@@ -1172,6 +1271,7 @@
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
             if(toolId === 'staff-medals-tool') populateStaffSelects();
+            if(toolId === 'signal-tool') updateMotifsDropdown();
         }
 
         function showAdminTool(toolId, ev) {
@@ -1425,6 +1525,7 @@
                 updateDoctorsDropdown();
                 populateStaffSelects();
                 renderPublicStaff();
+                updateMotifsDropdown();
             } else {
                 alert("Identifiants incorrects.");
             }
@@ -1557,6 +1658,7 @@
                 renderAdminCourses();
                 renderAdminAnnouncements();
                 renderAdminActsTable();
+                renderAdminMotifsTable();
                 populateStaffSelects();
                 applyInterfaceConfig();
             } else {
@@ -1618,6 +1720,7 @@
             updateDoctorsDropdown();
             renderPublicStaff();
             populateStaffSelects();
+            updateMotifsDropdown();
         };
     </script>
 </body>
