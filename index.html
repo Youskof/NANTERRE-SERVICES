@@ -240,12 +240,7 @@
         <!-- ANNONCES -->
         <section id="annonces" class="section-page">
             <h2>📢 Annonces Officielles & Santé Publique</h2>
-            <div id="announcementsContainer">
-                <div class="announcement-card" style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px;">
-                    <h4 style="color:var(--primary);">🏥 Ouverture des souscriptions aux assurances RMS</h4>
-                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Pensez à renouveler votre assurance médicale toutes les deux semaines pour bénéficier de 30% de réduction sur l'ensemble des interventions d'urgence.</p>
-                </div>
-            </div>
+            <div id="announcementsContainer"></div>
         </section>
 
         <!-- ESPACE STAFF MÉDICAL RMS -->
@@ -466,138 +461,183 @@
             </div>
         </section>
 
-        <!-- ADMIN -->
+        <!-- PANEL ADMIN TOTAL -->
         <section id="admin" class="section-page">
-            <h2>🔒 Espace d'Administration</h2>
+            <h2>🔒 Panel d'Administration Globale</h2>
 
             <div id="adminLoginBox" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès :</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès Administrateur :</p>
                 <input type="password" id="adminPasswordInput" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
-                <button class="btn" onclick="checkAdminPassword()">Se connecter</button>
+                <button class="btn" onclick="checkAdminPassword()">Se connecter au Control Panel</button>
             </div>
 
             <div id="adminPanelContent" style="display:none;">
-                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
+                <p style="color: #4ade80; margin-bottom: 20px; font-weight: bold;">✅ Session Administrateur Active</p>
 
-                <!-- GESTION DES MÉDAILLES & SPÉCIALISATIONS -->
-                <h3>🏅 Gestion des Médailles & Spécialisations du Personnel</h3>
-                <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
-                    <div class="form-group">
-                        <label>Sélectionner le Praticien</label>
-                        <select id="adm_target_staff"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Type d'attribut</label>
-                        <select id="adm_attr_type">
-                            <option value="medal">Médaille / Distinction</option>
-                            <option value="specialty">Spécialisation / Formation</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label>Libellé (ex: Médaille d'Honneur, Expert Trauma...)</label>
-                        <input type="text" id="adm_attr_label" placeholder="Ex: 🎖️ Médaille du Mérite RMS">
-                    </div>
-                    <div style="grid-column: span 2;">
-                        <button class="btn" onclick="adminAddAttribute()">Attribuer au membre du personnel</button>
-                    </div>
+                <!-- Navigation Interne Admin -->
+                <div class="sub-nav">
+                    <button class="sub-btn active" onclick="showAdminTool('adm-accounts-tool', event)">🩺 Accounts & Staff</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-wiki-tool', event)">📚 Wiki & Cours</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-announces-tool', event)">📢 Annonces</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-acts-tool', event)">💰 Grille Tarifaire</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-signals-tool', event)">🚨 Signalements RCSO</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-insurance-tool', event)">🛡️ Dossiers Patients</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-rules-tool', event)">📜 Règlements</button>
+                    <button class="sub-btn" onclick="showAdminTool('adm-config-tool', event)">🎨 Design & Discord</button>
                 </div>
 
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- CONFIGURATION DESIGN & INTERFACE -->
-                <h3>🎨 Personnalisation du Design & Interface</h3>
-                <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
-                    <div class="form-group"><label>Nom de l'Hôpital (Header)</label><input type="text" id="adm_cfg_title" value="🏥 RMS HOSPITAL"></div>
-                    <div class="form-group"><label>Sous-titre Header</label><input type="text" id="adm_cfg_subtitle" value="Rockford Medical Services - Centre Hospitalier Officiel"></div>
-                    <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#dc2626" style="height:45px; width:100%;"></div>
-                    <div class="form-group"><label>URL de l'image de la Bannière Accueil</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
-                    <div class="form-group"><label>Titre de la Bannière</label><input type="text" id="adm_cfg_herotitle" value="Centre Hospitalier de Rockford"></div>
-                    <div class="form-group"><label>Sous-titre Bannière</label><input type="text" id="adm_cfg_herosub" value="Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7."></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder et Appliquer le Design</button></div>
-                </div>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- CONFIGURATION DISCORD WEBHOOK -->
-                <h3>🤖 Configuration Webhook Discord</h3>
-                <div class="form-grid">
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label>URL du Webhook Discord</label>
-                        <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
+                <!-- ADMIN TOOL: COMPTES MÉDECINS & COMPTES RCSO -->
+                <div id="adm-accounts-tool" class="tool-panel active">
+                    <h3>🏅 Distinctions & Médailles</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
+                        <div class="form-group">
+                            <label>Sélectionner le Praticien</label>
+                            <select id="adm_target_staff"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Type d'attribut</label>
+                            <select id="adm_attr_type">
+                                <option value="medal">Médaille / Distinction</option>
+                                <option value="specialty">Spécialisation / Formation</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Libellé</label>
+                            <input type="text" id="adm_attr_label" placeholder="Ex: 🎖️ Médaille du Mérite RMS">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <button class="btn" onclick="adminAddAttribute()">Attribuer au membre du personnel</button>
+                        </div>
                     </div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL Webhook</button></div>
-                </div>
 
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- GESTION DES RÈGLEMENTS -->
-                <h3>📜 Gestion Admin des Règlements</h3>
-                <div class="form-grid" style="background: rgba(220, 38, 38, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--primary);">
-                    <input type="hidden" id="adm_rule_index" value="-1">
-                    <div class="form-group" style="grid-column: span 2;"><label>Titre de la règle / section</label><input type="text" id="adm_rule_title" placeholder="Ex: Article 1 - Tenue et Comportement"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Contenu du règlement</label><textarea id="adm_rule_content" placeholder="Rédigez le texte du règlement ici..."></textarea></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveRule()">Ajouter ou Mettre à jour le Règlement</button></div>
-                </div>
-                <table class="admin-table">
-                    <thead><tr><th>Titre</th><th>Contenu</th><th>Date / Auteur</th><th>Actions Admin</th></tr></thead>
-                    <tbody id="adminRulesTable"></tbody>
-                </table>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- GESTION COMPTES MÉDECINS -->
-                <h3>🩺 Gestion des Comptes Médecins RMS</h3>
-                <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant"></div>
-                    <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
-                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom (Ex: Dr. Martin)"></div>
-                    <div class="form-group">
-                        <select id="adm_staff_grade">
-                            <option value="grade-direction">Directeur / Médecin-Chef</option>
-                            <option value="grade-medecin" selected>Médecin Titulaire</option>
-                            <option value="grade-infirmier">Infirmier(ère)</option>
-                            <option value="grade-eleve">Externe / Élève</option>
-                        </select>
+                    <h3>🩺 Comptes Médecins RMS</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant"></div>
+                        <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
+                        <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom (Ex: Dr. Martin)"></div>
+                        <div class="form-group">
+                            <select id="adm_staff_grade">
+                                <option value="grade-direction">Directeur / Médecin-Chef</option>
+                                <option value="grade-medecin" selected>Médecin Titulaire</option>
+                                <option value="grade-infirmier">Infirmier(ère)</option>
+                                <option value="grade-eleve">Externe / Élève</option>
+                            </select>
+                        </div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte médecin</button></div>
                     </div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte médecin</button></div>
+                    <table class="admin-table">
+                        <thead><tr><th>Identifiant</th><th>Nom du Médecin</th><th>Grade</th><th>Action</th></tr></thead>
+                        <tbody id="adminStaffAccountsTable"></tbody>
+                    </table>
+
+                    <h3 style="color: var(--police-blue); margin-top:30px;">🚔 Comptes RCSO (Police)</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><input type="text" id="adm_rcso_user" placeholder="Identifiant / Matricule"></div>
+                        <div class="form-group"><input type="password" id="adm_rcso_pass" placeholder="Mot de passe"></div>
+                        <div class="form-group"><input type="text" id="adm_rcso_name" placeholder="Nom / Grade de l'agent"></div>
+                        <div style="grid-column: span 2;"><button class="btn btn-police" onclick="createRCSOAccount()">Créer le compte RCSO</button></div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
+                        <tbody id="adminRCSOAccountsTable"></tbody>
+                    </table>
                 </div>
-                <table class="admin-table">
-                    <thead><tr><th>Identifiant</th><th>Nom du Médecin</th><th>Grade</th><th>Action</th></tr></thead>
-                    <tbody id="adminStaffAccountsTable"></tbody>
-                </table>
 
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <!-- GESTION COMPTES RCSO -->
-                <h3 style="color: var(--police-blue);">🚔 Gestion des Comptes RCSO (Police)</h3>
-                <div class="form-grid">
-                    <div class="form-group"><input type="text" id="adm_rcso_user" placeholder="Identifiant / Matricule"></div>
-                    <div class="form-group"><input type="password" id="adm_rcso_pass" placeholder="Mot de passe"></div>
-                    <div class="form-group"><input type="text" id="adm_rcso_name" placeholder="Nom / Grade de l'agent"></div>
-                    <div style="grid-column: span 2;"><button class="btn btn-police" onclick="createRCSOAccount()">Créer le compte RCSO</button></div>
+                <!-- ADMIN TOOL: WIKI & COURS DE FORMATION -->
+                <div id="adm-wiki-tool" class="tool-panel">
+                    <h3>📚 Gestion Globale du Wiki & Documents de Formation</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
+                        <input type="hidden" id="adm_course_index" value="-1">
+                        <div class="form-group" style="grid-column: span 2;"><label>Titre du cours / protocole</label><input type="text" id="adm_course_title" placeholder="Ex: Urgences Vitales - Protocole ABCDE"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Contenu complet</label><textarea id="adm_course_content" placeholder="Contenu du document de formation..."></textarea></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveCourse()">Enregistrer le Document sur le Wiki</button></div>
+                    </div>
+                    <h3>📋 Cours actuellement en ligne</h3>
+                    <div id="adminCoursesList"></div>
                 </div>
-                <table class="admin-table">
-                    <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
-                    <tbody id="adminRCSOAccountsTable"></tbody>
-                </table>
 
-                <hr style="border-color: var(--border); margin: 30px 0;">
+                <!-- ADMIN TOOL: ANNONCES -->
+                <div id="adm-announces-tool" class="tool-panel">
+                    <h3>📢 Gestion des Annonces Officielles</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
+                        <div class="form-group" style="grid-column: span 2;"><label>Titre de l'annonce</label><input type="text" id="adm_ann_title" placeholder="Ex: Campagne de vaccination collective"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Message public</label><textarea id="adm_ann_content" placeholder="Rédigez le contenu de l'annonce..."></textarea></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="adminAddAnnouncement()">Publier l'Annonce</button></div>
+                    </div>
+                    <h3>📋 Annonces Actives</h3>
+                    <div id="adminAnnouncementsList"></div>
+                </div>
 
-                <!-- GESTION SIGNALEMENTS -->
-                <h3 style="color: var(--police-blue);">🚨 Gestion Admin des Signalements RCSO</h3>
-                <table class="admin-table">
-                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Actions Admin</th></tr></thead>
-                    <tbody id="adminSignalsTable"></tbody>
-                </table>
+                <!-- ADMIN TOOL: TARIFS & ACTES -->
+                <div id="adm-acts-tool" class="tool-panel">
+                    <h3>💰 Gestion de la Grille Tarifaire (Actes Médicaux)</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
+                        <div class="form-group"><label>Nom de l'acte</label><input type="text" id="adm_act_name" placeholder="Ex: Chirurgie Cardio-Vasculaire"></div>
+                        <div class="form-group"><label>Tarif ($)</label><input type="number" id="adm_act_price" placeholder="Ex: 1500"></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="adminAddAct()">Ajouter l'acte médical</button></div>
+                    </div>
+                    <h3>📋 Actes Médicaux Actuels</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Acte Médical</th><th>Prix ($)</th><th>Action</th></tr></thead>
+                        <tbody id="adminActsTable"></tbody>
+                    </table>
+                </div>
 
-                <hr style="border-color: var(--border); margin: 30px 0;">
+                <!-- ADMIN TOOL: SIGNALEMENTS RCSO -->
+                <div id="adm-signals-tool" class="tool-panel">
+                    <h3 style="color: var(--police-blue);">🚨 Gestion Admin des Signalements RCSO</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Actions Admin</th></tr></thead>
+                        <tbody id="adminSignalsTable"></tbody>
+                    </table>
+                </div>
 
-                <!-- SUPPRESSION DOSSIERS PATIENTS -->
-                <h3>🛡️ Gestion & Suppression des Dossiers Patients (Admin)</h3>
-                <table class="admin-table">
-                    <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Action (Suppression Admin)</th></tr></thead>
-                    <tbody id="adminInsuranceTable"></tbody>
-                </table>
+                <!-- ADMIN TOOL: DOSSIERS PATIENTS -->
+                <div id="adm-insurance-tool" class="tool-panel">
+                    <h3>🛡️ Gestion & Suppression des Dossiers Patients</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Action (Suppression Admin)</th></tr></thead>
+                        <tbody id="adminInsuranceTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- ADMIN TOOL: RÈGLEMENTS -->
+                <div id="adm-rules-tool" class="tool-panel">
+                    <h3>📜 Gestion Admin des Règlements</h3>
+                    <div class="form-grid" style="background: rgba(220, 38, 38, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--primary); margin-bottom:20px;">
+                        <input type="hidden" id="adm_rule_index" value="-1">
+                        <div class="form-group" style="grid-column: span 2;"><label>Titre de la règle / section</label><input type="text" id="adm_rule_title" placeholder="Ex: Article 1 - Tenue et Comportement"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Contenu du règlement</label><textarea id="adm_rule_content" placeholder="Rédigez le texte du règlement ici..."></textarea></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveRule()">Ajouter ou Mettre à jour le Règlement</button></div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Titre</th><th>Contenu</th><th>Date / Auteur</th><th>Actions Admin</th></tr></thead>
+                        <tbody id="adminRulesTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- ADMIN TOOL: CONFIG DESIGN & DISCORD -->
+                <div id="adm-config-tool" class="tool-panel">
+                    <h3>🎨 Personnalisation du Design & Interface</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
+                        <div class="form-group"><label>Nom de l'Hôpital (Header)</label><input type="text" id="adm_cfg_title" value="🏥 RMS HOSPITAL"></div>
+                        <div class="form-group"><label>Sous-titre Header</label><input type="text" id="adm_cfg_subtitle" value="Rockford Medical Services - Centre Hospitalier Officiel"></div>
+                        <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#dc2626" style="height:45px; width:100%;"></div>
+                        <div class="form-group"><label>URL de l'image de la Bannière Accueil</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
+                        <div class="form-group"><label>Titre de la Bannière</label><input type="text" id="adm_cfg_herotitle" value="Centre Hospitalier de Rockford"></div>
+                        <div class="form-group"><label>Sous-titre Bannière</label><input type="text" id="adm_cfg_herosub" value="Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7."></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder et Appliquer le Design</button></div>
+                    </div>
+
+                    <h3>🤖 Configuration Webhook Discord</h3>
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>URL du Webhook Discord</label>
+                            <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
+                        </div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL Webhook</button></div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -670,7 +710,6 @@
                 let gradeClass = acc.gradeClass || 'grade-medecin';
                 let gradeName = acc.gradeName || 'Médecin';
 
-                // Génération HTML des Médailles
                 let medalsHtml = '';
                 if (acc.medals && acc.medals.length > 0) {
                     medalsHtml = `<div style="margin-top: 4px;">` + 
@@ -678,7 +717,6 @@
                         `</div>`;
                 }
 
-                // Génération HTML des Spécialités/Formations
                 let specsHtml = '';
                 if (acc.specialties && acc.specialties.length > 0) {
                     specsHtml = `<div style="margin-top: 6px;">` + 
@@ -711,7 +749,7 @@
             });
         }
 
-        // --- GESTION DES ATTRIBUTS / TITRES / MÉDAILLES DEPUIS LE PANEL STAFF ET ADMIN ---
+        // --- GESTION DES ATTRIBUTS / TITRES / MÉDAILLES ---
         function populateStaffSelects() {
             const adminSelect = document.getElementById('adm_target_staff');
             const staffSelect = document.getElementById('staff_target_select');
@@ -774,7 +812,6 @@
             const acc = accounts[staffIndex];
             let html = `<p style="margin-bottom:10px;"><strong>Agent :</strong> ${acc.name} (<code>${acc.username}</code>)</p>`;
 
-            // Section Médailles
             html += `<div style="margin-bottom:15px;"><strong>🏅 Médailles / Distinctions :</strong><br>`;
             if (acc.medals && acc.medals.length > 0) {
                 acc.medals.forEach((m, idx) => {
@@ -785,7 +822,6 @@
             }
             html += `</div>`;
 
-            // Section Titres/Formations
             html += `<div><strong>🎓 Spécialisations & Formations :</strong><br>`;
             if (acc.specialties && acc.specialties.length > 0) {
                 acc.specialties.forEach((s, idx) => {
@@ -841,6 +877,168 @@
             renderStaffAccountsTable();
             renderPublicStaff();
             populateStaffSelects();
+        }
+
+        // --- GESTION ADMIN DES COURS DU WIKI ---
+        function adminSaveCourse() {
+            const title = document.getElementById('adm_course_title').value.trim();
+            const content = document.getElementById('adm_course_content').value.trim();
+            const index = parseInt(document.getElementById('adm_course_index').value);
+
+            if (!title || !content) return alert("Remplissez le titre et le contenu du cours.");
+
+            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
+            const timestamp = getFrenchTimestamp();
+
+            if (index > -1) {
+                courses[index] = { title, content, author: "Admin", date: timestamp };
+            } else {
+                courses.unshift({ title, content, author: "Admin", date: timestamp });
+            }
+
+            localStorage.setItem('rms_courses', JSON.stringify(courses));
+            document.getElementById('adm_course_title').value = '';
+            document.getElementById('adm_course_content').value = '';
+            document.getElementById('adm_course_index').value = '-1';
+            alert("Document enregistré sur le Wiki !");
+            renderCourses();
+            renderAdminCourses();
+        }
+
+        function deleteCourse(index) {
+            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
+            courses.splice(index, 1);
+            localStorage.setItem('rms_courses', JSON.stringify(courses));
+            renderCourses();
+            renderAdminCourses();
+        }
+
+        function renderAdminCourses() {
+            const container = document.getElementById('adminCoursesList');
+            if (!container) return;
+            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
+            container.innerHTML = '';
+            if (courses.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">Aucun cours actuellement publié.</p>`;
+                return;
+            }
+            courses.forEach((c, i) => {
+                container.innerHTML += `
+                    <div style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong style="color:var(--primary);">${c.title}</strong><br>
+                            <small style="color:var(--text-muted)">Par ${c.author} le ${c.date}</small>
+                        </div>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${i})">Supprimer</button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- GESTION ADMIN DES ANNONCES ---
+        function adminAddAnnouncement() {
+            const title = document.getElementById('adm_ann_title').value.trim();
+            const content = document.getElementById('adm_ann_content').value.trim();
+
+            if (!title || !content) return alert("Veuillez compléter le titre et le contenu de l'annonce.");
+
+            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
+            announcements.unshift({ title, content, date: getFrenchTimestamp() });
+
+            localStorage.setItem('rms_announcements', JSON.stringify(announcements));
+            document.getElementById('adm_ann_title').value = '';
+            document.getElementById('adm_ann_content').value = '';
+            alert("Annonce publiée !");
+            renderAnnouncements();
+            renderAdminAnnouncements();
+        }
+
+        function deleteAnnouncement(index) {
+            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
+            announcements.splice(index, 1);
+            localStorage.setItem('rms_announcements', JSON.stringify(announcements));
+            renderAnnouncements();
+            renderAdminAnnouncements();
+        }
+
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsContainer');
+            if(!container) return;
+            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [
+                { title: "🏥 Ouverture des souscriptions aux assurances RMS", content: "Pensez à renouveler votre assurance médicale toutes les deux semaines pour bénéficier de 30% de réduction sur l'ensemble des interventions d'urgence." }
+            ];
+            container.innerHTML = '';
+            announcements.forEach(a => {
+                container.innerHTML += `
+                    <div class="announcement-card" style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:15px;">
+                        <h4 style="color:var(--primary);">${a.title}</h4>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">${a.content}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAdminAnnouncements() {
+            const container = document.getElementById('adminAnnouncementsList');
+            if(!container) return;
+            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
+            container.innerHTML = '';
+            if(announcements.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);">Aucune annonce personnalisée.</p>`;
+                return;
+            }
+            announcements.forEach((a, i) => {
+                container.innerHTML += `
+                    <div style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong style="color:var(--primary);">${a.title}</strong>
+                        </div>
+                        <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${i})">Supprimer</button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- GESTION ADMIN DE LA GRILLE TARIFAIRE ---
+        function adminAddAct() {
+            const name = document.getElementById('adm_act_name').value.trim();
+            const price = parseFloat(document.getElementById('adm_act_price').value);
+
+            if (!name || isNaN(price)) return alert("Veuillez renseigner un nom d'acte et un tarif valide.");
+
+            let acts = getActs();
+            acts.push({ name, price });
+            localStorage.setItem('rms_acts', JSON.stringify(acts));
+
+            document.getElementById('adm_act_name').value = '';
+            document.getElementById('adm_act_price').value = '';
+            alert("Acte médical ajouté à la grille tarifaire !");
+            initActs();
+            renderAdminActsTable();
+        }
+
+        function deleteAct(index) {
+            let acts = getActs();
+            acts.splice(index, 1);
+            localStorage.setItem('rms_acts', JSON.stringify(acts));
+            initActs();
+            renderAdminActsTable();
+        }
+
+        function renderAdminActsTable() {
+            const tbody = document.getElementById('adminActsTable');
+            if(!tbody) return;
+            let acts = getActs();
+            tbody.innerHTML = '';
+            acts.forEach((a, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${a.name}</strong></td>
+                        <td>${a.price} $</td>
+                        <td><button class="btn btn-danger btn-sm" onclick="deleteAct(${i})">Supprimer</button></td>
+                    </tr>
+                `;
+            });
         }
 
         function renderDirectoryStaff() {
@@ -964,15 +1162,23 @@
             if(sectionId === 'reglement') renderRules();
             if(sectionId === 'rdv-public') updateDoctorsDropdown();
             if(sectionId === 'effectifs-public') renderPublicStaff();
+            if(sectionId === 'annonces') renderAnnouncements();
         }
 
         function showTool(toolId, ev) {
             document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#staffDashboard .sub-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
             if(toolId === 'staff-medals-tool') populateStaffSelects();
+        }
+
+        function showAdminTool(toolId, ev) {
+            document.querySelectorAll('#adminPanelContent .tool-panel').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#adminPanelContent .sub-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(toolId).classList.add('active');
+            if(ev && ev.target) ev.target.classList.add('active');
         }
 
         // --- WEBHOOK DISCORD ---
@@ -1073,6 +1279,7 @@
             document.getElementById('form_title').value = '';
             document.getElementById('form_content').value = '';
             renderCourses();
+            renderAdminCourses();
         }
         function renderCourses() {
             const container = document.getElementById('coursesContainer');
@@ -1347,6 +1554,9 @@
                 renderRCSOAccountsTable();
                 renderAdminSignalsTable();
                 renderAdminRulesTable();
+                renderAdminCourses();
+                renderAdminAnnouncements();
+                renderAdminActsTable();
                 populateStaffSelects();
                 applyInterfaceConfig();
             } else {
@@ -1403,6 +1613,7 @@
             renderRCSOTable();
             renderStaffPatientsTable();
             renderCourses();
+            renderAnnouncements();
             renderRules();
             updateDoctorsDropdown();
             renderPublicStaff();
