@@ -997,61 +997,68 @@
             });
         }
 
-        function loginStaff() {
-            const user = document.getElementById('staffUser').value.trim();
-            const pass = document.getElementById('staffPass').value.trim();
-            let accounts = getStaffAccounts();
-            let found = accounts.find(a => a.username === user && a.password === pass);
+       function loginStaff() {
+    const user = document.getElementById('staffUser').value.trim();
+    const pass = document.getElementById('staffPass').value.trim();
+    
+    if (!user || !pass) {
+        return alert("Veuillez saisir votre identifiant et votre mot de passe.");
+    }
 
-            if (found || user === "admin") {
-                loggedInAgent = found ? `${found.name} [Matricule ${found.matricule}]` : "Superviseur Nanterre [00]";
-                loggedInService = found ? found.service : "Administration";
-                loggedInRole = found ? found.role : "hc";
-                let usernameKey = found ? found.username : "admin";
-                
-                let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
-                if(!activeStaff.includes(usernameKey)) {
-                    activeStaff.push(usernameKey);
-                    localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
-                }
+    let accounts = getStaffAccounts();
+    
+    // Recherche de l'agent (insensible à la casse sur l'identifiant)
+    let found = accounts.find(a => a.username.toLowerCase() === user.toLowerCase() && a.password === pass);
 
-                logAuditAction(loggedInAgent, `Connexion à l'espace opérationnel (${loggedInService})`);
-
-                document.getElementById('staffLoginForm').style.display = 'none';
-                document.getElementById('staffDashboard').style.display = 'block';
-                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
-                
-                document.getElementById('rep_agent').value = loggedInAgent;
-                document.getElementById('gav_officer').value = loggedInAgent;
-                document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
-                toggleMedicalSection(document.getElementById('rep_service').value);
-
-                if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
-                    document.getElementById('policeGAVBtn').style.display = 'inline-block';
-                } else {
-                    document.getElementById('policeGAVBtn').style.display = 'none';
-                }
-
-                if (loggedInRole === 'haut_comm_police' || user === 'admin') {
-                    document.getElementById('policeArreteBtn').style.display = 'inline-block';
-                } else {
-                    document.getElementById('policeArreteBtn').style.display = 'none';
-                }
-
-                if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || user === 'admin') {
-                    document.getElementById('hcTabBtn').style.display = 'inline-block';
-                    document.getElementById('blameToolBtn').style.display = 'inline-block';
-                } else {
-                    document.getElementById('hcTabBtn').style.display = 'none';
-                    document.getElementById('blameToolBtn').style.display = 'none';
-                }
-
-                renderDirectoryStaff();
-                updatePublicServiceStatus();
-            } else {
-                alert("Identifiants incorrects.");
-            }
+    if (found || user.toLowerCase() === "admin") {
+        loggedInAgent = found ? `${found.name} [Matricule ${found.matricule}]` : "Superviseur Nanterre [00]";
+        loggedInService = found ? found.service : "Administration";
+        loggedInRole = found ? found.role : "hc";
+        let usernameKey = found ? found.username : "admin";
+        
+        let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+        if (!activeStaff.includes(usernameKey)) {
+            activeStaff.push(usernameKey);
+            localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
         }
+
+        logAuditAction(loggedInAgent, `Connexion à l'espace opérationnel (${loggedInService})`);
+
+        document.getElementById('staffLoginForm').style.display = 'none';
+        document.getElementById('staffDashboard').style.display = 'block';
+        document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
+        
+        document.getElementById('rep_agent').value = loggedInAgent;
+        document.getElementById('gav_officer').value = loggedInAgent;
+        document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
+        toggleMedicalSection(document.getElementById('rep_service').value);
+
+        if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
+            document.getElementById('policeGAVBtn').style.display = 'inline-block';
+        } else {
+            document.getElementById('policeGAVBtn').style.display = 'none';
+        }
+
+        if (loggedInRole === 'haut_comm_police' || user.toLowerCase() === 'admin') {
+            document.getElementById('policeArreteBtn').style.display = 'inline-block';
+        } else {
+            document.getElementById('policeArreteBtn').style.display = 'none';
+        }
+
+        if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || user.toLowerCase() === 'admin') {
+            document.getElementById('hcTabBtn').style.display = 'inline-block';
+            document.getElementById('blameToolBtn').style.display = 'inline-block';
+        } else {
+            document.getElementById('hcTabBtn').style.display = 'none';
+            document.getElementById('blameToolBtn').style.display = 'none';
+        }
+
+        renderDirectoryStaff();
+        updatePublicServiceStatus();
+    } else {
+        alert("Identifiant ou mot de passe incorrect.");
+    }
+}
 
         function logoutStaff() {
             let accounts = getStaffAccounts();
