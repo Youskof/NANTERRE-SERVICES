@@ -50,6 +50,9 @@
         }
         .hero-banner h3 { font-size: 2rem; color: white; margin-bottom: 10px; }
 
+        .alert-ticker { background: rgba(220, 38, 38, 0.15); border: 1px solid var(--bspn-red); padding: 12px; border-radius: 8px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .alert-ticker span { font-weight: bold; color: #f87171; }
+
         .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .action-card { background: #0f172a; border: 1px solid var(--border); padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
         .action-card:hover { transform: translateY(-5px); border-color: var(--police-blue); }
@@ -125,6 +128,11 @@
                 <h3 id="heroTitle">Sécurité & Secours - Ville de Nanterre</h3>
                 <p id="heroSubtitle">Coordination des services de la Police Nationale, de la BSPN et du SAMU 24h/24 et 7j/7.</p>
             </div>
+
+            <div class="alert-ticker">
+                <span>⚠️ ALERTE SÉCURITÉ EN DIRECT :</span>
+                <span id="publicAlertBannerText" style="color:var(--text-main); font-weight:normal;">Aucune alerte majeure en cours sur la commune de Nanterre. Restez vigilants.</span>
+            </div>
             
             <h2>Statut Opérationnel des Services en Direct</h2>
             <div class="service-status-grid">
@@ -179,7 +187,7 @@
             </div>
             <button class="btn" onclick="submitPublicApplication()">Soumettre ma candidature</button>
             <div class="output-box" id="output_recrutement" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendDiscordWebhook('output_recrutement')">🚀 Envoyer sur Discord</button>
+            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendReportWebhook('output_recrutement', document.getElementById('rec_service').value)">🚀 Envoyer sur Discord</button>
         </section>
 
         <!-- FORMULAIRE PLAINTE CITOYEN -->
@@ -203,7 +211,7 @@
             </div>
             <button class="btn" onclick="submitPublicComplaint()">Transmettre la plainte / main courante</button>
             <div class="output-box" id="output_plainte" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendDiscordWebhook('output_plainte')">🚀 Envoyer sur Discord</button>
+            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendReportWebhook('output_plainte', document.getElementById('plainte_service').value)">🚀 Envoyer sur Discord</button>
         </section>
 
         <!-- REGLEMENTS -->
@@ -234,6 +242,8 @@
                     <button class="sub-btn active" onclick="showTool('service-status-tool', event)">📡 Prise de Service & Radio</button>
                     <button class="sub-btn" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
                     <button class="sub-btn" id="policeGAVBtn" style="display:none;" onclick="showTool('gav-tool', event)">⚖️ Registre GAV (Police)</button>
+                    <button class="sub-btn" id="policeArreteBtn" style="display:none; background: #1e3a8a; border-color: #3b82f6;" onclick="showTool('arrete-tool', event)">📜 Arrêtés (Haut Comm. Police)</button>
+                    <button class="sub-btn" id="blameToolBtn" style="display:none; background: #7f1d1d; border-color: #ef4444;" onclick="showTool('blame-tool', event)">⚠️ Sanctions & Blâmes (HC)</button>
                     <button class="sub-btn" onclick="showTool('armement-tool', event)">🔫 Dotation & Matériel</button>
                     <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Matricules</button>
                     <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Planning</button>
@@ -257,28 +267,39 @@
                     </div>
                 </div>
 
-                <!-- Rapport d'Intervention unifié (Matricule prérempli) -->
+                <!-- Rapport d'Intervention unifié -->
                 <div id="report-tool" class="tool-panel">
                     <h3>📋 Rédaction de Rapport d'Intervention</h3>
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Service Émetteur</label>
-                            <select id="rep_service">
+                            <select id="rep_service" onchange="toggleMedicalSection(this.value)">
                                 <option value="Police Nationale">Police Nationale</option>
                                 <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
                                 <option value="SAMU">SAMU</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Agent & Matricule (Préenregistré)</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group"><label>Agent & Matricule</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
                         <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Avenue Joliot-Curie, Nanterre"></div>
                         <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
-                        <div class="form-group"><label>Type / Motif d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie, Interpellation, Urgence vitale..."></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé des faits et actions menées</label><textarea id="rep_details" placeholder="Rédigez le déroulement de l'intervention..."></textarea></div>
+                        <div class="form-group"><label>Motif / Type d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie / Arrêt Cardiaque / Vol à main armée"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé</label><textarea id="rep_details" placeholder="Rédigez le déroulement..."></textarea></div>
                     </div>
+
+                    <!-- Encart Bilan Victime / Fiche Médicale (SAMU & BSPN uniquement) -->
+                    <div id="medicalVictimSection" style="display:none; background: rgba(14, 116, 144, 0.1); border: 1px solid #0ea5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="color: #38bdf8; margin-bottom: 10px;">🩺 Bilan Victime / Fiche Médicale d'Urgence</h4>
+                        <div class="form-grid" style="margin-bottom:0;">
+                            <div class="form-group"><label>État de conscience (Glasgow / 15)</label><input type="text" id="med_glasgow" placeholder="Ex: GCS 15/15 ou Inconscient"></div>
+                            <div class="form-group"><label>Tension Artérielle & Pouls</label><input type="text" id="med_ta" placeholder="Ex: 12/8 - 80 bpm"></div>
+                            <div class="form-group" style="grid-column: span 2;"><label>Blessures constatées & Gestes d'urgence pratiqués</label><textarea id="med_gestes" placeholder="Oxygénothérapie, massage cardiaque..."></textarea></div>
+                        </div>
+                    </div>
+
                     <button class="btn" onclick="generateInterventionReport()">Générer le Rapport</button>
                     <div class="output-box" id="output_intervention" style="display:none;"></div>
                     <button class="btn btn-secondary" id="copy_intervention" style="display:none;" onclick="copyToClipboard('output_intervention')">📋 Copier</button>
-                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendDiscordWebhook('output_intervention')">🚀 Envoyer sur Discord</button>
+                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendReportWebhook('output_intervention', document.getElementById('rep_service').value)">🚀 Envoyer sur Discord (Rapport)</button>
                 </div>
 
                 <!-- Registre GAV & Infractions (Police uniquement) -->
@@ -288,22 +309,59 @@
                         <div class="form-group"><label>Nom & Prénom de l'Interpellé</label><input type="text" id="gav_suspect" placeholder="Ex: Marc Vigne"></div>
                         <div class="form-group"><label>Motif de l'interpellation</label><input type="text" id="gav_motif" placeholder="Ex: Vol à main armée / Outrage"></div>
                         <div class="form-group"><label>Durée de la GAV / Amende</label><input type="text" id="gav_duration" placeholder="Ex: 4h / 1500 $ d'amende"></div>
-                        <div class="form-group"><label>Officier en charge (Matricule)</label><input type="text" id="gav_officer" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group"><label>Officier en charge</label><input type="text" id="gav_officer" readonly style="background:#090d16; color:#38bdf8;"></div>
                         <div class="form-group" style="grid-column: span 2;"><label>Objets saisis & Notes d'enquête</label><textarea id="gav_notes" placeholder="Arme saisie, port d'arme illégal..."></textarea></div>
                     </div>
                     <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV</button>
                     <div class="output-box" id="output_gav" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendDiscordWebhook('output_gav')">🚀 Envoyer sur Discord</button>
+                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendReportWebhook('output_gav', 'Police Nationale')">🚀 Envoyer sur Discord</button>
+                </div>
+
+                <!-- Gestion des Blâmes et Sanctions (Réservé HC) -->
+                <div id="blame-tool" class="tool-panel">
+                    <h3 style="color: #ef4444;">⚠️ Module de Sanction & Attribution de Blâmes</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Attribuez un blâme à un agent. Cela s'affichera dans l'annuaire des effectifs et sera envoyé sur le Webhook de blâme du service.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Agent concerné</label>
+                            <select id="blame_agent_select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Niveau de Sanction</label>
+                            <select id="blame_level">
+                                <option value="Avertissement oral">Avertissement oral</option>
+                                <option value="Blâme écrit (1er degré)">Blâme écrit (1er degré)</option>
+                                <option value="Blâme avec mise à pied (2nd degré)">Blâme avec mise à pied (2nd degré)</option>
+                                <option value="Rétrogradation / Blâme lourd">Rétrogradation / Blâme lourd</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Motif précis du blâme</label><textarea id="blame_reason" placeholder="Ex: Retard répété, manquement au code de déontologie..."></textarea></div>
+                    </div>
+                    <button class="btn btn-danger" onclick="applyBlameToAgent()">Enregistrer et notifier le blâme</button>
+                    <div class="output-box" id="output_blame" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_blame" style="display:none;" onclick="sendBlameWebhook()">🚀 Envoyer le Blâme sur Discord</button>
+                </div>
+
+                <!-- Arrêtés & Permissions (Haut Comm. Police) -->
+                <div id="arrete-tool" class="tool-panel">
+                    <h3 style="color: #3b82f6;">📜 Rédaction d'un Arrêté Municipal / Permission (Haut Comm. Police)</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Titre de l'Arrêté / Permission</label><input type="text" id="arr_title" placeholder="Ex: Arrêté portant interdiction de stationnement"></div>
+                        <div class="form-group"><label>Date d'effet</label><input type="text" id="arr_date" placeholder="Ex: Du 12/11/2026 au 15/11/2026"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Contenu légal & Dispositions</label><textarea id="arr_content" placeholder="Rédigez les articles..."></textarea></div>
+                    </div>
+                    <button class="btn" style="background:#1d4ed8;" onclick="generateArreteMunicipal()">Publier l'Arrêté / Permission</button>
+                    <div class="output-box" id="output_arrete" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_arrete" style="display:none;" onclick="sendReportWebhook('output_arrete', 'Police Nationale')">🚀 Diffuser sur Discord</button>
                 </div>
 
                 <!-- Dotation & Matériel -->
                 <div id="armement-tool" class="tool-panel">
                     <h3>🔫 Registre de Dotation & Matériel</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Enregistrez le matériel pris en dotation lors de votre prise de service :</p>
                     <div class="form-grid">
-                        <div class="form-group"><label>Type d'équipement / Arme / Véhicule</label><input type="text" id="arm_item" placeholder="Ex: Sig Sauer P226 / Lot de Secours Médical"></div>
+                        <div class="form-group"><label>Type d'équipement / Arme / Véhicule</label><input type="text" id="arm_item" placeholder="Ex: Sig Sauer P226 / Lot de Secours"></div>
                         <div class="form-group"><label>Numéro de série / Immatriculation</label><input type="text" id="arm_serial" placeholder="Ex: #PN-9923 ou #VPI-02"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Remarques particulières</label><textarea id="arm_notes" placeholder="État du matériel, chargeurs fournis..."></textarea></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Remarques particulières</label><textarea id="arm_notes" placeholder="État du matériel..."></textarea></div>
                     </div>
                     <button class="btn" onclick="registerDotation()">Valider la dotation</button>
                     <div class="output-box" id="output_armement" style="display:none;"></div>
@@ -311,10 +369,10 @@
 
                 <!-- Effectifs & Matricules Préenregistrés -->
                 <div id="staff-list-tool" class="tool-panel">
-                    <h3>👥 Annuaire des Effectifs & Matricules (0-100)</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents enregistrés avec leur matricule unique :</p>
+                    <h3>👥 Annuaire des Effectifs & Suivi des Blâmes</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents, grades et historique des sanctions enregistrées :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Statut / Radio</th><th>Service</th><th>Matricule & Grade / Nom</th><th>Action Grade</th></tr></thead>
+                        <thead><tr><th>Statut / Radio</th><th>Service</th><th>Matricule & Grade / Nom</th><th>Sanctions & Blâmes Actifs</th><th>Action</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
@@ -333,6 +391,9 @@
                             <div class="stat-val" id="statTotalAgents">0</div>
                         </div>
                     </div>
+
+                    <h3 style="color: #fb923c; margin-top: 25px;">📈 Statistiques Avancées par Type de Motif</h3>
+                    <div id="motifStatsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 25px;"></div>
 
                     <h3>📅 Planification des Permanences & Chefs de Poste</h3>
                     <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
@@ -373,24 +434,37 @@
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
 
-                <h3>🎨 Personnalisation du Design</h3>
+                <h3>🎨 Personnalisation du Design & Alerte Publique</h3>
                 <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
                     <div class="form-group"><label>Nom de l'En-tête</label><input type="text" id="adm_cfg_title" value="🛡️ NANTERRE - SERVICES D'URGENCE"></div>
                     <div class="form-group"><label>Sous-titre En-tête</label><input type="text" id="adm_cfg_subtitle" value="Portail Officiel : Police Nationale - BSPN - SAMU"></div>
                     <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#1d4ed8" style="height:45px; width:100%;"></div>
                     <div class="form-group"><label>URL de l'image de la Bannière</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Message d'Alerte Nationale / Sécurité (Page d'accueil publique)</label><input type="text" id="adm_cfg_alert" value="Aucune alerte majeure en cours sur la commune de Nanterre. Restez vigilants."></div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder et Appliquer</button></div>
                 </div>
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <h3>🤖 Configuration Webhook Discord</h3>
+                <h3>🤖 Configuration des Webhooks Discord (Rapports & Blâmes)</h3>
                 <div class="form-grid">
                     <div class="form-group" style="grid-column: span 2;">
-                        <label>URL du Webhook Discord</label>
-                        <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
+                        <label>Webhook Rapport Police</label>
+                        <input type="text" id="adm_wh_report_police" placeholder="https://discord.com/api/webhooks/...">
                     </div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL</button></div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Webhook Rapport BSPN (Pompiers)</label>
+                        <input type="text" id="adm_wh_report_bspn" placeholder="https://discord.com/api/webhooks/...">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Webhook Blâme Police</label>
+                        <input type="text" id="adm_wh_blame_police" placeholder="https://discord.com/api/webhooks/...">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Webhook Blâme BSPN (Pompiers)</label>
+                        <input type="text" id="adm_wh_blame_bspn" placeholder="https://discord.com/api/webhooks/...">
+                    </div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhooksConfig()">Enregistrer les Webhooks</button></div>
                 </div>
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
@@ -409,7 +483,7 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <h3>👥 Préenregistrement des Comptes & Matricules (0 à 100)</h3>
+                    <h3>👥 Préenregistrement des Comptes & Matricules (0 à 100)</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant connexion"></div>
                     <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
@@ -426,6 +500,7 @@
                         <select id="adm_staff_role">
                             <option value="agent">Agent Standard</option>
                             <option value="hc">Haut Comité / Conseil d'Administration (HC)</option>
+                            <option value="haut_comm_police">Haut Commandement Police (Exclusif Arrêtés)</option>
                         </select>
                     </div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Préenregistrer l'agent avec son matricule</button></div>
@@ -462,16 +537,52 @@
             localStorage.setItem('nanterre_audit_logs', JSON.stringify(logs));
         }
 
+        // Gestion des Webhooks par type et par service
+        function getReportWebhookUrl(serviceName) {
+            let customWhs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
+            if (serviceName === "Police Nationale") {
+                return customWhs.reportPolice || "https://discord.com/api/webhooks/1569065868867014847/bLpiJ0imxdQ9wgzYZDJ3NUKnWoei01vPgk-bemGJKTJukjWRR9om14F4NMpgLAuRoXFS";
+            }
+            if (serviceName === "BSPN (Pompiers)") {
+                return customWhs.reportBspn || "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q";
+            }
+            return "";
+        }
+
+        function getBlameWebhookUrl(serviceName) {
+            let customWhs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
+            if (serviceName === "Police Nationale") {
+                return customWhs.blamePolice || "https://discord.com/api/webhooks/1569063814802964490/xEtdT1wQMWbhsr2Q3yHxt0IFEsRLY6CZIv55NgGciHR35zSeN6Edmeee0UX7v0kKnTiE";
+            }
+            if (serviceName === "BSPN (Pompiers)") {
+                return customWhs.blameBspn || "https://discord.com/api/webhooks/1569064376260890806/W6R6o3m_5GoOyiF5jqtaeoU95tT2TGnQPNCI0zwOOEQiEmUgsmcpG40bMcvu8t1btkeY";
+            }
+            return "";
+        }
+
+        function saveWebhooksConfig() {
+            let whs = {
+                reportPolice: document.getElementById('adm_wh_report_police').value.trim(),
+                reportBspn: document.getElementById('adm_wh_report_bspn').value.trim(),
+                blamePolice: document.getElementById('adm_wh_blame_police').value.trim(),
+                blameBspn: document.getElementById('adm_wh_blame_bspn').value.trim()
+            };
+            localStorage.setItem('nanterre_service_webhooks', JSON.stringify(whs));
+            alert("Webhooks enregistrés avec succès !");
+        }
+
         function applyInterfaceConfig() {
             let config = JSON.parse(localStorage.getItem('nanterre_interface_config')) || {
                 title: "🛡️ NANTERRE - SERVICES D'URGENCE",
                 subtitle: "Portail Officiel : Police Nationale - BSPN - SAMU",
                 primaryColor: "#1d4ed8",
-                bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"
+                bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
+                alertText: "Aucune alerte majeure en cours sur la commune de Nanterre. Restez vigilants."
             };
 
             document.getElementById('headerTitleText').innerText = config.title;
             document.getElementById('headerSubtitleText').innerText = config.subtitle;
+            document.getElementById('publicAlertBannerText').innerText = config.alertText;
             document.documentElement.style.setProperty('--police-blue', config.primaryColor);
             document.documentElement.style.setProperty('--police-dark', config.primaryColor);
             
@@ -480,11 +591,18 @@
                 banner.style.background = `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('${config.bannerUrl}') center/cover`;
             }
 
+            let whs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
             if(document.getElementById('adm_cfg_title')) {
                 document.getElementById('adm_cfg_title').value = config.title;
                 document.getElementById('adm_cfg_subtitle').value = config.subtitle;
                 document.getElementById('adm_cfg_color').value = config.primaryColor;
                 document.getElementById('adm_cfg_banner').value = config.bannerUrl;
+                document.getElementById('adm_cfg_alert').value = config.alertText;
+
+                document.getElementById('adm_wh_report_police').value = whs.reportPolice || "https://discord.com/api/webhooks/1569065868867014847/bLpiJ0imxdQ9wgzYZDJ3NUKnWoei01vPgk-bemGJKTJukjWRR9om14F4NMpgLAuRoXFS";
+                document.getElementById('adm_wh_report_bspn').value = whs.reportBspn || "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q";
+                document.getElementById('adm_wh_blame_police').value = whs.blamePolice || "https://discord.com/api/webhooks/1569063814802964490/xEtdT1wQMWbhsr2Q3yHxt0IFEsRLY6CZIv55NgGciHR35zSeN6Edmeee0UX7v0kKnTiE";
+                document.getElementById('adm_wh_blame_bspn').value = whs.blameBspn || "https://discord.com/api/webhooks/1569064376260890806/W6R6o3m_5GoOyiF5jqtaeoU95tT2TGnQPNCI0zwOOEQiEmUgsmcpG40bMcvu8t1btkeY";
             }
 
             updatePublicServiceStatus();
@@ -528,11 +646,12 @@
                 title: document.getElementById('adm_cfg_title').value.trim(),
                 subtitle: document.getElementById('adm_cfg_subtitle').value.trim(),
                 primaryColor: document.getElementById('adm_cfg_color').value,
-                bannerUrl: document.getElementById('adm_cfg_banner').value.trim()
+                bannerUrl: document.getElementById('adm_cfg_banner').value.trim(),
+                alertText: document.getElementById('adm_cfg_alert').value.trim()
             };
             localStorage.setItem('nanterre_interface_config', JSON.stringify(config));
             applyInterfaceConfig();
-            alert("Design mis à jour !");
+            alert("Design et alertes mis à jour !");
         }
 
         function showMainSection(sectionId, ev) {
@@ -551,22 +670,12 @@
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
             if(toolId === 'hc-stats-tool') { renderHCStatsAndReports(); renderPlanningTable(); }
+            if(toolId === 'blame-tool') populateBlameAgentsDropdown();
         }
 
-        function saveWebhookUrl() {
-            const url = document.getElementById('adm_webhook_url').value.trim();
-            if(!url) return alert("Entrez une URL Webhook valide.");
-            localStorage.setItem('nanterre_discord_webhook', url);
-            alert("URL Webhook sauvegardée !");
-        }
-
-        function getWebhookUrl() {
-            return localStorage.getItem('nanterre_discord_webhook') || "";
-        }
-
-        async function sendDiscordWebhook(elementId) {
-            const webhookUrl = getWebhookUrl();
-            if (!webhookUrl) return alert("Configurez l'URL Webhook dans l'Admin.");
+        async function sendReportWebhook(elementId, serviceName) {
+            const webhookUrl = getReportWebhookUrl(serviceName);
+            if (!webhookUrl) return alert(`Aucun webhook de rapport configuré pour la ${serviceName}.`);
             const contentText = document.getElementById(elementId).innerText;
             if (!contentText) return alert("Aucun texte à envoyer.");
 
@@ -576,9 +685,40 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
-                if (response.ok || response.status === 204) alert("🚀 Envoyé sur Discord !");
+                if (response.ok || response.status === 204) alert(`🚀 Rapport envoyé sur le Webhook de la ${serviceName} !`);
                 else alert("⚠️ Erreur d'envoi Discord.");
             } catch (err) { alert("Erreur réseau Discord."); }
+        }
+
+        async function sendBlameWebhook() {
+            let accounts = getStaffAccounts();
+            let username = document.getElementById('blame_agent_select').value;
+            let targetAcc = accounts.find(a => a.username === username);
+            let service = targetAcc ? targetAcc.service : loggedInService;
+
+            const webhookUrl = getBlameWebhookUrl(service);
+            if (!webhookUrl) return alert(`Aucun webhook de blâme configuré pour la ${service}.`);
+            const contentText = document.getElementById('output_blame').innerText;
+            if (!contentText) return alert("Aucun texte à envoyer.");
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
+                });
+                if (response.ok || response.status === 204) alert(`🚀 Blâme envoyé sur le Webhook de la ${service} !`);
+                else alert("⚠️ Erreur d'envoi Discord.");
+            } catch (err) { alert("Erreur réseau Discord."); }
+        }
+
+        function toggleMedicalSection(serviceName) {
+            const sec = document.getElementById('medicalVictimSection');
+            if(serviceName === 'SAMU' || serviceName === 'BSPN (Pompiers)') {
+                sec.style.display = 'block';
+            } else {
+                sec.style.display = 'none';
+            }
         }
 
         // RECRUTEMENT PUBLIC
@@ -601,7 +741,7 @@
             out.innerText = text;
             out.style.display = 'block';
             document.getElementById('send_rec_discord').style.display = 'block';
-            alert("Candidature générée ! Vous pouvez l'envoyer sur le canal de recrutement Discord.");
+            alert("Candidature générée !");
         }
 
         // PLAINTE CITOYEN
@@ -626,7 +766,7 @@
             out.innerText = text;
             out.style.display = 'block';
             document.getElementById('send_plainte_discord').style.display = 'block';
-            alert("Plainte enregistrée ! Vous pouvez maintenant la transmettre sur le canal Discord.");
+            alert("Plainte enregistrée !");
         }
 
         // RÈGLEMENTS
@@ -709,7 +849,7 @@
             });
         }
 
-        // GESTION DES COMPTES ET MATRICULES PRÉENREGISTRÉS (0-100)
+        // GESTION COMPTES ET MATRICULES
         function createStaffAccount() {
             const username = document.getElementById('adm_staff_user').value.trim();
             const password = document.getElementById('adm_staff_pass').value.trim();
@@ -718,23 +858,23 @@
             const service = document.getElementById('adm_staff_service').value;
             const role = document.getElementById('adm_staff_role').value;
 
-            if (!username || !password || !name || matricule === "") return alert("Remplissez tous les champs, y compris le matricule (0-100).");
+            if (!username || !password || !name || matricule === "") return alert("Remplissez tous les champs.");
             
             let accounts = getStaffAccounts();
-            let formattedMatricule = String(matricule).padStart(2, '0'); // Format 01, 02...
-            accounts.push({ username, password, name, matricule: formattedMatricule, service, role, radioState: "🟢 Disponible" });
+            let formattedMatricule = String(matricule).padStart(2, '0');
+            accounts.push({ username, password, name, matricule: formattedMatricule, service, role, radioState: "🟢 Disponible", blames: [] });
             
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
             logAuditAction("Administrateur", `Préenregistrement agent ${name} [Matricule ${formattedMatricule}] (${service})`);
             alert("Compte agent préenregistré avec succès !");
-            renderStaffAccountsTable();
+            renderAdminStaffAccountsTable();
         }
 
         function deleteStaffAccount(index) {
             let accounts = getStaffAccounts();
             accounts.splice(index, 1);
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-            renderStaffAccountsTable();
+            renderAdminStaffAccountsTable();
         }
 
         function updateAgentGrade(index) {
@@ -743,7 +883,7 @@
             if(newGrade && newGrade.trim() !== "") {
                 accounts[index].name = newGrade.trim();
                 localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-                logAuditAction(loggedInAgent || "HC", `Modification du nom/grade de l'agent -> ${newGrade.trim()}`);
+                logAuditAction(loggedInAgent || "HC", `Modification nom/grade de l'agent -> ${newGrade.trim()}`);
                 renderDirectoryStaff();
                 alert("Nom/Grade mis à jour !");
             }
@@ -753,7 +893,7 @@
             const unit = document.getElementById('radio_unit').value.trim() || "Unité standard";
             const state = document.getElementById('radio_state').value;
             let accounts = getStaffAccounts();
-            let acc = accounts.find(a => a.name === loggedInAgent);
+            let acc = accounts.find(a => loggedInAgent.includes(a.name));
             if(acc) {
                 acc.radioState = `${unit} : ${state}`;
                 localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
@@ -764,14 +904,96 @@
             }
         }
 
-        function renderStaffAccountsTable() {
-            const tbody = document.getElementById('adminStaffAccountsTable');
+        // ATTRIBUTION DES BLÂMES
+        function populateBlameAgentsDropdown() {
+            const select = document.getElementById('blame_agent_select');
+            if(!select) return;
+            select.innerHTML = '';
+            let accounts = getStaffAccounts();
+            let filteredAccounts = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
+            
+            filteredAccounts.forEach((acc, idx) => {
+                let opt = document.createElement('option');
+                opt.value = acc.username;
+                opt.text = `[Matricule ${acc.matricule}] ${acc.name} (${acc.service})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function applyBlameToAgent() {
+            const username = document.getElementById('blame_agent_select').value;
+            const level = document.getElementById('blame_level').value;
+            const reason = document.getElementById('blame_reason').value.trim();
+
+            if(!reason) return alert("Veuillez indiquer le motif précis du blâme.");
+
+            let accounts = getStaffAccounts();
+            let targetAcc = accounts.find(a => a.username === username);
+            if(!targetAcc) return alert("Agent introuvable.");
+
+            if(!targetAcc.blames) targetAcc.blames = [];
+            let blameObj = { level, reason, date: getFrenchTimestamp(), author: loggedInAgent };
+            targetAcc.blames.push(blameObj);
+
+            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+            logAuditAction(loggedInAgent, `Attribution de blâme (${level}) à ${targetAcc.name} [Matricule ${targetAcc.matricule}]`);
+
+            let text = `=== ⚠️ NOTIFICATION DE SANCTION DISCIPLINAIRE ===\n`;
+            text += `🏢 Service : ${targetAcc.service}\n`;
+            text += `👤 Agent : ${targetAcc.name} [Matricule ${targetAcc.matricule}]\n`;
+            text += `⚖️ Sanction : ${level}\n`;
+            text += `📝 Motif : ${reason}\n`;
+            text += `👮 Prononcé par : ${loggedInAgent}\n`;
+            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
+            text += `================================================`;
+
+            const out = document.getElementById('output_blame');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_blame').style.display = 'block';
+            alert("Blâme enregistré avec succès dans le dossier de l'agent !");
+        }
+
+        function renderDirectoryStaff() {
+            const tbody = document.getElementById('directoryStaffTable');
             if(!tbody) return;
             let accounts = getStaffAccounts();
+            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+            
             tbody.innerHTML = '';
-            accounts.forEach((acc, i) => {
-                let badgeRole = acc.role === 'hc' ? '<span style="color:#fb923c; font-weight:bold;">HC / Conseil</span>' : 'Agent';
-                tbody.innerHTML += `<tr><td>${acc.service}</td><td><strong>[${acc.matricule}]</strong></td><td>${badgeRole}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
+            if(accounts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted); text-align:center;">Aucun agent préenregistré.</td></tr>`;
+                return;
+            }
+
+            accounts.forEach((acc, index) => {
+                let isOnline = activeStaff.includes(acc.username) || loggedInAgent.includes(acc.name);
+                let dotClass = isOnline ? "status-dot online" : "status-dot";
+                let radioInfo = acc.radioState ? `<br><small style="color:#38bdf8;">📡 ${acc.radioState}</small>` : "";
+
+                let blamesHtml = "<span style='color:#4ade80;'>Aucun blâme (Dossier vierge)</span>";
+                if(acc.blames && acc.blames.length > 0) {
+                    blamesHtml = "<ul style='margin-left: 15px; color: #f87171;'>";
+                    acc.blames.forEach(b => {
+                        blamesHtml += `<li><strong>${b.level}</strong> (${b.date})<br><small style='color:var(--text-muted);'>Motif : ${b.reason}</small></li>`;
+                    });
+                    blamesHtml += "</ul>";
+                }
+
+                let roleBadge = acc.role === 'hc' ? '⭐ (HC)' : (acc.role === 'haut_comm_police' ? '⭐ (Haut Comm. Police)' : '');
+                let actionBtn = (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || loggedInService === "Administration") ? 
+                    `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Nom</button>` : 
+                    `<small style="color:var(--text-muted)">Réservé HC</small>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span class="${dotClass}"></span> ${isOnline ? 'En service' : 'Hors ligne'} ${radioInfo}</td>
+                        <td><strong>${acc.service}</strong></td>
+                        <td><strong>[Matricule ${acc.matricule}]</strong> - ${acc.name} ${roleBadge}</td>
+                        <td>${blamesHtml}</td>
+                        <td>${actionBtn}</td>
+                    </tr>
+                `;
             });
         }
 
@@ -799,10 +1021,10 @@
                 document.getElementById('staffDashboard').style.display = 'block';
                 document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
                 
-                // Attribution automatique dans les formulaires
                 document.getElementById('rep_agent').value = loggedInAgent;
                 document.getElementById('gav_officer').value = loggedInAgent;
                 document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
+                toggleMedicalSection(document.getElementById('rep_service').value);
 
                 if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
                     document.getElementById('policeGAVBtn').style.display = 'inline-block';
@@ -810,10 +1032,18 @@
                     document.getElementById('policeGAVBtn').style.display = 'none';
                 }
 
-                if (loggedInRole === 'hc' || user === 'admin') {
+                if (loggedInRole === 'haut_comm_police' || user === 'admin') {
+                    document.getElementById('policeArreteBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('policeArreteBtn').style.display = 'none';
+                }
+
+                if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || user === 'admin') {
                     document.getElementById('hcTabBtn').style.display = 'inline-block';
+                    document.getElementById('blameToolBtn').style.display = 'inline-block';
                 } else {
                     document.getElementById('hcTabBtn').style.display = 'none';
+                    document.getElementById('blameToolBtn').style.display = 'none';
                 }
 
                 renderDirectoryStaff();
@@ -841,39 +1071,20 @@
             document.getElementById('staffDashboard').style.display = 'none';
             document.getElementById('hcTabBtn').style.display = 'none';
             document.getElementById('policeGAVBtn').style.display = 'none';
+            document.getElementById('policeArreteBtn').style.display = 'none';
+            document.getElementById('blameToolBtn').style.display = 'none';
             renderDirectoryStaff();
             updatePublicServiceStatus();
         }
 
-        function renderDirectoryStaff() {
-            const tbody = document.getElementById('directoryStaffTable');
+        function renderAdminStaffAccountsTable() {
+            const tbody = document.getElementById('adminStaffAccountsTable');
             if(!tbody) return;
             let accounts = getStaffAccounts();
-            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
-            
             tbody.innerHTML = '';
-            if(accounts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun agent préenregistré.</td></tr>`;
-                return;
-            }
-
-            accounts.forEach((acc, index) => {
-                let isOnline = activeStaff.includes(acc.username) || loggedInAgent.includes(acc.name);
-                let dotClass = isOnline ? "status-dot online" : "status-dot";
-                let radioInfo = acc.radioState ? `<br><small style="color:#38bdf8;">📡 ${acc.radioState}</small>` : "";
-
-                let actionBtn = (loggedInRole === 'hc' || loggedInService === "Administration") ? 
-                    `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Nom</button>` : 
-                    `<small style="color:var(--text-muted)">Réservé HC</small>`;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td><span class="${dotClass}"></span> ${isOnline ? 'En service' : 'Hors ligne'} ${radioInfo}</td>
-                        <td><strong>${acc.service}</strong></td>
-                        <td><strong>[Matricule ${acc.matricule}]</strong> - ${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
-                        <td>${actionBtn}</td>
-                    </tr>
-                `;
+            accounts.forEach((acc, i) => {
+                let badgeRole = acc.role === 'hc' ? '<span style="color:#fb923c; font-weight:bold;">HC / Conseil</span>' : (acc.role === 'haut_comm_police' ? '<span style="color:#3b82f6; font-weight:bold;">Haut Comm. Police</span>' : 'Agent');
+                tbody.innerHTML += `<tr><td>${acc.service}</td><td><strong>[${acc.matricule}]</strong></td><td>${badgeRole}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
             });
         }
 
@@ -886,8 +1097,16 @@
             const motif = document.getElementById('rep_motif').value || "Intervention générale";
             const details = document.getElementById('rep_details').value || "N/A";
 
+            let medicalExtra = "";
+            if(service === 'SAMU' || service === 'BSPN (Pompiers)') {
+                const glasgow = document.getElementById('med_glasgow').value || "N/A";
+                const ta = document.getElementById('med_ta').value || "N/A";
+                const gestes = document.getElementById('med_gestes').value || "N/A";
+                medicalExtra = `\n--- BILAN VICTIME / MÉDICAL ---\nGlasgow : ${glasgow} | T.A / Pouls : ${ta}\nGestes pratiqués : ${gestes}\n------------------------------`;
+            }
+
             let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
-            let newReport = { service, agent, location, datetime, motif, details };
+            let newReport = { service, agent, location, datetime, motif, details: details + medicalExtra };
             allReports.unshift(newReport);
             localStorage.setItem('nanterre_all_reports', JSON.stringify(allReports));
 
@@ -898,7 +1117,7 @@
             text += `📍 Lieu : ${location}\n`;
             text += `🕒 Date/Heure : ${datetime}\n`;
             text += `⚠️ Motif : ${motif}\n`;
-            text += `📝 Compte-Rendu :\n${details}\n`;
+            text += `📝 Compte-Rendu :\n${details}${medicalExtra}\n`;
             text += `====================================================`;
 
             const out = document.getElementById('output_intervention');
@@ -909,7 +1128,30 @@
             alert("Rapport généré et enregistré !");
         }
 
-        // REGISTRE GAV & INFRACTIONS (POLICE)
+        function generateArreteMunicipal() {
+            const title = document.getElementById('arr_title').value.trim();
+            const date = document.getElementById('arr_date').value.trim();
+            const content = document.getElementById('arr_content').value.trim();
+
+            if(!title || !content) return alert("Remplissez tous les champs.");
+
+            let text = `=== 📜 ARRÊTÉ MUNICIPAL / PERMISSION OFFICIELLE ===\n`;
+            text += `📌 ${title}\n`;
+            text += `📅 Période : ${date}\n`;
+            text += `🏛️ Émetteur : Haut Commandement de la Police Nationale (Nanterre)\n`;
+            text += `----------------------------------------------------\n`;
+            text += `${content}\n`;
+            text += `====================================================`;
+
+            const out = document.getElementById('output_arrete');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_arrete').style.display = 'block';
+
+            logAuditAction(loggedInAgent, `Publication d'un arrêté municipal : ${title}`);
+            alert("Arrêté municipal rédigé !");
+        }
+
         function registerGAV() {
             const suspect = document.getElementById('gav_suspect').value.trim();
             const motif = document.getElementById('gav_motif').value.trim();
@@ -917,7 +1159,7 @@
             const officer = document.getElementById('gav_officer').value.trim();
             const notes = document.getElementById('gav_notes').value.trim();
 
-            if(!suspect || !motif) return alert("Renseignez le nom du suspect et le motif.");
+            if(!suspect || !motif) return alert("Renseignez le suspect et le motif.");
 
             let text = `=== ⚖️ REGISTRE DE GARDE À VUE (POLICE NATIONALE) ===\n`;
             text += `👤 Interpellé : ${suspect}\n`;
@@ -937,13 +1179,12 @@
             alert("Fiche GAV enregistrée !");
         }
 
-        // DOTATION & MATÉRIEL
         function registerDotation() {
             const item = document.getElementById('arm_item').value.trim();
             const serial = document.getElementById('arm_serial').value.trim();
             const notes = document.getElementById('arm_notes').value.trim();
 
-            if(!item) return alert("Indiquez l'équipement pris en dotation.");
+            if(!item) return alert("Indiquez l'équipement.");
 
             let text = `=== 🔫 FICHE DE DOTATION MATÉRIEL ===\n`;
             text += `👤 Agent : ${loggedInAgent}\n`;
@@ -955,23 +1196,22 @@
             const out = document.getElementById('output_armement');
             out.innerText = text;
             out.style.display = 'block';
-            logAuditAction(loggedInAgent, `Prise de dotation : ${item} [${serial}]`);
+            logAuditAction(loggedInAgent, `Prise de dotation : ${item}`);
             alert("Dotation enregistrée !");
         }
 
-        // PLANNING HC
         function savePlanning() {
             const day = document.getElementById('plan_day').value.trim();
             const leader = document.getElementById('plan_leader').value.trim();
 
-            if(!day || !leader) return alert("Remplissez tous les champs du planning.");
+            if(!day || !leader) return alert("Remplissez tous les champs.");
 
             let planning = JSON.parse(localStorage.getItem('nanterre_planning')) || [];
             planning.push({ service: loggedInService, day, leader });
             localStorage.setItem('nanterre_planning', JSON.stringify(planning));
-            logAuditAction(loggedInAgent, `Mise à jour du planning (${day})`);
+            logAuditAction(loggedInAgent, `Mise à jour planning (${day})`);
             renderPlanningTable();
-            alert("Créneau ajouté au planning !");
+            alert("Créneau ajouté !");
             document.getElementById('plan_day').value = '';
             document.getElementById('plan_leader').value = '';
         }
@@ -984,7 +1224,7 @@
             
             tbody.innerHTML = '';
             if(servicePlanning.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="2" style="color:var(--text-muted); text-align:center;">Aucun planning enregistré.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="2" style="color:var(--text-muted); text-align:center;">Aucun planning.</td></tr>`;
                 return;
             }
 
@@ -993,7 +1233,6 @@
             });
         }
 
-        // PANNEAU STATISTIQUES HC & AUDIT LOG
         function renderHCStatsAndReports() {
             document.getElementById('hcServiceNameDisplay').innerText = loggedInService;
             
@@ -1006,11 +1245,34 @@
             let serviceAgents = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
             document.getElementById('statTotalAgents').innerText = serviceAgents.length;
 
+            const motifContainer = document.getElementById('motifStatsContainer');
+            if(motifContainer) {
+                motifContainer.innerHTML = '';
+                let motifsCount = {};
+                serviceReports.forEach(r => {
+                    let m = r.motif ? r.motif.trim() : "Non spécifié";
+                    motifsCount[m] = (motifsCount[m] || 0) + 1;
+                });
+
+                if(Object.keys(motifsCount).length === 0) {
+                    motifContainer.innerHTML = `<p style="color:var(--text-muted); font-size:0.9rem;">Aucune donnée.</p>`;
+                } else {
+                    for(let [motifName, count] of Object.entries(motifsCount)) {
+                        motifContainer.innerHTML += `
+                            <div style="background:#090d16; border:1px solid var(--border); padding:12px; border-radius:6px;">
+                                <div style="font-size:0.85rem; color:var(--text-muted);">${motifName}</div>
+                                <div style="font-size:1.4rem; font-weight:bold; color:#38bdf8;">${count} intervention(s)</div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
             const tbody = document.getElementById('hcReportsTable');
             if(tbody) {
                 tbody.innerHTML = '';
                 if(serviceReports.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport.</td></tr>`;
                 } else {
                     serviceReports.forEach(r => {
                         tbody.innerHTML += `
@@ -1054,9 +1316,8 @@
             if (pwd && pwd.trim().length > 0) {
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
-                document.getElementById('adm_webhook_url').value = getWebhookUrl();
                 renderAdminRulesTable();
-                renderStaffAccountsTable();
+                renderAdminStaffAccountsTable();
                 applyInterfaceConfig();
                 logAuditAction("Administrateur", "Connexion Admin");
             } else {
