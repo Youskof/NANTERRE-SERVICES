@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Nanterre - Services d'Urgence Officiels</title>
+    <!-- Chargement de la bibliothèque Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --police-blue: #1d4ed8;
@@ -432,7 +434,7 @@
             </div>
 
             <div id="adminPanelContent" style="display:none;">
-                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
+                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active (Cloud Supabase)</p>
 
                 <h3>🎨 Personnalisation du Design & Alerte Publique</h3>
                 <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
@@ -483,7 +485,7 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                    <h3>👥 Préenregistrement des Comptes & Matricules (0 à 100)</h3>
+                <h3>👥 Préenregistrement des Comptes & Matricules (0 à 100)</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant connexion"></div>
                     <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
@@ -503,7 +505,7 @@
                             <option value="haut_comm_police">Haut Commandement Police (Exclusif Arrêtés)</option>
                         </select>
                     </div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Préenregistrer l'agent avec son matricule</button></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Préenregistrer l'agent dans le Cloud</button></div>
                 </div>
                 <table class="admin-table">
                     <thead><tr><th>Service</th><th>Matricule</th><th>Rôle</th><th>Identifiant</th><th>Nom & Grade</th><th>Action</th></tr></thead>
@@ -514,9 +516,32 @@
     </div>
 
     <script>
+        // CONFIGURATION SUPABASE CLOUD
+        const SUPABASE_URL = "https://fqgecgziekhkmztawgzu.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let loggedInAgent = "";
         let loggedInService = "";
         let loggedInRole = "";
+
+        async function cloudGet(key, defaultValue) {
+            try {
+                let { data, error } = await supabaseClient.from('portail_data').select('data').eq('key', key).maybeSingle();
+                if (error || !data) return defaultValue;
+                return data.data;
+            } catch (err) {
+                return defaultValue;
+            }
+        }
+
+        async function cloudSave(key, value) {
+            try {
+                await supabaseClient.from('portail_data').upsert({ key: key, data: value }, { onConflict: 'key' });
+            } catch (err) {
+                console.error("Erreur sauvegarde cloud", err);
+            }
+        }
 
         function getFrenchTimestamp() {
             const now = new Date();
@@ -527,58 +552,32 @@
             return `${day}/${month}/${year} à ${time}`;
         }
 
-        function getStaffAccounts() {
-            return JSON.parse(localStorage.getItem('nanterre_staff_accounts')) || [];
-        }
-
-        function logAuditAction(author, actionText) {
-            let logs = JSON.parse(localStorage.getItem('nanterre_audit_logs')) || [];
+        async function logAuditAction(author, actionText) {
+            let logs = await cloudGet('nanterre_audit_logs', []);
             logs.unshift({ timestamp: getFrenchTimestamp(), author, action: actionText });
-            localStorage.setItem('nanterre_audit_logs', JSON.stringify(logs));
+            await cloudSave('nanterre_audit_logs', logs);
         }
 
-        // Gestion des Webhooks par type et par service
         function getReportWebhookUrl(serviceName) {
-            let customWhs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
-            if (serviceName === "Police Nationale") {
-                return customWhs.reportPolice || "https://discord.com/api/webhooks/1569065868867014847/bLpiJ0imxdQ9wgzYZDJ3NUKnWoei01vPgk-bemGJKTJukjWRR9om14F4NMpgLAuRoXFS";
-            }
-            if (serviceName === "BSPN (Pompiers)") {
-                return customWhs.reportBspn || "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q";
-            }
+            if (serviceName === "Police Nationale") return "https://discord.com/api/webhooks/1569065868867014847/bLpiJ0imxdQ9wgzYZDJ3NUKnWoei01vPgk-bemGJKTJukjWRR9om14F4NMpgLAuRoXFS";
+            if (serviceName === "BSPN (Pompiers)") return "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q";
             return "";
         }
 
         function getBlameWebhookUrl(serviceName) {
-            let customWhs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
-            if (serviceName === "Police Nationale") {
-                return customWhs.blamePolice || "https://discord.com/api/webhooks/1569063814802964490/xEtdT1wQMWbhsr2Q3yHxt0IFEsRLY6CZIv55NgGciHR35zSeN6Edmeee0UX7v0kKnTiE";
-            }
-            if (serviceName === "BSPN (Pompiers)") {
-                return customWhs.blameBspn || "https://discord.com/api/webhooks/1569064376260890806/W6R6o3m_5GoOyiF5jqtaeoU95tT2TGnQPNCI0zwOOEQiEmUgsmcpG40bMcvu8t1btkeY";
-            }
+            if (serviceName === "Police Nationale") return "https://discord.com/api/webhooks/1569063814802964490/xEtdT1wQMWbhsr2Q3yHxt0IFEsRLY6CZIv55NgGciHR35zSeN6Edmeee0UX7v0kKnTiE";
+            if (serviceName === "BSPN (Pompiers)") return "https://discord.com/api/webhooks/1569064376260890806/W6R6o3m_5GoOyiF5jqtaeoU95tT2TGnQPNCI0zwOOEQiEmUgsmcpG40bMcvu8t1btkeY";
             return "";
         }
 
-        function saveWebhooksConfig() {
-            let whs = {
-                reportPolice: document.getElementById('adm_wh_report_police').value.trim(),
-                reportBspn: document.getElementById('adm_wh_report_bspn').value.trim(),
-                blamePolice: document.getElementById('adm_wh_blame_police').value.trim(),
-                blameBspn: document.getElementById('adm_wh_blame_bspn').value.trim()
-            };
-            localStorage.setItem('nanterre_service_webhooks', JSON.stringify(whs));
-            alert("Webhooks enregistrés avec succès !");
-        }
-
-        function applyInterfaceConfig() {
-            let config = JSON.parse(localStorage.getItem('nanterre_interface_config')) || {
+        async function applyInterfaceConfig() {
+            let config = await cloudGet('nanterre_interface_config', {
                 title: "🛡️ NANTERRE - SERVICES D'URGENCE",
                 subtitle: "Portail Officiel : Police Nationale - BSPN - SAMU",
                 primaryColor: "#1d4ed8",
                 bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
                 alertText: "Aucune alerte majeure en cours sur la commune de Nanterre. Restez vigilants."
-            };
+            });
 
             document.getElementById('headerTitleText').innerText = config.title;
             document.getElementById('headerSubtitleText').innerText = config.subtitle;
@@ -591,7 +590,7 @@
                 banner.style.background = `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('${config.bannerUrl}') center/cover`;
             }
 
-            let whs = JSON.parse(localStorage.getItem('nanterre_service_webhooks')) || {};
+            let whs = await cloudGet('nanterre_service_webhooks', {});
             if(document.getElementById('adm_cfg_title')) {
                 document.getElementById('adm_cfg_title').value = config.title;
                 document.getElementById('adm_cfg_subtitle').value = config.subtitle;
@@ -608,9 +607,9 @@
             updatePublicServiceStatus();
         }
 
-        function updatePublicServiceStatus() {
-            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
-            let accounts = getStaffAccounts();
+        async function updatePublicServiceStatus() {
+            let activeStaff = await cloudGet('nanterre_active_staff', []);
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
 
             let servicesOnline = { "Police Nationale": false, "BSPN (Pompiers)": false, "SAMU": false };
 
@@ -641,7 +640,7 @@
             }
         }
 
-        function saveInterfaceConfig() {
+        async function saveInterfaceConfig() {
             const config = {
                 title: document.getElementById('adm_cfg_title').value.trim(),
                 subtitle: document.getElementById('adm_cfg_subtitle').value.trim(),
@@ -649,9 +648,20 @@
                 bannerUrl: document.getElementById('adm_cfg_banner').value.trim(),
                 alertText: document.getElementById('adm_cfg_alert').value.trim()
             };
-            localStorage.setItem('nanterre_interface_config', JSON.stringify(config));
+            await cloudSave('nanterre_interface_config', config);
             applyInterfaceConfig();
             alert("Design et alertes mis à jour !");
+        }
+
+        async function saveWebhooksConfig() {
+            let whs = {
+                reportPolice: document.getElementById('adm_wh_report_police').value.trim(),
+                reportBspn: document.getElementById('adm_wh_report_bspn').value.trim(),
+                blamePolice: document.getElementById('adm_wh_blame_police').value.trim(),
+                blameBspn: document.getElementById('adm_wh_blame_bspn').value.trim()
+            };
+            await cloudSave('nanterre_service_webhooks', whs);
+            alert("Webhooks enregistrés dans le Cloud !");
         }
 
         function showMainSection(sectionId, ev) {
@@ -674,8 +684,9 @@
         }
 
         async function sendReportWebhook(elementId, serviceName) {
-            const webhookUrl = getReportWebhookUrl(serviceName);
-            if (!webhookUrl) return alert(`Aucun webhook de rapport configuré pour la ${serviceName}.`);
+            let whs = await cloudGet('nanterre_service_webhooks', {});
+            const webhookUrl = serviceName === "Police Nationale" ? (whs.reportPolice || getReportWebhookUrl(serviceName)) : (whs.reportBspn || getReportWebhookUrl(serviceName));
+            if (!webhookUrl) return alert(`Aucun webhook configuré pour la ${serviceName}.`);
             const contentText = document.getElementById(elementId).innerText;
             if (!contentText) return alert("Aucun texte à envoyer.");
 
@@ -685,18 +696,19 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
-                if (response.ok || response.status === 204) alert(`🚀 Rapport envoyé sur le Webhook de la ${serviceName} !`);
+                if (response.ok || response.status === 204) alert(`🚀 Envoyé sur Discord !`);
                 else alert("⚠️ Erreur d'envoi Discord.");
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
         async function sendBlameWebhook() {
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let username = document.getElementById('blame_agent_select').value;
             let targetAcc = accounts.find(a => a.username === username);
             let service = targetAcc ? targetAcc.service : loggedInService;
 
-            const webhookUrl = getBlameWebhookUrl(service);
+            let whs = await cloudGet('nanterre_service_webhooks', {});
+            const webhookUrl = service === "Police Nationale" ? (whs.blamePolice || getBlameWebhookUrl(service)) : (whs.blameBspn || getBlameWebhookUrl(service));
             if (!webhookUrl) return alert(`Aucun webhook de blâme configuré pour la ${service}.`);
             const contentText = document.getElementById('output_blame').innerText;
             if (!contentText) return alert("Aucun texte à envoyer.");
@@ -707,7 +719,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
-                if (response.ok || response.status === 204) alert(`🚀 Blâme envoyé sur le Webhook de la ${service} !`);
+                if (response.ok || response.status === 204) alert(`🚀 Blâme envoyé sur Discord !`);
                 else alert("⚠️ Erreur d'envoi Discord.");
             } catch (err) { alert("Erreur réseau Discord."); }
         }
@@ -721,7 +733,6 @@
             }
         }
 
-        // RECRUTEMENT PUBLIC
         function submitPublicApplication() {
             const name = document.getElementById('rec_name').value.trim();
             const discord = document.getElementById('rec_discord').value.trim();
@@ -744,7 +755,6 @@
             alert("Candidature générée !");
         }
 
-        // PLAINTE CITOYEN
         function submitPublicComplaint() {
             const name = document.getElementById('plainte_name').value.trim();
             const contact = document.getElementById('plainte_contact').value.trim();
@@ -769,21 +779,20 @@
             alert("Plainte enregistrée !");
         }
 
-        // RÈGLEMENTS
-        function adminSaveRule() {
+        async function adminSaveRule() {
             const index = parseInt(document.getElementById('adm_rule_index').value);
             const title = document.getElementById('adm_rule_title').value.trim();
             const content = document.getElementById('adm_rule_content').value.trim();
             if (!title || !content) return alert("Remplissez tous les champs.");
 
-            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
+            let rules = await cloudGet('nanterre_rules', []);
             const timestamp = getFrenchTimestamp();
 
             if (index > -1) rules[index] = { title, content, date: timestamp };
             else rules.push({ title, content, date: timestamp });
 
-            localStorage.setItem('nanterre_rules', JSON.stringify(rules));
-            logAuditAction("Administrateur", `Mise à jour du règlement : ${title}`);
+            await cloudSave('nanterre_rules', rules);
+            await logAuditAction("Administrateur", `Mise à jour du règlement : ${title}`);
             alert("Règle enregistrée !");
             document.getElementById('adm_rule_index').value = "-1";
             document.getElementById('adm_rule_title').value = "";
@@ -792,8 +801,8 @@
             renderRules();
         }
 
-        function editRule(index) {
-            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
+        async function editRule(index) {
+            let rules = await cloudGet('nanterre_rules', []);
             let r = rules[index];
             if(!r) return;
             document.getElementById('adm_rule_index').value = index;
@@ -801,18 +810,18 @@
             document.getElementById('adm_rule_content').value = r.content;
         }
 
-        function deleteRule(index) {
-            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
+        async function deleteRule(index) {
+            let rules = await cloudGet('nanterre_rules', []);
             rules.splice(index, 1);
-            localStorage.setItem('nanterre_rules', JSON.stringify(rules));
+            await cloudSave('nanterre_rules', rules);
             renderAdminRulesTable();
             renderRules();
         }
 
-        function renderRules() {
+        async function renderRules() {
             const container = document.getElementById('rulesContainer');
             if(!container) return;
-            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
+            let rules = await cloudGet('nanterre_rules', []);
             if(rules.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted);">Aucun règlement publié.</p>`;
                 return;
@@ -829,10 +838,10 @@
             });
         }
 
-        function renderAdminRulesTable() {
+        async function renderAdminRulesTable() {
             const tbody = document.getElementById('adminRulesTable');
             if(!tbody) return;
-            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
+            let rules = await cloudGet('nanterre_rules', []);
             tbody.innerHTML = '';
             rules.forEach((r, i) => {
                 tbody.innerHTML += `
@@ -849,8 +858,7 @@
             });
         }
 
-        // GESTION COMPTES ET MATRICULES
-        function createStaffAccount() {
+        async function createStaffAccount() {
             const username = document.getElementById('adm_staff_user').value.trim();
             const password = document.getElementById('adm_staff_pass').value.trim();
             const name = document.getElementById('adm_staff_name').value.trim();
@@ -860,59 +868,58 @@
 
             if (!username || !password || !name || matricule === "") return alert("Remplissez tous les champs.");
             
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let formattedMatricule = String(matricule).padStart(2, '0');
             accounts.push({ username, password, name, matricule: formattedMatricule, service, role, radioState: "🟢 Disponible", blames: [] });
             
-            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-            logAuditAction("Administrateur", `Préenregistrement agent ${name} [Matricule ${formattedMatricule}] (${service})`);
-            alert("Compte agent préenregistré avec succès !");
+            await cloudSave('nanterre_staff_accounts', accounts);
+            await logAuditAction("Administrateur", `Préenregistrement agent ${name} [Matricule ${formattedMatricule}] (${service})`);
+            alert("Compte agent enregistré dans le Cloud ! Il peut désormais se connecter de n'importe où.");
             renderAdminStaffAccountsTable();
         }
 
-        function deleteStaffAccount(index) {
-            let accounts = getStaffAccounts();
+        async function deleteStaffAccount(index) {
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             accounts.splice(index, 1);
-            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+            await cloudSave('nanterre_staff_accounts', accounts);
             renderAdminStaffAccountsTable();
         }
 
-        function updateAgentGrade(index) {
-            let accounts = getStaffAccounts();
+        async function updateAgentGrade(index) {
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let newGrade = prompt("Entrez le nouveau grade et nom pour cet agent :", accounts[index].name);
             if(newGrade && newGrade.trim() !== "") {
                 accounts[index].name = newGrade.trim();
-                localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-                logAuditAction(loggedInAgent || "HC", `Modification nom/grade de l'agent -> ${newGrade.trim()}`);
+                await cloudSave('nanterre_staff_accounts', accounts);
+                await logAuditAction(loggedInAgent || "HC", `Modification nom/grade de l'agent -> ${newGrade.trim()}`);
                 renderDirectoryStaff();
                 alert("Nom/Grade mis à jour !");
             }
         }
 
-        function updateAgentRadioStatus() {
+        async function updateAgentRadioStatus() {
             const unit = document.getElementById('radio_unit').value.trim() || "Unité standard";
             const state = document.getElementById('radio_state').value;
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let acc = accounts.find(a => loggedInAgent.includes(a.name));
             if(acc) {
                 acc.radioState = `${unit} : ${state}`;
-                localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-                logAuditAction(loggedInAgent, `Mise à jour statut radio : ${acc.radioState}`);
+                await cloudSave('nanterre_staff_accounts', accounts);
+                await logAuditAction(loggedInAgent, `Mise à jour statut radio : ${acc.radioState}`);
                 alert("Statut radio mis à jour !");
             } else {
                 alert("Erreur de session.");
             }
         }
 
-        // ATTRIBUTION DES BLÂMES
-        function populateBlameAgentsDropdown() {
+        async function populateBlameAgentsDropdown() {
             const select = document.getElementById('blame_agent_select');
             if(!select) return;
             select.innerHTML = '';
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let filteredAccounts = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
             
-            filteredAccounts.forEach((acc, idx) => {
+            filteredAccounts.forEach((acc) => {
                 let opt = document.createElement('option');
                 opt.value = acc.username;
                 opt.text = `[Matricule ${acc.matricule}] ${acc.name} (${acc.service})`;
@@ -920,14 +927,14 @@
             });
         }
 
-        function applyBlameToAgent() {
+        async function applyBlameToAgent() {
             const username = document.getElementById('blame_agent_select').value;
             const level = document.getElementById('blame_level').value;
             const reason = document.getElementById('blame_reason').value.trim();
 
             if(!reason) return alert("Veuillez indiquer le motif précis du blâme.");
 
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let targetAcc = accounts.find(a => a.username === username);
             if(!targetAcc) return alert("Agent introuvable.");
 
@@ -935,8 +942,8 @@
             let blameObj = { level, reason, date: getFrenchTimestamp(), author: loggedInAgent };
             targetAcc.blames.push(blameObj);
 
-            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-            logAuditAction(loggedInAgent, `Attribution de blâme (${level}) à ${targetAcc.name} [Matricule ${targetAcc.matricule}]`);
+            await cloudSave('nanterre_staff_accounts', accounts);
+            await logAuditAction(loggedInAgent, `Attribution de blâme (${level}) à ${targetAcc.name} [Matricule ${targetAcc.matricule}]`);
 
             let text = `=== ⚠️ NOTIFICATION DE SANCTION DISCIPLINAIRE ===\n`;
             text += `🏢 Service : ${targetAcc.service}\n`;
@@ -951,14 +958,14 @@
             out.innerText = text;
             out.style.display = 'block';
             document.getElementById('send_blame').style.display = 'block';
-            alert("Blâme enregistré avec succès dans le dossier de l'agent !");
+            alert("Blâme enregistré avec succès !");
         }
 
-        function renderDirectoryStaff() {
+        async function renderDirectoryStaff() {
             const tbody = document.getElementById('directoryStaffTable');
             if(!tbody) return;
-            let accounts = getStaffAccounts();
-            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
+            let activeStaff = await cloudGet('nanterre_active_staff', []);
             
             tbody.innerHTML = '';
             if(accounts.length === 0) {
@@ -997,79 +1004,72 @@
             });
         }
 
-       function loginStaff() {
-    const user = document.getElementById('staffUser').value.trim();
-    const pass = document.getElementById('staffPass').value.trim();
-    
-    if (!user || !pass) {
-        return alert("Veuillez saisir votre identifiant et votre mot de passe.");
-    }
+        async function loginStaff() {
+            const user = document.getElementById('staffUser').value.trim().toLowerCase();
+            const pass = document.getElementById('staffPass').value.trim();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
+            let found = accounts.find(a => a.username.toLowerCase() === user && a.password === pass);
 
-    let accounts = getStaffAccounts();
-    
-    // Recherche de l'agent (insensible à la casse sur l'identifiant)
-    let found = accounts.find(a => a.username.toLowerCase() === user.toLowerCase() && a.password === pass);
+            if (found || user === "admin") {
+                loggedInAgent = found ? `${found.name} [Matricule ${found.matricule}]` : "Superviseur Nanterre [00]";
+                loggedInService = found ? found.service : "Administration";
+                loggedInRole = found ? found.role : "hc";
+                let usernameKey = found ? found.username : "admin";
+                
+                let activeStaff = await cloudGet('nanterre_active_staff', []);
+                if(!activeStaff.includes(usernameKey)) {
+                    activeStaff.push(usernameKey);
+                    await cloudSave('nanterre_active_staff', activeStaff);
+                }
 
-    if (found || user.toLowerCase() === "admin") {
-        loggedInAgent = found ? `${found.name} [Matricule ${found.matricule}]` : "Superviseur Nanterre [00]";
-        loggedInService = found ? found.service : "Administration";
-        loggedInRole = found ? found.role : "hc";
-        let usernameKey = found ? found.username : "admin";
-        
-        let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
-        if (!activeStaff.includes(usernameKey)) {
-            activeStaff.push(usernameKey);
-            localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
+                await logAuditAction(loggedInAgent, `Connexion à l'espace opérationnel (${loggedInService})`);
+
+                document.getElementById('staffLoginForm').style.display = 'none';
+                document.getElementById('staffDashboard').style.display = 'block';
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
+                
+                document.getElementById('rep_agent').value = loggedInAgent;
+                document.getElementById('gav_officer').value = loggedInAgent;
+                document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
+                toggleMedicalSection(document.getElementById('rep_service').value);
+
+                if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
+                    document.getElementById('policeGAVBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('policeGAVBtn').style.display = 'none';
+                }
+
+                if (loggedInRole === 'haut_comm_police' || user === 'admin') {
+                    document.getElementById('policeArreteBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('policeArreteBtn').style.display = 'none';
+                }
+
+                if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || user === 'admin') {
+                    document.getElementById('hcTabBtn').style.display = 'inline-block';
+                    document.getElementById('blameToolBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('hcTabBtn').style.display = 'none';
+                    document.getElementById('blameToolBtn').style.display = 'none';
+                }
+
+                renderDirectoryStaff();
+                updatePublicServiceStatus();
+            } else {
+                alert("Identifiant ou mot de passe incorrect.");
+            }
         }
 
-        logAuditAction(loggedInAgent, `Connexion à l'espace opérationnel (${loggedInService})`);
-
-        document.getElementById('staffLoginForm').style.display = 'none';
-        document.getElementById('staffDashboard').style.display = 'block';
-        document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
-        
-        document.getElementById('rep_agent').value = loggedInAgent;
-        document.getElementById('gav_officer').value = loggedInAgent;
-        document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
-        toggleMedicalSection(document.getElementById('rep_service').value);
-
-        if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
-            document.getElementById('policeGAVBtn').style.display = 'inline-block';
-        } else {
-            document.getElementById('policeGAVBtn').style.display = 'none';
-        }
-
-        if (loggedInRole === 'haut_comm_police' || user.toLowerCase() === 'admin') {
-            document.getElementById('policeArreteBtn').style.display = 'inline-block';
-        } else {
-            document.getElementById('policeArreteBtn').style.display = 'none';
-        }
-
-        if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police' || user.toLowerCase() === 'admin') {
-            document.getElementById('hcTabBtn').style.display = 'inline-block';
-            document.getElementById('blameToolBtn').style.display = 'inline-block';
-        } else {
-            document.getElementById('hcTabBtn').style.display = 'none';
-            document.getElementById('blameToolBtn').style.display = 'none';
-        }
-
-        renderDirectoryStaff();
-        updatePublicServiceStatus();
-    } else {
-        alert("Identifiant ou mot de passe incorrect.");
-    }
-}
-
-        function logoutStaff() {
-            let accounts = getStaffAccounts();
+        async function logoutStaff() {
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let currentAcc = accounts.find(a => loggedInAgent.includes(a.name));
             if(currentAcc) {
-                let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+                let activeStaff = await cloudGet('nanterre_active_staff', []);
                 activeStaff = activeStaff.filter(u => u !== currentAcc.username);
-                localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
+                await cloudSave('nanterre_active_staff', activeStaff);
             }
 
-            logAuditAction(loggedInAgent, `Déconnexion de l'espace opérationnel`);
+            await logAuditAction(loggedInAgent, `Déconnexion de l'espace opérationnel`);
 
             loggedInAgent = "";
             loggedInService = "";
@@ -1084,10 +1084,10 @@
             updatePublicServiceStatus();
         }
 
-        function renderAdminStaffAccountsTable() {
+        async function renderAdminStaffAccountsTable() {
             const tbody = document.getElementById('adminStaffAccountsTable');
             if(!tbody) return;
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             tbody.innerHTML = '';
             accounts.forEach((acc, i) => {
                 let badgeRole = acc.role === 'hc' ? '<span style="color:#fb923c; font-weight:bold;">HC / Conseil</span>' : (acc.role === 'haut_comm_police' ? '<span style="color:#3b82f6; font-weight:bold;">Haut Comm. Police</span>' : 'Agent');
@@ -1095,8 +1095,7 @@
             });
         }
 
-        // RAPPORT D'INTERVENTION UNIFIÉ
-        function generateInterventionReport() {
+        async function generateInterventionReport() {
             const service = document.getElementById('rep_service').value;
             const agent = document.getElementById('rep_agent').value || "N/A";
             const location = document.getElementById('rep_location').value || "N/A";
@@ -1112,12 +1111,12 @@
                 medicalExtra = `\n--- BILAN VICTIME / MÉDICAL ---\nGlasgow : ${glasgow} | T.A / Pouls : ${ta}\nGestes pratiqués : ${gestes}\n------------------------------`;
             }
 
-            let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
+            let allReports = await cloudGet('nanterre_all_reports', []);
             let newReport = { service, agent, location, datetime, motif, details: details + medicalExtra };
             allReports.unshift(newReport);
-            localStorage.setItem('nanterre_all_reports', JSON.stringify(allReports));
+            await cloudSave('nanterre_all_reports', allReports);
 
-            logAuditAction(agent, `Rédaction rapport (${service}) - Motif : ${motif}`);
+            await logAuditAction(agent, `Rédaction rapport (${service}) - Motif : ${motif}`);
 
             let text = `=== 🚨 RAPPORT D'INTERVENTION - ${service.toUpperCase()} ===\n`;
             text += `👤 Agent : ${agent}\n`;
@@ -1135,7 +1134,7 @@
             alert("Rapport généré et enregistré !");
         }
 
-        function generateArreteMunicipal() {
+        async function generateArreteMunicipal() {
             const title = document.getElementById('arr_title').value.trim();
             const date = document.getElementById('arr_date').value.trim();
             const content = document.getElementById('arr_content').value.trim();
@@ -1155,11 +1154,11 @@
             out.style.display = 'block';
             document.getElementById('send_arrete').style.display = 'block';
 
-            logAuditAction(loggedInAgent, `Publication d'un arrêté municipal : ${title}`);
+            await logAuditAction(loggedInAgent, `Publication d'un arrêté municipal : ${title}`);
             alert("Arrêté municipal rédigé !");
         }
 
-        function registerGAV() {
+        async function registerGAV() {
             const suspect = document.getElementById('gav_suspect').value.trim();
             const motif = document.getElementById('gav_motif').value.trim();
             const duration = document.getElementById('gav_duration').value.trim();
@@ -1182,11 +1181,11 @@
             out.style.display = 'block';
             document.getElementById('send_gav').style.display = 'block';
 
-            logAuditAction(officer || loggedInAgent, `Enregistrement GAV pour ${suspect}`);
+            await logAuditAction(officer || loggedInAgent, `Enregistrement GAV pour ${suspect}`);
             alert("Fiche GAV enregistrée !");
         }
 
-        function registerDotation() {
+        async function registerDotation() {
             const item = document.getElementById('arm_item').value.trim();
             const serial = document.getElementById('arm_serial').value.trim();
             const notes = document.getElementById('arm_notes').value.trim();
@@ -1203,30 +1202,30 @@
             const out = document.getElementById('output_armement');
             out.innerText = text;
             out.style.display = 'block';
-            logAuditAction(loggedInAgent, `Prise de dotation : ${item}`);
+            await logAuditAction(loggedInAgent, `Prise de dotation : ${item}`);
             alert("Dotation enregistrée !");
         }
 
-        function savePlanning() {
+        async function savePlanning() {
             const day = document.getElementById('plan_day').value.trim();
             const leader = document.getElementById('plan_leader').value.trim();
 
             if(!day || !leader) return alert("Remplissez tous les champs.");
 
-            let planning = JSON.parse(localStorage.getItem('nanterre_planning')) || [];
+            let planning = await cloudGet('nanterre_planning', []);
             planning.push({ service: loggedInService, day, leader });
-            localStorage.setItem('nanterre_planning', JSON.stringify(planning));
-            logAuditAction(loggedInAgent, `Mise à jour planning (${day})`);
+            await cloudSave('nanterre_planning', planning);
+            await logAuditAction(loggedInAgent, `Mise à jour planning (${day})`);
             renderPlanningTable();
             alert("Créneau ajouté !");
             document.getElementById('plan_day').value = '';
             document.getElementById('plan_leader').value = '';
         }
 
-        function renderPlanningTable() {
+        async function renderPlanningTable() {
             const tbody = document.getElementById('planningTable');
             if(!tbody) return;
-            let planning = JSON.parse(localStorage.getItem('nanterre_planning')) || [];
+            let planning = await cloudGet('nanterre_planning', []);
             let servicePlanning = loggedInService === "Administration" ? planning : planning.filter(p => p.service === loggedInService);
             
             tbody.innerHTML = '';
@@ -1240,15 +1239,15 @@
             });
         }
 
-        function renderHCStatsAndReports() {
+        async function renderHCStatsAndReports() {
             document.getElementById('hcServiceNameDisplay').innerText = loggedInService;
             
-            let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
+            let allReports = await cloudGet('nanterre_all_reports', []);
             let serviceReports = loggedInService === "Administration" ? allReports : allReports.filter(r => r.service === loggedInService);
 
             document.getElementById('statTotalReports').innerText = serviceReports.length;
 
-            let accounts = getStaffAccounts();
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
             let serviceAgents = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
             document.getElementById('statTotalAgents').innerText = serviceAgents.length;
 
@@ -1297,7 +1296,7 @@
             const auditTbody = document.getElementById('auditLogTable');
             if(auditTbody) {
                 auditTbody.innerHTML = '';
-                let logs = JSON.parse(localStorage.getItem('nanterre_audit_logs')) || [];
+                let logs = await cloudGet('nanterre_audit_logs', []);
                 if(logs.length === 0) {
                     auditTbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted); text-align:center;">Aucune activité.</td></tr>`;
                 } else {
@@ -1318,7 +1317,7 @@
             navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié dans le presse-papier !"));
         }
 
-        function checkAdminPassword() {
+        async function checkAdminPassword() {
             const pwd = document.getElementById('adminPasswordInput').value;
             if (pwd && pwd.trim().length > 0) {
                 document.getElementById('adminLoginBox').style.display = 'none';
@@ -1326,17 +1325,17 @@
                 renderAdminRulesTable();
                 renderAdminStaffAccountsTable();
                 applyInterfaceConfig();
-                logAuditAction("Administrateur", "Connexion Admin");
+                await logAuditAction("Administrateur", "Connexion Admin");
             } else {
                 alert("Entrez un mot de passe administrateur.");
             }
         }
 
-        window.onload = () => {
-            applyInterfaceConfig();
-            renderRules();
-            renderDirectoryStaff();
-            updatePublicServiceStatus();
+        window.onload = async () => {
+            await applyInterfaceConfig();
+            await renderRules();
+            await renderDirectoryStaff();
+            await updatePublicServiceStatus();
         };
     </script>
 </body>
