@@ -1,16 +1,16 @@
-html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">RMS Hospital - Portail Officiel</title>
+    <title id="pageTitle">Nanterre - Services d'Urgence Officiels</title>
     <style>
         :root {
-            --primary: #dc2626;
-            --primary-dark: #b91c1c;
-            --police-blue: #0284c7;
-            --police-dark: #0369a1;
+            --police-blue: #1d4ed8;
+            --police-dark: #1e40af;
+            --bspn-red: #dc2626;
+            --bspn-dark: #b91c1c;
+            --samu-yellow: #ca8a04;
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
@@ -23,9 +23,9 @@ html
 
         header {
             text-align: center; margin-bottom: 25px; padding: 25px;
-            background: var(--card-bg); border-radius: 12px; border-bottom: 4px solid var(--primary);
+            background: var(--card-bg); border-radius: 12px; border-bottom: 4px solid var(--police-blue);
         }
-        header h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 1px; }
+        header h1 { color: var(--text-main); font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 1px; }
         header p { color: var(--text-muted); }
 
         .container { max-width: 1200px; margin: 0 auto; }
@@ -35,15 +35,13 @@ html
             background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);
             padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: all 0.2s;
         }
-        .nav-link:hover, .nav-link.active { background: var(--primary); border-color: var(--primary); color: white; }
-        .nav-link.rcso-btn { border-color: var(--police-blue); }
-        .nav-link.rcso-btn:hover, .nav-link.rcso-btn.active { background: var(--police-blue); border-color: var(--police-blue); color: white; }
+        .nav-link:hover, .nav-link.active { background: var(--police-blue); border-color: var(--police-blue); color: white; }
 
         .section-page { display: none; background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
         .section-page.active { display: block; }
 
         h2 { margin-bottom: 20px; font-size: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; color: var(--text-main); }
-        h3 { color: var(--primary); margin-bottom: 15px; }
+        h3 { color: var(--police-blue); margin-bottom: 15px; }
 
         .hero-banner {
             width: 100%; height: 220px;
@@ -54,13 +52,13 @@ html
 
         .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .action-card { background: #0f172a; border: 1px solid var(--border); padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
-        .action-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .action-card h4 { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; }
+        .action-card:hover { transform: translateY(-5px); border-color: var(--police-blue); }
+        .action-card h4 { color: var(--police-blue); font-size: 1.2rem; margin-bottom: 10px; }
         .action-card p { color: var(--text-muted); font-size: 0.9rem; }
 
         .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
-        .sub-btn.active { background: var(--primary-dark); color: white; border-color: var(--primary); }
+        .sub-btn.active { background: var(--police-dark); color: white; border-color: var(--police-blue); }
         .tool-panel { display: none; }
         .tool-panel.active { display: block; }
 
@@ -68,33 +66,23 @@ html
         .form-group { display: flex; flex-direction: column; gap: 5px; }
         label { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
         input, select, textarea { background: #0f172a; border: 1px solid var(--border); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.95rem; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--police-blue); }
         textarea { resize: vertical; min-height: 80px; }
 
-        .billing-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .billing-layout { grid-template-columns: 1fr; } }
-        .acts-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
-        .act-item { background: #0f172a; border: 1px solid var(--border); padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .act-item:hover { border-color: var(--primary); }
-        .act-item.selected { background: rgba(220, 38, 38, 0.15); border-color: var(--primary); }
-        .act-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
-        .act-price { color: #4ade80; font-weight: bold; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #0f172a; border: 1px solid var(--border); padding: 20px; border-radius: 8px; text-align: center; }
+        .stat-card h4 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; }
+        .stat-card .stat-val { font-size: 1.8rem; font-weight: bold; color: #4ade80; }
 
-        .cart-summary { background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
-        .total-display { font-size: 1.6rem; font-weight: bold; color: #4ade80; margin: 10px 0; text-align: right; }
-        .discount-info { color: #38bdf8; font-size: 0.85rem; margin-bottom: 5px; text-align: right; }
-
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; }
-        .btn:hover { background: var(--primary-dark); }
+        .btn { background: var(--police-blue); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; }
+        .btn:hover { background: var(--police-dark); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
-        .btn-secondary:hover { background: #475569; }
+        .btn-secondary:hover { background: #475269; }
         .btn-discord { background: #5865F2; margin-top: 10px; }
         .btn-discord:hover { background: #4752C4; }
         .btn-danger { background: #7f1d1d; }
         .btn-danger:hover { background: #991b1b; }
-        .btn-police { background: var(--police-blue); }
-        .btn-police:hover { background: var(--police-dark); }
 
         .output-box { margin-top: 20px; background: #090d16; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1; max-height: 200px; overflow-y: auto; }
 
@@ -103,586 +91,220 @@ html
         .admin-table th { background: #0f172a; color: var(--text-muted); }
 
         .admin-login-box { max-width: 400px; margin: 40px auto; background: #0f172a; border: 1px solid var(--border); padding: 25px; border-radius: 10px; text-align: center; }
-        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-        .badge-danger { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid #ef4444; }
         .forum-card { background: #0f172a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .forum-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 5px; }
         
-        .badge-grade { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; display: inline-block; }
-        .grade-direction { background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid #ef4444; }
-        .grade-medecin { background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid #0284c7; }
-        .grade-infirmier { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #9333ea; }
-        .grade-eleve { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid #eab308; }
-
         .status-dot { height: 10px; width: 10px; background-color: #94a3b8; border-radius: 50%; display: inline-block; margin-right: 6px; }
         .status-dot.online { background-color: #4ade80; box-shadow: 0 0 8px #4ade80; }
-
-        .tag-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; margin-right: 5px; margin-bottom: 4px; }
-        .tag-medal { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid #eab308; }
-        .tag-specialty { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #0284c7; }
-        .tag-remove { cursor: pointer; color: #f87171; font-weight: bold; margin-left: 4px; }
-        .tag-remove:hover { color: #ef4444; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1 id="headerTitleText">🏥 RMS HOSPITAL</h1>
-            <p id="headerSubtitleText">Rockford Medical Services - Centre Hospitalier Officiel</p>
+            <h1 id="headerTitleText">🛡️ NANTERRE - SERVICES D'URGENCE</h1>
+            <p id="headerSubtitleText">Portail Officiel : Police Nationale - BSPN - SAMU</p>
         </header>
 
         <!-- Navigation Principale -->
         <nav class="main-nav">
             <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
-            <button class="nav-link" onclick="showMainSection('effectifs-public', event)">👥 Effectifs RMS</button>
-            <button class="nav-link" onclick="showMainSection('rdv-public', event)">📅 Prendre RDV</button>
-            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements</button>
-            <button class="nav-link" onclick="showMainSection('formation', event)">📚 Formation & Wiki</button>
-            <button class="nav-link" onclick="showMainSection('annonces', event)">📢 Annonces</button>
-            <button class="nav-link" onclick="showMainSection('staff-login', event)">🩺 Espace RMS (Médecins)</button>
-            <button class="nav-link rcso-btn" onclick="showMainSection('rcso-portal', event)">🚔 Espace RCSO (Police)</button>
-            <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Admin</button>
+            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements & Protocoles</button>
+            <button class="nav-link" onclick="showMainSection('staff-login', event)">🚨 Espace Opérationnel (Agents & HC)</button>
+            <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Administration</button>
         </nav>
 
         <!-- ACCUEIL PUBLIC -->
         <section id="accueil" class="section-page active">
             <div class="hero-banner" id="homeHeroBanner" style="background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover;">
-                <h3 id="heroTitle">Centre Hospitalier de Rockford</h3>
-                <p id="heroSubtitle">Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7.</p>
+                <h3 id="heroTitle">Sécurité & Secours - Ville de Nanterre</h3>
+                <p id="heroSubtitle">Coordination des services de la Police Nationale, de la BSPN et du SAMU 24h/24 et 7j/7.</p>
             </div>
-            <h2>Services aux Citoyens</h2>
+            <h2>Informations Citoyennes</h2>
             <div class="quick-actions">
-                <div class="action-card" onclick="showMainSection('effectifs-public')">
-                    <h4>👥 Annuaire des Effectifs</h4>
-                    <p>Consultez la liste des médecins, leurs grades, médailles et spécialisations.</p>
-                </div>
-                <div class="action-card" onclick="showMainSection('rdv-public')">
-                    <h4>📅 Prise de Rendez-vous</h4>
-                    <p>Réservez une consultation médicale avec nos spécialistes en quelques clics.</p>
-                </div>
-                <div class="action-card" onclick="showMainSection('annonces')">
-                    <h4>📢 Annonces Officielles</h4>
-                    <p>Consultez les informations de santé publique et campagnes de prévention.</p>
+                <div class="action-card" onclick="showMainSection('reglement')">
+                    <h4>📜 Consulter les Règlements</h4>
+                    <p>Prenez connaissance des lois, arrêtés et consignes de sécurité à Nanterre.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- EFFECTIFS PUBLICS -->
-        <section id="effectifs-public" class="section-page">
-            <h2>👥 Annuaire Public des Effectifs RMS</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Liste des membres du personnel médical de Rockford, leurs statuts, grades, rôles, médailles et formations :</p>
-            
-            <div class="form-group" style="margin-bottom: 15px; max-width: 400px;">
-                <input type="text" id="publicStaffSearch" placeholder="🔍 Rechercher un praticien, un grade ou une spécialité..." onkeyup="filterPublicStaff()">
-            </div>
-
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Statut</th>
-                        <th>Agent / Médecin</th>
-                        <th>Identifiant</th>
-                        <th>Grade</th>
-                        <th>Rôle, Spécialisations & Médailles</th>
-                    </tr>
-                </thead>
-                <tbody id="publicStaffTableBody"></tbody>
-            </table>
-        </section>
-
-        <!-- RDV PUBLIC CITOYEN -->
-        <section id="rdv-public" class="section-page">
-            <h2>📅 Prise de Rendez-vous Médical (Citoyen)</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Remplissez ce formulaire pour envoyer une demande de rendez-vous directement au secrétariat médical RMS.</p>
-            
-            <div class="form-grid">
-                <div class="form-group"><label>Nom & Prénom du Citoyen</label><input type="text" id="rdv_citoyen_name" placeholder="Ex: John Doe"></div>
-                <div class="form-group"><label>Pseudo Discord</label><input type="text" id="rdv_citoyen_phone" placeholder="Ex: @citoyen_discord"></div>
-                <div class="form-group">
-                    <label>Médecin souhaité (Optionnel)</label>
-                    <select id="rdv_citoyen_medic">
-                        <option value="Premier disponible">Premier disponible</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Date souhaitée</label><input type="date" id="rdv_citoyen_date"></div>
-                <div class="form-group"><label>Heure souhaitée</label><input type="time" id="rdv_citoyen_time"></div>
-                <div class="form-group" style="grid-column: span 2;"><label>Motif de la consultation</label><textarea id="rdv_citoyen_reason" placeholder="Ex: Visite médicale de contrôle, douleurs..."></textarea></div>
-            </div>
-            <button class="btn" onclick="submitPublicRDV()">📩 Soumettre la demande de RDV</button>
-            <div class="output-box" id="output_rdv" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_rdv_discord" style="display:none;" onclick="sendDiscordWebhook('output_rdv')">🚀 Envoyer le Ticket RDV sur Discord</button>
         </section>
 
         <!-- REGLEMENTS -->
         <section id="reglement" class="section-page">
-            <h2>📜 Règlements Officiels de la RMS</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Consultez ici l'ensemble des règles internes, codes de déontologie et directives de l'hôpital.</p>
+            <h2>📜 Règlements & Consignes Officielles</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Directives opérationnelles et réglementations en vigueur sur la commune de Nanterre.</p>
             <div id="rulesContainer"></div>
         </section>
 
-        <!-- FORMATION & WIKI INTERNE -->
-        <section id="formation" class="section-page">
-            <h2>📚 Base de Formation & Wiki RMS</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Espace de consultation des cours, protocoles et manuels médicaux pour les étudiants et praticiens.</p>
-            
-            <div id="superviseurPostBox" style="display:none; background:#0f172a; border:1px solid var(--border); padding:20px; border-radius:8px; margin-bottom:25px;">
-                <h3 style="color: var(--primary);">✍️ Publier un document de formation (Réservé Superviseurs & Direction)</h3>
-                <div class="form-grid">
-                    <div class="form-group" style="grid-column: span 2;"><label>Titre du cours / protocole</label><input type="text" id="form_title" placeholder="Ex: Protocole de réanimation trauma"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Contenu / Informations</label><textarea id="form_content" placeholder="Rédigez le cours ici..."></textarea></div>
-                </div>
-                <button class="btn" onclick="publishCourse()">Publier sur le Wiki</button>
-            </div>
-
-            <div id="coursesContainer"></div>
-        </section>
-
-        <!-- ANNONCES -->
-        <section id="annonces" class="section-page">
-            <h2>📢 Annonces Officielles & Santé Publique</h2>
-            <div id="announcementsContainer"></div>
-        </section>
-
-        <!-- ESPACE STAFF MÉDICAL RMS -->
+        <!-- ESPACE OPERATIONNEL (AGENTS & HC) -->
         <section id="staff-login" class="section-page">
-            <h2>🩺 Espace Confidentiel - Personnel RMS</h2>
+            <h2>🚨 Espace Opérationnel & Haut Comité (HC)</h2>
             
             <div id="staffLoginForm" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion réservée aux membres de la RMS :</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion agents, cadres ou direction (HC) :</p>
                 <input type="text" id="staffUser" placeholder="Identifiant..." style="width: 100%; margin-bottom: 10px;">
                 <input type="password" id="staffPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
-                <button class="btn" onclick="loginStaff()">Se connecter à l'espace médical</button>
+                <button class="btn" onclick="loginStaff()">Se connecter</button>
             </div>
 
             <div id="staffDashboard" style="display:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <p style="color: #4ade80; font-weight: bold;" id="welcomeStaffMsg">✅ Session Médicale Active</p>
+                    <p style="color: #4ade80; font-weight: bold;" id="welcomeStaffMsg">✅ Session Active</p>
                     <button class="btn btn-secondary btn-sm" onclick="logoutStaff()">Se déconnecter</button>
                 </div>
                 
                 <div class="sub-nav">
-                    <button class="sub-btn active" onclick="showTool('facture-tool', event)">💰 Facturation</button>
-                    <button class="sub-btn" onclick="showTool('op-tool', event)">📋 Rapport d'Opération</button>
-                    <button class="sub-btn" onclick="showTool('cr-tool', event)">🩺 Compte-Rendu</button>
-                    <button class="sub-btn" onclick="showTool('imp-tool', event)">⚠️ Impayés</button>
-                    <button class="sub-btn" onclick="showTool('dec-tool', event)">⚰️ Avis de Décès</button>
-                    <button class="sub-btn" onclick="showTool('dossiers-tool', event)">📂 Dossiers Patients</button>
-                    <button class="sub-btn" onclick="showTool('signal-tool', event)">🚨 Signaler au RCSO</button>
-                    <button class="sub-btn" onclick="showTool('staff-medals-tool', event)">🏅 Titres & Médailles</button>
-                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs RMS</button>
+                    <button class="sub-btn active" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
+                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Matricules</button>
+                    <!-- Onglet Statistiques / HC visible uniquement si l'agent est HC ou Admin -->
+                    <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Statistiques</button>
                 </div>
 
-                <!-- Facturation -->
-                <div id="facture-tool" class="tool-panel active">
+                <!-- Rapport d'Intervention unifié -->
+                <div id="report-tool" class="tool-panel active">
+                    <h3>📋 Rédaction de Rapport d'Intervention</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Patient</label><input type="text" id="fact_patient" placeholder="Ex: John Doe" onblur="checkPatientInsurance(this.value)"></div>
-                        <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="fact_id" placeholder="Ex: #EMS-1042"></div>
-                        <div class="form-group"><label>Médecin</label><input type="text" id="fact_medic" placeholder="Ex: Dr. House"></div>
-                    </div>
-                    
-                    <div id="insuranceAlertBox" style="background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none;">
-                        <span id="insuranceStatusText" style="color: #38bdf8; font-weight: bold;">ℹ️ Statut assurance...</span>
-                    </div>
-
-                    <label style="margin-bottom: 10px; display: block;">Actes pratiqués :</label>
-                    <div class="billing-layout">
-                        <div class="acts-list" id="actsContainer"></div>
-                        <div class="cart-summary">
-                            <div><h3>Total</h3><div class="discount-info" id="discountInfoText">Assurance : Aucune</div></div>
-                            <div><div class="total-display" id="totalPrice">0 $</div><button class="btn" onclick="generateFacture()">Générer la facture</button></div>
-                        </div>
-                    </div>
-                    <div class="output-box" id="output_facturation" style="display:none;"></div>
-                    <button class="btn btn-secondary" id="copy_facturation" style="display:none;" onclick="copyToClipboard('output_facturation')">📋 Copier</button>
-                    <button class="btn btn-discord" id="send_facturation" style="display:none;" onclick="sendDiscordWebhook('output_facturation')">🚀 Envoyer direct sur Discord</button>
-                </div>
-
-                <!-- Rapport d'Opération -->
-                <div id="op-tool" class="tool-panel">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Patient</label><input type="text" id="op_patient"></div>
-                        <div class="form-group"><label>ID</label><input type="text" id="op_id"></div>
-                        <div class="form-group"><label>Chirurgien</label><input type="text" id="op_medic"></div>
-                        <div class="form-group"><label>Date</label><input type="date" id="op_date"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Motif</label><input type="text" id="op_reason"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Détails</label><textarea id="op_desc"></textarea></div>
-                    </div>
-                    <button class="btn" onclick="generateOperation()">Générer le Rapport</button>
-                    <div class="output-box" id="output_operation" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_operation" style="display:none;" onclick="sendDiscordWebhook('output_operation')">🚀 Envoyer direct sur Discord</button>
-                </div>
-
-                <!-- Compte Rendu -->
-                <div id="cr-tool" class="tool-panel">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Patient</label><input type="text" id="cr_patient"></div>
-                        <div class="form-group"><label>ID</label><input type="text" id="cr_id"></div>
-                        <div class="form-group"><label>Médecin</label><input type="text" id="cr_medic"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Soins</label><input type="text" id="cr_care"></div>
-                    </div>
-                    <button class="btn" onclick="generateCompteRendu()">Générer le Compte-Rendu</button>
-                    <div class="output-box" id="output_compterendu" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_compterendu" style="display:none;" onclick="sendDiscordWebhook('output_compterendu')">🚀 Envoyer direct sur Discord</button>
-                </div>
-
-                <!-- Impayé -->
-                <div id="imp-tool" class="tool-panel">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Patient</label><input type="text" id="imp_patient"></div>
-                        <div class="form-group"><label>Montant Dû ($)</label><input type="number" id="imp_amount"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Raison</label><input type="text" id="imp_reason"></div>
-                    </div>
-                    <button class="btn" onclick="generateImpaye()">Générer l'Impayé</button>
-                    <div class="output-box" id="output_impaye" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_impaye" style="display:none;" onclick="sendDiscordWebhook('output_impaye')">🚀 Envoyer direct sur Discord</button>
-                </div>
-
-                <!-- Décès -->
-                <div id="dec-tool" class="tool-panel">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Nom Défunt</label><input type="text" id="dec_patient"></div>
-                        <div class="form-group"><label>Cause</label><input type="text" id="dec_cause"></div>
-                        <div class="form-group"><label>Médecin</label><input type="text" id="dec_medic"></div>
-                    </div>
-                    <button class="btn" onclick="generateDeces()">Générer le Certificat</button>
-                    <div class="output-box" id="output_deces" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_deces" style="display:none;" onclick="sendDiscordWebhook('output_deces')">🚀 Envoyer direct sur Discord</button>
-                </div>
-
-                <!-- Dossiers Patients -->
-                <div id="dossiers-tool" class="tool-panel">
-                    <h3>📂 Base de Données & Dossiers Médicaux</h3>
-                    <div class="form-grid" style="margin-bottom: 20px;">
-                        <div class="form-group"><label>Nom du Patient</label><input type="text" id="staff_ins_patient" placeholder="Ex: John Doe"></div>
-                        <div class="form-group"><label>ID / Carte Vitale</label><input type="text" id="staff_ins_id" placeholder="Ex: #EMS-1042"></div>
                         <div class="form-group">
-                            <label>Statut Assurance</label>
-                            <select id="staff_ins_status">
-                                <option value="active">Active (-30%)</option>
-                                <option value="expired">Expirée</option>
+                            <label>Service Émetteur</label>
+                            <select id="rep_service">
+                                <option value="Police Nationale">Police Nationale</option>
+                                <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                                <option value="SAMU">SAMU</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Date d'expiration assurance</label><input type="date" id="staff_ins_date"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Informations Complémentaires & Antécédents</label><textarea id="staff_ins_notes" placeholder="Allergies, groupes sanguins, antécédents..."></textarea></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="staffSavePatientInsurance()">Créer ou Mettre à jour le dossier</button></div>
+                        <div class="form-group"><label>Nom & Matricule de l'Agent (0 - 100)</label><input type="text" id="rep_agent" placeholder="Ex: Cne Dupont [Matricule 42]"></div>
+                        <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Avenue Joliot-Curie, Nanterre"></div>
+                        <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Nature de l'intervention / Motif</label><input type="text" id="rep_motif" placeholder="Ex: Incendie / Braquage / Urgence vitale"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé des faits et actions menées</label><textarea id="rep_details" placeholder="Rédigez le déroulement de l'intervention..."></textarea></div>
                     </div>
-                    
-                    <h3>📋 Registre des Dossiers Médicaux</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Patient & ID</th><th>Assurance</th><th>Notes & Historique Horodaté (JJ/MM/AAAA)</th></tr></thead>
-                        <tbody id="staffPatientsTable"></tbody>
-                    </table>
+                    <button class="btn" onclick="generateInterventionReport()">Générer le Rapport</button>
+                    <div class="output-box" id="output_intervention" style="display:none;"></div>
+                    <button class="btn btn-secondary" id="copy_intervention" style="display:none;" onclick="copyToClipboard('output_intervention')">📋 Copier</button>
+                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendDiscordWebhook('output_intervention')">🚀 Envoyer sur Discord</button>
                 </div>
 
-                <!-- Signalement RCSO -->
-                <div id="signal-tool" class="tool-panel">
-                    <h3 style="color: var(--police-blue);">🚨 Transmettre un signalement au RCSO</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Nom du Citoyen concerné</label><input type="text" id="rcso_name" placeholder="Ex: Jane Doe"></div>
-                        <div class="form-group">
-                            <label>Motif</label>
-                            <select id="rcso_reason">
-                                <!-- Généré dynamiquement -->
-                            </select>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Détails / Circonstances</label><textarea id="rcso_details"></textarea></div>
-                    </div>
-                    <button class="btn btn-police" onclick="submitRCSOSignalment()">Transmettre au RCSO & Discord</button>
-                </div>
-
-                <!-- GESTION STAFF : MÉDAILLES & TITRES -->
-                <div id="staff-medals-tool" class="tool-panel">
-                    <h3>🏅 Gestion des Titres, Médailles et Formations (Panel Staff)</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Ajoutez, modifiez ou supprimez les distinctions et formations attribuées aux praticiens :</p>
-                    
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
-                        <div class="form-group">
-                            <label>Sélectionner le Praticien</label>
-                            <select id="staff_target_select" onchange="loadStaffAttributesForEdit()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Type de distinction</label>
-                            <select id="staff_attr_type">
-                                <option value="medal">🏅 Médaille / Distinction</option>
-                                <option value="specialty">🎓 Spécialisation / Titre / Formation</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Libellé (Ex: 🎖️ Médaille du Mérite, Expert Réanimation...)</label>
-                            <input type="text" id="staff_attr_label" placeholder="Saisir le titre ou la médaille...">
-                        </div>
-                        <div style="grid-column: span 2;">
-                            <button class="btn" onclick="staffAddAttribute()">➕ Ajouter cette distinction</button>
-                        </div>
-                    </div>
-
-                    <h3>📋 Distinctions Actuelles du Praticien Sélectionné</h3>
-                    <div id="staffAttributesList" style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-top:10px;">
-                        <p style="color:var(--text-muted);">Sélectionnez un membre de l'effectif ci-dessus pour afficher ses attributs.</p>
-                    </div>
-                </div>
-
-                <!-- Liste du personnel / effectifs connectés ou non -->
+                <!-- Effectifs et Matricules (0-100) -->
                 <div id="staff-list-tool" class="tool-panel">
-                    <h3>👥 Annuaire et Statut des Effectifs RMS</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste officielle de tous les praticiens enregistrés et leur statut de connexion actuel :</p>
+                    <h3>👥 Annuaire des Effectifs & Matricules (0 à 100)</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents connectés et de leur statut opérationnel :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Statut</th><th>Nom / Grade (Médecin)</th><th>Identifiant</th></tr></thead>
+                        <thead><tr><th>Statut</th><th>Service</th><th>Nom / Grade & Matricule (0-100)</th><th>Identifiant</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
-            </div>
-        </section>
 
-        <!-- ESPACE RCSO (POLICE) -->
-        <section id="rcso-portal" class="section-page">
-            <h2 style="color: var(--police-blue); border-bottom-color: var(--police-blue);">🚔 Espace Confidentiel - Forces de l'Ordre (RCSO)</h2>
-            
-            <div id="rcsoLoginForm" class="admin-login-box" style="border-color: var(--police-blue);">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion réservée aux agents du RCSO :</p>
-                <input type="text" id="rcsoUser" placeholder="Identifiant / Matricule..." style="width: 100%; margin-bottom: 10px;">
-                <input type="password" id="rcsoPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
-                <button class="btn btn-police" onclick="loginRCSO()">Se connecter au portail RCSO</button>
-            </div>
+                <!-- Panneau HC : Statistiques et Consultation Rapports du Service -->
+                <div id="hc-stats-tool" class="tool-panel">
+                    <h3 style="color: #fb923c;">📊 Tableau de Bord Haut Comité (HC) - <span id="hcServiceNameDisplay">Service</span></h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Consultation exclusive des statistiques et des rapports enregistrés pour votre service.</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Total Interventions</h4>
+                            <div class="stat-val" id="statTotalReports">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Agents Actifs / Enregistrés</h4>
+                            <div class="stat-val" id="statTotalAgents">0</div>
+                        </div>
+                    </div>
 
-            <div id="rcsoDashboard" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <p style="color: #38bdf8; font-weight: bold;" id="welcomeRCSOMsg">✅ Session RCSO Active (Consultation)</p>
-                    <button class="btn btn-secondary btn-sm" onclick="logoutRCSO()">Se déconnecter</button>
+                    <h3>📂 Registre des Rapports du Service</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Date & Heure</th><th>Agent & Matricule</th><th>Lieu & Motif</th><th>Actions</th></tr></thead>
+                        <tbody id="hcReportsTable"></tbody>
+                    </table>
                 </div>
-
-                <h3 style="color: var(--police-blue);">📋 Registre Central des Signalements et Fraudes Médicales</h3>
-                <table class="admin-table">
-                    <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails & Auteur</th><th>Date (JJ/MM/AAAA)</th></tr></thead>
-                    <tbody id="rcsoReportsTable"></tbody>
-                </table>
             </div>
         </section>
 
-        <!-- PANEL ADMIN TOTAL -->
+        <!-- ADMIN -->
         <section id="admin" class="section-page">
-            <h2>🔒 Panel d'Administration Globale</h2>
+            <h2>🔒 Espace d'Administration</h2>
 
             <div id="adminLoginBox" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès Administrateur :</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès :</p>
                 <input type="password" id="adminPasswordInput" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
-                <button class="btn" onclick="checkAdminPassword()">Se connecter au Control Panel</button>
+                <button class="btn" onclick="checkAdminPassword()">Se connecter</button>
             </div>
 
             <div id="adminPanelContent" style="display:none;">
-                <p style="color: #4ade80; margin-bottom: 20px; font-weight: bold;">✅ Session Administrateur Active</p>
+                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
 
-                <!-- Navigation Interne Admin -->
-                <div class="sub-nav">
-                    <button class="sub-btn active" onclick="showAdminTool('adm-accounts-tool', event)">🩺 Accounts & Staff</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-motifs-tool', event)">🚨 Motifs RCSO</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-wiki-tool', event)">📚 Wiki & Cours</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-announces-tool', event)">📢 Annonces</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-acts-tool', event)">💰 Grille Tarifaire</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-signals-tool', event)">🚨 Signalements</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-insurance-tool', event)">🛡️ Dossiers Patients</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-rules-tool', event)">📜 Règlements</button>
-                    <button class="sub-btn" onclick="showAdminTool('adm-config-tool', event)">🎨 Design & Discord</button>
+                <!-- CONFIGURATION DESIGN -->
+                <h3>🎨 Personnalisation du Design & Interface</h3>
+                <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div class="form-group"><label>Nom de l'En-tête</label><input type="text" id="adm_cfg_title" value="🛡️ NANTERRE - SERVICES D'URGENCE"></div>
+                    <div class="form-group"><label>Sous-titre En-tête</label><input type="text" id="adm_cfg_subtitle" value="Portail Officiel : Police Nationale - BSPN - SAMU"></div>
+                    <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#1d4ed8" style="height:45px; width:100%;"></div>
+                    <div class="form-group"><label>URL de l'image de la Bannière</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder et Appliquer</button></div>
                 </div>
 
-                <!-- ADMIN TOOL: COMPTES MÉDECINS & COMPTES RCSO -->
-                <div id="adm-accounts-tool" class="tool-panel active">
-                    <h3>🏅 Distinctions & Médailles</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
-                        <div class="form-group">
-                            <label>Sélectionner le Praticien</label>
-                            <select id="adm_target_staff"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Type d'attribut</label>
-                            <select id="adm_attr_type">
-                                <option value="medal">Médaille / Distinction</option>
-                                <option value="specialty">Spécialisation / Formation</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Libellé</label>
-                            <input type="text" id="adm_attr_label" placeholder="Ex: 🎖️ Médaille du Mérite RMS">
-                        </div>
-                        <div style="grid-column: span 2;">
-                            <button class="btn" onclick="adminAddAttribute()">Attribuer au membre du personnel</button>
-                        </div>
-                    </div>
+                <hr style="border-color: var(--border); margin: 30px 0;">
 
-                    <h3>🩺 Comptes Médecins RMS</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant"></div>
-                        <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
-                        <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom (Ex: Dr. Martin)"></div>
-                        <div class="form-group">
-                            <select id="adm_staff_grade">
-                                <option value="grade-direction">Directeur / Médecin-Chef</option>
-                                <option value="grade-medecin" selected>Médecin Titulaire</option>
-                                <option value="grade-infirmier">Infirmier(ère)</option>
-                                <option value="grade-eleve">Externe / Élève</option>
-                            </select>
-                        </div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte médecin</button></div>
+                <!-- WEBHOOK DISCORD -->
+                <h3>🤖 Configuration Webhook Discord</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>URL du Webhook Discord</label>
+                        <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
                     </div>
-                    <table class="admin-table">
-                        <thead><tr><th>Identifiant</th><th>Nom du Médecin</th><th>Grade</th><th>Action</th></tr></thead>
-                        <tbody id="adminStaffAccountsTable"></tbody>
-                    </table>
-
-                    <h3 style="color: var(--police-blue); margin-top:30px;">🚔 Comptes RCSO (Police)</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><input type="text" id="adm_rcso_user" placeholder="Identifiant / Matricule"></div>
-                        <div class="form-group"><input type="password" id="adm_rcso_pass" placeholder="Mot de passe"></div>
-                        <div class="form-group"><input type="text" id="adm_rcso_name" placeholder="Nom / Grade de l'agent"></div>
-                        <div style="grid-column: span 2;"><button class="btn btn-police" onclick="createRCSOAccount()">Créer le compte RCSO</button></div>
-                    </div>
-                    <table class="admin-table">
-                        <thead><tr><th>Identifiant</th><th>Agent / Grade</th><th>Action</th></tr></thead>
-                        <tbody id="adminRCSOAccountsTable"></tbody>
-                    </table>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL</button></div>
                 </div>
 
-                <!-- ADMIN TOOL: GESTION DES MOTIFS RCSO -->
-                <div id="adm-motifs-tool" class="tool-panel">
-                    <h3 style="color: var(--police-blue);">🚨 Gestion des Motifs de Signalement RCSO</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
-                        <input type="hidden" id="adm_motif_index" value="-1">
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Intitulé du motif</label>
-                            <input type="text" id="adm_motif_name" placeholder="Ex: Impayé / Fraude Médicale">
-                        </div>
-                        <div style="grid-column: span 2;">
-                            <button class="btn btn-police" onclick="adminSaveMotif()">Ajouter ou Mettre à jour le Motif</button>
-                        </div>
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <!-- GESTION DES RÈGLEMENTS -->
+                <h3>📜 Gestion des Règlements</h3>
+                <div class="form-grid" style="background: rgba(29, 78, 216, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--police-blue);">
+                    <input type="hidden" id="adm_rule_index" value="-1">
+                    <div class="form-group" style="grid-column: span 2;"><label>Titre de la règle</label><input type="text" id="adm_rule_title" placeholder="Ex: Article 1 - Utilisation des gyrophares"></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Contenu</label><textarea id="adm_rule_content" placeholder="Rédigez le texte..."></textarea></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveRule()">Ajouter / Modifier le Règlement</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Titre</th><th>Contenu</th><th>Date</th><th>Action</th></tr></thead>
+                    <tbody id="adminRulesTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <!-- GESTION COMPTES AGENTS & HAUT COMITÉ -->
+                <h3>👥 Gestion des Comptes & Attribution Rôle HC (Conseil d'Administration)</h3>
+                <div class="form-grid">
+                    <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant connexion"></div>
+                    <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom, Grade & Matricule (ex: Cne Dupont [01])"></div>
+                    <div class="form-group">
+                        <select id="adm_staff_service">
+                            <option value="Police Nationale">Police Nationale</option>
+                            <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                            <option value="SAMU">SAMU</option>
+                        </select>
                     </div>
-                    <h3>📋 Liste des Motifs Actuels</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Motif enregistré</th><th>Actions</th></tr></thead>
-                        <tbody id="adminMotifsTable"></tbody>
-                    </table>
-                </div>
-
-                <!-- ADMIN TOOL: WIKI & COURS DE FORMATION -->
-                <div id="adm-wiki-tool" class="tool-panel">
-                    <h3>📚 Gestion Globale du Wiki & Documents de Formation</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
-                        <input type="hidden" id="adm_course_index" value="-1">
-                        <div class="form-group" style="grid-column: span 2;"><label>Titre du cours / protocole</label><input type="text" id="adm_course_title" placeholder="Ex: Urgences Vitales - Protocole ABCDE"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Contenu complet</label><textarea id="adm_course_content" placeholder="Contenu du document de formation..."></textarea></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveCourse()">Enregistrer le Document sur le Wiki</button></div>
+                    <div class="form-group">
+                        <label>Rôle / Niveau d'accès</label>
+                        <select id="adm_staff_role">
+                            <option value="agent">Agent Standard</option>
+                            <option value="hc">Haut Comité / Conseil d'Administration (HC)</option>
+                        </select>
                     </div>
-                    <h3>📋 Cours actuellement en ligne</h3>
-                    <div id="adminCoursesList"></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte agent / HC</button></div>
                 </div>
-
-                <!-- ADMIN TOOL: ANNONCES -->
-                <div id="adm-announces-tool" class="tool-panel">
-                    <h3>📢 Gestion des Annonces Officielles</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
-                        <div class="form-group" style="grid-column: span 2;"><label>Titre de l'annonce</label><input type="text" id="adm_ann_title" placeholder="Ex: Campagne de vaccination collective"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Message public</label><textarea id="adm_ann_content" placeholder="Rédigez le contenu de l'annonce..."></textarea></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="adminAddAnnouncement()">Publier l'Annonce</button></div>
-                    </div>
-                    <h3>📋 Annonces Actives</h3>
-                    <div id="adminAnnouncementsList"></div>
-                </div>
-
-                <!-- ADMIN TOOL: TARIFS & ACTES -->
-                <div id="adm-acts-tool" class="tool-panel">
-                    <h3>💰 Gestion de la Grille Tarifaire (Actes Médicaux)</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:20px;">
-                        <div class="form-group"><label>Nom de l'acte</label><input type="text" id="adm_act_name" placeholder="Ex: Chirurgie Cardio-Vasculaire"></div>
-                        <div class="form-group"><label>Tarif ($)</label><input type="number" id="adm_act_price" placeholder="Ex: 1500"></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="adminAddAct()">Ajouter l'acte médical</button></div>
-                    </div>
-                    <h3>📋 Actes Médicaux Actuels</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Acte Médical</th><th>Prix ($)</th><th>Action</th></tr></thead>
-                        <tbody id="adminActsTable"></tbody>
-                    </table>
-                </div>
-
-                <!-- ADMIN TOOL: SIGNALEMENTS RCSO -->
-                <div id="adm-signals-tool" class="tool-panel">
-                    <h3 style="color: var(--police-blue);">🚨 Gestion Admin des Signalements RCSO</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Citoyen</th><th>Motif</th><th>Détails</th><th>Actions Admin</th></tr></thead>
-                        <tbody id="adminSignalsTable"></tbody>
-                    </table>
-                </div>
-
-                <!-- ADMIN TOOL: DOSSIERS PATIENTS -->
-                <div id="adm-insurance-tool" class="tool-panel">
-                    <h3>🛡️ Gestion & Suppression des Dossiers Patients</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Patient</th><th>ID</th><th>Statut</th><th>Action (Suppression Admin)</th></tr></thead>
-                        <tbody id="adminInsuranceTable"></tbody>
-                    </table>
-                </div>
-
-                <!-- ADMIN TOOL: RÈGLEMENTS -->
-                <div id="adm-rules-tool" class="tool-panel">
-                    <h3>📜 Gestion Admin des Règlements</h3>
-                    <div class="form-grid" style="background: rgba(220, 38, 38, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--primary); margin-bottom:20px;">
-                        <input type="hidden" id="adm_rule_index" value="-1">
-                        <div class="form-group" style="grid-column: span 2;"><label>Titre de la règle / section</label><input type="text" id="adm_rule_title" placeholder="Ex: Article 1 - Tenue et Comportement"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Contenu du règlement</label><textarea id="adm_rule_content" placeholder="Rédigez le texte du règlement ici..."></textarea></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveRule()">Ajouter ou Mettre à jour le Règlement</button></div>
-                    </div>
-                    <table class="admin-table">
-                        <thead><tr><th>Titre</th><th>Contenu</th><th>Date / Auteur</th><th>Actions Admin</th></tr></thead>
-                        <tbody id="adminRulesTable"></tbody>
-                    </table>
-                </div>
-
-                <!-- ADMIN TOOL: CONFIG DESIGN & DISCORD -->
-                <div id="adm-config-tool" class="tool-panel">
-                    <h3>🎨 Personnalisation du Design & Interface</h3>
-                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px;">
-                        <div class="form-group"><label>Nom de l'Hôpital (Header)</label><input type="text" id="adm_cfg_title" value="🏥 RMS HOSPITAL"></div>
-                        <div class="form-group"><label>Sous-titre Header</label><input type="text" id="adm_cfg_subtitle" value="Rockford Medical Services - Centre Hospitalier Officiel"></div>
-                        <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#dc2626" style="height:45px; width:100%;"></div>
-                        <div class="form-group"><label>URL de l'image de la Bannière Accueil</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
-                        <div class="form-group"><label>Titre de la Bannière</label><input type="text" id="adm_cfg_herotitle" value="Centre Hospitalier de Rockford"></div>
-                        <div class="form-group"><label>Sous-titre Bannière</label><input type="text" id="adm_cfg_herosub" value="Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7."></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder et Appliquer le Design</button></div>
-                    </div>
-
-                    <h3>🤖 Configuration Webhook Discord</h3>
-                    <div class="form-grid">
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>URL du Webhook Discord</label>
-                            <input type="text" id="adm_webhook_url" placeholder="https://discord.com/api/webhooks/...">
-                        </div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhookUrl()">Enregistrer l'URL Webhook</button></div>
-                    </div>
-                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Service</th><th>Rôle</th><th>Identifiant</th><th>Nom & Matricule</th><th>Action</th></tr></thead>
+                    <tbody id="adminStaffAccountsTable"></tbody>
+                </table>
             </div>
         </section>
     </div>
 
     <script>
-        const defaultActs = [
-            { name: "Petit soin", price: 250 },
-            { name: "Gros soin", price: 500 },
-            { name: "Consultation en urgence", price: 500 },
-            { name: "Soins de Réhabilitation", price: 1000 },
-            { name: "Services de Transport", price: 500 },
-            { name: "Suture des plaies", price: 500 },
-            { name: "Plâtre ou attelle", price: 500 },
-            { name: "Gestion des blessures par balle", price: 2000 }
-        ];
-
-        const defaultMotifs = [
-            "Impayé / Fraude Médicale",
-            "Outrage / Agression Soignant",
-            "Suspect recherché blessé"
-        ];
-
-        let selectedActs = [];
-        let currentPatientDiscount = 0;
-        let loggedInDoctor = "";
+        let loggedInAgent = "";
+        let loggedInService = "";
+        let loggedInRole = "";
 
         function getFrenchTimestamp() {
             const now = new Date();
@@ -693,497 +315,33 @@ html
             return `${day}/${month}/${year} à ${time}`;
         }
 
-        // --- GESTION DES MOTIFS RCSO ---
-        function getMotifs() {
-            return JSON.parse(localStorage.getItem('rms_rcso_motifs')) || defaultMotifs;
-        }
-
-        function updateMotifsDropdown() {
-            const select = document.getElementById('rcso_reason');
-            if(!select) return;
-            const motifs = getMotifs();
-            select.innerHTML = '';
-            motifs.forEach(motif => {
-                let opt = document.createElement('option');
-                opt.value = motif;
-                opt.textContent = motif;
-                select.appendChild(opt);
-            });
-        }
-
-        function adminSaveMotif() {
-            const index = parseInt(document.getElementById('adm_motif_index').value);
-            const motifName = document.getElementById('adm_motif_name').value.trim();
-
-            if (!motifName) return alert("Veuillez saisir un intitulé de motif.");
-
-            let motifs = getMotifs();
-            if (index > -1) {
-                motifs[index] = motifName;
-            } else {
-                motifs.push(motifName);
-            }
-
-            localStorage.setItem('rms_rcso_motifs', JSON.stringify(motifs));
-            document.getElementById('adm_motif_index').value = '-1';
-            document.getElementById('adm_motif_name').value = '';
-            alert("Motif enregistré avec succès !");
-            renderAdminMotifsTable();
-            updateMotifsDropdown();
-        }
-
-        function editMotif(index) {
-            let motifs = getMotifs();
-            if(!motifs[index]) return;
-            document.getElementById('adm_motif_index').value = index;
-            document.getElementById('adm_motif_name').value = motifs[index];
-        }
-
-        function deleteMotif(index) {
-            let motifs = getMotifs();
-            motifs.splice(index, 1);
-            localStorage.setItem('rms_rcso_motifs', JSON.stringify(motifs));
-            renderAdminMotifsTable();
-            updateMotifsDropdown();
-        }
-
-        function renderAdminMotifsTable() {
-            const tbody = document.getElementById('adminMotifsTable');
-            if(!tbody) return;
-            let motifs = getMotifs();
-            tbody.innerHTML = '';
-            motifs.forEach((motif, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${motif}</strong></td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm" onclick="editMotif(${i})">Modifier</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteMotif(${i})">Supprimer</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        // --- GESTION STRICTE DES COMPTES & EFFECTIFS ---
         function getStaffAccounts() {
-            return JSON.parse(localStorage.getItem('rms_staff_accounts')) || [];
+            return JSON.parse(localStorage.getItem('nanterre_staff_accounts')) || [];
         }
 
-        function updateDoctorsDropdown() {
-            const select = document.getElementById('rdv_citoyen_medic');
-            if(!select) return;
-            select.innerHTML = '<option value="Premier disponible">Premier disponible</option>';
-            let accounts = getStaffAccounts();
-            let activeStaff = JSON.parse(localStorage.getItem('rms_active_staff')) || [];
-            accounts.forEach(acc => {
-                let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInDoctor;
-                let statusIcon = isOnline ? "🟢 [En ligne]" : "⚪ [Hors ligne]";
-                let opt = document.createElement('option');
-                opt.value = acc.name;
-                opt.text = `${acc.name} ${statusIcon}`;
-                select.appendChild(opt);
-            });
-        }
-
-        // --- ANNUAIRE PUBLIC DES EFFECTIFS ---
-        function renderPublicStaff() {
-            const tbody = document.getElementById('publicStaffTableBody');
-            if(!tbody) return;
-            let accounts = getStaffAccounts();
-            let activeStaff = JSON.parse(localStorage.getItem('rms_active_staff')) || [];
-            tbody.innerHTML = '';
-
-            if(accounts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted); text-align:center; padding: 20px;">Aucun effectif enregistré pour le moment. Ajoutez des comptes dans l'espace Admin ou via le Bot Discord.</td></tr>`;
-                return;
-            }
-
-            accounts.forEach((acc) => {
-                let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInDoctor;
-                let statusHtml = isOnline 
-                    ? `<span class="status-dot online"></span><span style="color:#4ade80;">En Service</span>` 
-                    : `<span class="status-dot"></span><span style="color:#94a3b8;">Hors Service</span>`;
-
-                let gradeClass = acc.gradeClass || 'grade-medecin';
-                let gradeName = acc.gradeName || 'Médecin';
-
-                let medalsHtml = '';
-                if (acc.medals && acc.medals.length > 0) {
-                    medalsHtml = `<div style="margin-top: 4px;">` + 
-                        acc.medals.map(m => `<span class="tag-badge tag-medal">${m}</span>`).join('') + 
-                        `</div>`;
-                }
-
-                let specsHtml = '';
-                if (acc.specialties && acc.specialties.length > 0) {
-                    specsHtml = `<div style="margin-top: 6px;">` + 
-                        acc.specialties.map(s => `<span class="tag-badge tag-specialty">🎓 ${s}</span>`).join('') + 
-                        `</div>`;
-                }
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${statusHtml}</td>
-                        <td><strong>${acc.name}</strong></td>
-                        <td><code>${acc.username}</code></td>
-                        <td><span class="badge-grade ${gradeClass}">${gradeName}</span></td>
-                        <td>
-                            <div><strong>Rôle :</strong> ${acc.role || 'Praticien Médical'}</div>
-                            ${specsHtml}
-                            ${medalsHtml}
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function filterPublicStaff() {
-            const input = document.getElementById('publicStaffSearch').value.toLowerCase();
-            const rows = document.querySelectorAll('#publicStaffTableBody tr');
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(input) ? '' : 'none';
-            });
-        }
-
-        // --- GESTION DES ATTRIBUTS / TITRES / MÉDAILLES ---
-        function populateStaffSelects() {
-            const adminSelect = document.getElementById('adm_target_staff');
-            const staffSelect = document.getElementById('staff_target_select');
-            let accounts = getStaffAccounts();
-
-            [adminSelect, staffSelect].forEach(select => {
-                if(!select) return;
-                select.innerHTML = '';
-                accounts.forEach((acc, index) => {
-                    let opt = document.createElement('option');
-                    opt.value = index;
-                    opt.textContent = `${acc.name} (${acc.username})`;
-                    select.appendChild(opt);
-                });
-            });
-
-            if (staffSelect && accounts.length > 0) loadStaffAttributesForEdit();
-        }
-
-        function staffAddAttribute() {
-            const staffIndex = document.getElementById('staff_target_select').value;
-            const type = document.getElementById('staff_attr_type').value;
-            const label = document.getElementById('staff_attr_label').value.trim();
-
-            if (staffIndex === "" || !label) {
-                alert("Veuillez sélectionner un praticien et entrer un libellé.");
-                return;
-            }
-
-            let accounts = getStaffAccounts();
-            if(!accounts[staffIndex]) return;
-
-            if (type === 'medal') {
-                if (!accounts[staffIndex].medals) accounts[staffIndex].medals = [];
-                accounts[staffIndex].medals.push(label);
-            } else {
-                if (!accounts[staffIndex].specialties) accounts[staffIndex].specialties = [];
-                accounts[staffIndex].specialties.push(label);
-            }
-
-            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
-            document.getElementById('staff_attr_label').value = '';
-            alert("Distinction ajoutée avec succès !");
-            loadStaffAttributesForEdit();
-            renderPublicStaff();
-        }
-
-        function loadStaffAttributesForEdit() {
-            const select = document.getElementById('staff_target_select');
-            const listDiv = document.getElementById('staffAttributesList');
-            if(!select || !listDiv) return;
-
-            const staffIndex = select.value;
-            let accounts = getStaffAccounts();
-            if (staffIndex === "" || !accounts[staffIndex]) {
-                listDiv.innerHTML = `<p style="color:var(--text-muted);">Aucun praticien sélectionné.</p>`;
-                return;
-            }
-
-            const acc = accounts[staffIndex];
-            let html = `<p style="margin-bottom:10px;"><strong>Agent :</strong> ${acc.name} (<code>${acc.username}</code>)</p>`;
-
-            html += `<div style="margin-bottom:15px;"><strong>🏅 Médailles / Distinctions :</strong><br>`;
-            if (acc.medals && acc.medals.length > 0) {
-                acc.medals.forEach((m, idx) => {
-                    html += `<span class="tag-badge tag-medal">${m} <span class="tag-remove" onclick="staffRemoveAttribute(${staffIndex}, 'medal', ${idx})">❌</span></span>`;
-                });
-            } else {
-                html += `<small style="color:var(--text-muted);">Aucune médaille attribuée.</small>`;
-            }
-            html += `</div>`;
-
-            html += `<div><strong>🎓 Spécialisations & Formations :</strong><br>`;
-            if (acc.specialties && acc.specialties.length > 0) {
-                acc.specialties.forEach((s, idx) => {
-                    html += `<span class="tag-badge tag-specialty">${s} <span class="tag-remove" onclick="staffRemoveAttribute(${staffIndex}, 'specialty', ${idx})">❌</span></span>`;
-                });
-            } else {
-                html += `<small style="color:var(--text-muted);">Aucune spécialisation enregistrée.</small>`;
-            }
-            html += `</div>`;
-
-            listDiv.innerHTML = html;
-        }
-
-        function staffRemoveAttribute(staffIndex, type, attrIdx) {
-            let accounts = getStaffAccounts();
-            if(!accounts[staffIndex]) return;
-
-            if (type === 'medal' && accounts[staffIndex].medals) {
-                accounts[staffIndex].medals.splice(attrIdx, 1);
-            } else if (type === 'specialty' && accounts[staffIndex].specialties) {
-                accounts[staffIndex].specialties.splice(attrIdx, 1);
-            }
-
-            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
-            loadStaffAttributesForEdit();
-            renderPublicStaff();
-        }
-
-        function adminAddAttribute() {
-            const staffIndex = document.getElementById('adm_target_staff').value;
-            const type = document.getElementById('adm_attr_type').value;
-            const label = document.getElementById('adm_attr_label').value.trim();
-
-            if (staffIndex === "" || !label) {
-                alert("Veuillez sélectionner un praticien et entrer un libellé.");
-                return;
-            }
-
-            let accounts = getStaffAccounts();
-            if(!accounts[staffIndex]) return;
-
-            if (type === 'medal') {
-                if (!accounts[staffIndex].medals) accounts[staffIndex].medals = [];
-                accounts[staffIndex].medals.push(label);
-            } else {
-                if (!accounts[staffIndex].specialties) accounts[staffIndex].specialties = [];
-                accounts[staffIndex].specialties.push(label);
-            }
-
-            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
-            document.getElementById('adm_attr_label').value = '';
-            alert("Attribution enregistrée avec succès !");
-            renderStaffAccountsTable();
-            renderPublicStaff();
-            populateStaffSelects();
-        }
-
-        // --- GESTION ADMIN DES COURS DU WIKI ---
-        function adminSaveCourse() {
-            const title = document.getElementById('adm_course_title').value.trim();
-            const content = document.getElementById('adm_course_content').value.trim();
-            const index = parseInt(document.getElementById('adm_course_index').value);
-
-            if (!title || !content) return alert("Remplissez le titre et le contenu du cours.");
-
-            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
-            const timestamp = getFrenchTimestamp();
-
-            if (index > -1) {
-                courses[index] = { title, content, author: "Admin", date: timestamp };
-            } else {
-                courses.unshift({ title, content, author: "Admin", date: timestamp });
-            }
-
-            localStorage.setItem('rms_courses', JSON.stringify(courses));
-            document.getElementById('adm_course_title').value = '';
-            document.getElementById('adm_course_content').value = '';
-            document.getElementById('adm_course_index').value = '-1';
-            alert("Document enregistré sur le Wiki !");
-            renderCourses();
-            renderAdminCourses();
-        }
-
-        function deleteCourse(index) {
-            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
-            courses.splice(index, 1);
-            localStorage.setItem('rms_courses', JSON.stringify(courses));
-            renderCourses();
-            renderAdminCourses();
-        }
-
-        function renderAdminCourses() {
-            const container = document.getElementById('adminCoursesList');
-            if (!container) return;
-            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
-            container.innerHTML = '';
-            if (courses.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">Aucun cours actuellement publié.</p>`;
-                return;
-            }
-            courses.forEach((c, i) => {
-                container.innerHTML += `
-                    <div style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong style="color:var(--primary);">${c.title}</strong><br>
-                            <small style="color:var(--text-muted)">Par ${c.author} le ${c.date}</small>
-                        </div>
-                        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${i})">Supprimer</button>
-                    </div>
-                `;
-            });
-        }
-
-        // --- GESTION ADMIN DES ANNONCES ---
-        function adminAddAnnouncement() {
-            const title = document.getElementById('adm_ann_title').value.trim();
-            const content = document.getElementById('adm_ann_content').value.trim();
-
-            if (!title || !content) return alert("Veuillez compléter le titre et le contenu de l'annonce.");
-
-            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
-            announcements.unshift({ title, content, date: getFrenchTimestamp() });
-
-            localStorage.setItem('rms_announcements', JSON.stringify(announcements));
-            document.getElementById('adm_ann_title').value = '';
-            document.getElementById('adm_ann_content').value = '';
-            alert("Annonce publiée !");
-            renderAnnouncements();
-            renderAdminAnnouncements();
-        }
-
-        function deleteAnnouncement(index) {
-            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
-            announcements.splice(index, 1);
-            localStorage.setItem('rms_announcements', JSON.stringify(announcements));
-            renderAnnouncements();
-            renderAdminAnnouncements();
-        }
-
-        function renderAnnouncements() {
-            const container = document.getElementById('announcementsContainer');
-            if(!container) return;
-            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [
-                { title: "🏥 Ouverture des souscriptions aux assurances RMS", content: "Pensez à renouveler votre assurance médicale toutes les deux semaines pour bénéficier de 30% de réduction sur l'ensemble des interventions d'urgence." }
-            ];
-            container.innerHTML = '';
-            announcements.forEach(a => {
-                container.innerHTML += `
-                    <div class="announcement-card" style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:15px;">
-                        <h4 style="color:var(--primary);">${a.title}</h4>
-                        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">${a.content}</p>
-                    </div>
-                `;
-            });
-        }
-
-        function renderAdminAnnouncements() {
-            const container = document.getElementById('adminAnnouncementsList');
-            if(!container) return;
-            let announcements = JSON.parse(localStorage.getItem('rms_announcements')) || [];
-            container.innerHTML = '';
-            if(announcements.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">Aucune annonce personnalisée.</p>`;
-                return;
-            }
-            announcements.forEach((a, i) => {
-                container.innerHTML += `
-                    <div style="background:#0f172a; border:1px solid var(--border); padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong style="color:var(--primary);">${a.title}</strong>
-                        </div>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${i})">Supprimer</button>
-                    </div>
-                `;
-            });
-        }
-
-        // --- GESTION ADMIN DE LA GRILLE TARIFAIRE ---
-        function adminAddAct() {
-            const name = document.getElementById('adm_act_name').value.trim();
-            const price = parseFloat(document.getElementById('adm_act_price').value);
-
-            if (!name || isNaN(price)) return alert("Veuillez renseigner un nom d'acte et un tarif valide.");
-
-            let acts = getActs();
-            acts.push({ name, price });
-            localStorage.setItem('rms_acts', JSON.stringify(acts));
-
-            document.getElementById('adm_act_name').value = '';
-            document.getElementById('adm_act_price').value = '';
-            alert("Acte médical ajouté à la grille tarifaire !");
-            initActs();
-            renderAdminActsTable();
-        }
-
-        function deleteAct(index) {
-            let acts = getActs();
-            acts.splice(index, 1);
-            localStorage.setItem('rms_acts', JSON.stringify(acts));
-            initActs();
-            renderAdminActsTable();
-        }
-
-        function renderAdminActsTable() {
-            const tbody = document.getElementById('adminActsTable');
-            if(!tbody) return;
-            let acts = getActs();
-            tbody.innerHTML = '';
-            acts.forEach((a, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${a.name}</strong></td>
-                        <td>${a.price} $</td>
-                        <td><button class="btn btn-danger btn-sm" onclick="deleteAct(${i})">Supprimer</button></td>
-                    </tr>
-                `;
-            });
-        }
-
-        function renderDirectoryStaff() {
-            const tbody = document.getElementById('directoryStaffTable');
-            if(!tbody) return;
-            let accounts = getStaffAccounts();
-            let activeStaff = JSON.parse(localStorage.getItem('rms_active_staff')) || [];
-            tbody.innerHTML = '';
-            if(accounts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted); text-align:center;">Aucun médecin enregistré.</td></tr>`;
-                return;
-            }
-            accounts.forEach(acc => {
-                let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInDoctor;
-                let dotClass = isOnline ? "status-dot online" : "status-dot";
-                let statusLabel = isOnline ? "En ligne / Actif" : "Hors ligne";
-                tbody.innerHTML += `<tr><td><span class="${dotClass}"></span> ${statusLabel}</td><td><strong>${acc.name}</strong></td><td><code>${acc.username}</code></td></tr>`;
-            });
-        }
-
-        // --- CHARGEMENT DU DESIGN PERSONNALISÉ ---
         function applyInterfaceConfig() {
-            let config = JSON.parse(localStorage.getItem('rms_interface_config')) || {
-                title: "🏥 RMS HOSPITAL",
-                subtitle: "Rockford Medical Services - Centre Hospitalier Officiel",
-                primaryColor: "#dc2626",
-                bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
-                heroTitle: "Centre Hospitalier de Rockford",
-                heroSubtitle: "Bienvenue sur le portail citoyen RMS Hospital. Nos services de soins et d'urgences sont ouverts 24/7."
+            let config = JSON.parse(localStorage.getItem('nanterre_interface_config')) || {
+                title: "🛡️ NANTERRE - SERVICES D'URGENCE",
+                subtitle: "Portail Officiel : Police Nationale - BSPN - SAMU",
+                primaryColor: "#1d4ed8",
+                bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"
             };
+
             document.getElementById('headerTitleText').innerText = config.title;
             document.getElementById('headerSubtitleText').innerText = config.subtitle;
-            document.documentElement.style.setProperty('--primary', config.primaryColor);
-            document.documentElement.style.setProperty('--primary-dark', config.primaryColor);
+            document.documentElement.style.setProperty('--police-blue', config.primaryColor);
+            document.documentElement.style.setProperty('--police-dark', config.primaryColor);
+            
             const banner = document.getElementById('homeHeroBanner');
             if(banner) {
                 banner.style.background = `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('${config.bannerUrl}') center/cover`;
             }
-            document.getElementById('heroTitle').innerText = config.heroTitle;
-            document.getElementById('heroSubtitle').innerText = config.heroSubtitle;
+
             if(document.getElementById('adm_cfg_title')) {
                 document.getElementById('adm_cfg_title').value = config.title;
                 document.getElementById('adm_cfg_subtitle').value = config.subtitle;
                 document.getElementById('adm_cfg_color').value = config.primaryColor;
                 document.getElementById('adm_cfg_banner').value = config.bannerUrl;
-                document.getElementById('adm_cfg_herotitle').value = config.heroTitle;
-                document.getElementById('adm_cfg_herosub').value = config.heroSubtitle;
             }
         }
 
@@ -1192,63 +350,11 @@ html
                 title: document.getElementById('adm_cfg_title').value.trim(),
                 subtitle: document.getElementById('adm_cfg_subtitle').value.trim(),
                 primaryColor: document.getElementById('adm_cfg_color').value,
-                bannerUrl: document.getElementById('adm_cfg_banner').value.trim(),
-                heroTitle: document.getElementById('adm_cfg_herotitle').value.trim(),
-                heroSubtitle: document.getElementById('adm_cfg_herosub').value.trim()
+                bannerUrl: document.getElementById('adm_cfg_banner').value.trim()
             };
-            localStorage.setItem('rms_interface_config', JSON.stringify(config));
+            localStorage.setItem('nanterre_interface_config', JSON.stringify(config));
             applyInterfaceConfig();
-            alert("Design et interface mis à jour avec succès !");
-        }
-
-        function getActs() { return JSON.parse(localStorage.getItem('rms_acts')) || defaultActs; }
-        function initActs() {
-            const container = document.getElementById('actsContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            getActs().forEach((act, index) => {
-                const div = document.createElement('div');
-                div.className = 'act-item';
-                div.onclick = () => toggleAct(index, div, getActs());
-                div.innerHTML = `<div class="act-name">${act.name}</div><div class="act-price">${act.price} $</div>`;
-                container.appendChild(div);
-            });
-        }
-
-        function toggleAct(index, element, acts) {
-            const act = acts[index];
-            const idx = selectedActs.findIndex(a => a.name === act.name);
-            if (idx > -1) { selectedActs.splice(idx, 1); element.classList.remove('selected'); } 
-            else { selectedActs.push(act); element.classList.add('selected'); }
-            updateTotal();
-        }
-
-        function updateTotal() {
-            let subtotal = selectedActs.reduce((sum, act) => sum + act.price, 0);
-            let discountAmount = subtotal * currentPatientDiscount;
-            let finalTotal = Math.round(subtotal - discountAmount);
-            document.getElementById('totalPrice').innerText = finalTotal + " $";
-            document.getElementById('discountInfoText').innerText = currentPatientDiscount > 0 ? `Assurance Active : -30%` : `Assurance : Aucune`;
-        }
-
-        function checkPatientInsurance(patientName) {
-            if (!patientName) return;
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            let found = patients.find(p => p.name.toLowerCase() === patientName.toLowerCase());
-            const alertBox = document.getElementById('insuranceAlertBox');
-            const statusText = document.getElementById('insuranceStatusText');
-            alertBox.style.display = 'block';
-            if (found && found.status === 'active') {
-                currentPatientDiscount = 0.30;
-                statusText.innerHTML = `✅ Assurance ACTIVE pour ${found.name} (-30% appliqués)`;
-                alertBox.style.borderColor = '#4ade80';
-                if(found.id) document.getElementById('fact_id').value = found.id;
-            } else {
-                currentPatientDiscount = 0;
-                statusText.innerHTML = `ℹ️ Aucune assurance active pour ce patient (Plein tarif)`;
-                alertBox.style.borderColor = '#38bdf8';
-            }
-            updateTotal();
+            alert("Design mis à jour !");
         }
 
         function showMainSection(sectionId, ev) {
@@ -1256,251 +362,156 @@ html
             document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
-            if(sectionId === 'formation') renderCourses();
             if(sectionId === 'reglement') renderRules();
-            if(sectionId === 'rdv-public') updateDoctorsDropdown();
-            if(sectionId === 'effectifs-public') renderPublicStaff();
-            if(sectionId === 'annonces') renderAnnouncements();
-            if(sectionId === 'staff-login') updateMotifsDropdown();
         }
 
         function showTool(toolId, ev) {
             document.querySelectorAll('.tool-panel').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('#staffDashboard .sub-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
-            if(toolId === 'staff-medals-tool') populateStaffSelects();
-            if(toolId === 'signal-tool') updateMotifsDropdown();
+            if(toolId === 'hc-stats-tool') renderHCStatsAndReports();
         }
 
-        function showAdminTool(toolId, ev) {
-            document.querySelectorAll('#adminPanelContent .tool-panel').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('#adminPanelContent .sub-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(toolId).classList.add('active');
-            if(ev && ev.target) ev.target.classList.add('active');
-        }
-
-        // --- WEBHOOK DISCORD ---
         function saveWebhookUrl() {
             const url = document.getElementById('adm_webhook_url').value.trim();
             if(!url) return alert("Entrez une URL Webhook valide.");
-            localStorage.setItem('rms_discord_webhook', url);
-            alert("URL Webhook Discord sauvegardée !");
+            localStorage.setItem('nanterre_discord_webhook', url);
+            alert("URL Webhook sauvegardée !");
         }
+
         function getWebhookUrl() {
-            return localStorage.getItem('rms_discord_webhook') || "https://discord.com/api/webhooks/1567265793832652983/4UYv2QbCR8MZrgG6LcOqJVdO6iBQ_vF7yg4Ld2szDRsUezlEOMRerTOkdc-3xjyEEAv3";
+            return localStorage.getItem('nanterre_discord_webhook') || "";
         }
+
         async function sendDiscordWebhook(elementId) {
             const webhookUrl = getWebhookUrl();
-            if (!webhookUrl) return alert("Configurez le Webhook dans l'Admin.");
+            if (!webhookUrl) return alert("Configurez l'URL Webhook dans l'Admin.");
             const contentText = document.getElementById(elementId).innerText;
             if (!contentText) return alert("Aucun texte à envoyer.");
+
             try {
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
-                if (response.ok || response.status === 204) alert("🚀 Envoyé avec succès sur Discord !");
-                else alert("⚠️ Erreur lors de l'envoi Discord.");
+                if (response.ok || response.status === 204) alert("🚀 Envoyé sur Discord !");
+                else alert("⚠️ Erreur d'envoi Discord.");
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
-        // --- GESTION DES RÈGLEMENTS ---
+        // RÈGLEMENTS
         function adminSaveRule() {
             const index = parseInt(document.getElementById('adm_rule_index').value);
             const title = document.getElementById('adm_rule_title').value.trim();
             const content = document.getElementById('adm_rule_content').value.trim();
-            if (!title || !content) return alert("Remplissez tous les champs du règlement.");
-            let rules = JSON.parse(localStorage.getItem('rms_rules')) || [];
+            if (!title || !content) return alert("Remplissez tous les champs.");
+
+            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
             const timestamp = getFrenchTimestamp();
-            if (index > -1) {
-                rules[index] = { title, content, author: "Administrateur", date: timestamp };
-            } else {
-                rules.push({ title, content, author: "Administrateur", date: timestamp });
-            }
-            localStorage.setItem('rms_rules', JSON.stringify(rules));
-            alert("Règlement enregistré avec succès !");
+
+            if (index > -1) rules[index] = { title, content, date: timestamp };
+            else rules.push({ title, content, date: timestamp });
+
+            localStorage.setItem('nanterre_rules', JSON.stringify(rules));
+            alert("Règle enregistrée !");
             document.getElementById('adm_rule_index').value = "-1";
             document.getElementById('adm_rule_title').value = "";
             document.getElementById('adm_rule_content').value = "";
             renderAdminRulesTable();
             renderRules();
         }
+
         function editRule(index) {
-            let rules = JSON.parse(localStorage.getItem('rms_rules')) || [];
+            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
             let r = rules[index];
             if(!r) return;
             document.getElementById('adm_rule_index').value = index;
             document.getElementById('adm_rule_title').value = r.title;
             document.getElementById('adm_rule_content').value = r.content;
         }
+
         function deleteRule(index) {
-            let rules = JSON.parse(localStorage.getItem('rms_rules')) || [];
+            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
             rules.splice(index, 1);
-            localStorage.setItem('rms_rules', JSON.stringify(rules));
+            localStorage.setItem('nanterre_rules', JSON.stringify(rules));
             renderAdminRulesTable();
             renderRules();
         }
+
         function renderRules() {
             const container = document.getElementById('rulesContainer');
             if(!container) return;
-            let rules = JSON.parse(localStorage.getItem('rms_rules')) || [];
+            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
             if(rules.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">Aucun règlement publié pour le moment.</p>`;
+                container.innerHTML = `<p style="color:var(--text-muted);">Aucun règlement publié.</p>`;
                 return;
             }
             container.innerHTML = '';
             rules.forEach(r => {
-                container.innerHTML += `<div class="forum-card"><h4 style="color:var(--primary); margin-bottom:8px;">📜 ${r.title}</h4><p style="white-space: pre-wrap; font-size:0.95rem; color:var(--text-main);">${r.content}</p><div class="forum-meta">✍️ Modifié par : <strong>${r.author}</strong> | 🕒 Date : ${r.date}</div></div>`;
+                container.innerHTML += `
+                    <div class="forum-card">
+                        <h4 style="color:var(--police-blue); margin-bottom:8px;">📜 ${r.title}</h4>
+                        <p style="white-space: pre-wrap; font-size:0.95rem; color:var(--text-main);">${r.content}</p>
+                        <div class="forum-meta">🕒 Date : ${r.date}</div>
+                    </div>
+                `;
             });
         }
+
         function renderAdminRulesTable() {
             const tbody = document.getElementById('adminRulesTable');
             if(!tbody) return;
-            let rules = JSON.parse(localStorage.getItem('rms_rules')) || [];
+            let rules = JSON.parse(localStorage.getItem('nanterre_rules')) || [];
             tbody.innerHTML = '';
             rules.forEach((r, i) => {
-                tbody.innerHTML += `<tr><td><strong>${r.title}</strong></td><td>${r.content.substring(0, 50)}...</td><td><small>${r.date}</small></td><td><button class="btn btn-secondary btn-sm" onclick="editRule(${i})">Modifier</button><button class="btn btn-danger btn-sm" onclick="deleteRule(${i})">Supprimer</button></td></tr>`;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${r.title}</strong></td>
+                        <td>${r.content.substring(0, 40)}...</td>
+                        <td><small>${r.date}</small></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editRule(${i})">Modifier</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteRule(${i})">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
             });
         }
 
-        // --- FORMATION WIKI ---
-        function publishCourse() {
-            const title = document.getElementById('form_title').value.trim();
-            const content = document.getElementById('form_content').value.trim();
-            if(!title || !content) return alert("Remplissez tous les champs du cours.");
-            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
-            const timestamp = getFrenchTimestamp();
-            courses.unshift({ title, content, author: loggedInDoctor || "Superviseur / Direction", date: timestamp });
-            localStorage.setItem('rms_courses', JSON.stringify(courses));
-            alert("Document publié avec succès sur le Wiki !");
-            document.getElementById('form_title').value = '';
-            document.getElementById('form_content').value = '';
-            renderCourses();
-            renderAdminCourses();
-        }
-        function renderCourses() {
-            const container = document.getElementById('coursesContainer');
-            if(!container) return;
-            let courses = JSON.parse(localStorage.getItem('rms_courses')) || [];
-            if(courses.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">Aucun document de formation disponible pour le moment.</p>`;
-                return;
-            }
-            container.innerHTML = '';
-            courses.forEach(c => {
-                container.innerHTML += `<div class="forum-card"><h4 style="color:var(--primary); margin-bottom:8px;">📖 ${c.title}</h4><p style="white-space: pre-wrap; font-size:0.95rem; color:var(--text-main);">${c.content}</p><div class="forum-meta">✍️ Rédigé par : <strong>${c.author}</strong> | 🕒 Date : ${c.date}</div></div>`;
-            });
-        }
-
-        // --- PRISE DE RDV PUBLIC ---
-        function submitPublicRDV() {
-            const name = document.getElementById('rdv_citoyen_name').value;
-            const phone = document.getElementById('rdv_citoyen_phone').value;
-            const medic = document.getElementById('rdv_citoyen_medic').value;
-            const date = document.getElementById('rdv_citoyen_date').value;
-            const time = document.getElementById('rdv_citoyen_time').value;
-            const reason = document.getElementById('rdv_citoyen_reason').value;
-            if(!name || !phone) return alert("Veuillez renseigner votre nom et contact.");
-            const ticketNum = Math.floor(1000 + Math.random() * 9000);
-            let text = `=== 📅 DEMANDE DE RENDEZ-VOUS (Ticket #${ticketNum}) ===\n`;
-            text += `👤 Citoyen : ${name} (Tel/Discord: ${phone})\n`;
-            text += `👨‍⚕️ Soignant : ${medic}\n`;
-            text += `📅 Horaires souhaités : Le ${date} à ${time}\n`;
-            text += `📝 Motif : ${reason}\n===============================================`;
-            const out = document.getElementById('output_rdv');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_rdv_discord').style.display = 'block';
-            alert(`Votre Ticket RDV #${ticketNum} a été généré ! Cliquez sur le bouton bleu pour transmettre votre rendez-vous.`);
-        }
-
-        // --- SIGNALEMENTS RCSO ---
-        function submitRCSOSignalment() {
-            const name = document.getElementById('rcso_name').value;
-            const reason = document.getElementById('rcso_reason').value;
-            const details = document.getElementById('rcso_details').value;
-            if(!name) return alert("Entrez le nom du citoyen.");
-            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
-            const timestamp = getFrenchTimestamp();
-            const newReport = { name, reason, details, author: loggedInDoctor || "Personnel RMS", date: timestamp };
-            reports.push(newReport);
-            localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
-            renderRCSOTable();
-            const webhookUrl = getWebhookUrl();
-            if(webhookUrl) {
-                let msg = `=== 🚔 SIGNALEMENT TRANSMIS AU RCSO ===\n👤 Citoyen : ${name}\n⚠️ Motif : ${reason}\n📝 Détails : ${details}\n👨‍⚕️ Par : ${newReport.author}\n📅 Date : ${newReport.date}\n========================================`;
-                fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: "```\n" + msg + "\n```" }) });
-            }
-            alert("Signalement transmis avec succès au RCSO et sur Discord !");
-            document.getElementById('rcso_name').value = '';
-            document.getElementById('rcso_details').value = '';
-        }
-        function renderRCSOTable() {
-            const tbody = document.getElementById('rcsoReportsTable');
-            if(!tbody) return;
-            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
-            tbody.innerHTML = '';
-            reports.forEach(r => {
-                tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details} <br><small style="color:var(--text-muted)">Par ${r.author}</small></td><td>${r.date}</td></tr>`;
-            });
-        }
-        function deleteSignal(index) {
-            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
-            reports.splice(index, 1);
-            localStorage.setItem('rms_rcso_reports', JSON.stringify(reports));
-            renderAdminSignalsTable();
-            renderRCSOTable();
-        }
-        function renderAdminSignalsTable() {
-            const tbody = document.getElementById('adminSignalsTable');
-            if(!tbody) return;
-            let reports = JSON.parse(localStorage.getItem('rms_rcso_reports')) || [];
-            tbody.innerHTML = '';
-            reports.forEach((r, i) => {
-                tbody.innerHTML += `<tr><td><strong>${r.name}</strong></td><td><span class="badge-status badge-danger">${r.reason}</span></td><td>${r.details}</td><td><button class="btn btn-danger btn-sm" onclick="deleteSignal(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-
-        // --- GESTION COMPTES ---
+        // COMPTES ET EFFECTIFS
         function createStaffAccount() {
             const username = document.getElementById('adm_staff_user').value.trim();
             const password = document.getElementById('adm_staff_pass').value.trim();
             const name = document.getElementById('adm_staff_name').value.trim();
-            const gradeClass = document.getElementById('adm_staff_grade').value;
-            let gradeName = "Médecin Titulaire";
-            if(gradeClass === 'grade-direction') gradeName = "Directeur / Médecin-Chef";
-            if(gradeClass === 'grade-infirmier') gradeName = "Infirmier(ère)";
-            if(gradeClass === 'grade-eleve') gradeName = "Externe / Élève";
+            const service = document.getElementById('adm_staff_service').value;
+            const role = document.getElementById('adm_staff_role').value;
 
             if (!username || !password || !name) return alert("Remplissez tous les champs.");
             let accounts = getStaffAccounts();
-            accounts.push({ username, password, name, gradeClass, gradeName, medals: [], specialties: [] });
-            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
-            alert("Compte médecin créé !");
+            accounts.push({ username, password, name, service, role });
+            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+            alert("Compte agent / HC créé avec succès !");
             renderStaffAccountsTable();
-            updateDoctorsDropdown();
-            populateStaffSelects();
-            renderPublicStaff();
         }
+
         function deleteStaffAccount(index) {
             let accounts = getStaffAccounts();
             accounts.splice(index, 1);
-            localStorage.setItem('rms_staff_accounts', JSON.stringify(accounts));
+            localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
             renderStaffAccountsTable();
-            updateDoctorsDropdown();
-            populateStaffSelects();
-            renderPublicStaff();
         }
+
         function renderStaffAccountsTable() {
             const tbody = document.getElementById('adminStaffAccountsTable');
             if(!tbody) return;
             let accounts = getStaffAccounts();
             tbody.innerHTML = '';
             accounts.forEach((acc, i) => {
-                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><span class="badge-grade ${acc.gradeClass || 'grade-medecin'}">${acc.gradeName || 'Médecin'}</span></td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
+                let badgeRole = acc.role === 'hc' ? '<span style="color:#fb923c; font-weight:bold;">HC / Conseil</span>' : 'Agent';
+                tbody.innerHTML += `<tr><td>${acc.service}</td><td>${badgeRole}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
             });
         }
 
@@ -1509,139 +520,152 @@ html
             const pass = document.getElementById('staffPass').value.trim();
             let accounts = getStaffAccounts();
             let found = accounts.find(a => a.username === user && a.password === pass);
+
             if (found || user === "admin") {
-                loggedInDoctor = found ? found.name : "Direction / Superviseur";
+                loggedInAgent = found ? found.name : "Superviseur Nanterre";
+                loggedInService = found ? found.service : "Administration";
+                loggedInRole = found ? found.role : "hc";
                 let usernameKey = found ? found.username : "admin";
-                let activeStaff = JSON.parse(localStorage.getItem('rms_active_staff')) || [];
+                
+                let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
                 if(!activeStaff.includes(usernameKey)) {
                     activeStaff.push(usernameKey);
-                    localStorage.setItem('rms_active_staff', JSON.stringify(activeStaff));
+                    localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
                 }
+
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
-                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Médicale Active (${loggedInDoctor})`;
-                document.getElementById('superviseurPostBox').style.display = 'block';
-                renderStaffPatientsTable();
-                updateDoctorsDropdown();
-                populateStaffSelects();
-                renderPublicStaff();
-                updateMotifsDropdown();
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
+                document.getElementById('rep_agent').value = loggedInAgent;
+                document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
+
+                // Afficher ou cacher l'onglet HC / Statistiques selon le rôle
+                if (loggedInRole === 'hc' || user === 'admin') {
+                    document.getElementById('hcTabBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('hcTabBtn').style.display = 'none';
+                }
+
+                renderDirectoryStaff();
             } else {
                 alert("Identifiants incorrects.");
             }
         }
+
         function logoutStaff() {
             let accounts = getStaffAccounts();
-            let currentAcc = accounts.find(a => a.name === loggedInDoctor);
+            let currentAcc = accounts.find(a => a.name === loggedInAgent);
             if(currentAcc) {
-                let activeStaff = JSON.parse(localStorage.getItem('rms_active_staff')) || [];
+                let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
                 activeStaff = activeStaff.filter(u => u !== currentAcc.username);
-                localStorage.setItem('rms_active_staff', JSON.stringify(activeStaff));
+                localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
             }
-            loggedInDoctor = "";
+
+            loggedInAgent = "";
+            loggedInService = "";
+            loggedInRole = "";
             document.getElementById('staffLoginForm').style.display = 'block';
             document.getElementById('staffDashboard').style.display = 'none';
-            document.getElementById('superviseurPostBox').style.display = 'none';
-            updateDoctorsDropdown();
-            renderPublicStaff();
+            document.getElementById('hcTabBtn').style.display = 'none';
+            renderDirectoryStaff();
         }
 
-        function createRCSOAccount() {
-            const username = document.getElementById('adm_rcso_user').value.trim();
-            const password = document.getElementById('adm_rcso_pass').value.trim();
-            const name = document.getElementById('adm_rcso_name').value.trim();
-            if (!username || !password || !name) return alert("Remplissez tous les champs RCSO.");
-            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
-            accounts.push({ username, password, name });
-            localStorage.setItem('rcso_accounts', JSON.stringify(accounts));
-            alert("Compte RCSO créé avec succès !");
-            renderRCSOAccountsTable();
-        }
-        function deleteRCSOAccount(index) {
-            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
-            accounts.splice(index, 1);
-            localStorage.setItem('rcso_accounts', JSON.stringify(accounts));
-            renderRCSOAccountsTable();
-        }
-        function renderRCSOAccountsTable() {
-            const tbody = document.getElementById('adminRCSOAccountsTable');
+        function renderDirectoryStaff() {
+            const tbody = document.getElementById('directoryStaffTable');
             if(!tbody) return;
-            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
+            let accounts = getStaffAccounts();
+            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+            
             tbody.innerHTML = '';
-            accounts.forEach((acc, i) => {
-                tbody.innerHTML += `<tr><td>${acc.username}</td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteRCSOAccount(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-        function loginRCSO() {
-            const user = document.getElementById('rcsoUser').value.trim();
-            const pass = document.getElementById('rcsoPass').value.trim();
-            let accounts = JSON.parse(localStorage.getItem('rcso_accounts')) || [];
-            let found = accounts.find(a => a.username === user && a.password === pass);
-            if (found) {
-                document.getElementById('rcsoLoginForm').style.display = 'none';
-                document.getElementById('rcsoDashboard').style.display = 'block';
-                document.getElementById('welcomeRCSOMsg').innerText = `✅ Session RCSO Active (${found.name})`;
-                renderRCSOTable();
-            } else {
-                alert("Identifiant ou mot de passe RCSO incorrect.");
+            if(accounts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun agent enregistré dans l'Admin.</td></tr>`;
+                return;
             }
-        }
-        function logoutRCSO() {
-            document.getElementById('rcsoLoginForm').style.display = 'block';
-            document.getElementById('rcsoDashboard').style.display = 'none';
+
+            accounts.forEach(acc => {
+                let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInAgent;
+                let dotClass = isOnline ? "status-dot online" : "status-dot";
+                let statusLabel = isOnline ? "En service" : "Hors ligne";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span class="${dotClass}"></span> ${statusLabel}</td>
+                        <td><strong>${acc.service}</strong></td>
+                        <td>${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
+                        <td><code>${acc.username}</code></td>
+                    </tr>
+                `;
+            });
         }
 
-        // --- DOSSIERS PATIENTS ---
-        function staffSavePatientInsurance() {
-            const name = document.getElementById('staff_ins_patient').value.trim();
-            const id = document.getElementById('staff_ins_id').value.trim();
-            const status = document.getElementById('staff_ins_status').value;
-            const date = document.getElementById('staff_ins_date').value;
-            const notes = document.getElementById('staff_ins_notes').value.trim();
-            if (!name) return alert("Entrez un nom de patient.");
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            let index = patients.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
-            const timestamp = getFrenchTimestamp();
-            const authorName = loggedInDoctor || "Personnel RMS";
-            const logEntry = `[${timestamp}] Modifié/Créé par : ${authorName}`;
-            if (index > -1) {
-                let logs = patients[index].logs || [];
-                logs.unshift(logEntry);
-                patients[index] = { name, id, status, date, notes, logs };
-            } else {
-                patients.push({ name, id, status, date, notes, logs: [logEntry] });
+        // RAPPORT D'INTERVENTION UNIFIÉ (AVEC SAUVEGARDE POUR STATS HC)
+        function generateInterventionReport() {
+            const service = document.getElementById('rep_service').value;
+            const agent = document.getElementById('rep_agent').value || "N/A";
+            const location = document.getElementById('rep_location').value || "N/A";
+            const datetime = document.getElementById('rep_datetime').value || getFrenchTimestamp();
+            const motif = document.getElementById('rep_motif').value || "N/A";
+            const details = document.getElementById('rep_details').value || "N/A";
+
+            // Enregistrer le rapport dans la base de données globale
+            let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
+            let newReport = { service, agent, location, datetime, motif, details };
+            allReports.unshift(newReport);
+            localStorage.setItem('nanterre_all_reports', JSON.stringify(allReports));
+
+            let text = `=== 🚨 RAPPORT D'INTERVENTION - ${service.toUpperCase()} ===\n`;
+            text += `👤 Agent & Matricule : ${agent}\n`;
+            text += `📍 Lieu : ${location}\n`;
+            text += `🕒 Date/Heure : ${datetime}\n`;
+            text += `⚠️ Motif : ${motif}\n`;
+            text += `📝 Compte-Rendu :\n${details}\n`;
+            text += `====================================================`;
+
+            const out = document.getElementById('output_intervention');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('copy_intervention').style.display = 'block';
+            document.getElementById('send_intervention').style.display = 'block';
+            alert("Rapport d'intervention généré et enregistré avec succès !");
+        }
+
+        // PANNEAU STATISTIQUES & RAPPORTS POUR LE HAUT COMITÉ DU SERVICE
+        function renderHCStatsAndReports() {
+            document.getElementById('hcServiceNameDisplay').innerText = loggedInService;
+            
+            let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
+            // Filtrer uniquement les rapports du service de l'agent HC connecté (sauf admin global)
+            let serviceReports = loggedInService === "Administration" ? allReports : allReports.filter(r => r.service === loggedInService);
+
+            document.getElementById('statTotalReports').innerText = serviceReports.length;
+
+            let accounts = getStaffAccounts();
+            let serviceAgents = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
+            document.getElementById('statTotalAgents').innerText = serviceAgents.length;
+
+            const tbody = document.getElementById('hcReportsTable');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if(serviceReports.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré pour ce service.</td></tr>`;
+                return;
             }
-            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            alert("Dossier médical enregistré avec succès !");
-            document.getElementById('staff_ins_patient').value = '';
-            document.getElementById('staff_ins_id').value = '';
-            document.getElementById('staff_ins_notes').value = '';
-            renderStaffPatientsTable();
-        }
-        function renderStaffPatientsTable() {
-            const tbody = document.getElementById('staffPatientsTable');
-            if(!tbody) return;
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            tbody.innerHTML = '';
-            patients.forEach(p => {
-                let logsHtml = p.logs ? p.logs.join('<br>') : 'Aucun historique';
-                tbody.innerHTML += `<tr><td><strong>${p.name}</strong><br><small style="color:var(--text-muted)">ID: ${p.id || 'N/A'}</small></td><td><span class="badge-status" style="background:rgba(56,189,248,0.2); color:#38bdf8;">${p.status}</span><br><small>Exp: ${p.date || 'N/A'}</small></td><td><div style="font-size:0.85rem;"><strong>Notes :</strong> ${p.notes || 'Aucune'}</div><div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;"><strong>Historique & Auteurs :</strong><br>${logsHtml}</div></td></tr>`;
+
+            serviceReports.forEach(r => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><small>${r.datetime}</small></td>
+                        <td><strong>${r.agent}</strong></td>
+                        <td>📍 ${r.location}<br><span style="color:var(--text-muted)">${r.motif}</span></td>
+                        <td><button class="btn btn-secondary btn-sm" onclick="alert('${r.details.replace(/'/g, "\\'")}')">Voir détails</button></td>
+                    </tr>
+                `;
             });
         }
-        function deleteInsurance(index) {
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            patients.splice(index, 1);
-            localStorage.setItem('rms_patients_insurance', JSON.stringify(patients));
-            renderAdminInsuranceTable();
-        }
-        function renderAdminInsuranceTable() {
-            const tbody = document.getElementById('adminInsuranceTable');
-            if(!tbody) return;
-            let patients = JSON.parse(localStorage.getItem('rms_patients_insurance')) || [];
-            tbody.innerHTML = '';
-            patients.forEach((p, i) => {
-                tbody.innerHTML += `<tr><td>${p.name}</td><td>${p.id || 'N/A'}</td><td>${p.status}</td><td><button class="btn btn-danger btn-sm" onclick="deleteInsurance(${i})">Supprimer (Admin)</button></td></tr>`;
-            });
+
+        function copyToClipboard(elementId) {
+            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié dans le presse-papier !"));
         }
 
         function checkAdminPassword() {
@@ -1650,77 +674,18 @@ html
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
                 document.getElementById('adm_webhook_url').value = getWebhookUrl();
-                renderAdminInsuranceTable();
-                renderStaffAccountsTable();
-                renderRCSOAccountsTable();
-                renderAdminSignalsTable();
                 renderAdminRulesTable();
-                renderAdminCourses();
-                renderAdminAnnouncements();
-                renderAdminActsTable();
-                renderAdminMotifsTable();
-                populateStaffSelects();
+                renderStaffAccountsTable();
                 applyInterfaceConfig();
             } else {
-                alert("Entrez un mot de passe.");
+                alert("Entrez un mot de passe administrateur.");
             }
         }
-
-        function generateFacture() {
-            const patient = document.getElementById('fact_patient').value || "N/A";
-            const id = document.getElementById('fact_id').value || "N/A";
-            const medic = document.getElementById('fact_medic').value || "N/A";
-            const total = document.getElementById('totalPrice').innerText;
-            let text = `=== 💰 FACTURE RMS HOSPITAL ===\n👤 Patient : ${patient} (${id})\n👨‍⚕️ Soignant : ${medic}\n🛡️ Réduction : ${currentPatientDiscount > 0 ? 'Assurance Active (-30%)' : 'Aucune'}\n📋 Actes réalisés :\n`;
-            if (selectedActs.length === 0) text += ` - Soins généraux\n`;
-            else selectedActs.forEach(a => { text += ` - ${a.name} (${a.price} $)\n`; });
-            text += `💵 MONTANT TOTAL : ${total}\n==============================`;
-            showOutput('output_facturation', 'copy_facturation', 'send_facturation', text);
-        }
-        function generateOperation() {
-            let text = `=== 📋 RAPPORT D'OPÉRATION RMS ===\n👤 Patient : ${document.getElementById('op_patient').value || "N/A"}\n👨‍⚕️ Chirurgiens : ${document.getElementById('op_medic').value || "N/A"}\n📅 Date : ${document.getElementById('op_date').value || "N/A"}\n📝 Motif : ${document.getElementById('op_reason').value || "N/A"}\n==============================`;
-            showOutput('output_operation', 'send_operation', text);
-        }
-        function generateCompteRendu() {
-            let text = `=== 🩺 COMPTE-RENDU MÉDICAL ===\n👤 Patient : ${document.getElementById('cr_patient').value || "N/A"}\n👨‍⚕️ Médecin : ${document.getElementById('cr_medic').value || "N/A"}\n🏥 Soins : ${document.getElementById('cr_care').value || "N/A"}\n==============================`;
-            showOutput('output_compterendu', 'send_compterendu', text);
-        }
-        function generateImpaye() {
-            let text = `=== ⚠️ AVIS D'IMPAYÉ RMS HOSPITAL ===\n👤 Patient : ${document.getElementById('imp_patient').value || "N/A"}\n💵 Montant : ${document.getElementById('imp_amount').value || "0"} $\n====================================`;
-            showOutput('output_impaye', 'send_impaye', text);
-        }
-        function generateDeces() {
-            let text = `=== ⚰️ CERTIFICAT DE DÉCÈS ===\n👤 Défunt : ${document.getElementById('dec_patient').value || "N/A"}\n⚠️ Cause : ${document.getElementById('dec_cause').value || "N/A"}\n👨‍⚕️ Constaté par : ${document.getElementById('dec_medic').value || "N/A"}\n==============================`;
-            showOutput('output_deces', 'send_deces', text);
-        }
-        function showOutput(outputId, copyBtnId, sendBtnId, text) {
-            if (arguments.length === 3) {
-                text = sendBtnId;
-                sendBtnId = copyBtnId;
-                copyBtnId = null;
-            }
-            const out = document.getElementById(outputId);
-            const copyBtn = copyBtnId ? document.getElementById(copyBtnId) : null;
-            const sendBtn = document.getElementById(sendBtnId);
-            out.innerText = text;
-            out.style.display = 'block';
-            if (copyBtn) copyBtn.style.display = 'block';
-            if (sendBtn) sendBtn.style.display = 'block';
-        }
-        function copyToClipboard(elementId) { navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !")); }
 
         window.onload = () => {
             applyInterfaceConfig();
-            initActs();
-            renderRCSOTable();
-            renderStaffPatientsTable();
-            renderCourses();
-            renderAnnouncements();
             renderRules();
-            updateDoctorsDropdown();
-            renderPublicStaff();
-            populateStaffSelects();
-            updateMotifsDropdown();
+            renderDirectoryStaff();
         };
     </script>
 </body>
