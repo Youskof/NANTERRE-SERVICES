@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Nanterre - Services</title>
+    <title id="pageTitle">Nanterre - Services d'Urgence Officiels</title>
     <style>
         :root {
             --police-blue: #1d4ed8;
@@ -105,7 +105,7 @@
 
     <div class="container">
         <header>
-            <h1 id="headerTitleText">🛡️ NANTERRE - SERVICES</h1>
+            <h1 id="headerTitleText">🛡️ NANTERRE - SERVICES D'URGENCE</h1>
             <p id="headerSubtitleText">Portail Officiel : Police Nationale - BSPN - SAMU</p>
         </header>
 
@@ -234,8 +234,9 @@
                     <button class="sub-btn active" onclick="showTool('service-status-tool', event)">📡 Prise de Service & Radio</button>
                     <button class="sub-btn" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
                     <button class="sub-btn" id="policeGAVBtn" style="display:none;" onclick="showTool('gav-tool', event)">⚖️ Registre GAV (Police)</button>
-                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Grades (0-100)</button>
-                    <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Statistiques</button>
+                    <button class="sub-btn" onclick="showTool('armement-tool', event)">🔫 Dotation & Matériel</button>
+                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Matricules</button>
+                    <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Planning</button>
                 </div>
 
                 <!-- Prise de Service & Statut Radio -->
@@ -256,7 +257,7 @@
                     </div>
                 </div>
 
-                <!-- Rapport d'Intervention unifié -->
+                <!-- Rapport d'Intervention unifié (Matricule prérempli) -->
                 <div id="report-tool" class="tool-panel">
                     <h3>📋 Rédaction de Rapport d'Intervention</h3>
                     <div class="form-grid">
@@ -268,7 +269,7 @@
                                 <option value="SAMU">SAMU</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Grade, Nom & Matricule (0 - 100)</label><input type="text" id="rep_agent" placeholder="Ex: Cne Dupont [Matricule 42]"></div>
+                        <div class="form-group"><label>Agent & Matricule (Préenregistré)</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
                         <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Avenue Joliot-Curie, Nanterre"></div>
                         <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
                         <div class="form-group"><label>Type / Motif d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie, Interpellation, Urgence vitale..."></div>
@@ -287,7 +288,7 @@
                         <div class="form-group"><label>Nom & Prénom de l'Interpellé</label><input type="text" id="gav_suspect" placeholder="Ex: Marc Vigne"></div>
                         <div class="form-group"><label>Motif de l'interpellation</label><input type="text" id="gav_motif" placeholder="Ex: Vol à main armée / Outrage"></div>
                         <div class="form-group"><label>Durée de la GAV / Amende</label><input type="text" id="gav_duration" placeholder="Ex: 4h / 1500 $ d'amende"></div>
-                        <div class="form-group"><label>Officier en charge</label><input type="text" id="gav_officer" placeholder="Ex: Brig. Chef Leroy [12]"></div>
+                        <div class="form-group"><label>Officier en charge (Matricule)</label><input type="text" id="gav_officer" readonly style="background:#090d16; color:#38bdf8;"></div>
                         <div class="form-group" style="grid-column: span 2;"><label>Objets saisis & Notes d'enquête</label><textarea id="gav_notes" placeholder="Arme saisie, port d'arme illégal..."></textarea></div>
                     </div>
                     <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV</button>
@@ -295,17 +296,30 @@
                     <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendDiscordWebhook('output_gav')">🚀 Envoyer sur Discord</button>
                 </div>
 
-                <!-- Effectifs, Matricules & Gestion des Grades -->
+                <!-- Dotation & Matériel -->
+                <div id="armement-tool" class="tool-panel">
+                    <h3>🔫 Registre de Dotation & Matériel</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Enregistrez le matériel pris en dotation lors de votre prise de service :</p>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Type d'équipement / Arme / Véhicule</label><input type="text" id="arm_item" placeholder="Ex: Sig Sauer P226 / Lot de Secours Médical"></div>
+                        <div class="form-group"><label>Numéro de série / Immatriculation</label><input type="text" id="arm_serial" placeholder="Ex: #PN-9923 ou #VPI-02"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Remarques particulières</label><textarea id="arm_notes" placeholder="État du matériel, chargeurs fournis..."></textarea></div>
+                    </div>
+                    <button class="btn" onclick="registerDotation()">Valider la dotation</button>
+                    <div class="output-box" id="output_armement" style="display:none;"></div>
+                </div>
+
+                <!-- Effectifs & Matricules Préenregistrés -->
                 <div id="staff-list-tool" class="tool-panel">
-                    <h3>👥 Annuaire des Effectifs & Gestion des Grades</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents et modification des grades (réservé HC/Admin) :</p>
+                    <h3>👥 Annuaire des Effectifs & Matricules (0-100)</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents enregistrés avec leur matricule unique :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Statut / Radio</th><th>Service</th><th>Nom, Grade & Matricule (0-100)</th><th>Action Grade</th></tr></thead>
+                        <thead><tr><th>Statut / Radio</th><th>Service</th><th>Matricule & Grade / Nom</th><th>Action Grade</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
 
-                <!-- Panneau HC : Statistiques Avancées & Audit Log -->
+                <!-- Panneau HC : Statistiques, Planning & Audit Log -->
                 <div id="hc-stats-tool" class="tool-panel">
                     <h3 style="color: #fb923c;">📊 Tableau de Bord Haut Comité (HC) - <span id="hcServiceNameDisplay">Service</span></h3>
                     
@@ -320,7 +334,18 @@
                         </div>
                     </div>
 
-                    <h3>📂 Registre des Rapports & Filtre par Motif</h3>
+                    <h3>📅 Planification des Permanences & Chefs de Poste</h3>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
+                        <div class="form-group"><label>Jour / Créneau</label><input type="text" id="plan_day" placeholder="Ex: Lundi - Soir (20h-00h)"></div>
+                        <div class="form-group"><label>Responsable / Chef de Poste</label><input type="text" id="plan_leader" placeholder="Ex: Cne Dupont [Matricule 01]"></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="savePlanning()">Publier sur le planning</button></div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Créneau</th><th>Responsable / Chef de Poste</th></tr></thead>
+                        <tbody id="planningTable"></tbody>
+                    </table>
+
+                    <h3 style="margin-top:30px; color: #fb923c;">📂 Registre des Rapports du Service</h3>
                     <table class="admin-table">
                         <thead><tr><th>Date & Heure</th><th>Agent & Matricule</th><th>Lieu & Motif</th><th>Actions</th></tr></thead>
                         <tbody id="hcReportsTable"></tbody>
@@ -384,11 +409,12 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <h3>👥 Gestion des Comptes Agents & Rôle HC</h3>
+                <h3>👥 Préenregistrement des Comptes & Matricules (0 à 100)</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant connexion"></div>
                     <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
-                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Grade, Nom & Matricule (ex: Cne Dupont [01])"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Grade & Nom (ex: Cne Dupont)"></div>
+                    <div class="form-group"><input type="number" id="adm_staff_matricule" min="0" max="100" placeholder="Numéro de Matricule (0 - 100)"></div>
                     <div class="form-group">
                         <select id="adm_staff_service">
                             <option value="Police Nationale">Police Nationale</option>
@@ -402,10 +428,10 @@
                             <option value="hc">Haut Comité / Conseil d'Administration (HC)</option>
                         </select>
                     </div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Créer le compte agent / HC</button></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Préenregistrer l'agent avec son matricule</button></div>
                 </div>
                 <table class="admin-table">
-                    <thead><tr><th>Service</th><th>Rôle</th><th>Identifiant</th><th>Nom & Matricule</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Service</th><th>Matricule</th><th>Rôle</th><th>Identifiant</th><th>Nom & Grade</th><th>Action</th></tr></thead>
                     <tbody id="adminStaffAccountsTable"></tbody>
                 </table>
             </div>
@@ -524,7 +550,7 @@
             document.getElementById(toolId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
-            if(toolId === 'hc-stats-tool') renderHCStatsAndReports();
+            if(toolId === 'hc-stats-tool') { renderHCStatsAndReports(); renderPlanningTable(); }
         }
 
         function saveWebhookUrl() {
@@ -683,20 +709,24 @@
             });
         }
 
-        // COMPTES ET EFFECTIFS
+        // GESTION DES COMPTES ET MATRICULES PRÉENREGISTRÉS (0-100)
         function createStaffAccount() {
             const username = document.getElementById('adm_staff_user').value.trim();
             const password = document.getElementById('adm_staff_pass').value.trim();
             const name = document.getElementById('adm_staff_name').value.trim();
+            const matricule = document.getElementById('adm_staff_matricule').value.trim();
             const service = document.getElementById('adm_staff_service').value;
             const role = document.getElementById('adm_staff_role').value;
 
-            if (!username || !password || !name) return alert("Remplissez tous les champs.");
+            if (!username || !password || !name || matricule === "") return alert("Remplissez tous les champs, y compris le matricule (0-100).");
+            
             let accounts = getStaffAccounts();
-            accounts.push({ username, password, name, service, role, radioState: "🟢 Disponible" });
+            let formattedMatricule = String(matricule).padStart(2, '0'); // Format 01, 02...
+            accounts.push({ username, password, name, matricule: formattedMatricule, service, role, radioState: "🟢 Disponible" });
+            
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-            logAuditAction("Administrateur", `Création du compte agent ${name} (${service})`);
-            alert("Compte agent / HC créé avec succès !");
+            logAuditAction("Administrateur", `Préenregistrement agent ${name} [Matricule ${formattedMatricule}] (${service})`);
+            alert("Compte agent préenregistré avec succès !");
             renderStaffAccountsTable();
         }
 
@@ -709,13 +739,13 @@
 
         function updateAgentGrade(index) {
             let accounts = getStaffAccounts();
-            let newGrade = prompt("Entrez le nouveau grade / nom & matricule pour cet agent :", accounts[index].name);
+            let newGrade = prompt("Entrez le nouveau grade et nom pour cet agent :", accounts[index].name);
             if(newGrade && newGrade.trim() !== "") {
                 accounts[index].name = newGrade.trim();
                 localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
-                logAuditAction(loggedInAgent || "HC", `Modification du grade de l'agent -> ${newGrade.trim()}`);
+                logAuditAction(loggedInAgent || "HC", `Modification du nom/grade de l'agent -> ${newGrade.trim()}`);
                 renderDirectoryStaff();
-                alert("Grade mis à jour avec succès !");
+                alert("Nom/Grade mis à jour !");
             }
         }
 
@@ -728,9 +758,9 @@
                 acc.radioState = `${unit} : ${state}`;
                 localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
                 logAuditAction(loggedInAgent, `Mise à jour statut radio : ${acc.radioState}`);
-                alert("Statut radio mis à jour sur le terrain !");
+                alert("Statut radio mis à jour !");
             } else {
-                alert("Erreur de session agent.");
+                alert("Erreur de session.");
             }
         }
 
@@ -741,7 +771,7 @@
             tbody.innerHTML = '';
             accounts.forEach((acc, i) => {
                 let badgeRole = acc.role === 'hc' ? '<span style="color:#fb923c; font-weight:bold;">HC / Conseil</span>' : 'Agent';
-                tbody.innerHTML += `<tr><td>${acc.service}</td><td>${badgeRole}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
+                tbody.innerHTML += `<tr><td>${acc.service}</td><td><strong>[${acc.matricule}]</strong></td><td>${badgeRole}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
             });
         }
 
@@ -752,7 +782,7 @@
             let found = accounts.find(a => a.username === user && a.password === pass);
 
             if (found || user === "admin") {
-                loggedInAgent = found ? found.name : "Superviseur Nanterre";
+                loggedInAgent = found ? `${found.name} [Matricule ${found.matricule}]` : "Superviseur Nanterre [00]";
                 loggedInService = found ? found.service : "Administration";
                 loggedInRole = found ? found.role : "hc";
                 let usernameKey = found ? found.username : "admin";
@@ -768,10 +798,12 @@
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
                 document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
+                
+                // Attribution automatique dans les formulaires
                 document.getElementById('rep_agent').value = loggedInAgent;
+                document.getElementById('gav_officer').value = loggedInAgent;
                 document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
 
-                // Activer l'onglet GAV uniquement pour la Police Nationale ou Admin
                 if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
                     document.getElementById('policeGAVBtn').style.display = 'inline-block';
                 } else {
@@ -793,7 +825,7 @@
 
         function logoutStaff() {
             let accounts = getStaffAccounts();
-            let currentAcc = accounts.find(a => a.name === loggedInAgent);
+            let currentAcc = accounts.find(a => loggedInAgent.includes(a.name));
             if(currentAcc) {
                 let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
                 activeStaff = activeStaff.filter(u => u !== currentAcc.username);
@@ -821,24 +853,24 @@
             
             tbody.innerHTML = '';
             if(accounts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun agent enregistré dans l'Admin.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun agent préenregistré.</td></tr>`;
                 return;
             }
 
             accounts.forEach((acc, index) => {
-                let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInAgent;
+                let isOnline = activeStaff.includes(acc.username) || loggedInAgent.includes(acc.name);
                 let dotClass = isOnline ? "status-dot online" : "status-dot";
                 let radioInfo = acc.radioState ? `<br><small style="color:#38bdf8;">📡 ${acc.radioState}</small>` : "";
 
                 let actionBtn = (loggedInRole === 'hc' || loggedInService === "Administration") ? 
-                    `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Grade</button>` : 
+                    `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Nom</button>` : 
                     `<small style="color:var(--text-muted)">Réservé HC</small>`;
 
                 tbody.innerHTML += `
                     <tr>
                         <td><span class="${dotClass}"></span> ${isOnline ? 'En service' : 'Hors ligne'} ${radioInfo}</td>
                         <td><strong>${acc.service}</strong></td>
-                        <td>${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
+                        <td><strong>[Matricule ${acc.matricule}]</strong> - ${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
                         <td>${actionBtn}</td>
                     </tr>
                 `;
@@ -859,10 +891,10 @@
             allReports.unshift(newReport);
             localStorage.setItem('nanterre_all_reports', JSON.stringify(allReports));
 
-            logAuditAction(agent, `Rédaction d'un rapport (${service}) - Motif : ${motif}`);
+            logAuditAction(agent, `Rédaction rapport (${service}) - Motif : ${motif}`);
 
             let text = `=== 🚨 RAPPORT D'INTERVENTION - ${service.toUpperCase()} ===\n`;
-            text += `👤 Agent & Matricule : ${agent}\n`;
+            text += `👤 Agent : ${agent}\n`;
             text += `📍 Lieu : ${location}\n`;
             text += `🕒 Date/Heure : ${datetime}\n`;
             text += `⚠️ Motif : ${motif}\n`;
@@ -874,7 +906,7 @@
             out.style.display = 'block';
             document.getElementById('copy_intervention').style.display = 'block';
             document.getElementById('send_intervention').style.display = 'block';
-            alert("Rapport d'intervention généré et enregistré !");
+            alert("Rapport généré et enregistré !");
         }
 
         // REGISTRE GAV & INFRACTIONS (POLICE)
@@ -891,7 +923,7 @@
             text += `👤 Interpellé : ${suspect}\n`;
             text += `⚠️ Motif : ${motif}\n`;
             text += `⏱️ Durée / Sanction : ${duration}\n`;
-            text += `👮 Officier en charge : ${officer}\n`;
+            text += `👮 Officier : ${officer}\n`;
             text += `📝 Notes & Objets saisis :\n${notes}\n`;
             text += `🕒 Enregistré le : ${getFrenchTimestamp()}\n`;
             text += `==================================================`;
@@ -902,7 +934,63 @@
             document.getElementById('send_gav').style.display = 'block';
 
             logAuditAction(officer || loggedInAgent, `Enregistrement GAV pour ${suspect}`);
-            alert("Fiche GAV enregistrée avec succès !");
+            alert("Fiche GAV enregistrée !");
+        }
+
+        // DOTATION & MATÉRIEL
+        function registerDotation() {
+            const item = document.getElementById('arm_item').value.trim();
+            const serial = document.getElementById('arm_serial').value.trim();
+            const notes = document.getElementById('arm_notes').value.trim();
+
+            if(!item) return alert("Indiquez l'équipement pris en dotation.");
+
+            let text = `=== 🔫 FICHE DE DOTATION MATÉRIEL ===\n`;
+            text += `👤 Agent : ${loggedInAgent}\n`;
+            text += `📦 Équipement : ${item} (${serial})\n`;
+            text += `📝 Remarques : ${notes}\n`;
+            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
+            text += `=====================================`;
+
+            const out = document.getElementById('output_armement');
+            out.innerText = text;
+            out.style.display = 'block';
+            logAuditAction(loggedInAgent, `Prise de dotation : ${item} [${serial}]`);
+            alert("Dotation enregistrée !");
+        }
+
+        // PLANNING HC
+        function savePlanning() {
+            const day = document.getElementById('plan_day').value.trim();
+            const leader = document.getElementById('plan_leader').value.trim();
+
+            if(!day || !leader) return alert("Remplissez tous les champs du planning.");
+
+            let planning = JSON.parse(localStorage.getItem('nanterre_planning')) || [];
+            planning.push({ service: loggedInService, day, leader });
+            localStorage.setItem('nanterre_planning', JSON.stringify(planning));
+            logAuditAction(loggedInAgent, `Mise à jour du planning (${day})`);
+            renderPlanningTable();
+            alert("Créneau ajouté au planning !");
+            document.getElementById('plan_day').value = '';
+            document.getElementById('plan_leader').value = '';
+        }
+
+        function renderPlanningTable() {
+            const tbody = document.getElementById('planningTable');
+            if(!tbody) return;
+            let planning = JSON.parse(localStorage.getItem('nanterre_planning')) || [];
+            let servicePlanning = loggedInService === "Administration" ? planning : planning.filter(p => p.service === loggedInService);
+            
+            tbody.innerHTML = '';
+            if(servicePlanning.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="2" style="color:var(--text-muted); text-align:center;">Aucun planning enregistré.</td></tr>`;
+                return;
+            }
+
+            servicePlanning.forEach(p => {
+                tbody.innerHTML += `<tr><td><strong>${p.day}</strong></td><td>${p.leader}</td></tr>`;
+            });
         }
 
         // PANNEAU STATISTIQUES HC & AUDIT LOG
@@ -922,7 +1010,7 @@
             if(tbody) {
                 tbody.innerHTML = '';
                 if(serviceReports.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré pour ce service.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré.</td></tr>`;
                 } else {
                     serviceReports.forEach(r => {
                         tbody.innerHTML += `
@@ -937,13 +1025,12 @@
                 }
             }
 
-            // Journal d'audit
             const auditTbody = document.getElementById('auditLogTable');
             if(auditTbody) {
                 auditTbody.innerHTML = '';
                 let logs = JSON.parse(localStorage.getItem('nanterre_audit_logs')) || [];
                 if(logs.length === 0) {
-                    auditTbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted); text-align:center;">Aucune activité enregistrée.</td></tr>`;
+                    auditTbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted); text-align:center;">Aucune activité.</td></tr>`;
                 } else {
                     logs.slice(0, 15).forEach(l => {
                         auditTbody.innerHTML += `
@@ -971,7 +1058,7 @@
                 renderAdminRulesTable();
                 renderStaffAccountsTable();
                 applyInterfaceConfig();
-                logAuditAction("Administrateur", "Connexion à l'espace Administrateur");
+                logAuditAction("Administrateur", "Connexion Admin");
             } else {
                 alert("Entrez un mot de passe administrateur.");
             }
