@@ -112,7 +112,8 @@
         <!-- Navigation Principale -->
         <nav class="main-nav">
             <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
-            <button class="nav-link" onclick="showMainSection('plainte-public', event)">📝 Main Courante / Plainte</button>
+            <button class="nav-link" onclick="showMainSection('recrutement-public', event)">📋 Recrutement</button>
+            <button class="nav-link" onclick="showMainSection('plainte-public', event)">📝 Main Courante</button>
             <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements</button>
             <button class="nav-link" onclick="showMainSection('staff-login', event)">🚨 Espace Opérationnel (Agents & HC)</button>
             <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Administration</button>
@@ -143,6 +144,10 @@
 
             <h2 style="margin-top: 30px;">Services Citoyens</h2>
             <div class="quick-actions">
+                <div class="action-card" onclick="showMainSection('recrutement-public')">
+                    <h4>📋 Postuler à un Service</h4>
+                    <p>Rejoignez les rangs de la Police, de la BSPN ou du SAMU en soumettant votre dossier.</p>
+                </div>
                 <div class="action-card" onclick="showMainSection('plainte-public')">
                     <h4>📝 Dépôt de Plainte en Ligne</h4>
                     <p>Transmettez une main courante ou un signalement non urgent aux services compétents.</p>
@@ -152,6 +157,29 @@
                     <p>Prenez connaissance des lois, arrêtés et consignes de sécurité à Nanterre.</p>
                 </div>
             </div>
+        </section>
+
+        <!-- FORMULAIRE RECRUTEMENT -->
+        <section id="recrutement-public" class="section-page">
+            <h2>📋 Candidature / Recrutement Externe</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Remplissez votre dossier de candidature pour intégrer les effectifs officiels de Nanterre.</p>
+            
+            <div class="form-grid">
+                <div class="form-group"><label>Nom & Prénom / Identité</label><input type="text" id="rec_name" placeholder="Ex: Lucas Bernard"></div>
+                <div class="form-group"><label>Contact Discord</label><input type="text" id="rec_discord" placeholder="Ex: @lucas_92"></div>
+                <div class="form-group">
+                    <label>Service visé</label>
+                    <select id="rec_service">
+                        <option value="Police Nationale">Police Nationale</option>
+                        <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                        <option value="SAMU">SAMU</option>
+                    </select>
+                </div>
+                <div class="form-group" style="grid-column: span 2;"><label>Motivation & Expérience</label><textarea id="rec_motiv" placeholder="Expliquez vos motivations et vos expériences passées..."></textarea></div>
+            </div>
+            <button class="btn" onclick="submitPublicApplication()">Soumettre ma candidature</button>
+            <div class="output-box" id="output_recrutement" style="display:none;"></div>
+            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendDiscordWebhook('output_recrutement')">🚀 Envoyer sur Discord</button>
         </section>
 
         <!-- FORMULAIRE PLAINTE CITOYEN -->
@@ -203,13 +231,33 @@
                 </div>
                 
                 <div class="sub-nav">
-                    <button class="sub-btn active" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
+                    <button class="sub-btn active" onclick="showTool('service-status-tool', event)">📡 Prise de Service & Radio</button>
+                    <button class="sub-btn" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
+                    <button class="sub-btn" id="policeGAVBtn" style="display:none;" onclick="showTool('gav-tool', event)">⚖️ Registre GAV (Police)</button>
                     <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Grades (0-100)</button>
                     <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Statistiques</button>
                 </div>
 
+                <!-- Prise de Service & Statut Radio -->
+                <div id="service-status-tool" class="tool-panel active">
+                    <h3>📡 Gestion des Prises de Service & Statut Radio</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Indiquez votre position et votre statut actuel sur le terrain :</p>
+                    <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
+                        <div class="form-group"><label>Indicatif / Unité</label><input type="text" id="radio_unit" placeholder="Ex: Alpha-1 / VPI-12 / SAMU-02"></div>
+                        <div class="form-group">
+                            <label>Statut Radio / Terrain</label>
+                            <select id="radio_state">
+                                <option value="🟢 En patrouille / Disponible">🟢 En patrouille / Disponible</option>
+                                <option value="🔴 En intervention / Sur les lieux">🔴 En intervention / Sur les lieux</option>
+                                <option value="🟡 En pause / Au QG">🟡 En pause / Au QG</option>
+                            </select>
+                        </div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="updateAgentRadioStatus()">Mettre à jour mon statut radio</button></div>
+                    </div>
+                </div>
+
                 <!-- Rapport d'Intervention unifié -->
-                <div id="report-tool" class="tool-panel active">
+                <div id="report-tool" class="tool-panel">
                     <h3>📋 Rédaction de Rapport d'Intervention</h3>
                     <div class="form-grid">
                         <div class="form-group">
@@ -232,12 +280,27 @@
                     <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendDiscordWebhook('output_intervention')">🚀 Envoyer sur Discord</button>
                 </div>
 
+                <!-- Registre GAV & Infractions (Police uniquement) -->
+                <div id="gav-tool" class="tool-panel">
+                    <h3 style="color: var(--police-blue);">⚖️ Registre des Gardes à Vue (GAV) & Infractions</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom & Prénom de l'Interpellé</label><input type="text" id="gav_suspect" placeholder="Ex: Marc Vigne"></div>
+                        <div class="form-group"><label>Motif de l'interpellation</label><input type="text" id="gav_motif" placeholder="Ex: Vol à main armée / Outrage"></div>
+                        <div class="form-group"><label>Durée de la GAV / Amende</label><input type="text" id="gav_duration" placeholder="Ex: 4h / 1500 $ d'amende"></div>
+                        <div class="form-group"><label>Officier en charge</label><input type="text" id="gav_officer" placeholder="Ex: Brig. Chef Leroy [12]"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Objets saisis & Notes d'enquête</label><textarea id="gav_notes" placeholder="Arme saisie, port d'arme illégal..."></textarea></div>
+                    </div>
+                    <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV</button>
+                    <div class="output-box" id="output_gav" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendDiscordWebhook('output_gav')">🚀 Envoyer sur Discord</button>
+                </div>
+
                 <!-- Effectifs, Matricules & Gestion des Grades -->
                 <div id="staff-list-tool" class="tool-panel">
                     <h3>👥 Annuaire des Effectifs & Gestion des Grades</h3>
                     <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents et modification des grades (réservé HC/Admin) :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Statut</th><th>Service</th><th>Nom, Grade & Matricule (0-100)</th><th>Action Grade</th></tr></thead>
+                        <thead><tr><th>Statut / Radio</th><th>Service</th><th>Nom, Grade & Matricule (0-100)</th><th>Action Grade</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
@@ -492,6 +555,29 @@
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
+        // RECRUTEMENT PUBLIC
+        function submitPublicApplication() {
+            const name = document.getElementById('rec_name').value.trim();
+            const discord = document.getElementById('rec_discord').value.trim();
+            const service = document.getElementById('rec_service').value;
+            const motiv = document.getElementById('rec_motiv').value.trim();
+
+            if(!name || !motiv) return alert("Veuillez remplir votre nom et vos motivations.");
+
+            let text = `=== 📋 NOUVELLE CANDIDATURE EXTERNE ===\n`;
+            text += `🏢 Service visé : ${service}\n`;
+            text += `👤 Candidat : ${name} (Discord: ${discord})\n`;
+            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
+            text += `📝 Motivations & Expérience :\n${motiv}\n`;
+            text += `========================================`;
+
+            const out = document.getElementById('output_recrutement');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_rec_discord').style.display = 'block';
+            alert("Candidature générée ! Vous pouvez l'envoyer sur le canal de recrutement Discord.");
+        }
+
         // PLAINTE CITOYEN
         function submitPublicComplaint() {
             const name = document.getElementById('plainte_name').value.trim();
@@ -607,7 +693,7 @@
 
             if (!username || !password || !name) return alert("Remplissez tous les champs.");
             let accounts = getStaffAccounts();
-            accounts.push({ username, password, name, service, role });
+            accounts.push({ username, password, name, service, role, radioState: "🟢 Disponible" });
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
             logAuditAction("Administrateur", `Création du compte agent ${name} (${service})`);
             alert("Compte agent / HC créé avec succès !");
@@ -630,6 +716,21 @@
                 logAuditAction(loggedInAgent || "HC", `Modification du grade de l'agent -> ${newGrade.trim()}`);
                 renderDirectoryStaff();
                 alert("Grade mis à jour avec succès !");
+            }
+        }
+
+        function updateAgentRadioStatus() {
+            const unit = document.getElementById('radio_unit').value.trim() || "Unité standard";
+            const state = document.getElementById('radio_state').value;
+            let accounts = getStaffAccounts();
+            let acc = accounts.find(a => a.name === loggedInAgent);
+            if(acc) {
+                acc.radioState = `${unit} : ${state}`;
+                localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+                logAuditAction(loggedInAgent, `Mise à jour statut radio : ${acc.radioState}`);
+                alert("Statut radio mis à jour sur le terrain !");
+            } else {
+                alert("Erreur de session agent.");
             }
         }
 
@@ -670,6 +771,13 @@
                 document.getElementById('rep_agent').value = loggedInAgent;
                 document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
 
+                // Activer l'onglet GAV uniquement pour la Police Nationale ou Admin
+                if (loggedInService === "Police Nationale" || loggedInService === "Administration") {
+                    document.getElementById('policeGAVBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('policeGAVBtn').style.display = 'none';
+                }
+
                 if (loggedInRole === 'hc' || user === 'admin') {
                     document.getElementById('hcTabBtn').style.display = 'inline-block';
                 } else {
@@ -700,6 +808,7 @@
             document.getElementById('staffLoginForm').style.display = 'block';
             document.getElementById('staffDashboard').style.display = 'none';
             document.getElementById('hcTabBtn').style.display = 'none';
+            document.getElementById('policeGAVBtn').style.display = 'none';
             renderDirectoryStaff();
             updatePublicServiceStatus();
         }
@@ -719,7 +828,7 @@
             accounts.forEach((acc, index) => {
                 let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInAgent;
                 let dotClass = isOnline ? "status-dot online" : "status-dot";
-                let statusLabel = isOnline ? "En service" : "Hors ligne";
+                let radioInfo = acc.radioState ? `<br><small style="color:#38bdf8;">📡 ${acc.radioState}</small>` : "";
 
                 let actionBtn = (loggedInRole === 'hc' || loggedInService === "Administration") ? 
                     `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Grade</button>` : 
@@ -727,7 +836,7 @@
 
                 tbody.innerHTML += `
                     <tr>
-                        <td><span class="${dotClass}"></span> ${statusLabel}</td>
+                        <td><span class="${dotClass}"></span> ${isOnline ? 'En service' : 'Hors ligne'} ${radioInfo}</td>
                         <td><strong>${acc.service}</strong></td>
                         <td>${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
                         <td>${actionBtn}</td>
@@ -766,6 +875,34 @@
             document.getElementById('copy_intervention').style.display = 'block';
             document.getElementById('send_intervention').style.display = 'block';
             alert("Rapport d'intervention généré et enregistré !");
+        }
+
+        // REGISTRE GAV & INFRACTIONS (POLICE)
+        function registerGAV() {
+            const suspect = document.getElementById('gav_suspect').value.trim();
+            const motif = document.getElementById('gav_motif').value.trim();
+            const duration = document.getElementById('gav_duration').value.trim();
+            const officer = document.getElementById('gav_officer').value.trim();
+            const notes = document.getElementById('gav_notes').value.trim();
+
+            if(!suspect || !motif) return alert("Renseignez le nom du suspect et le motif.");
+
+            let text = `=== ⚖️ REGISTRE DE GARDE À VUE (POLICE NATIONALE) ===\n`;
+            text += `👤 Interpellé : ${suspect}\n`;
+            text += `⚠️ Motif : ${motif}\n`;
+            text += `⏱️ Durée / Sanction : ${duration}\n`;
+            text += `👮 Officier en charge : ${officer}\n`;
+            text += `📝 Notes & Objets saisis :\n${notes}\n`;
+            text += `🕒 Enregistré le : ${getFrenchTimestamp()}\n`;
+            text += `==================================================`;
+
+            const out = document.getElementById('output_gav');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_gav').style.display = 'block';
+
+            logAuditAction(officer || loggedInAgent, `Enregistrement GAV pour ${suspect}`);
+            alert("Fiche GAV enregistrée avec succès !");
         }
 
         // PANNEAU STATISTIQUES HC & AUDIT LOG
