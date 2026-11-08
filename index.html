@@ -50,11 +50,14 @@
         }
         .hero-banner h3 { font-size: 2rem; color: white; margin-bottom: 10px; }
 
-        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .action-card { background: #0f172a; border: 1px solid var(--border); padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
         .action-card:hover { transform: translateY(-5px); border-color: var(--police-blue); }
         .action-card h4 { color: var(--police-blue); font-size: 1.2rem; margin-bottom: 10px; }
         .action-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .service-status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 20px; }
+        .service-status-card { background: #0f172a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; }
 
         .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
@@ -109,7 +112,8 @@
         <!-- Navigation Principale -->
         <nav class="main-nav">
             <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
-            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements & Protocoles</button>
+            <button class="nav-link" onclick="showMainSection('plainte-public', event)">📝 Main Courante / Plainte</button>
+            <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements</button>
             <button class="nav-link" onclick="showMainSection('staff-login', event)">🚨 Espace Opérationnel (Agents & HC)</button>
             <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Administration</button>
         </nav>
@@ -120,13 +124,58 @@
                 <h3 id="heroTitle">Sécurité & Secours - Ville de Nanterre</h3>
                 <p id="heroSubtitle">Coordination des services de la Police Nationale, de la BSPN et du SAMU 24h/24 et 7j/7.</p>
             </div>
-            <h2>Informations Citoyennes</h2>
+            
+            <h2>Statut Opérationnel des Services en Direct</h2>
+            <div class="service-status-grid">
+                <div class="service-status-card">
+                    <div><strong>Police Nationale</strong><br><small style="color:var(--text-muted)">Ordre & Sécurité</small></div>
+                    <div><span class="status-dot" id="dot_police"></span><span id="label_police" style="font-size:0.85rem">Hors service</span></div>
+                </div>
+                <div class="service-status-card">
+                    <div><strong>BSPN (Pompiers)</strong><br><small style="color:var(--text-muted)">Incendie & Secours</small></div>
+                    <div><span class="status-dot" id="dot_bspn"></span><span id="label_bspn" style="font-size:0.85rem">Hors service</span></div>
+                </div>
+                <div class="service-status-card">
+                    <div><strong>SAMU</strong><br><small style="color:var(--text-muted)">Urgences Médicales</small></div>
+                    <div><span class="status-dot" id="dot_samu"></span><span id="label_samu" style="font-size:0.85rem">Hors service</span></div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 30px;">Services Citoyens</h2>
             <div class="quick-actions">
+                <div class="action-card" onclick="showMainSection('plainte-public')">
+                    <h4>📝 Dépôt de Plainte en Ligne</h4>
+                    <p>Transmettez une main courante ou un signalement non urgent aux services compétents.</p>
+                </div>
                 <div class="action-card" onclick="showMainSection('reglement')">
                     <h4>📜 Consulter les Règlements</h4>
                     <p>Prenez connaissance des lois, arrêtés et consignes de sécurité à Nanterre.</p>
                 </div>
             </div>
+        </section>
+
+        <!-- FORMULAIRE PLAINTE CITOYEN -->
+        <section id="plainte-public" class="section-page">
+            <h2>📝 Formulaire de Plainte / Main Courante</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Remplissez ce formulaire pour notifier les services officiels de Nanterre.</p>
+            
+            <div class="form-grid">
+                <div class="form-group"><label>Nom & Prénom du Déclarant</label><input type="text" id="plainte_name" placeholder="Ex: Jean Martin"></div>
+                <div class="form-group"><label>Contact (Discord / Téléphone)</label><input type="text" id="plainte_contact" placeholder="Ex: @jean_nanterre"></div>
+                <div class="form-group">
+                    <label>Service destinataire</label>
+                    <select id="plainte_service">
+                        <option value="Police Nationale">Police Nationale</option>
+                        <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                        <option value="SAMU">SAMU</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Lieu des faits</label><input type="text" id="plainte_location" placeholder="Ex: Centre-ville, Nanterre"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Description détaillée des faits</label><textarea id="plainte_desc" placeholder="Décrivez précisément l'événement..."></textarea></div>
+            </div>
+            <button class="btn" onclick="submitPublicComplaint()">Transmettre la plainte / main courante</button>
+            <div class="output-box" id="output_plainte" style="display:none;"></div>
+            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendDiscordWebhook('output_plainte')">🚀 Envoyer sur Discord</button>
         </section>
 
         <!-- REGLEMENTS -->
@@ -155,8 +204,7 @@
                 
                 <div class="sub-nav">
                     <button class="sub-btn active" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
-                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Matricules</button>
-                    <!-- Onglet Statistiques / HC visible uniquement si l'agent est HC ou Admin -->
+                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Grades (0-100)</button>
                     <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Statistiques</button>
                 </div>
 
@@ -172,10 +220,10 @@
                                 <option value="SAMU">SAMU</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Nom & Matricule de l'Agent (0 - 100)</label><input type="text" id="rep_agent" placeholder="Ex: Cne Dupont [Matricule 42]"></div>
+                        <div class="form-group"><label>Grade, Nom & Matricule (0 - 100)</label><input type="text" id="rep_agent" placeholder="Ex: Cne Dupont [Matricule 42]"></div>
                         <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Avenue Joliot-Curie, Nanterre"></div>
                         <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Nature de l'intervention / Motif</label><input type="text" id="rep_motif" placeholder="Ex: Incendie / Braquage / Urgence vitale"></div>
+                        <div class="form-group"><label>Type / Motif d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie, Interpellation, Urgence vitale..."></div>
                         <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé des faits et actions menées</label><textarea id="rep_details" placeholder="Rédigez le déroulement de l'intervention..."></textarea></div>
                     </div>
                     <button class="btn" onclick="generateInterventionReport()">Générer le Rapport</button>
@@ -184,20 +232,19 @@
                     <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendDiscordWebhook('output_intervention')">🚀 Envoyer sur Discord</button>
                 </div>
 
-                <!-- Effectifs et Matricules (0-100) -->
+                <!-- Effectifs, Matricules & Gestion des Grades -->
                 <div id="staff-list-tool" class="tool-panel">
-                    <h3>👥 Annuaire des Effectifs & Matricules (0 à 100)</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents connectés et de leur statut opérationnel :</p>
+                    <h3>👥 Annuaire des Effectifs & Gestion des Grades</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Liste des agents et modification des grades (réservé HC/Admin) :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Statut</th><th>Service</th><th>Nom / Grade & Matricule (0-100)</th><th>Identifiant</th></tr></thead>
+                        <thead><tr><th>Statut</th><th>Service</th><th>Nom, Grade & Matricule (0-100)</th><th>Action Grade</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
 
-                <!-- Panneau HC : Statistiques et Consultation Rapports du Service -->
+                <!-- Panneau HC : Statistiques Avancées & Audit Log -->
                 <div id="hc-stats-tool" class="tool-panel">
                     <h3 style="color: #fb923c;">📊 Tableau de Bord Haut Comité (HC) - <span id="hcServiceNameDisplay">Service</span></h3>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Consultation exclusive des statistiques et des rapports enregistrés pour votre service.</p>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -205,15 +252,21 @@
                             <div class="stat-val" id="statTotalReports">0</div>
                         </div>
                         <div class="stat-card">
-                            <h4>Agents Actifs / Enregistrés</h4>
+                            <h4>Agents Actifs</h4>
                             <div class="stat-val" id="statTotalAgents">0</div>
                         </div>
                     </div>
 
-                    <h3>📂 Registre des Rapports du Service</h3>
+                    <h3>📂 Registre des Rapports & Filtre par Motif</h3>
                     <table class="admin-table">
                         <thead><tr><th>Date & Heure</th><th>Agent & Matricule</th><th>Lieu & Motif</th><th>Actions</th></tr></thead>
                         <tbody id="hcReportsTable"></tbody>
+                    </table>
+
+                    <h3 style="margin-top:30px; color: #fb923c;">📋 Journal des Activités / Audit Log</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>Horodatage</th><th>Auteur / HC</th><th>Action Effectuée</th></tr></thead>
+                        <tbody id="auditLogTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -232,8 +285,7 @@
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active</p>
 
-                <!-- CONFIGURATION DESIGN -->
-                <h3>🎨 Personnalisation du Design & Interface</h3>
+                <h3>🎨 Personnalisation du Design</h3>
                 <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
                     <div class="form-group"><label>Nom de l'En-tête</label><input type="text" id="adm_cfg_title" value="🛡️ NANTERRE - SERVICES D'URGENCE"></div>
                     <div class="form-group"><label>Sous-titre En-tête</label><input type="text" id="adm_cfg_subtitle" value="Portail Officiel : Police Nationale - BSPN - SAMU"></div>
@@ -244,7 +296,6 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- WEBHOOK DISCORD -->
                 <h3>🤖 Configuration Webhook Discord</h3>
                 <div class="form-grid">
                     <div class="form-group" style="grid-column: span 2;">
@@ -256,7 +307,6 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION DES RÈGLEMENTS -->
                 <h3>📜 Gestion des Règlements</h3>
                 <div class="form-grid" style="background: rgba(29, 78, 216, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--police-blue);">
                     <input type="hidden" id="adm_rule_index" value="-1">
@@ -271,12 +321,11 @@
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
-                <!-- GESTION COMPTES AGENTS & HAUT COMITÉ -->
-                <h3>👥 Gestion des Comptes & Attribution Rôle HC (Conseil d'Administration)</h3>
+                <h3>👥 Gestion des Comptes Agents & Rôle HC</h3>
                 <div class="form-grid">
                     <div class="form-group"><input type="text" id="adm_staff_user" placeholder="Identifiant connexion"></div>
                     <div class="form-group"><input type="password" id="adm_staff_pass" placeholder="Mot de passe"></div>
-                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Nom, Grade & Matricule (ex: Cne Dupont [01])"></div>
+                    <div class="form-group"><input type="text" id="adm_staff_name" placeholder="Grade, Nom & Matricule (ex: Cne Dupont [01])"></div>
                     <div class="form-group">
                         <select id="adm_staff_service">
                             <option value="Police Nationale">Police Nationale</option>
@@ -285,7 +334,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Rôle / Niveau d'accès</label>
                         <select id="adm_staff_role">
                             <option value="agent">Agent Standard</option>
                             <option value="hc">Haut Comité / Conseil d'Administration (HC)</option>
@@ -319,6 +367,12 @@
             return JSON.parse(localStorage.getItem('nanterre_staff_accounts')) || [];
         }
 
+        function logAuditAction(author, actionText) {
+            let logs = JSON.parse(localStorage.getItem('nanterre_audit_logs')) || [];
+            logs.unshift({ timestamp: getFrenchTimestamp(), author, action: actionText });
+            localStorage.setItem('nanterre_audit_logs', JSON.stringify(logs));
+        }
+
         function applyInterfaceConfig() {
             let config = JSON.parse(localStorage.getItem('nanterre_interface_config')) || {
                 title: "🛡️ NANTERRE - SERVICES D'URGENCE",
@@ -343,6 +397,41 @@
                 document.getElementById('adm_cfg_color').value = config.primaryColor;
                 document.getElementById('adm_cfg_banner').value = config.bannerUrl;
             }
+
+            updatePublicServiceStatus();
+        }
+
+        function updatePublicServiceStatus() {
+            let activeStaff = JSON.parse(localStorage.getItem('nanterre_active_staff')) || [];
+            let accounts = getStaffAccounts();
+
+            let servicesOnline = { "Police Nationale": false, "BSPN (Pompiers)": false, "SAMU": false };
+
+            accounts.forEach(acc => {
+                if (activeStaff.includes(acc.username)) {
+                    if (servicesOnline[acc.service] !== undefined) servicesOnline[acc.service] = true;
+                }
+            });
+
+            updateStatusElement('police', servicesOnline["Police Nationale"]);
+            updateStatusElement('bspn', servicesOnline["BSPN (Pompiers)"]);
+            updateStatusElement('samu', servicesOnline["SAMU"]);
+        }
+
+        function updateStatusElement(serviceKey, isOnline) {
+            const dot = document.getElementById(`dot_${serviceKey}`);
+            const label = document.getElementById(`label_${serviceKey}`);
+            if(!dot || !label) return;
+
+            if (isOnline) {
+                dot.className = "status-dot online";
+                label.innerText = "En service (Actif)";
+                label.style.color = "#4ade80";
+            } else {
+                dot.className = "status-dot";
+                label.innerText = "Hors service";
+                label.style.color = "var(--text-muted)";
+            }
         }
 
         function saveInterfaceConfig() {
@@ -363,6 +452,7 @@
             document.getElementById(sectionId).classList.add('active');
             if(ev && ev.target) ev.target.classList.add('active');
             if(sectionId === 'reglement') renderRules();
+            if(sectionId === 'accueil') updatePublicServiceStatus();
         }
 
         function showTool(toolId, ev) {
@@ -402,6 +492,31 @@
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
+        // PLAINTE CITOYEN
+        function submitPublicComplaint() {
+            const name = document.getElementById('plainte_name').value.trim();
+            const contact = document.getElementById('plainte_contact').value.trim();
+            const service = document.getElementById('plainte_service').value;
+            const location = document.getElementById('plainte_location').value.trim();
+            const desc = document.getElementById('plainte_desc').value.trim();
+
+            if(!name || !desc) return alert("Veuillez renseigner votre nom et la description des faits.");
+
+            let text = `=== 📝 MAIN COURANTE / PLAINTE EN LIGNE ===\n`;
+            text += `🏢 Service : ${service}\n`;
+            text += `👤 Déclarant : ${name} (${contact})\n`;
+            text += `📍 Lieu : ${location}\n`;
+            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
+            text += `📝 Description :\n${desc}\n`;
+            text += `==========================================`;
+
+            const out = document.getElementById('output_plainte');
+            out.innerText = text;
+            out.style.display = 'block';
+            document.getElementById('send_plainte_discord').style.display = 'block';
+            alert("Plainte enregistrée ! Vous pouvez maintenant la transmettre sur le canal Discord.");
+        }
+
         // RÈGLEMENTS
         function adminSaveRule() {
             const index = parseInt(document.getElementById('adm_rule_index').value);
@@ -416,6 +531,7 @@
             else rules.push({ title, content, date: timestamp });
 
             localStorage.setItem('nanterre_rules', JSON.stringify(rules));
+            logAuditAction("Administrateur", `Mise à jour du règlement : ${title}`);
             alert("Règle enregistrée !");
             document.getElementById('adm_rule_index').value = "-1";
             document.getElementById('adm_rule_title').value = "";
@@ -493,6 +609,7 @@
             let accounts = getStaffAccounts();
             accounts.push({ username, password, name, service, role });
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+            logAuditAction("Administrateur", `Création du compte agent ${name} (${service})`);
             alert("Compte agent / HC créé avec succès !");
             renderStaffAccountsTable();
         }
@@ -502,6 +619,18 @@
             accounts.splice(index, 1);
             localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
             renderStaffAccountsTable();
+        }
+
+        function updateAgentGrade(index) {
+            let accounts = getStaffAccounts();
+            let newGrade = prompt("Entrez le nouveau grade / nom & matricule pour cet agent :", accounts[index].name);
+            if(newGrade && newGrade.trim() !== "") {
+                accounts[index].name = newGrade.trim();
+                localStorage.setItem('nanterre_staff_accounts', JSON.stringify(accounts));
+                logAuditAction(loggedInAgent || "HC", `Modification du grade de l'agent -> ${newGrade.trim()}`);
+                renderDirectoryStaff();
+                alert("Grade mis à jour avec succès !");
+            }
         }
 
         function renderStaffAccountsTable() {
@@ -533,13 +662,14 @@
                     localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
                 }
 
+                logAuditAction(loggedInAgent, `Connexion à l'espace opérationnel (${loggedInService})`);
+
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
                 document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
                 document.getElementById('rep_agent').value = loggedInAgent;
                 document.getElementById('rep_service').value = loggedInService !== "Administration" ? loggedInService : "Police Nationale";
 
-                // Afficher ou cacher l'onglet HC / Statistiques selon le rôle
                 if (loggedInRole === 'hc' || user === 'admin') {
                     document.getElementById('hcTabBtn').style.display = 'inline-block';
                 } else {
@@ -547,6 +677,7 @@
                 }
 
                 renderDirectoryStaff();
+                updatePublicServiceStatus();
             } else {
                 alert("Identifiants incorrects.");
             }
@@ -561,6 +692,8 @@
                 localStorage.setItem('nanterre_active_staff', JSON.stringify(activeStaff));
             }
 
+            logAuditAction(loggedInAgent, `Déconnexion de l'espace opérationnel`);
+
             loggedInAgent = "";
             loggedInService = "";
             loggedInRole = "";
@@ -568,6 +701,7 @@
             document.getElementById('staffDashboard').style.display = 'none';
             document.getElementById('hcTabBtn').style.display = 'none';
             renderDirectoryStaff();
+            updatePublicServiceStatus();
         }
 
         function renderDirectoryStaff() {
@@ -582,36 +716,41 @@
                 return;
             }
 
-            accounts.forEach(acc => {
+            accounts.forEach((acc, index) => {
                 let isOnline = activeStaff.includes(acc.username) || acc.name === loggedInAgent;
                 let dotClass = isOnline ? "status-dot online" : "status-dot";
                 let statusLabel = isOnline ? "En service" : "Hors ligne";
+
+                let actionBtn = (loggedInRole === 'hc' || loggedInService === "Administration") ? 
+                    `<button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier Grade</button>` : 
+                    `<small style="color:var(--text-muted)">Réservé HC</small>`;
 
                 tbody.innerHTML += `
                     <tr>
                         <td><span class="${dotClass}"></span> ${statusLabel}</td>
                         <td><strong>${acc.service}</strong></td>
                         <td>${acc.name} ${acc.role === 'hc' ? '⭐ (HC)' : ''}</td>
-                        <td><code>${acc.username}</code></td>
+                        <td>${actionBtn}</td>
                     </tr>
                 `;
             });
         }
 
-        // RAPPORT D'INTERVENTION UNIFIÉ (AVEC SAUVEGARDE POUR STATS HC)
+        // RAPPORT D'INTERVENTION UNIFIÉ
         function generateInterventionReport() {
             const service = document.getElementById('rep_service').value;
             const agent = document.getElementById('rep_agent').value || "N/A";
             const location = document.getElementById('rep_location').value || "N/A";
             const datetime = document.getElementById('rep_datetime').value || getFrenchTimestamp();
-            const motif = document.getElementById('rep_motif').value || "N/A";
+            const motif = document.getElementById('rep_motif').value || "Intervention générale";
             const details = document.getElementById('rep_details').value || "N/A";
 
-            // Enregistrer le rapport dans la base de données globale
             let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
             let newReport = { service, agent, location, datetime, motif, details };
             allReports.unshift(newReport);
             localStorage.setItem('nanterre_all_reports', JSON.stringify(allReports));
+
+            logAuditAction(agent, `Rédaction d'un rapport (${service}) - Motif : ${motif}`);
 
             let text = `=== 🚨 RAPPORT D'INTERVENTION - ${service.toUpperCase()} ===\n`;
             text += `👤 Agent & Matricule : ${agent}\n`;
@@ -626,15 +765,14 @@
             out.style.display = 'block';
             document.getElementById('copy_intervention').style.display = 'block';
             document.getElementById('send_intervention').style.display = 'block';
-            alert("Rapport d'intervention généré et enregistré avec succès !");
+            alert("Rapport d'intervention généré et enregistré !");
         }
 
-        // PANNEAU STATISTIQUES & RAPPORTS POUR LE HAUT COMITÉ DU SERVICE
+        // PANNEAU STATISTIQUES HC & AUDIT LOG
         function renderHCStatsAndReports() {
             document.getElementById('hcServiceNameDisplay').innerText = loggedInService;
             
             let allReports = JSON.parse(localStorage.getItem('nanterre_all_reports')) || [];
-            // Filtrer uniquement les rapports du service de l'agent HC connecté (sauf admin global)
             let serviceReports = loggedInService === "Administration" ? allReports : allReports.filter(r => r.service === loggedInService);
 
             document.getElementById('statTotalReports').innerText = serviceReports.length;
@@ -644,24 +782,43 @@
             document.getElementById('statTotalAgents').innerText = serviceAgents.length;
 
             const tbody = document.getElementById('hcReportsTable');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-
-            if(serviceReports.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré pour ce service.</td></tr>`;
-                return;
+            if(tbody) {
+                tbody.innerHTML = '';
+                if(serviceReports.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucun rapport enregistré pour ce service.</td></tr>`;
+                } else {
+                    serviceReports.forEach(r => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><small>${r.datetime}</small></td>
+                                <td><strong>${r.agent}</strong></td>
+                                <td>📍 ${r.location}<br><span style="color:var(--text-muted)">${r.motif}</span></td>
+                                <td><button class="btn btn-secondary btn-sm" onclick="alert('${r.details.replace(/'/g, "\\'")}')">Voir détails</button></td>
+                            </tr>
+                        `;
+                    });
+                }
             }
 
-            serviceReports.forEach(r => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><small>${r.datetime}</small></td>
-                        <td><strong>${r.agent}</strong></td>
-                        <td>📍 ${r.location}<br><span style="color:var(--text-muted)">${r.motif}</span></td>
-                        <td><button class="btn btn-secondary btn-sm" onclick="alert('${r.details.replace(/'/g, "\\'")}')">Voir détails</button></td>
-                    </tr>
-                `;
-            });
+            // Journal d'audit
+            const auditTbody = document.getElementById('auditLogTable');
+            if(auditTbody) {
+                auditTbody.innerHTML = '';
+                let logs = JSON.parse(localStorage.getItem('nanterre_audit_logs')) || [];
+                if(logs.length === 0) {
+                    auditTbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted); text-align:center;">Aucune activité enregistrée.</td></tr>`;
+                } else {
+                    logs.slice(0, 15).forEach(l => {
+                        auditTbody.innerHTML += `
+                            <tr>
+                                <td><small>${l.timestamp}</small></td>
+                                <td><strong>${l.author}</strong></td>
+                                <td>${l.action}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
         }
 
         function copyToClipboard(elementId) {
@@ -677,6 +834,7 @@
                 renderAdminRulesTable();
                 renderStaffAccountsTable();
                 applyInterfaceConfig();
+                logAuditAction("Administrateur", "Connexion à l'espace Administrateur");
             } else {
                 alert("Entrez un mot de passe administrateur.");
             }
@@ -686,6 +844,7 @@
             applyInterfaceConfig();
             renderRules();
             renderDirectoryStaff();
+            updatePublicServiceStatus();
         };
     </script>
 </body>
