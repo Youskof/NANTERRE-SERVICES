@@ -454,6 +454,7 @@
             </div>
             <div class="form-actions">
               <button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte</button>
+              <button class="btn danger" onclick="stopAlertSound()">⏹️ Arrêter le son (STOP)</button>
               <button class="btn secondary" onclick="clearAlertForm()">Effacer / Nouveau</button>
             </div>
           </div>
@@ -475,14 +476,30 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- LECTEUR AUDIO ULTRA-SIMPLE ---
-    function playAlertSound(text, soundUrl) {
-      if (soundUrl && soundUrl.trim() !== '') {
-        const audio = new Audio(soundUrl.trim());
-        audio.play().catch(e => console.warn("Erreur lecture MP3:", e));
+    // --- LECTEUR AUDIO AVEC CONTRÔLE ET BOUTON STOP ---
+    let currentAudio = null;
+
+    function stopAlertSound() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
       }
-      if (text && text.trim() !== '' && 'speechSynthesis' in window) {
+      if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
+      }
+      toast('⏹️ Lecture audio arrêtée.');
+    }
+
+    function playAlertSound(text, soundUrl) {
+      stopAlertSound();
+
+      if (soundUrl && soundUrl.trim() !== '') {
+        currentAudio = new Audio(soundUrl.trim());
+        currentAudio.play().catch(e => console.warn("Erreur lecture MP3:", e));
+      }
+
+      if (text && text.trim() !== '' && 'speechSynthesis' in window) {
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'fr-FR';
         window.speechSynthesis.speak(msg);
@@ -956,6 +973,7 @@
           <td>${a.sound_url ? '🎵 MP3: ' + esc(a.sound_url) : '🗣️ Text: ' + esc(a.announcement_text)}</td>
           <td>
             <button class="btn small" onclick="broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
+            <button class="btn danger small" onclick="stopAlertSound()">⏹️ Stop</button>
             <button class="btn secondary small" onclick="editCustomAlert('${a.id}')">Modifier</button>
             <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button>
           </td>
