@@ -431,6 +431,41 @@
         </div>
       </section>
 
+      <!-- ADMINISTRATION : ALERTES & VOIX LIVE -->
+      <section class="view" id="view-admin-alerts">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>🔊 Gestion & Test des Alertes Vocales en Direct</h2><div class="muted small">Créez et diffusez des annonces vocales audibles par tous les utilisateurs connectés en temps réel.</div></div>
+          </div>
+          <div class="panel" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
+            <h3>Ajouter / Modifier une Alerte Vocale</h3>
+            <div class="form-grid">
+              <input type="hidden" id="alert_edit_id">
+              <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
+              <div class="field"><label>Type de Sirène / Ambiance <span class="req">*</span></label>
+                <select id="alt_type">
+                  <option value="police">Police Nationale (2 tons)</option>
+                  <option value="bspn">BSPN Pompiers (Monte-baisse)</option>
+                  <option value="samu">SAMU 92 (Bip médical)</option>
+                  <option value="general">Alerte Générale (Urgence)</option>
+                </select>
+              </div>
+              <div class="field full"><label>Texte de l'annonce vocale (Prononcé par la voix synthétique) <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Attention à tous les services, intervention majeure en cours secteur centre-ville."></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn" onclick="playSubmit(); saveCustomAlert()">Enregistrer l'alerte</button>
+              <button class="btn secondary" onclick="clearAlertForm()">Effacer / Nouveau</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Titre</th><th>Type</th><th>Texte de l'annonce vocale</th><th>Actions</th></tr></thead>
+              <tbody id="adminAlertsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
   <div class="toast-host" id="toastHost" aria-live="polite"></div>
@@ -440,7 +475,7 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- MOTEUR SONORE WEB AUDIO API ---
+    // --- MOTEUR SONORE & SYNTHÈSE VOCALE (TEXT-TO-SPEECH) ---
     let audioCtx = null;
     function getAudioContext() {
       if (!audioCtx) {
@@ -502,6 +537,56 @@
         osc.start();
         osc.stop(now + 0.25);
       } catch(e){}
+    }
+
+    // --- FONCTION DE DIFFUSION VOCALE & SIRENE ---
+    function triggerVoiceAnnouncement(text, type = 'police') {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        if (type === 'police') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(550, now);
+          osc.frequency.linearRampToValueAtTime(850, now + 0.35);
+          osc.frequency.linearRampToValueAtTime(550, now + 0.7);
+        } else if (type === 'bspn') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.linearRampToValueAtTime(900, now + 0.5);
+          osc.frequency.linearRampToValueAtTime(400, now + 1.0);
+        } else if (type === 'samu') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.setValueAtTime(440, now + 0.2);
+          osc.frequency.setValueAtTime(880, now + 0.4);
+        } else {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(650, now);
+          osc.frequency.setValueAtTime(500, now + 0.3);
+        }
+
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(now + 1.2);
+      } catch(e) {}
+
+      // Synthèse vocale en français
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stoppe la parole précédente si besoin
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'fr-FR';
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          window.speechSynthesis.speak(utterance);
+        }, 900);
+      }
     }
 
     let webhookUrls = {
@@ -605,6 +690,7 @@
 
     let roster = [...DEFAULT_ROSTER];
     let tajRecords = [];
+    let customAlerts = [];
 
     const PENAL_CODE = [
       ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
@@ -646,12 +732,10 @@
       if (activeSpace === 'citoyen') {
         navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Zones & règlement']);
       } else if (activeSpace === 'admin') {
-        navItems.push(['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe agents'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH']);
+        navItems.push(['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe agents'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH'],['view-admin-alerts','🔊','Alertes & Voix Live']);
       } else {
         navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']);
         if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV & registre'],['view-penal','≡','Code pénal']);
-        
-        // --- CONTRÔLE D'ACCÈS PAR GRADE (RBAC) ---
         if (isAdminUser || (currentAgent && isHighRank(currentAgent.grade))) {
           navItems.push(['view-taj','🗂️','Fichier TAJ/STIC']);
           navItems.push(['view-stats','📊','Tableau de bord RH']);
@@ -727,6 +811,7 @@
         renderAdminPasswords();
         renderTajData();
         renderDashboardStats();
+        loadCustomAlerts();
         showView('view-admin-home');
         toast('Accès administrateur autorisé.');
       } else {
@@ -951,6 +1036,105 @@
       $('st_total_taj').textContent = tajRecords.length;
     }
 
+    // --- MODULE GESTION & TEST DES ALERTES VOCALES EN DIRECT ---
+    async function loadCustomAlerts() {
+      try {
+        const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
+        if (data) {
+          customAlerts = data;
+          renderAdminAlertsTable();
+        }
+      } catch(e) {}
+    }
+
+    function renderAdminAlertsTable() {
+      const tbody = $('adminAlertsBody');
+      if(!tbody) return;
+      tbody.innerHTML = customAlerts.map(a => `
+        <tr>
+          <td><b>${esc(a.title)}</b></td>
+          <td><span class="pill info">${esc(a.alert_type)}</span></td>
+          <td>${esc(a.announcement_text)}</td>
+          <td>
+            <button class="btn small" onclick="playSubmit(); broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
+            <button class="btn secondary small" onclick="playClick(); editCustomAlert('${a.id}')">Modifier</button>
+            <button class="btn danger small" onclick="playClick(); deleteCustomAlert('${a.id}')">Supprimer</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function saveCustomAlert() {
+      const id = $('alert_edit_id').value;
+      const title = val('alt_title');
+      const text = val('alt_text');
+      const type = $('alt_type').value;
+
+      if(!title || !text) return toast('Veuillez remplir le titre et le texte de l’annonce.', 'error');
+
+      const payload = { title, announcement_text: text, alert_type: type };
+
+      try {
+        if(id) {
+          await sb.from('nrp_custom_alerts').update(payload).eq('id', id);
+          toast('Alerte mise à jour avec succès !');
+        } else {
+          await sb.from('nrp_custom_alerts').insert([payload]);
+          toast('Nouvelle alerte créée !');
+        }
+        clearAlertForm();
+        loadCustomAlerts();
+      } catch(e) {
+        toast('Erreur lors de l’enregistrement de l’alerte.', 'error');
+      }
+    }
+
+    function editCustomAlert(id) {
+      const a = customAlerts.find(x => String(x.id) === String(id));
+      if(!a) return;
+      $('alert_edit_id').value = a.id;
+      $('alt_title').value = a.title;
+      $('alt_text').value = a.announcement_text;
+      $('alt_type').value = a.alert_type;
+    }
+
+    function clearAlertForm() {
+      $('alert_edit_id').value = '';
+      $('alt_title').value = '';
+      $('alt_text').value = '';
+      $('alt_type').value = 'police';
+    }
+
+    async function deleteCustomAlert(id) {
+      if(!confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?')) return;
+      try {
+        await sb.from('nrp_custom_alerts').delete().eq('id', id);
+        toast('Alerte supprimée.');
+        loadCustomAlerts();
+      } catch(e) {
+        toast('Erreur lors de la suppression.', 'error');
+      }
+    }
+
+    // Diffusion en direct via Supabase Realtime Broadcast à tout le monde
+    async function broadcastLiveAlert(id) {
+      const a = customAlerts.find(x => String(x.id) === String(id));
+      if(!a) return;
+
+      // Déclenche l'alerte pour soi-même immédiatement
+      triggerVoiceAnnouncement(a.announcement_text, a.alert_type);
+      toast(`🔊 Diffusion en direct de : "${a.title}" à tous les connectés !`);
+
+      // Envoie l'ordre à tous les autres clients connectés via le canal broadcast Supabase
+      const channel = sb.channel('nrp_global_alerts');
+      await channel.subscribe();
+      await channel.send({
+        type: 'broadcast',
+        event: 'trigger_alert',
+        payload: { text: a.announcement_text, type: a.alert_type, title: a.title }
+      });
+    }
+
     function initAdminWebhooksUI(){
       const keys = Object.keys(webhookUrls);
       $('webhookConfigForm').innerHTML = keys.map(k=>`
@@ -1042,14 +1226,25 @@
       }
     }
 
-    // --- TEMPS RÉEL (SUPABASE REALTIME) ---
+    // --- TEMPS RÉEL GLOBAL (SUPABASE REALTIME) ---
     function setupRealtimeListeners() {
+      // Écoute des ajouts TAJ
       sb.channel('realtime:nrp_taj')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'nrp_taj' }, payload => {
           tajRecords.unshift(payload.new);
           renderTajData();
           renderDashboardStats();
           toast(`📢 Nouvel ajout au fichier TAJ : ${payload.new.citizen_name}`);
+        })
+        .subscribe();
+
+      // Écoute des alertes vocales globales en direct (Broadcast)
+      const alertChannel = sb.channel('nrp_global_alerts');
+      alertChannel
+        .on('broadcast', { event: 'trigger_alert' }, payload => {
+          const data = payload.payload;
+          toast(`🚨 ANNONCE OFFICIELLE : ${data.title}`);
+          triggerVoiceAnnouncement(data.text, data.type);
         })
         .subscribe();
     }
@@ -1073,6 +1268,7 @@
       renderDirectory();
       renderPenal();
       loadTajCloudData();
+      loadCustomAlerts();
       setupRealtimeListeners();
     }
 
