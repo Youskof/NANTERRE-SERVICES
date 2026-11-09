@@ -89,7 +89,7 @@
         <nav class="side-nav" id="sideNav"></nav>
       </div>
       <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté</span></div>
+        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté à Supabase Cloud</span></div>
         <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
       </div>
     </aside>
@@ -371,8 +371,8 @@
       <!-- ADMINISTRATION : EFFECTIFS ET MOTS DE PASSE -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
-          <h2>Gestion des effectifs & Mots de passe (00 à 100)</h2>
-          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade, le statut et le <b>mot de passe secret</b> de chaque agent pour sécuriser leur accès.</p>
+          <h2>Gestion des effectifs (00 à 100)</h2>
+          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade et le statut de chaque agent.</p>
           <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer par nom, grade, matricule..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap">
             <table class="data-table">
@@ -386,9 +386,9 @@
       <!-- ONGLET ADMIN DÉDIÉ : GESTION DES MOTS DE PASSE -->
       <section class="view" id="view-admin-passwords">
         <div class="panel">
-          <h2>🔑 Gestion centralisée des accès & Mots de passe</h2>
-          <p class="muted small" style="margin-bottom:15px">Attribuez des mots de passe individuels sécurisés pour chaque matricule. Les modifications s'appliquent immédiatement sur la base de données Cloud Supabase.</p>
-          <div class="search-row"><input id="adminPwdSearch" placeholder="Rechercher un agent..." oninput="renderAdminPasswords()"></div>
+          <h2>🔑 Gestion des accès & Mots de passe agents</h2>
+          <p class="muted small" style="margin-bottom:15px">Consultez et modifiez les mots de passe individuels pré-enregistrés au format <code>Nom.XXXXX</code>. Les sauvegardes se font en temps réel sur Supabase.</p>
+          <div class="search-row"><input id="adminPwdSearch" placeholder="Rechercher par nom ou matricule..." oninput="renderAdminPasswords()"></div>
           <div class="table-wrap">
             <table class="data-table">
               <thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe actuel</th><th>Action</th></tr></thead>
@@ -424,86 +424,86 @@
     };
 
     const DEFAULT_ROSTER = [
-      ['00','Youskof Yorka','IGPN','IGPN','Occupé','MonMotDePasseSecurise'],
-      ['01','Aram','Commandant','Police Nationale','Occupé','1234'],
-      ['02','Motlo','Directeur','Police Nationale','Occupé','1234'],
-      ['03','Honey','Directrice','Police Nationale','Occupé','1234'],
-      ['04','Zappeur','Lieutenant','Police Nationale','Occupé','1234'],
-      ['05','Osman','GPX','Police Nationale','Occupé','1234'],
-      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé','1234'],
-      ['07','Le T','GPX','Police Nationale','Occupé','1234'],
-      ['08','Aaron','Capitaine','Police Nationale','Occupé','1234'],
-      ['09','Lyky','GPX','Police Nationale','Occupé','1234'],
-      ['10','Tatou','GPX','Police Nationale','Occupé','1234'],
-      ['11','Ombre','GPX','Police Nationale','Occupé','1234'],
-      ['12','Onur','GPX','Police Nationale','Occupé','1234'],
-      ['13','Tgrm','Commandant','Police Nationale','Occupé','1234'],
-      ['14','Monage','Formateur','Police Nationale','Occupé','1234'],
-      ['15','Yven','Sous-Brigadier','Police Nationale','Occupé','1234'],
-      ['16','Nono','GPX','Police Nationale','Occupé','1234'],
-      ['17','Wdy','GPX','Police Nationale','Occupé','1234'],
-      ['18','Vorynix','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['19','Anto','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['20','Peffcorse','Sous-Brigadier','Police Nationale','Occupé','1234'],
-      ['21','Ghost','Lieutenant','Police Nationale','Occupé','1234'],
-      ['22','Raph137','Capitaine-BAC','Police Nationale - BAC','Occupé','1234'],
-      ['23','Thymote','Sous-Brigadier','Police Nationale','Occupé','1234'],
-      ['24','Tuicareu','Brigadier','Police Nationale','Occupé','1234'],
-      ['25','Libre','Vacant','Police Nationale','Vacant','1234'],
-      ['26','Baptouste','Directeur-Adjoint','Police Nationale','Occupé','1234'],
-      ['27','Libre','Vacant','Police Nationale','Vacant','1234'],
-      ['28','Gab','Major','Police Nationale','Occupé','1234'],
-      ['29','Tatin','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['30','Jaymaze','GPX','Police Nationale','Occupé','1234'],
-      ['31','Loenzo','GPX','Police Nationale','Occupé','1234'],
-      ['32','Yui','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['33','Nino','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['34','S4ch47','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['35','Blk','GPX','Police Nationale','Occupé','1234'],
-      ['36','Adn','GPX','Police Nationale','Occupé','1234'],
-      ['37','Valentine','GPX','Police Nationale','Occupé','1234'],
-      ['38','Dodoby','GPX','Police Nationale','Occupé','1234'],
-      ['39','Yaya','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['40','Scarface','GPX','Police Nationale','Occupé','1234'],
-      ['41','Terax','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['42','Halower','Sous-Brigadier','Police Nationale','Occupé','1234'],
-      ['43','Gab','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['44','Noam','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['45','Libre','Vacant','Police Nationale','Vacant','1234'],
-      ['46','Hisoka','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['47','D.34','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['48','Noxyral','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['49','Louija','Brigadier','Police Nationale','Occupé','1234'],
-      ['50','B4ptz02','GPX','Police Nationale','Occupé','1234'],
-      ['51','Lebiscuit','GPX','Police Nationale','Occupé','1234'],
-      ['52','Bobstant','Sous-Brigadier','Police Nationale','Occupé','1234'],
-      ['53','Stabal620','GPX','Police Nationale','Occupé','1234'],
-      ['54','Lsk','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['55','Ds','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['56','Trk','Brigadier-Chef','Police Nationale','Occupé','1234'],
-      ['57','Blablacar','GPX','Police Nationale','Occupé','1234'],
-      ['58','Axel','GPX','Police Nationale','Occupé','1234'],
-      ['59','Darkozz21','GPX','Police Nationale','Occupé','1234'],
-      ['60','Warlib','GPX','Police Nationale','Occupé','1234'],
-      ['61','Alex','Brigadier','Police Nationale','Occupé','1234'],
-      ['62','Alden','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['63','Rayane','GPX','Police Nationale','Occupé','1234'],
-      ['64','Lays','GPX','Police Nationale','Occupé','1234'],
-      ['65','Nuggetss','GPX','Police Nationale','Occupé','1234'],
-      ['66','Jean Paul','GPX','Police Nationale','Occupé','1234'],
-      ['67','Baban','GPX','Police Nationale','Occupé','1234'],
-      ['68','Moha','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['69','Lastreet','GPX','Police Nationale','Occupé','1234'],
-      ['70','Neyz','GPX','Police Nationale','Occupé','1234'],
-      ['71','Baptiste','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['72','Godly','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['73','M4rv1n77','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ['74','Jeniija','GPX','Police Nationale','Occupé','1234'],
-      ['75','Libre','Vacant','Police Nationale','Vacant','1234'],
-      ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','1234'],
-      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant','1234'];}),
-      ['99','Rdh','GPX','Police Nationale','Occupé','1234'],
-      ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','1234']
+      ['00','Youskof Yorka','IGPN','IGPN','Occupé','Yohan.76450'],
+      ['01','Aram','Commandant','Police Nationale','Occupé','Aram.33548'],
+      ['02','Motlo','Directeur','Police Nationale','Occupé','Motlo.85462'],
+      ['03','Honey','Directrice','Police Nationale','Occupé','Honey.19420'],
+      ['04','Zappeur','Lieutenant','Police Nationale','Occupé','Zappeur.74102'],
+      ['05','Osman','GPX','Police Nationale','Occupé','Osman.93214'],
+      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé','Pablo.48512'],
+      ['07','Le T','GPX','Police Nationale','Occupé','LeT.62914'],
+      ['08','Aaron','Capitaine','Police Nationale','Occupé','Aaron.10492'],
+      ['09','Lyky','GPX','Police Nationale','Occupé','Lyky.83719'],
+      ['10','Tatou','GPX','Police Nationale','Occupé','Tatou.29481'],
+      ['11','Ombre','GPX','Police Nationale','Occupé','Ombre.57291'],
+      ['12','Onur','GPX','Police Nationale','Occupé','Onur.48102'],
+      ['13','Tgrm','Commandant','Police Nationale','Occupé','Tgrm.91823'],
+      ['14','Monage','Formateur','Police Nationale','Occupé','Monage.37192'],
+      ['15','Yven','Sous-Brigadier','Police Nationale','Occupé','Yven.64910'],
+      ['16','Nono','GPX','Police Nationale','Occupé','Nono.28471'],
+      ['17','Wdy','GPX','Police Nationale','Occupé','Wdy.94720'],
+      ['18','Vorynix','GPX-Stagiaire','Police Nationale','Occupé','Vorynix.18392'],
+      ['19','Anto','GPX-Stagiaire','Police Nationale','Occupé','Anto.47291'],
+      ['20','Peffcorse','Sous-Brigadier','Police Nationale','Occupé','Peffcorse.83019'],
+      ['21','Ghost','Lieutenant','Police Nationale','Occupé','Ghost.29183'],
+      ['22','Raph137','Capitaine-BAC','Police Nationale - BAC','Occupé','Raph.58291'],
+      ['23','Thymote','Sous-Brigadier','Police Nationale','Occupé','Thymote.47192'],
+      ['24','Tuicareu','Brigadier','Police Nationale','Occupé','Tuicareu.83920'],
+      ['25','Libre','Vacant','Police Nationale','Vacant','Libre.25000'],
+      ['26','Baptouste','Directeur-Adjoint','Police Nationale','Occupé','Baptouste.93812'],
+      ['27','Libre','Vacant','Police Nationale','Vacant','Libre.27000'],
+      ['28','Gab','Major','Police Nationale','Occupé','Gab.48291'],
+      ['29','Tatin','GPX-Stagiaire','Police Nationale','Occupé','Tatin.91823'],
+      ['30','Jaymaze','GPX','Police Nationale','Occupé','Jaymaze.37281'],
+      ['31','Loenzo','GPX','Police Nationale','Occupé','Loenzo.84910'],
+      ['32','Yui','GPX-Stagiaire','Police Nationale','Occupé','Yui.28471'],
+      ['33','Nino','GPX-Stagiaire','Police Nationale','Occupé','Nino.59281'],
+      ['34','S4ch47','GPX-Stagiaire','Police Nationale','Occupé','Sacha.38291'],
+      ['35','Blk','GPX','Police Nationale','Occupé','Blk.91823'],
+      ['36','Adn','GPX','Police Nationale','Occupé','Adn.47281'],
+      ['37','Valentine','GPX','Police Nationale','Occupé','Valentine.83912'],
+      ['38','Dodoby','GPX','Police Nationale','Occupé','Dodoby.19283'],
+      ['39','Yaya','GPX-Stagiaire','Police Nationale','Occupé','Yaya.48291'],
+      ['40','Scarface','GPX','Police Nationale','Occupé','Scarface.91827'],
+      ['41','Terax','GPX-Stagiaire','Police Nationale','Occupé','Terax.38291'],
+      ['42','Halower','Sous-Brigadier','Police Nationale','Occupé','Halower.74829'],
+      ['43','Gab','GPX-Stagiaire','Police Nationale','Occupé','Gab.19283'],
+      ['44','Noam','GPX-Stagiaire','Police Nationale','Occupé','Noam.48291'],
+      ['45','Libre','Vacant','Police Nationale','Vacant','Libre.45000'],
+      ['46','Hisoka','GPX-Stagiaire','Police Nationale','Occupé','Hisoka.91827'],
+      ['47','D.34','GPX-Stagiaire','Police Nationale','Occupé','D34.48291'],
+      ['48','Noxyral','GPX-Stagiaire','Police Nationale','Occupé','Noxyral.19283'],
+      ['49','Louija','Brigadier','Police Nationale','Occupé','Louija.74829'],
+      ['50','B4ptz02','GPX','Police Nationale','Occupé','Baptz.48291'],
+      ['51','Lebiscuit','GPX','Police Nationale','Occupé','Lebiscuit.91823'],
+      ['52','Bobstant','Sous-Brigadier','Police Nationale','Occupé','Bobstant.38291'],
+      ['53','Stabal620','GPX','Police Nationale','Occupé','Stabal.83912'],
+      ['54','Lsk','GPX-Stagiaire','Police Nationale','Occupé','Lsk.19283'],
+      ['55','Ds','GPX-Stagiaire','Police Nationale','Occupé','Ds.48291'],
+      ['56','Trk','Brigadier-Chef','Police Nationale','Occupé','Trk.91827'],
+      ['57','Blablacar','GPX','Police Nationale','Occupé','Blablacar.38291'],
+      ['58','Axel','GPX','Police Nationale','Occupé','Axel.74829'],
+      ['59','Darkozz21','GPX','Police Nationale','Occupé','Darkozz.48291'],
+      ['60','Warlib','GPX','Police Nationale','Occupé','Warlib.91823'],
+      ['61','Alex','Brigadier','Police Nationale','Occupé','Alex.38291'],
+      ['62','Alden','GPX-Stagiaire','Police Nationale','Occupé','Alden.83912'],
+      ['63','Rayane','GPX','Police Nationale','Occupé','Rayane.19283'],
+      ['64','Lays','GPX','Police Nationale','Occupé','Lays.48291'],
+      ['65','Nuggetss','GPX','Police Nationale','Occupé','Nuggetss.91827'],
+      ['66','Jean Paul','GPX','Police Nationale','Occupé','JeanPaul.38291'],
+      ['67','Baban','GPX','Police Nationale','Occupé','Baban.74829'],
+      ['68','Moha','GPX-Stagiaire','Police Nationale','Occupé','Moha.48291'],
+      ['69','Lastreet','GPX','Police Nationale','Occupé','Lastreet.91823'],
+      ['70','Neyz','GPX','Police Nationale','Occupé','Neyz.38291'],
+      ['71','Baptiste','GPX-Stagiaire','Police Nationale','Occupé','Baptiste.83912'],
+      ['72','Godly','GPX-Stagiaire','Police Nationale','Occupé','Godly.19283'],
+      ['73','M4rv1n77','GPX-Stagiaire','Police Nationale','Occupé','Marvin.48291'],
+      ['74','Jeniija','GPX','Police Nationale','Occupé','Jeniija.91827'],
+      ['75','Libre','Vacant','Police Nationale','Vacant','Libre.75000'],
+      ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','Aim.38291'],
+      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}),
+      ['99','Rdh','GPX','Police Nationale','Occupé','Rdh.99123'],
+      ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','Steven.10023']
     ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
 
     let roster = [...DEFAULT_ROSTER];
@@ -601,7 +601,7 @@
     }
 
     function loginAdminSimple(){
-      if(val('adminCode')==='1234' || val('adminCode')==='ADMIN'){
+      if(val('adminCode')==='Nanterre2026' || val('adminCode')==='ADMIN2026'){
         buildNav(NAVS.admin);
         $('userChip').classList.remove('hidden');
         $('logoutBtn').classList.remove('hidden');
@@ -808,7 +808,7 @@
           <td><b>[${esc(x.matricule)}]</b></td>
           <td>${esc(x.name)} (${esc(x.grade)})</td>
           <td>${esc(x.service)}</td>
-          <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'1234')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:140px"></td>
+          <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:150px"></td>
           <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
         </tr>
       `).join('');
@@ -831,7 +831,7 @@
             status: item.status,
             password: item.password 
           });
-          toast(`Matricule [${mat}] et son mot de passe mis à jour sur Supabase !`);
+          toast(`Matricule [${mat}] mis à jour sur Supabase !`);
           renderAdminPasswords();
         } catch(e) {
           toast(`Erreur d'enregistrement Cloud`, 'error');
@@ -872,7 +872,7 @@
           webhookUrls = settingsData.data;
         }
         $('cloudDot').style.background = 'var(--green)';
-        $('connectionLabel').textContent = 'Connecté';
+        $('connectionLabel').textContent = 'Connecté à Supabase Cloud';
       } catch(e) {
         $('cloudDot').style.background = 'var(--yellow)';
         $('connectionLabel').textContent = 'Mode local';
