@@ -435,22 +435,23 @@
       <section class="view" id="view-admin-alerts">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>🔊 Gestion & Test des Alertes Vocales en Direct</h2><div class="muted small">Créez et diffusez des annonces vocales audibles par tous les utilisateurs connectés en temps réel.</div></div>
+            <div><h2>🔊 Gestion & Test des Alertes Vocales / MP3</h2><div class="muted small">Ajoutez vos alertes avec texte ou lien MP3 direct, audibles par tous en temps réel.</div></div>
           </div>
           <div class="panel" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
-            <h3>Ajouter / Modifier une Alerte Vocale</h3>
+            <h3>Ajouter / Modifier une Alerte</h3>
             <div class="form-grid">
               <input type="hidden" id="alert_edit_id">
               <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
-              <div class="field"><label>Type de Sirène / Ambiance <span class="req">*</span></label>
+              <div class="field"><label>Type de Sirène de secours (si pas de MP3)</label>
                 <select id="alt_type">
                   <option value="police">Police Nationale (2 tons)</option>
                   <option value="bspn">BSPN Pompiers (Monte-baisse)</option>
                   <option value="samu">SAMU 92 (Bip médical)</option>
-                  <option value="general">Alerte Générale (Urgence)</option>
+                  <option value="general">Alerte Générale</option>
                 </select>
               </div>
-              <div class="field full"><label>Texte de l'annonce vocale (Prononcé par la voix synthétique) <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Attention à tous les services, intervention majeure en cours secteur centre-ville."></textarea></div>
+              <div class="field full"><label>Lien direct du fichier MP3 (Optionnel - ex: hébergé sur Discord ou web)</label><input id="alt_sound" placeholder="https://... / mon-son.mp3"></div>
+              <div class="field full"><label>Texte de l'annonce vocale (Optionnel - lu si pas de MP3 ou en complément)</label><textarea id="alt_text" placeholder="Attention à tous les services, intervention majeure en cours..."></textarea></div>
             </div>
             <div class="form-actions">
               <button class="btn" onclick="playSubmit(); saveCustomAlert()">Enregistrer l'alerte</button>
@@ -459,7 +460,7 @@
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Titre</th><th>Type</th><th>Texte de l'annonce vocale</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Titre</th><th>Type / MP3</th><th>Annonce / Fichier</th><th>Actions</th></tr></thead>
               <tbody id="adminAlertsBody"></tbody>
             </table>
           </div>
@@ -475,7 +476,7 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- MOTEUR SONORE & SYNTHÈSE VOCALE (TEXT-TO-SPEECH) ---
+    // --- MOTEUR AUDIO & INTERACTION ---
     let audioCtx = null;
     function getAudioContext() {
       if (!audioCtx) {
@@ -539,53 +540,66 @@
       } catch(e){}
     }
 
-    // --- FONCTION DE DIFFUSION VOCALE & SIRENE ---
-    function triggerVoiceAnnouncement(text, type = 'police') {
-      try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+    // --- DIFFUSION AUDIO (MP3 ou SYNTHÈSE VOCALE) ---
+    function triggerVoiceAnnouncement(text, type = 'police', soundUrl = '') {
+      getAudioContext(); // Débloque l'audio sur interaction utilisateur
 
-        if (type === 'police') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(550, now);
-          osc.frequency.linearRampToValueAtTime(850, now + 0.35);
-          osc.frequency.linearRampToValueAtTime(550, now + 0.7);
-        } else if (type === 'bspn') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(400, now);
-          osc.frequency.linearRampToValueAtTime(900, now + 0.5);
-          osc.frequency.linearRampToValueAtTime(400, now + 1.0);
-        } else if (type === 'samu') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(880, now);
-          osc.frequency.setValueAtTime(440, now + 0.2);
-          osc.frequency.setValueAtTime(880, now + 0.4);
-        } else {
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(650, now);
-          osc.frequency.setValueAtTime(500, now + 0.3);
-        }
+      // 1. Si un lien MP3 est fourni, on le lit en priorité absolue
+      if (soundUrl && soundUrl.trim() !== '') {
+        const audio = new Audio(soundUrl.trim());
+        audio.volume = 1.0;
+        audio.play().catch(err => {
+          console.warn("Lecture MP3 bloquée ou URL invalide :", err);
+          toast("Erreur lecture MP3 (Vérifiez l'URL directe)", "error");
+        });
+      } else {
+        // Sinon, sirène synthétique de secours
+        try {
+          const ctx = getAudioContext();
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
 
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(now + 1.2);
-      } catch(e) {}
+          if (type === 'police') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(550, now);
+            osc.frequency.linearRampToValueAtTime(850, now + 0.35);
+            osc.frequency.linearRampToValueAtTime(550, now + 0.7);
+          } else if (type === 'bspn') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.linearRampToValueAtTime(900, now + 0.5);
+            osc.frequency.linearRampToValueAtTime(400, now + 1.0);
+          } else if (type === 'samu') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.setValueAtTime(440, now + 0.2);
+            osc.frequency.setValueAtTime(880, now + 0.4);
+          } else {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(650, now);
+            osc.frequency.setValueAtTime(500, now + 0.3);
+          }
 
-      // Synthèse vocale en français
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stoppe la parole précédente si besoin
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(now + 1.2);
+        } catch(e) {}
+      }
+
+      // 2. Si du texte est renseigné, la voix le lit
+      if (text && text.trim() !== '' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
         setTimeout(() => {
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = 'fr-FR';
           utterance.rate = 1.0;
           utterance.pitch = 1.0;
           window.speechSynthesis.speak(utterance);
-        }, 900);
+        }, soundUrl ? 200 : 900);
       }
     }
 
@@ -683,7 +697,7 @@
       ['74','Jeniija','GPX','Police Nationale','Occupé','Jeniija.91827'],
       ['75','Libre','Vacant','Police Nationale','Vacant','Libre.75000'],
       ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','Aim.38291'],
-      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}),
+      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}],
       ['99','Rdh','GPX','Police Nationale','Occupé','Rdh.99123'],
       ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','Steven.10023']
     ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
@@ -1036,7 +1050,7 @@
       $('st_total_taj').textContent = tajRecords.length;
     }
 
-    // --- MODULE GESTION & TEST DES ALERTES VOCALES EN DIRECT ---
+    // --- MODULE GESTION & TEST DES ALERTES (MP3 / VOIX) ---
     async function loadCustomAlerts() {
       try {
         const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
@@ -1054,7 +1068,7 @@
         <tr>
           <td><b>${esc(a.title)}</b></td>
           <td><span class="pill info">${esc(a.alert_type)}</span></td>
-          <td>${esc(a.announcement_text)}</td>
+          <td>${a.sound_url ? '🎵 ' + esc(a.sound_url) : '🗣️ ' + esc(a.announcement_text)}</td>
           <td>
             <button class="btn small" onclick="playSubmit(); broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
             <button class="btn secondary small" onclick="playClick(); editCustomAlert('${a.id}')">Modifier</button>
@@ -1069,10 +1083,11 @@
       const title = val('alt_title');
       const text = val('alt_text');
       const type = $('alt_type').value;
+      const soundUrl = val('alt_sound');
 
-      if(!title || !text) return toast('Veuillez remplir le titre et le texte de l’annonce.', 'error');
+      if(!title) return toast('Veuillez donner un titre à l’alerte.', 'error');
 
-      const payload = { title, announcement_text: text, alert_type: type };
+      const payload = { title, announcement_text: text, alert_type: type, sound_url: soundUrl };
 
       try {
         if(id) {
@@ -1094,14 +1109,16 @@
       if(!a) return;
       $('alert_edit_id').value = a.id;
       $('alt_title').value = a.title;
-      $('alt_text').value = a.announcement_text;
-      $('alt_type').value = a.alert_type;
+      $('alt_text').value = a.announcement_text || '';
+      $('alt_type').value = a.alert_type || 'police';
+      $('alt_sound').value = a.sound_url || '';
     }
 
     function clearAlertForm() {
       $('alert_edit_id').value = '';
       $('alt_title').value = '';
       $('alt_text').value = '';
+      $('alt_sound').value = '';
       $('alt_type').value = 'police';
     }
 
@@ -1116,22 +1133,20 @@
       }
     }
 
-    // Diffusion en direct via Supabase Realtime Broadcast à tout le monde
+    // Diffusion en direct à tous les connectés
     async function broadcastLiveAlert(id) {
       const a = customAlerts.find(x => String(x.id) === String(id));
       if(!a) return;
 
-      // Déclenche l'alerte pour soi-même immédiatement
-      triggerVoiceAnnouncement(a.announcement_text, a.alert_type);
-      toast(`🔊 Diffusion en direct de : "${a.title}" à tous les connectés !`);
+      triggerVoiceAnnouncement(a.announcement_text, a.alert_type, a.sound_url);
+      toast(`🔊 Diffusion en direct de : "${a.title}" !`);
 
-      // Envoie l'ordre à tous les autres clients connectés via le canal broadcast Supabase
       const channel = sb.channel('nrp_global_alerts');
       await channel.subscribe();
       await channel.send({
         type: 'broadcast',
         event: 'trigger_alert',
-        payload: { text: a.announcement_text, type: a.alert_type, title: a.title }
+        payload: { text: a.announcement_text, type: a.alert_type, soundUrl: a.sound_url, title: a.title }
       });
     }
 
@@ -1228,7 +1243,6 @@
 
     // --- TEMPS RÉEL GLOBAL (SUPABASE REALTIME) ---
     function setupRealtimeListeners() {
-      // Écoute des ajouts TAJ
       sb.channel('realtime:nrp_taj')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'nrp_taj' }, payload => {
           tajRecords.unshift(payload.new);
@@ -1238,13 +1252,12 @@
         })
         .subscribe();
 
-      // Écoute des alertes vocales globales en direct (Broadcast)
       const alertChannel = sb.channel('nrp_global_alerts');
       alertChannel
         .on('broadcast', { event: 'trigger_alert' }, payload => {
           const data = payload.payload;
           toast(`🚨 ANNONCE OFFICIELLE : ${data.title}`);
-          triggerVoiceAnnouncement(data.text, data.type);
+          triggerVoiceAnnouncement(data.text, data.type, data.soundUrl);
         })
         .subscribe();
     }
