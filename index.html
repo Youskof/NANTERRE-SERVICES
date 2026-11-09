@@ -67,12 +67,12 @@
       <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne. Sélectionnez votre espace pour accéder aux démarches ou aux outils correspondant à vos fonctions.</p>
     </div>
     <div class="gateway-grid">
-      <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, candidatures et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
+      <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
       <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
       <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
       <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
       <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et journal d'audit.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
+      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
     </div>
     <div class="footnote">NANTERRE RP · PORTAIL DE GESTION DES SERVICES · ENVIRONNEMENT ROLEPLAY</div>
   </div>
@@ -109,15 +109,16 @@
         </div>
       </div>
 
-      <!-- VUE CONNEXION AGENT -->
+      <!-- VUE CONNEXION AGENT AVEC MOT DE PASSE -->
       <section class="view" id="view-login">
         <div class="panel login-wrap">
           <div class="login-mark">NRP</div>
           <div class="eyebrow" id="loginEyebrow">Espace réservé</div>
-          <h2 id="loginTitle">Connexion sécurisée</h2>
-          <p id="loginDescription">Sélectionnez votre matricule pour accéder aux outils du service.</p>
-          <div class="field"><label>Sélectionnez votre matricule / Agent</label><select id="loginMatriculeSelect"></select></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffSimple()">Se connecter</button></div>
+          <h2 id="loginTitle">Connexion sécurisée agent</h2>
+          <p id="loginDescription">Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
+          <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule</label><select id="loginMatriculeSelect"></select></div>
+          <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password" placeholder="Votre mot de passe secret"></div>
+          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter en sécurité</button></div>
         </div>
       </section>
 
@@ -127,8 +128,8 @@
           <div class="login-mark">NRP</div>
           <div class="eyebrow">Accès restreint</div>
           <h2>Administration générale</h2>
-          <p>Entrez le code administrateur pour accéder à la configuration complète.</p>
-          <div class="field"><label>Code administrateur</label><input id="adminCode" type="password" placeholder="Code (ex: 1234)"></div>
+          <p>Entrez le code administrateur sécurisé.</p>
+          <div class="field"><label>Code administrateur</label><input id="adminCode" type="password" placeholder="Code secret admin"></div>
           <div class="form-actions"><button class="btn" style="width:100%" onclick="loginAdminSimple()">Ouvrir l'administration</button></div>
         </div>
       </section>
@@ -138,10 +139,10 @@
         <div class="hero">
           <span class="hero-tag">● Portail officiel · Nanterre RP</span>
           <h2 id="heroMainTitle">Protéger, secourir et accompagner les citoyens.</h2>
-          <p id="heroMainDesc">Retrouvez les démarches publiques et les informations opérationnelles des services. Les formulaires sont destinés exclusivement aux situations roleplay.</p>
+          <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations opérationnelles des services.</p>
           <div class="hero-actions">
-            <button class="btn" onclick="showView('view-complaint')">Déposer une plainte</button>
-            <button class="btn secondary" onclick="showView('view-maincourante')">Déclarer des faits</button>
+            <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
+            <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
           </div>
         </div>
         <div class="panel">
@@ -155,10 +156,37 @@
             <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status" id="public-samu-label">En service</div></div></div><div class="service-count" id="public-samu-count">1</div></div>
           </div>
         </div>
-        <div class="grid grid-3">
+        <div class="grid grid-4">
+          <div class="quick-card"><span class="q-icon">🎫</span><strong>Ouvrir un ticket</strong><p>Contactez directement le service concerné (Police, BSPN ou SAMU).</p><button class="btn ghost small" onclick="showView('view-ticket')">Ouvrir →</button></div>
           <div class="quick-card"><span class="q-icon">⚖️</span><strong>Dépôt de plainte</strong><p>Signalez un fait précis et transmettez les éléments utiles.</p><button class="btn ghost small" onclick="showView('view-complaint')">Ouvrir →</button></div>
           <div class="quick-card"><span class="q-icon">📄</span><strong>Main courante</strong><p>Consignez un différend ou un incident de service.</p><button class="btn ghost small" onclick="showView('view-maincourante')">Ouvrir →</button></div>
           <div class="quick-card"><span class="q-icon">👥</span><strong>Recrutement</strong><p>Présentez votre candidature aux différents services.</p><button class="btn ghost small" onclick="showView('view-recruitment')">Candidater →</button></div>
+        </div>
+      </section>
+
+      <!-- OUVERTURE DE TICKET -->
+      <section class="view" id="view-ticket">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Support & Assistance</div>
+              <h2>Ouvrir un ticket de service</h2>
+              <div class="muted small">Votre demande sera transmise au service sélectionné pour prise en charge et réponse sur Discord.</div>
+            </div>
+            <span class="pill info">Nouveau ticket</span>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
+            <div class="field"><label>Objet / Sujet du ticket <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information, litige..."></div>
+            <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name" placeholder="Identité RP"></div>
+            <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="tkt_roblox" placeholder="Pseudo en jeu"></div>
+            <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="tkt_discord" placeholder="@pseudo"></div>
+            <div class="field"><label>Date de la demande <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
+            <div class="field full"><label>Description détaillée de votre demande <span class="req">*</span></label><textarea id="tkt_desc" placeholder="Expliquez la raison de votre ticket en détail..."></textarea></div>
+          </div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser le ticket</button></div>
+          <div id="preview-ticket" class="preview hidden"></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
         </div>
       </section>
 
@@ -243,10 +271,6 @@
           <div class="stat"><div class="stat-label">Service</div><div class="stat-value" style="font-size:18px" id="staffService">Police</div><div class="stat-note">Actif</div></div>
           <div class="stat"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:18px" id="staffStatusDisp">En service</div><div class="stat-note">Radio OK</div></div>
         </div>
-        <div class="panel">
-          <h2>Outils rapides</h2>
-          <div class="grid grid-3" id="staffQuickLinks"></div>
-        </div>
       </section>
 
       <!-- PRISE DE SERVICE -->
@@ -296,7 +320,7 @@
         </div>
       </section>
 
-      <!-- ANNUAIRE DES EFFECTIFS (00 A 100) -->
+      <!-- ANNUAIRE DES EFFECTIFS -->
       <section class="view" id="view-directory">
         <div class="panel">
           <div class="panel-head">
@@ -344,16 +368,31 @@
         </div>
       </section>
 
-      <!-- ADMINISTRATION : EFFECTIFS (00 A 100) -->
+      <!-- ADMINISTRATION : EFFECTIFS ET MOTS DE PASSE -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
-          <h2>Gestion des effectifs (00 à 100)</h2>
-          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade et l'affectation des 101 matricules. Les modifications sont répercutées immédiatement pour tous.</p>
+          <h2>Gestion des effectifs & Mots de passe (00 à 100)</h2>
+          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade, le statut et le <b>mot de passe secret</b> de chaque agent pour sécuriser leur accès.</p>
           <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer par nom, grade, matricule..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Nom RP</th><th>Grade</th><th>Service</th><th>Statut</th><th>Action</th></tr></thead>
+              <thead><tr><th>Matricule</th><th>Nom RP</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead>
               <tbody id="adminMatBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ONGLET ADMIN DÉDIÉ : GESTION DES MOTS DE PASSE -->
+      <section class="view" id="view-admin-passwords">
+        <div class="panel">
+          <h2>🔑 Gestion centralisée des accès & Mots de passe</h2>
+          <p class="muted small" style="margin-bottom:15px">Attribuez des mots de passe individuels sécurisés pour chaque matricule. Les modifications s'appliquent immédiatement sur la base de données Cloud Supabase.</p>
+          <div class="search-row"><input id="adminPwdSearch" placeholder="Rechercher un agent..." oninput="renderAdminPasswords()"></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe actuel</th><th>Action</th></tr></thead>
+              <tbody id="adminPwdBody"></tbody>
             </table>
           </div>
         </div>
@@ -364,15 +403,14 @@
   <div class="toast-host" id="toastHost" aria-live="polite"></div>
 
   <script>
-    /* =========================================================================
-       CONFIGURATION SUPABASE CLOUD
-       ========================================================================= */
     const SUPABASE_URL = 'https://fqgecgziekhkmztawgzu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Vos Webhooks Discord exacts pré-remplis
     let webhookUrls = {
+      HOOK_TICKET_POLICE: '',
+      HOOK_TICKET_BSPN: '',
+      HOOK_TICKET_SAMU: '',
       HOOK_RECRUIT_POLICE: 'https://discord.com/api/webhooks/1360010972403666996/g1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
       HOOK_RECRUIT_BSPN: 'https://discord.com/api/webhooks/1360011037645934753/m9YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
       HOOK_RECRUIT_SAMU: 'https://discord.com/api/webhooks/1360011091530285220/p8YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
@@ -385,89 +423,88 @@
       HOOK_GAV: 'https://discord.com/api/webhooks/1360011498428108920/w1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x'
     };
 
-    // La liste complète de vos 101 matricules (00 à 100)
     const DEFAULT_ROSTER = [
-      ['00','Youskof Yorka','IGPN','IGPN','Occupé'],
-      ['01','Aram','Commandant','Police Nationale','Occupé'],
-      ['02','Motlo','Directeur','Police Nationale','Occupé'],
-      ['03','Honey','Directrice','Police Nationale','Occupé'],
-      ['04','Zappeur','Lieutenant','Police Nationale','Occupé'],
-      ['05','Osman','GPX','Police Nationale','Occupé'],
-      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé'],
-      ['07','Le T','GPX','Police Nationale','Occupé'],
-      ['08','Aaron','Capitaine','Police Nationale','Occupé'],
-      ['09','Lyky','GPX','Police Nationale','Occupé'],
-      ['10','Tatou','GPX','Police Nationale','Occupé'],
-      ['11','Ombre','GPX','Police Nationale','Occupé'],
-      ['12','Onur','GPX','Police Nationale','Occupé'],
-      ['13','Tgrm','Commandant','Police Nationale','Occupé'],
-      ['14','Monage','Formateur','Police Nationale','Occupé'],
-      ['15','Yven','Sous-Brigadier','Police Nationale','Occupé'],
-      ['16','Nono','GPX','Police Nationale','Occupé'],
-      ['17','Wdy','GPX','Police Nationale','Occupé'],
-      ['18','Vorynix','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['19','Anto','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['20','Peffcorse','Sous-Brigadier','Police Nationale','Occupé'],
-      ['21','Ghost','Lieutenant','Police Nationale','Occupé'],
-      ['22','Raph137','Capitaine-BAC','Police Nationale - BAC','Occupé'],
-      ['23','Thymote','Sous-Brigadier','Police Nationale','Occupé'],
-      ['24','Tuicareu','Brigadier','Police Nationale','Occupé'],
-      ['25','Libre','Vacant','Police Nationale','Vacant'],
-      ['26','Baptouste','Directeur-Adjoint','Police Nationale','Occupé'],
-      ['27','Libre','Vacant','Police Nationale','Vacant'],
-      ['28','Gab','Major','Police Nationale','Occupé'],
-      ['29','Tatin','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['30','Jaymaze','GPX','Police Nationale','Occupé'],
-      ['31','Loenzo','GPX','Police Nationale','Occupé'],
-      ['32','Yui','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['33','Nino','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['34','S4ch47','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['35','Blk','GPX','Police Nationale','Occupé'],
-      ['36','Adn','GPX','Police Nationale','Occupé'],
-      ['37','Valentine','GPX','Police Nationale','Occupé'],
-      ['38','Dodoby','GPX','Police Nationale','Occupé'],
-      ['39','Yaya','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['40','Scarface','GPX','Police Nationale','Occupé'],
-      ['41','Terax','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['42','Halower','Sous-Brigadier','Police Nationale','Occupé'],
-      ['43','Gab','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['44','Noam','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['45','Libre','Vacant','Police Nationale','Vacant'],
-      ['46','Hisoka','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['47','D.34','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['48','Noxyral','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['49','Louija','Brigadier','Police Nationale','Occupé'],
-      ['50','B4ptz02','GPX','Police Nationale','Occupé'],
-      ['51','Lebiscuit','GPX','Police Nationale','Occupé'],
-      ['52','Bobstant','Sous-Brigadier','Police Nationale','Occupé'],
-      ['53','Stabal620','GPX','Police Nationale','Occupé'],
-      ['54','Lsk','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['55','Ds','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['56','Trk','Brigadier-Chef','Police Nationale','Occupé'],
-      ['57','Blablacar','GPX','Police Nationale','Occupé'],
-      ['58','Axel','GPX','Police Nationale','Occupé'],
-      ['59','Darkozz21','GPX','Police Nationale','Occupé'],
-      ['60','Warlib','GPX','Police Nationale','Occupé'],
-      ['61','Alex','Brigadier','Police Nationale','Occupé'],
-      ['62','Alden','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['63','Rayane','GPX','Police Nationale','Occupé'],
-      ['64','Lays','GPX','Police Nationale','Occupé'],
-      ['65','Nuggetss','GPX','Police Nationale','Occupé'],
-      ['66','Jean Paul','GPX','Police Nationale','Occupé'],
-      ['67','Baban','GPX','Police Nationale','Occupé'],
-      ['68','Moha','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['69','Lastreet','GPX','Police Nationale','Occupé'],
-      ['70','Neyz','GPX','Police Nationale','Occupé'],
-      ['71','Baptiste','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['72','Godly','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['73','M4rv1n77','GPX-Stagiaire','Police Nationale','Occupé'],
-      ['74','Jeniija','GPX','Police Nationale','Occupé'],
-      ['75','Libre','Vacant','Police Nationale','Vacant'],
-      ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé'],
-      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant'];}),
-      ['99','Rdh','GPX','Police Nationale','Occupé'],
-      ['100','Steven','Sous-Brigadier','Police Nationale','Occupé']
-    ].map(([matricule,name,grade,service,status])=>({matricule,name,grade,service,status}));
+      ['00','Youskof Yorka','IGPN','IGPN','Occupé','MonMotDePasseSecurise'],
+      ['01','Aram','Commandant','Police Nationale','Occupé','1234'],
+      ['02','Motlo','Directeur','Police Nationale','Occupé','1234'],
+      ['03','Honey','Directrice','Police Nationale','Occupé','1234'],
+      ['04','Zappeur','Lieutenant','Police Nationale','Occupé','1234'],
+      ['05','Osman','GPX','Police Nationale','Occupé','1234'],
+      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé','1234'],
+      ['07','Le T','GPX','Police Nationale','Occupé','1234'],
+      ['08','Aaron','Capitaine','Police Nationale','Occupé','1234'],
+      ['09','Lyky','GPX','Police Nationale','Occupé','1234'],
+      ['10','Tatou','GPX','Police Nationale','Occupé','1234'],
+      ['11','Ombre','GPX','Police Nationale','Occupé','1234'],
+      ['12','Onur','GPX','Police Nationale','Occupé','1234'],
+      ['13','Tgrm','Commandant','Police Nationale','Occupé','1234'],
+      ['14','Monage','Formateur','Police Nationale','Occupé','1234'],
+      ['15','Yven','Sous-Brigadier','Police Nationale','Occupé','1234'],
+      ['16','Nono','GPX','Police Nationale','Occupé','1234'],
+      ['17','Wdy','GPX','Police Nationale','Occupé','1234'],
+      ['18','Vorynix','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['19','Anto','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['20','Peffcorse','Sous-Brigadier','Police Nationale','Occupé','1234'],
+      ['21','Ghost','Lieutenant','Police Nationale','Occupé','1234'],
+      ['22','Raph137','Capitaine-BAC','Police Nationale - BAC','Occupé','1234'],
+      ['23','Thymote','Sous-Brigadier','Police Nationale','Occupé','1234'],
+      ['24','Tuicareu','Brigadier','Police Nationale','Occupé','1234'],
+      ['25','Libre','Vacant','Police Nationale','Vacant','1234'],
+      ['26','Baptouste','Directeur-Adjoint','Police Nationale','Occupé','1234'],
+      ['27','Libre','Vacant','Police Nationale','Vacant','1234'],
+      ['28','Gab','Major','Police Nationale','Occupé','1234'],
+      ['29','Tatin','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['30','Jaymaze','GPX','Police Nationale','Occupé','1234'],
+      ['31','Loenzo','GPX','Police Nationale','Occupé','1234'],
+      ['32','Yui','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['33','Nino','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['34','S4ch47','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['35','Blk','GPX','Police Nationale','Occupé','1234'],
+      ['36','Adn','GPX','Police Nationale','Occupé','1234'],
+      ['37','Valentine','GPX','Police Nationale','Occupé','1234'],
+      ['38','Dodoby','GPX','Police Nationale','Occupé','1234'],
+      ['39','Yaya','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['40','Scarface','GPX','Police Nationale','Occupé','1234'],
+      ['41','Terax','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['42','Halower','Sous-Brigadier','Police Nationale','Occupé','1234'],
+      ['43','Gab','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['44','Noam','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['45','Libre','Vacant','Police Nationale','Vacant','1234'],
+      ['46','Hisoka','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['47','D.34','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['48','Noxyral','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['49','Louija','Brigadier','Police Nationale','Occupé','1234'],
+      ['50','B4ptz02','GPX','Police Nationale','Occupé','1234'],
+      ['51','Lebiscuit','GPX','Police Nationale','Occupé','1234'],
+      ['52','Bobstant','Sous-Brigadier','Police Nationale','Occupé','1234'],
+      ['53','Stabal620','GPX','Police Nationale','Occupé','1234'],
+      ['54','Lsk','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['55','Ds','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['56','Trk','Brigadier-Chef','Police Nationale','Occupé','1234'],
+      ['57','Blablacar','GPX','Police Nationale','Occupé','1234'],
+      ['58','Axel','GPX','Police Nationale','Occupé','1234'],
+      ['59','Darkozz21','GPX','Police Nationale','Occupé','1234'],
+      ['60','Warlib','GPX','Police Nationale','Occupé','1234'],
+      ['61','Alex','Brigadier','Police Nationale','Occupé','1234'],
+      ['62','Alden','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['63','Rayane','GPX','Police Nationale','Occupé','1234'],
+      ['64','Lays','GPX','Police Nationale','Occupé','1234'],
+      ['65','Nuggetss','GPX','Police Nationale','Occupé','1234'],
+      ['66','Jean Paul','GPX','Police Nationale','Occupé','1234'],
+      ['67','Baban','GPX','Police Nationale','Occupé','1234'],
+      ['68','Moha','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['69','Lastreet','GPX','Police Nationale','Occupé','1234'],
+      ['70','Neyz','GPX','Police Nationale','Occupé','1234'],
+      ['71','Baptiste','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['72','Godly','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['73','M4rv1n77','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ['74','Jeniija','GPX','Police Nationale','Occupé','1234'],
+      ['75','Libre','Vacant','Police Nationale','Vacant','1234'],
+      ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','1234'],
+      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant','1234'];}),
+      ['99','Rdh','GPX','Police Nationale','Occupé','1234'],
+      ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','1234']
+    ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
 
     let roster = [...DEFAULT_ROSTER];
 
@@ -481,43 +518,23 @@
       ['Infractions liées aux armes','Braquage de banque / commerces','8 000 €','15 min']
     ];
 
-    // NAVIGATION COMPLETE DONT L'ADMINISTRATION CORRIGEE
     const NAVS = {
       citoyen: [
         ['view-public-home','⌂','Accueil public'],
+        ['view-ticket','🎫','Ouvrir un ticket'],
         ['view-complaint','⚖','Dépôt de plainte'],
         ['view-maincourante','▤','Main courante'],
         ['view-recruitment','♙','Recrutement'],
         ['view-zones','⌖','Zones & règlement']
       ],
-      police: [
-        ['view-staff-home','▦','Tableau de bord'],
-        ['view-report','▤','Rapport d’intervention'],
-        ['view-service','◉','Prise / fin de service'],
-        ['view-gav','⚖','GAV & registre'],
-        ['view-directory','♙','Annuaire effectifs'],
-        ['view-penal','≡','Code pénal']
-      ],
-      bspn: [
-        ['view-staff-home','▦','Tableau de bord'],
-        ['view-report','▤','Rapport d’intervention'],
-        ['view-service','◉','Prise / fin de service'],
-        ['view-directory','♙','Annuaire effectifs']
-      ],
-      samu: [
-        ['view-staff-home','▦','Tableau de bord'],
-        ['view-report','▤','Rapport d’intervention'],
-        ['view-service','◉','Prise / fin de service'],
-        ['view-directory','♙','Annuaire effectifs']
-      ],
-      igpn: [
-        ['view-staff-home','▦','Tableau de bord'],
-        ['view-directory','♙','Annuaire effectifs']
-      ],
+      police: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-gav','⚖','GAV & registre'],['view-directory','♙','Annuaire effectifs'],['view-penal','≡','Code pénal']],
+      bspn: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
+      samu: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
+      igpn: [['view-staff-home','▦','Tableau de bord'],['view-directory','♙','Annuaire effectifs']],
       admin: [
         ['view-admin-home','↗','Webhooks Discord'],
         ['view-admin-matricules','▤','Registre 00-100'],
-        ['view-directory','♙','Annuaire global']
+        ['view-admin-passwords','🔑','Mots de passe agents']
       ]
     };
 
@@ -530,16 +547,8 @@
     function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
     function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast'+(type==='error'?' error':'');t.textContent=msg;$('toastHost').appendChild(t);setTimeout(()=>t.remove(),5000)}
     function toggleSidebar(){$('sidebar').classList.toggle('open')}
-    function showView(id){
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      $(id)?.classList.add('active');
-      document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-      $('sidebar').classList.remove('open');
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
-    function buildNav(items){
-      $('sideNav').innerHTML=items.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
-    }
+    function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'})}
+    function buildNav(items){$('sideNav').innerHTML=items.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('')}
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
     function enterCitizen(){activeSpace='citoyen';$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');$('topTitle').textContent='Portail citoyen';$('topSubtitle').textContent='Services et démarches en ligne';buildNav(NAVS.citoyen);showView('view-public-home');}
@@ -550,14 +559,21 @@
       $('loginTitle').textContent='Connexion ' + space.toUpperCase();
       const filtered = roster.filter(r => r.status==='Occupé');
       $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade} (${r.service})</option>`).join('');
+      $('loginPasswordInput').value = '';
       showView('view-login');
     }
 
-    function loginStaffSimple(){
+    function loginStaffWithPassword(){
       const mat = $('loginMatriculeSelect').value;
-      currentAgent = roster.find(r=>r.matricule===mat);
-      if(!currentAgent) return toast('Agent introuvable','error');
-      
+      const pwd = val('loginPasswordInput');
+      const agent = roster.find(r=>r.matricule===mat);
+
+      if(!agent) return toast('Agent introuvable','error');
+      if(agent.password && agent.password !== pwd){
+        return toast('❌ Mot de passe incorrect pour cet agent !','error');
+      }
+
+      currentAgent = agent;
       buildNav(NAVS[activeSpace] || NAVS.police);
       $('userChip').classList.remove('hidden');
       $('logoutBtn').classList.remove('hidden');
@@ -573,12 +589,14 @@
       $('plt_datetime').value = toLocalDatetime();
       $('mc_datetime').value = toLocalDatetime();
       $('gav_datetime').value = toLocalDatetime();
+      $('tkt_datetime').value = toLocalDatetime();
       showView('view-staff-home');
-      toast('Connexion réussie !');
+      toast('Connexion sécurisée réussie !');
     }
 
     function enterAdmin(){
       $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
+      $('adminCode').value = '';
       showView('view-admin-login');
     }
 
@@ -588,14 +606,13 @@
         $('userChip').classList.remove('hidden');
         $('logoutBtn').classList.remove('hidden');
         $('userChip').textContent = 'Administrateur';
-        $('topTitle').textContent = 'Panneau d\'Administration';
-        $('topSubtitle').textContent = 'Gestion globale des webhooks et des matricules';
         initAdminWebhooksUI();
         renderAdminMatricules();
+        renderAdminPasswords();
         showView('view-admin-home');
         toast('Accès administrateur autorisé.');
       } else {
-        toast('Code incorrect (essayez 1234)','error');
+        toast('Code administrateur incorrect','error');
       }
     }
 
@@ -622,7 +639,17 @@
 
     function previewPublic(kind){
       let embed;
-      if(kind==='plainte'){
+      if(kind==='ticket'){
+        const p={s:val('tkt_service'), subj:val('tkt_subject'), n:val('tkt_name'), r:val('tkt_roblox'), d:val('tkt_discord'), dt:val('tkt_datetime'), desc:val('tkt_desc')};
+        embed=makeEmbed(`🎫 NOUVEAU TICKET — ${p.s.toUpperCase()}`, 0x4D8DFF, [
+          {name:'Sujet', value:p.subj, inline:false},
+          {name:'Demandeur', value:`${p.n} (Roblox: ${p.r})`, inline:true},
+          {name:'Discord', value:p.d, inline:true},
+          {name:'Date ouverture', value:p.dt, inline:true},
+          {name:'Statut', value:'🟢 En attente de prise en charge', inline:true},
+          {name:'Description', value:p.desc}
+        ]);
+      } else if(kind==='plainte'){
         const p={s:val('plt_service'), c:val('plt_category'), n:val('plt_name'), r:val('plt_roblox'), d:val('plt_discord'), dt:val('plt_datetime'), desc:val('plt_desc')};
         embed=makeEmbed(`PLAINTE — ${p.s.toUpperCase()}`, 0xD85B65, [
           {name:'Déposant', value:`${p.n} (Roblox: ${p.r})`, inline:true},
@@ -679,12 +706,23 @@
       if(!embed) return toast('Aucun aperçu généré','error');
       
       let url = webhookUrls.HOOK_REPORT_POLICE;
-      if(kind==='plainte' || kind==='maincourante') url = webhookUrls.HOOK_COMPLAINT_POLICE;
-      if(kind==='recrutement') url = webhookUrls.HOOK_RECRUIT_POLICE;
-      if(kind==='gav') url = webhookUrls.HOOK_GAV;
+      if(kind === 'ticket') {
+        const s = val('tkt_service');
+        if(s === 'Police Nationale') url = webhookUrls.HOOK_TICKET_POLICE;
+        else if(s === 'BSPN') url = webhookUrls.HOOK_TICKET_BSPN;
+        else if(s === 'SAMU 92') url = webhookUrls.HOOK_TICKET_SAMU;
+      } else if(kind==='plainte' || kind==='maincourante') {
+        const s = val(kind==='plainte'?'plt_service':'mc_service');
+        url = (s === 'Police Nationale') ? webhookUrls.HOOK_COMPLAINT_POLICE : webhookUrls.HOOK_COMPLAINT_RELIEF;
+      } else if(kind==='recrutement') {
+        const s = val('rec_service');
+        if(s === 'Police Nationale') url = webhookUrls.HOOK_RECRUIT_POLICE;
+        else if(s === 'BSPN') url = webhookUrls.HOOK_RECRUIT_BSPN;
+        else if(s === 'SAMU 92') url = webhookUrls.HOOK_RECRUIT_SAMU;
+      } else if(kind==='gav') url = webhookUrls.HOOK_GAV;
 
       if(!url){
-        toast('Aucun webhook configuré pour cette action.', 'error');
+        toast('Aucun webhook configuré pour ce service dans l\'administration.', 'error');
         return;
       }
 
@@ -739,7 +777,6 @@
         toast('Webhooks sauvegardés sur Supabase Cloud !');
       } catch(e) {
         toast('Sauvegarde locale effectuée (Erreur Cloud)', 'error');
-        localStorage.setItem('nrp_webhooks', JSON.stringify(webhookUrls));
       }
     }
 
@@ -749,9 +786,9 @@
       $('adminMatBody').innerHTML = rows.map(x=>`
         <tr>
           <td><b>[${esc(x.matricule)}]</b></td>
-          <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:120px"></td>
-          <td><input id="adm_grade_${x.matricule}" value="${esc(x.grade)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:120px"></td>
-          <td>${esc(x.service)}</td>
+          <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
+          <td><input id="adm_grade_${x.matricule}" value="${esc(x.grade)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
+          <td><input id="adm_pwd_${x.matricule}" value="${esc(x.password||'1234')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
           <td>
             <select id="adm_stat_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;border-radius:4px">
               <option ${x.status==='Occupé'?'selected':''}>Occupé</option>
@@ -763,19 +800,63 @@
       `).join('');
     }
 
+    function renderAdminPasswords(){
+      const q = (val('adminPwdSearch')||'').toLowerCase();
+      const rows = roster.filter(x=>[x.matricule,x.name,x.service].join(' ').toLowerCase().includes(q));
+      $('adminPwdBody').innerHTML = rows.map(x=>`
+        <tr>
+          <td><b>[${esc(x.matricule)}]</b></td>
+          <td>${esc(x.name)} (${esc(x.grade)})</td>
+          <td>${esc(x.service)}</td>
+          <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'1234')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:140px"></td>
+          <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
+        </tr>
+      `).join('');
+    }
+
     async function updateMatricule(mat){
       const item = roster.find(r=>r.matricule===mat);
       if(item){
         item.name = val('adm_name_'+mat);
         item.grade = val('adm_grade_'+mat);
+        item.password = val('adm_pwd_'+mat);
         item.status = $('adm_stat_'+mat).value;
         
         try {
-          await sb.from('nrp_roster').upsert({ matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status });
-          toast(`Matricule [${mat}] mis à jour sur Supabase !`);
+          await sb.from('nrp_roster').upsert({ 
+            matricule: mat, 
+            name: item.name, 
+            grade: item.grade, 
+            service: item.service, 
+            status: item.status,
+            password: item.password 
+          });
+          toast(`Matricule [${mat}] et son mot de passe mis à jour sur Supabase !`);
+          renderAdminPasswords();
         } catch(e) {
-          toast(`Matricule [${mat}] mis à jour localement`, 'error');
-          localStorage.setItem('nrp_roster', JSON.stringify(roster));
+          toast(`Erreur d'enregistrement Cloud`, 'error');
+        }
+      }
+    }
+
+    async function updatePasswordOnly(mat){
+      const item = roster.find(r=>r.matricule===mat);
+      if(item){
+        item.password = val('adm_pwd_only_'+mat);
+        
+        try {
+          await sb.from('nrp_roster').upsert({ 
+            matricule: mat, 
+            name: item.name, 
+            grade: item.grade, 
+            service: item.service, 
+            status: item.status,
+            password: item.password 
+          });
+          toast(`🔑 Mot de passe de [${mat}] ${item.name} mis à jour avec succès !`);
+          renderAdminMatricules();
+        } catch(e) {
+          toast(`Erreur d'enregistrement Cloud`, 'error');
         }
       }
     }
@@ -794,7 +875,7 @@
         $('connectionLabel').textContent = 'Connecté';
       } catch(e) {
         $('cloudDot').style.background = 'var(--yellow)';
-        $('connectionLabel').textContent = 'Mode local (Vérifiez la table Supabase)';
+        $('connectionLabel').textContent = 'Mode local';
       }
       renderDirectory();
       renderPenal();
