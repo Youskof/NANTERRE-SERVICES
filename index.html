@@ -67,12 +67,12 @@
       <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne. Sélectionnez votre espace pour accéder aux démarches ou aux outils correspondant à vos fonctions.</p>
     </div>
     <div class="gateway-grid">
-      <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
-      <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
+      <button class="gateway-card" onclick="playClick(); enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
     </div>
     <div class="footnote">NANTERRE RP · PORTAIL DE GESTION DES SERVICES · ENVIRONNEMENT ROLEPLAY</div>
   </div>
@@ -89,14 +89,14 @@
         <nav class="side-nav" id="sideNav"></nav>
       </div>
       <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté à Supabase Cloud</span></div>
-        <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
+        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté</span></div>
+        <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="playClick(); returnGateway()">← Changer d'espace</button>
       </div>
     </aside>
     <main class="main">
       <div class="topbar">
         <div style="display:flex;gap:12px;align-items:flex-start">
-          <button class="btn secondary small mobile-menu" onclick="toggleSidebar()">☰</button>
+          <button class="btn secondary small mobile-menu" onclick="playClick(); toggleSidebar()">☰</button>
           <div>
             <div class="eyebrow" id="topEyebrow">Nanterre RP</div>
             <h1 class="page-title" id="topTitle">Portail citoyen</h1>
@@ -105,11 +105,11 @@
         </div>
         <div class="top-actions">
           <span class="user-chip hidden" id="userChip"></span>
-          <button class="btn ghost small hidden" id="logoutBtn" onclick="logout()">Déconnexion</button>
+          <button class="btn ghost small hidden" id="logoutBtn" onclick="playClick(); logout()">Déconnexion</button>
         </div>
       </div>
 
-      <!-- VUE CONNEXION AGENT AVEC MOT DE PASSE -->
+      <!-- VUE CONNEXION AGENT -->
       <section class="view" id="view-login">
         <div class="panel login-wrap">
           <div class="login-mark">NRP</div>
@@ -118,7 +118,7 @@
           <p id="loginDescription">Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
           <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule</label><select id="loginMatriculeSelect"></select></div>
           <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password" placeholder="Votre mot de passe secret"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter en sécurité</button></div>
+          <div class="form-actions"><button class="btn" style="width:100%" onclick="playSubmit(); loginStaffWithPassword()">Se connecter en sécurité</button></div>
         </div>
       </section>
 
@@ -130,7 +130,7 @@
           <h2>Administration générale</h2>
           <p>Entrez le code administrateur sécurisé.</p>
           <div class="field"><label>Code administrateur</label><input id="adminCode" type="password" placeholder="Code secret admin"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginAdminSimple()">Ouvrir l'administration</button></div>
+          <div class="form-actions"><button class="btn" style="width:100%" onclick="playSubmit(); loginAdminSimple()">Ouvrir l'administration</button></div>
         </div>
       </section>
 
@@ -141,14 +141,14 @@
           <h2 id="heroMainTitle">Protéger, secourir et accompagner les citoyens.</h2>
           <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations opérationnelles des services.</p>
           <div class="hero-actions">
-            <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
-            <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
+            <button class="btn" onclick="playClick(); showView('view-ticket')">🎫 Ouvrir un ticket</button>
+            <button class="btn secondary" onclick="playClick(); showView('view-complaint')">Déposer une plainte</button>
           </div>
         </div>
         <div class="panel">
           <div class="panel-head">
             <div><h2>État opérationnel des services</h2><div class="muted small">Statuts en temps réel.</div></div>
-            <button class="btn ghost small" onclick="refreshPublicStatus()">Actualiser</button>
+            <button class="btn ghost small" onclick="playClick(); refreshPublicStatus()">Actualiser</button>
           </div>
           <div class="grid grid-3" id="publicStatusGrid">
             <div class="service-card"><div class="service-title"><div class="service-icon">🛡️</div><div><strong>Police Nationale</strong><div class="service-status" id="public-police-label">En service</div></div></div><div class="service-count" id="public-police-count">3</div></div>
@@ -156,56 +156,46 @@
             <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status" id="public-samu-label">En service</div></div></div><div class="service-count" id="public-samu-count">1</div></div>
           </div>
         </div>
-        <div class="grid grid-4">
-          <div class="quick-card"><span class="q-icon">🎫</span><strong>Ouvrir un ticket</strong><p>Contactez directement le service concerné (Police, BSPN ou SAMU).</p><button class="btn ghost small" onclick="showView('view-ticket')">Ouvrir →</button></div>
-          <div class="quick-card"><span class="q-icon">⚖️</span><strong>Dépôt de plainte</strong><p>Signalez un fait précis et transmettez les éléments utiles.</p><button class="btn ghost small" onclick="showView('view-complaint')">Ouvrir →</button></div>
-          <div class="quick-card"><span class="q-icon">📄</span><strong>Main courante</strong><p>Consignez un différend ou un incident de service.</p><button class="btn ghost small" onclick="showView('view-maincourante')">Ouvrir →</button></div>
-          <div class="quick-card"><span class="q-icon">👥</span><strong>Recrutement</strong><p>Présentez votre candidature aux différents services.</p><button class="btn ghost small" onclick="showView('view-recruitment')">Candidater →</button></div>
-        </div>
       </section>
 
       <!-- OUVERTURE DE TICKET -->
       <section class="view" id="view-ticket">
         <div class="panel">
           <div class="panel-head">
-            <div>
-              <div class="eyebrow">Support & Assistance</div>
-              <h2>Ouvrir un ticket de service</h2>
-              <div class="muted small">Votre demande sera transmise au service sélectionné pour prise en charge et réponse sur Discord.</div>
-            </div>
+            <div><div class="eyebrow">Support & Assistance</div><h2>Ouvrir un ticket de service</h2></div>
             <span class="pill info">Nouveau ticket</span>
           </div>
           <div class="form-grid">
             <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Objet / Sujet du ticket <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information, litige..."></div>
+            <div class="field"><label>Objet / Sujet du ticket <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information..."></div>
             <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name" placeholder="Identité RP"></div>
             <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="tkt_roblox" placeholder="Pseudo en jeu"></div>
             <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="tkt_discord" placeholder="@pseudo"></div>
             <div class="field"><label>Date de la demande <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Description détaillée de votre demande <span class="req">*</span></label><textarea id="tkt_desc" placeholder="Expliquez la raison de votre ticket en détail..."></textarea></div>
+            <div class="field full"><label>Description détaillée <span class="req">*</span></label><textarea id="tkt_desc" placeholder="Détails du ticket..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser le ticket</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('ticket')">Prévisualiser le ticket</button></div>
           <div id="preview-ticket" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="playSubmit(); sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
         </div>
       </section>
 
       <!-- PLAINTE -->
       <section class="view" id="view-complaint">
         <div class="panel">
-          <div class="panel-head"><div><div class="eyebrow">Guichet citoyen</div><h2>Dépôt de plainte</h2><div class="muted small">Dossier de signalement transmis au service sélectionné via Webhook Discord.</div></div><span class="pill info">Formulaire public</span></div>
+          <div class="panel-head"><div><div class="eyebrow">Guichet citoyen</div><h2>Dépôt de plainte</h2></div><span class="pill info">Public</span></div>
           <div class="form-grid">
             <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="plt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
             <div class="field"><label>Nature des faits <span class="req">*</span></label><select id="plt_category"><option>Vol / Dégradation</option><option>Agression / Menaces</option><option>Infraction routière</option><option>Autre fait</option></select></div>
-            <div class="field"><label>Nom et prénom du déposant <span class="req">*</span></label><input id="plt_name" placeholder="Identité RP"></div>
+            <div class="field"><label>Nom et prénom <span class="req">*</span></label><input id="plt_name" placeholder="Identité RP"></div>
             <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="plt_roblox" placeholder="Pseudo en jeu"></div>
             <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="plt_discord" placeholder="@pseudo"></div>
             <div class="field"><label>Date et heure <span class="req">*</span></label><input id="plt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Exposé des faits <span class="req">*</span></label><textarea id="plt_desc" placeholder="Décrivez le déroulement des faits..."></textarea></div>
+            <div class="field full"><label>Exposé des faits <span class="req">*</span></label><textarea id="plt_desc" placeholder="Décrivez les faits..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('plainte')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('plainte')">Prévisualiser</button></div>
           <div id="preview-plainte" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="sendDiscordWebhook('plainte')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="playSubmit(); sendDiscordWebhook('plainte')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -220,9 +210,9 @@
             <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
             <div class="field full"><label>Récit des faits <span class="req">*</span></label><textarea id="mc_desc" placeholder="Détails de la main courante..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('maincourante')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('maincourante')">Prévisualiser</button></div>
           <div id="preview-maincourante" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="sendDiscordWebhook('maincourante')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="playSubmit(); sendDiscordWebhook('maincourante')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -236,9 +226,9 @@
             <div class="field"><label>Discord <span class="req">*</span></label><input id="rec_discord" placeholder="@pseudo"></div>
             <div class="field full"><label>Motivations <span class="req">*</span></label><textarea id="rec_motivation" placeholder="Pourquoi intégrer ce service ?"></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('recrutement')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('recrutement')">Prévisualiser</button></div>
           <div id="preview-recrutement" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="sendDiscordWebhook('recrutement')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="playSubmit(); sendDiscordWebhook('recrutement')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -262,8 +252,8 @@
           <h2 id="staffWelcome">Bienvenue dans votre espace de service.</h2>
           <p id="staffWelcomeSub">Gérez vos rapports, prises de service et interventions.</p>
           <div class="hero-actions">
-            <button class="btn" onclick="showView('view-report')">Rédiger un rapport</button>
-            <button class="btn secondary" onclick="showView('view-service')">Changer mon statut</button>
+            <button class="btn" onclick="playClick(); showView('view-report')">Rédiger un rapport</button>
+            <button class="btn secondary" onclick="playClick(); showView('view-service')">Changer mon statut</button>
           </div>
         </div>
         <div class="grid grid-3" style="margin-bottom:18px">
@@ -282,7 +272,7 @@
             <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
             <div class="field full"><label>Observations / Secteur</label><input id="svc_note" placeholder="Secteur patrouillé..."></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer et diffuser sur Discord</button></div>
+          <div class="form-actions"><button class="btn" onclick="playSubmit(); submitServiceStatus()">Enregistrer et diffuser sur Discord</button></div>
         </div>
       </section>
 
@@ -297,9 +287,9 @@
             <div class="field"><label>Effectifs engagés</label><input id="rep_team" placeholder="Noms / Matricules"></div>
             <div class="field full"><label>Déroulement des faits <span class="req">*</span></label><textarea id="rep_timeline" placeholder="Récit chronologique..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser le rapport</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewStaff('rapport')">Prévisualiser le rapport</button></div>
           <div id="preview-rapport" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Transmettre le rapport sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="playSubmit(); sendDiscordWebhook('rapport')">Transmettre le rapport sur Discord</button></div>
         </div>
       </section>
 
@@ -314,9 +304,54 @@
             <div class="field"><label>Amende / Sanction</label><input id="gav_duration" placeholder="Ex: 4000 € / 15 min"></div>
             <div class="field full"><label>Notes & droits notifiés</label><textarea id="gav_notes" placeholder="Détails de l'interpellation..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewStaff('gav')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="playClick(); previewStaff('gav')">Prévisualiser</button></div>
           <div id="preview-gav" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="sendDiscordWebhook('gav')">Enregistrer et transmettre</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="playSubmit(); sendDiscordWebhook('gav')">Enregistrer et transmettre</button></div>
+        </div>
+      </section>
+
+      <!-- TAJ / FICHIER DE POLICE CENTRALISÉ -->
+      <section class="view" id="view-taj">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>🗂️ Fichier de Police Centralisé (TAJ / STIC)</h2><div class="muted small">Recherche et consultation des antécédents judiciaires des citoyens.</div></div>
+            <span class="pill danger">Fichier Confidentiel</span>
+          </div>
+          <div class="search-row">
+            <input id="tajSearch" placeholder="Rechercher par nom de citoyen RP..." oninput="renderTajData()">
+            <button class="btn small" onclick="playClick(); showTajAddForm()">+ Ajouter une inscription</button>
+          </div>
+          <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-top:10px">
+            <h3>Nouvelle Inscription au Fichier TAJ</h3>
+            <div class="form-grid">
+              <div class="field"><label>Nom & Prénom du citoyen <span class="req">*</span></label><input id="taj_citizen" placeholder="Nom RP complet"></div>
+              <div class="field"><label>Pseudonyme Roblox</label><input id="taj_roblox" placeholder="Pseudo Roblox"></div>
+              <div class="field"><label>Catégorie <span class="req">*</span></label><select id="taj_category"><option>Garde à Vue</option><option>Amende / Infraction</option><option>Avis de Recherche</option><option>Signalement RP</option></select></div>
+              <div class="field"><label>Sanction / Peine octroyée</label><input id="taj_sanction" placeholder="Ex: 5000€ / 15 min GAV"></div>
+              <div class="field full"><label>Détails des faits inscrits <span class="req">*</span></label><textarea id="taj_details" placeholder="Motifs précis de l'inscription au fichier..."></textarea></div>
+            </div>
+            <div class="form-actions"><button class="btn" onclick="playSubmit(); saveTajEntry()">Enregistrer au fichier central</button></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Citoyen RP</th><th>Roblox</th><th>Catégorie</th><th>Motifs</th><th>Sanction</th><th>Agent Rédacteur</th></tr></thead>
+              <tbody id="tajBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- DASHBOARD STATISTIQUES & RH -->
+      <section class="view" id="view-stats">
+        <div class="panel">
+          <h2>📊 Tableau de Bord & Statistiques RH</h2>
+          <p class="muted small">Bilan des effectifs et indicateurs généraux des services.</p>
+          <div class="grid grid-4" style="margin-top:15px">
+            <div class="stat"><div class="stat-label">Total Effectifs</div><div class="stat-value" id="st_total_agents">0</div><div class="stat-note">Matricules répertoriés</div></div>
+            <div class="stat"><div class="stat-label">Agents Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div><div class="stat-note">Postes occupés</div></div>
+            <div class="stat"><div class="stat-label">Postes Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div><div class="stat-note">Places disponibles</div></div>
+            <div class="stat"><div class="stat-label">Inscriptions TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div><div class="stat-note">Fiches répertoriées</div></div>
+          </div>
         </div>
       </section>
 
@@ -363,16 +398,15 @@
           <h2>Configuration des Webhooks Discord</h2>
           <div class="form-grid" id="webhookConfigForm"></div>
           <div class="form-actions" style="margin-top:20px">
-            <button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
+            <button class="btn" onclick="playSubmit(); saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
           </div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : EFFECTIFS ET MOTS DE PASSE -->
+      <!-- ADMINISTRATION : EFFECTIFS -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
           <h2>Gestion des effectifs (00 à 100)</h2>
-          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade et le statut de chaque agent.</p>
           <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer par nom, grade, matricule..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap">
             <table class="data-table">
@@ -383,11 +417,10 @@
         </div>
       </section>
 
-      <!-- ONGLET ADMIN DÉDIÉ : GESTION DES MOTS DE PASSE -->
+      <!-- ADMINISTRATION : MOTS DE PASSE -->
       <section class="view" id="view-admin-passwords">
         <div class="panel">
           <h2>🔑 Gestion des accès & Mots de passe agents</h2>
-          <p class="muted small" style="margin-bottom:15px">Consultez et modifiez les mots de passe individuels pré-enregistrés au format <code>Nom.XXXXX</code>. Les sauvegardes se font en temps réel sur Supabase.</p>
           <div class="search-row"><input id="adminPwdSearch" placeholder="Rechercher par nom ou matricule..." oninput="renderAdminPasswords()"></div>
           <div class="table-wrap">
             <table class="data-table">
@@ -406,6 +439,70 @@
     const SUPABASE_URL = 'https://fqgecgziekhkmztawgzu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- MOTEUR SONORE WEB AUDIO API ---
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playClick() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.04);
+      } catch(e){}
+    }
+
+    function playSubmit() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(520, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch(e){}
+    }
+
+    function playBipNotification() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.setValueAtTime(1200, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(now + 0.25);
+      } catch(e){}
+    }
 
     let webhookUrls = {
       HOOK_TICKET_POLICE: '',
@@ -507,6 +604,7 @@
     ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
 
     let roster = [...DEFAULT_ROSTER];
+    let tajRecords = [];
 
     const PENAL_CODE = [
       ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
@@ -518,43 +616,55 @@
       ['Infractions liées aux armes','Braquage de banque / commerces','8 000 €','15 min']
     ];
 
-    const NAVS = {
-      citoyen: [
-        ['view-public-home','⌂','Accueil public'],
-        ['view-ticket','🎫','Ouvrir un ticket'],
-        ['view-complaint','⚖','Dépôt de plainte'],
-        ['view-maincourante','▤','Main courante'],
-        ['view-recruitment','♙','Recrutement'],
-        ['view-zones','⌖','Zones & règlement']
-      ],
-      police: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-gav','⚖','GAV & registre'],['view-directory','♙','Annuaire effectifs'],['view-penal','≡','Code pénal']],
-      bspn: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
-      samu: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
-      igpn: [['view-staff-home','▦','Tableau de bord'],['view-directory','♙','Annuaire effectifs']],
-      admin: [
-        ['view-admin-home','↗','Webhooks Discord'],
-        ['view-admin-matricules','▤','Registre 00-100'],
-        ['view-admin-passwords','🔑','Mots de passe agents']
-      ]
-    };
-
     let activeSpace = 'citoyen';
     let currentAgent = null;
+    let isAdminUser = false;
     let drafts = {};
 
     function $(id){return document.getElementById(id)}
     function val(id){return ($(id)?.value||'').trim()}
     function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-    function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast'+(type==='error'?' error':'');t.textContent=msg;$('toastHost').appendChild(t);setTimeout(()=>t.remove(),5000)}
+    function toast(msg,type='ok'){
+      const t=document.createElement('div');
+      t.className='toast'+(type==='error'?' error':'');
+      t.textContent=msg;
+      $('toastHost').appendChild(t);
+      if(type !== 'error') playBipNotification();
+      setTimeout(()=>t.remove(),5000)
+    }
     function toggleSidebar(){$('sidebar').classList.toggle('open')}
     function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'})}
-    function buildNav(items){$('sideNav').innerHTML=items.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('')}
+
+    function isHighRank(grade) {
+      if (!grade) return false;
+      const g = grade.toLowerCase();
+      return g.includes('commandant') || g.includes('directeur') || g.includes('capitaine') || g.includes('lieutenant') || g.includes('major') || g.includes('igpn');
+    }
+
+    function buildDynamicNav() {
+      const navItems = [];
+      if (activeSpace === 'citoyen') {
+        navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Zones & règlement']);
+      } else if (activeSpace === 'admin') {
+        navItems.push(['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe agents'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH']);
+      } else {
+        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']);
+        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV & registre'],['view-penal','≡','Code pénal']);
+        
+        // --- CONTRÔLE D'ACCÈS PAR GRADE (RBAC) ---
+        if (isAdminUser || (currentAgent && isHighRank(currentAgent.grade))) {
+          navItems.push(['view-taj','🗂️','Fichier TAJ/STIC']);
+          navItems.push(['view-stats','📊','Tableau de bord RH']);
+        }
+      }
+      $('sideNav').innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="playClick(); showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
+    }
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
-    function enterCitizen(){activeSpace='citoyen';$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');$('topTitle').textContent='Portail citoyen';$('topSubtitle').textContent='Services et démarches en ligne';buildNav(NAVS.citoyen);showView('view-public-home');}
+    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');$('topTitle').textContent='Portail citoyen';$('topSubtitle').textContent='Services et démarches en ligne';buildDynamicNav();showView('view-public-home');}
 
     function enterStaff(space){
-      activeSpace=space;
+      activeSpace=space;isAdminUser=false;
       $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
       $('loginTitle').textContent='Connexion ' + space.toUpperCase();
       const filtered = roster.filter(r => r.status==='Occupé');
@@ -574,7 +684,8 @@
       }
 
       currentAgent = agent;
-      buildNav(NAVS[activeSpace] || NAVS.police);
+      isAdminUser = false;
+      buildDynamicNav();
       $('userChip').classList.remove('hidden');
       $('logoutBtn').classList.remove('hidden');
       $('userChip').textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
@@ -585,6 +696,8 @@
       
       renderDirectory();
       renderPenal();
+      renderTajData();
+      renderDashboardStats();
       $('rep_datetime').value = toLocalDatetime();
       $('plt_datetime').value = toLocalDatetime();
       $('mc_datetime').value = toLocalDatetime();
@@ -602,13 +715,18 @@
 
     function loginAdminSimple(){
       if(val('adminCode')==='Nanterre2026' || val('adminCode')==='ADMIN2026'){
-        buildNav(NAVS.admin);
+        activeSpace = 'admin';
+        isAdminUser = true;
+        currentAgent = { name: 'Administrateur', matricule: '00', grade: 'Directeur', service: 'Administration' };
+        buildDynamicNav();
         $('userChip').classList.remove('hidden');
         $('logoutBtn').classList.remove('hidden');
         $('userChip').textContent = 'Administrateur';
         initAdminWebhooksUI();
         renderAdminMatricules();
         renderAdminPasswords();
+        renderTajData();
+        renderDashboardStats();
         showView('view-admin-home');
         toast('Accès administrateur autorisé.');
       } else {
@@ -618,6 +736,7 @@
 
     function logout(){
       currentAgent=null;
+      isAdminUser=false;
       $('userChip').classList.add('hidden');
       $('logoutBtn').classList.add('hidden');
       returnGateway();
@@ -722,7 +841,7 @@
       } else if(kind==='gav') url = webhookUrls.HOOK_GAV;
 
       if(!url){
-        toast('Aucun webhook configuré pour ce service dans l\'administration.', 'error');
+        toast('Aucun webhook configuré pour ce service.', 'error');
         return;
       }
 
@@ -736,10 +855,10 @@
           toast('Transmis avec succès sur Discord !');
           $('send-'+kind).classList.add('hidden');
         } else {
-          toast('Erreur lors de l\'envoi vers le webhook Discord.', 'error');
+          toast('Erreur lors de l\'envoi vers Discord.', 'error');
         }
       } catch(e) {
-        toast('Erreur réseau / CORS vers le webhook.', 'error');
+        toast('Erreur réseau / CORS.', 'error');
       }
     }
 
@@ -753,8 +872,83 @@
       const rows = roster.filter(x=>(f==='all'||(f==='vacant'?x.status==='Vacant':x.status!=='Vacant'))&&[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
       $('directoryBody').innerHTML = rows.map(x=>`<tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)}</td><td>${esc(x.grade)}</td><td>${esc(x.service)}</td><td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td></tr>`).join('');
     }
+    
     function renderPenal(){
       $('penalTableBody').innerHTML = PENAL_CODE.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+    }
+
+    // --- MODULE TAJ / STIC ---
+    function showTajAddForm(){
+      $('tajAddContainer').classList.toggle('hidden');
+    }
+
+    async function saveTajEntry(){
+      const citizen = val('taj_citizen');
+      const category = $('taj_category').value;
+      const details = val('taj_details');
+      if(!citizen || !details) return toast('Veuillez remplir le nom du citoyen et les détails.', 'error');
+
+      const newRecord = {
+        citizen_name: citizen,
+        roblox_name: val('taj_roblox'),
+        officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : '[00] Admin',
+        category: category,
+        details: details,
+        sanction: val('taj_sanction')
+      };
+
+      try {
+        const { data, error } = await sb.from('nrp_taj').insert([newRecord]).select();
+        if(error) throw error;
+        toast('Nouvelle fiche ajoutée au TAJ avec succès !');
+        $('taj_citizen').value = '';
+        $('taj_roblox').value = '';
+        $('taj_details').value = '';
+        $('taj_sanction').value = '';
+        $('tajAddContainer').classList.add('hidden');
+        loadTajCloudData();
+      } catch(e) {
+        toast('Erreur lors de la sauvegarde sur Supabase', 'error');
+      }
+    }
+
+    function renderTajData(){
+      const q = (val('tajSearch')||'').toLowerCase();
+      const rows = tajRecords.filter(t => [t.citizen_name, t.roblox_name, t.category, t.details, t.officer_matricule].join(' ').toLowerCase().includes(q));
+      $('tajBody').innerHTML = rows.map(t=>`
+        <tr>
+          <td><small class="muted">${new Date(t.created_at || Date.now()).toLocaleDateString('fr-FR')}</small></td>
+          <td><b>${esc(t.citizen_name)}</b></td>
+          <td>${esc(t.roblox_name || '-')}</td>
+          <td><span class="pill ${t.category==='Avis de Recherche'?'warn':'info'}">${esc(t.category)}</span></td>
+          <td>${esc(t.details)}</td>
+          <td>${esc(t.sanction || '-')}</td>
+          <td><small>${esc(t.officer_matricule)}</small></td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadTajCloudData(){
+      try {
+        const { data, error } = await sb.from('nrp_taj').select('*').order('created_at', { ascending: false });
+        if(data) {
+          tajRecords = data;
+          renderTajData();
+          renderDashboardStats();
+        }
+      } catch(e){}
+    }
+
+    // --- MODULE DASHBOARD STATS RH ---
+    function renderDashboardStats(){
+      const total = roster.length;
+      const active = roster.filter(r => r.status === 'Occupé').length;
+      const vacant = roster.filter(r => r.status === 'Vacant').length;
+      
+      $('st_total_agents').textContent = total;
+      $('st_active_agents').textContent = active;
+      $('st_vacant_agents').textContent = vacant;
+      $('st_total_taj').textContent = tajRecords.length;
     }
 
     function initAdminWebhooksUI(){
@@ -769,14 +963,12 @@
 
     async function saveWebhooksConfig(){
       const keys = Object.keys(webhookUrls);
-      keys.forEach(k=>{
-        webhookUrls[k] = val('wh_'+k);
-      });
+      keys.forEach(k=>{ webhookUrls[k] = val('wh_'+k); });
       try {
         await sb.from('nrp_settings').upsert({ id: 'webhooks', data: webhookUrls });
         toast('Webhooks sauvegardés sur Supabase Cloud !');
       } catch(e) {
-        toast('Sauvegarde locale effectuée (Erreur Cloud)', 'error');
+        toast('Sauvegarde locale effectuée', 'error');
       }
     }
 
@@ -795,7 +987,7 @@
               <option ${x.status==='Vacant'?'selected':''}>Vacant</option>
             </select>
           </td>
-          <td><button class="btn small" onclick="updateMatricule('${x.matricule}')">Enregistrer</button></td>
+          <td><button class="btn small" onclick="playSubmit(); updateMatricule('${x.matricule}')">Enregistrer</button></td>
         </tr>
       `).join('');
     }
@@ -809,7 +1001,7 @@
           <td>${esc(x.name)} (${esc(x.grade)})</td>
           <td>${esc(x.service)}</td>
           <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:150px"></td>
-          <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
+          <td><button class="btn small" onclick="playSubmit(); updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
         </tr>
       `).join('');
     }
@@ -821,18 +1013,13 @@
         item.grade = val('adm_grade_'+mat);
         item.password = val('adm_pwd_'+mat);
         item.status = $('adm_stat_'+mat).value;
-        
         try {
           await sb.from('nrp_roster').upsert({ 
-            matricule: mat, 
-            name: item.name, 
-            grade: item.grade, 
-            service: item.service, 
-            status: item.status,
-            password: item.password 
+            matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status, password: item.password 
           });
           toast(`Matricule [${mat}] mis à jour sur Supabase !`);
           renderAdminPasswords();
+          renderDashboardStats();
         } catch(e) {
           toast(`Erreur d'enregistrement Cloud`, 'error');
         }
@@ -843,22 +1030,28 @@
       const item = roster.find(r=>r.matricule===mat);
       if(item){
         item.password = val('adm_pwd_only_'+mat);
-        
         try {
           await sb.from('nrp_roster').upsert({ 
-            matricule: mat, 
-            name: item.name, 
-            grade: item.grade, 
-            service: item.service, 
-            status: item.status,
-            password: item.password 
+            matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status, password: item.password 
           });
-          toast(`🔑 Mot de passe de [${mat}] ${item.name} mis à jour avec succès !`);
+          toast(`🔑 Mot de passe de [${mat}] mis à jour !`);
           renderAdminMatricules();
         } catch(e) {
           toast(`Erreur d'enregistrement Cloud`, 'error');
         }
       }
+    }
+
+    // --- TEMPS RÉEL (SUPABASE REALTIME) ---
+    function setupRealtimeListeners() {
+      sb.channel('realtime:nrp_taj')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'nrp_taj' }, payload => {
+          tajRecords.unshift(payload.new);
+          renderTajData();
+          renderDashboardStats();
+          toast(`📢 Nouvel ajout au fichier TAJ : ${payload.new.citizen_name}`);
+        })
+        .subscribe();
     }
 
     async function loadCloudData(){
@@ -872,13 +1065,15 @@
           webhookUrls = settingsData.data;
         }
         $('cloudDot').style.background = 'var(--green)';
-        $('connectionLabel').textContent = 'Connecté à Supabase Cloud';
+        $('connectionLabel').textContent = 'Connecté';
       } catch(e) {
         $('cloudDot').style.background = 'var(--yellow)';
         $('connectionLabel').textContent = 'Mode local';
       }
       renderDirectory();
       renderPenal();
+      loadTajCloudData();
+      setupRealtimeListeners();
     }
 
     document.addEventListener('DOMContentLoaded',()=>{
