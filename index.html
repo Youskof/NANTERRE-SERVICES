@@ -67,12 +67,12 @@
       <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne. Sélectionnez votre espace pour accéder aux démarches ou aux outils correspondant à vos fonctions.</p>
     </div>
     <div class="gateway-grid">
-      <button class="gateway-card" onclick="playClick(); enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
-      <button class="gateway-card" onclick="playClick(); enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="playClick(); enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="playClick(); enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="playClick(); enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="playClick(); enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
+      <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
+      <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
+      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
     </div>
     <div class="footnote">NANTERRE RP · PORTAIL DE GESTION DES SERVICES · ENVIRONNEMENT ROLEPLAY</div>
   </div>
@@ -89,14 +89,14 @@
         <nav class="side-nav" id="sideNav"></nav>
       </div>
       <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté</span></div>
-        <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="playClick(); returnGateway()">← Changer d'espace</button>
+        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté à Supabase Cloud</span></div>
+        <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
       </div>
     </aside>
     <main class="main">
       <div class="topbar">
         <div style="display:flex;gap:12px;align-items:flex-start">
-          <button class="btn secondary small mobile-menu" onclick="playClick(); toggleSidebar()">☰</button>
+          <button class="btn secondary small mobile-menu" onclick="toggleSidebar()">☰</button>
           <div>
             <div class="eyebrow" id="topEyebrow">Nanterre RP</div>
             <h1 class="page-title" id="topTitle">Portail citoyen</h1>
@@ -105,7 +105,7 @@
         </div>
         <div class="top-actions">
           <span class="user-chip hidden" id="userChip"></span>
-          <button class="btn ghost small hidden" id="logoutBtn" onclick="playClick(); logout()">Déconnexion</button>
+          <button class="btn ghost small hidden" id="logoutBtn" onclick="logout()">Déconnexion</button>
         </div>
       </div>
 
@@ -118,7 +118,7 @@
           <p id="loginDescription">Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
           <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule</label><select id="loginMatriculeSelect"></select></div>
           <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password" placeholder="Votre mot de passe secret"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="playSubmit(); loginStaffWithPassword()">Se connecter en sécurité</button></div>
+          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter en sécurité</button></div>
         </div>
       </section>
 
@@ -130,7 +130,7 @@
           <h2>Administration générale</h2>
           <p>Entrez le code administrateur sécurisé.</p>
           <div class="field"><label>Code administrateur</label><input id="adminCode" type="password" placeholder="Code secret admin"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="playSubmit(); loginAdminSimple()">Ouvrir l'administration</button></div>
+          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginAdminSimple()">Ouvrir l'administration</button></div>
         </div>
       </section>
 
@@ -141,19 +141,18 @@
           <h2 id="heroMainTitle">Protéger, secourir et accompagner les citoyens.</h2>
           <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations opérationnelles des services.</p>
           <div class="hero-actions">
-            <button class="btn" onclick="playClick(); showView('view-ticket')">🎫 Ouvrir un ticket</button>
-            <button class="btn secondary" onclick="playClick(); showView('view-complaint')">Déposer une plainte</button>
+            <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
+            <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
           </div>
         </div>
         <div class="panel">
           <div class="panel-head">
             <div><h2>État opérationnel des services</h2><div class="muted small">Statuts en temps réel.</div></div>
-            <button class="btn ghost small" onclick="playClick(); refreshPublicStatus()">Actualiser</button>
           </div>
           <div class="grid grid-3" id="publicStatusGrid">
-            <div class="service-card"><div class="service-title"><div class="service-icon">🛡️</div><div><strong>Police Nationale</strong><div class="service-status" id="public-police-label">En service</div></div></div><div class="service-count" id="public-police-count">3</div></div>
-            <div class="service-card"><div class="service-title"><div class="service-icon red">🚒</div><div><strong>BSPN</strong><div class="service-status" id="public-bspn-label">En service</div></div></div><div class="service-count" id="public-bspn-count">2</div></div>
-            <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status" id="public-samu-label">En service</div></div></div><div class="service-count" id="public-samu-count">1</div></div>
+            <div class="service-card"><div class="service-title"><div class="service-icon">🛡️</div><div><strong>Police Nationale</strong><div class="service-status">En service</div></div></div><div class="service-count">3</div></div>
+            <div class="service-card"><div class="service-title"><div class="service-icon red">🚒</div><div><strong>BSPN</strong><div class="service-status">En service</div></div></div><div class="service-count">2</div></div>
+            <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status">En service</div></div></div><div class="service-count">1</div></div>
           </div>
         </div>
       </section>
@@ -174,9 +173,9 @@
             <div class="field"><label>Date de la demande <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
             <div class="field full"><label>Description détaillée <span class="req">*</span></label><textarea id="tkt_desc" placeholder="Détails du ticket..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('ticket')">Prévisualiser le ticket</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser le ticket</button></div>
           <div id="preview-ticket" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="playSubmit(); sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
         </div>
       </section>
 
@@ -193,9 +192,9 @@
             <div class="field"><label>Date et heure <span class="req">*</span></label><input id="plt_datetime" type="datetime-local"></div>
             <div class="field full"><label>Exposé des faits <span class="req">*</span></label><textarea id="plt_desc" placeholder="Décrivez les faits..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('plainte')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('plainte')">Prévisualiser</button></div>
           <div id="preview-plainte" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="playSubmit(); sendDiscordWebhook('plainte')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="sendDiscordWebhook('plainte')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -210,9 +209,9 @@
             <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
             <div class="field full"><label>Récit des faits <span class="req">*</span></label><textarea id="mc_desc" placeholder="Détails de la main courante..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('maincourante')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('maincourante')">Prévisualiser</button></div>
           <div id="preview-maincourante" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="playSubmit(); sendDiscordWebhook('maincourante')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="sendDiscordWebhook('maincourante')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -226,9 +225,9 @@
             <div class="field"><label>Discord <span class="req">*</span></label><input id="rec_discord" placeholder="@pseudo"></div>
             <div class="field full"><label>Motivations <span class="req">*</span></label><textarea id="rec_motivation" placeholder="Pourquoi intégrer ce service ?"></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewPublic('recrutement')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('recrutement')">Prévisualiser</button></div>
           <div id="preview-recrutement" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="playSubmit(); sendDiscordWebhook('recrutement')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="sendDiscordWebhook('recrutement')">Envoyer sur Discord (Webhook)</button></div>
         </div>
       </section>
 
@@ -252,8 +251,8 @@
           <h2 id="staffWelcome">Bienvenue dans votre espace de service.</h2>
           <p id="staffWelcomeSub">Gérez vos rapports, prises de service et interventions.</p>
           <div class="hero-actions">
-            <button class="btn" onclick="playClick(); showView('view-report')">Rédiger un rapport</button>
-            <button class="btn secondary" onclick="playClick(); showView('view-service')">Changer mon statut</button>
+            <button class="btn" onclick="showView('view-report')">Rédiger un rapport</button>
+            <button class="btn secondary" onclick="showView('view-service')">Changer mon statut</button>
           </div>
         </div>
         <div class="grid grid-3" style="margin-bottom:18px">
@@ -272,7 +271,7 @@
             <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
             <div class="field full"><label>Observations / Secteur</label><input id="svc_note" placeholder="Secteur patrouillé..."></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playSubmit(); submitServiceStatus()">Enregistrer et diffuser sur Discord</button></div>
+          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer et diffuser sur Discord</button></div>
         </div>
       </section>
 
@@ -287,9 +286,9 @@
             <div class="field"><label>Effectifs engagés</label><input id="rep_team" placeholder="Noms / Matricules"></div>
             <div class="field full"><label>Déroulement des faits <span class="req">*</span></label><textarea id="rep_timeline" placeholder="Récit chronologique..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewStaff('rapport')">Prévisualiser le rapport</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser le rapport</button></div>
           <div id="preview-rapport" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="playSubmit(); sendDiscordWebhook('rapport')">Transmettre le rapport sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Transmettre le rapport sur Discord</button></div>
         </div>
       </section>
 
@@ -304,9 +303,9 @@
             <div class="field"><label>Amende / Sanction</label><input id="gav_duration" placeholder="Ex: 4000 € / 15 min"></div>
             <div class="field full"><label>Notes & droits notifiés</label><textarea id="gav_notes" placeholder="Détails de l'interpellation..."></textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="playClick(); previewStaff('gav')">Prévisualiser</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewStaff('gav')">Prévisualiser</button></div>
           <div id="preview-gav" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="playSubmit(); sendDiscordWebhook('gav')">Enregistrer et transmettre</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="sendDiscordWebhook('gav')">Enregistrer et transmettre</button></div>
         </div>
       </section>
 
@@ -319,7 +318,7 @@
           </div>
           <div class="search-row">
             <input id="tajSearch" placeholder="Rechercher par nom de citoyen RP..." oninput="renderTajData()">
-            <button class="btn small" onclick="playClick(); showTajAddForm()">+ Ajouter une inscription</button>
+            <button class="btn small" onclick="showTajAddForm()">+ Ajouter une inscription</button>
           </div>
           <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-top:10px">
             <h3>Nouvelle Inscription au Fichier TAJ</h3>
@@ -330,7 +329,7 @@
               <div class="field"><label>Sanction / Peine octroyée</label><input id="taj_sanction" placeholder="Ex: 5000€ / 15 min GAV"></div>
               <div class="field full"><label>Détails des faits inscrits <span class="req">*</span></label><textarea id="taj_details" placeholder="Motifs précis de l'inscription au fichier..."></textarea></div>
             </div>
-            <div class="form-actions"><button class="btn" onclick="playSubmit(); saveTajEntry()">Enregistrer au fichier central</button></div>
+            <div class="form-actions"><button class="btn" onclick="saveTajEntry()">Enregistrer au fichier central</button></div>
           </div>
           <div class="table-wrap">
             <table class="data-table">
@@ -398,7 +397,7 @@
           <h2>Configuration des Webhooks Discord</h2>
           <div class="form-grid" id="webhookConfigForm"></div>
           <div class="form-actions" style="margin-top:20px">
-            <button class="btn" onclick="playSubmit(); saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
+            <button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
           </div>
         </div>
       </section>
@@ -442,25 +441,25 @@
             <div class="form-grid">
               <input type="hidden" id="alert_edit_id">
               <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
-              <div class="field"><label>Type de Sirène de secours (si pas de MP3)</label>
+              <div class="field"><label>Type d'alerte</label>
                 <select id="alt_type">
-                  <option value="police">Police Nationale (2 tons)</option>
-                  <option value="bspn">BSPN Pompiers (Monte-baisse)</option>
-                  <option value="samu">SAMU 92 (Bip médical)</option>
+                  <option value="police">Police Nationale</option>
+                  <option value="bspn">BSPN Pompiers</option>
+                  <option value="samu">SAMU 92</option>
                   <option value="general">Alerte Générale</option>
                 </select>
               </div>
-              <div class="field full"><label>Lien direct du fichier MP3 (Optionnel - ex: hébergé sur Discord ou web)</label><input id="alt_sound" placeholder="https://... / mon-son.mp3"></div>
-              <div class="field full"><label>Texte de l'annonce vocale (Optionnel - lu si pas de MP3 ou en complément)</label><textarea id="alt_text" placeholder="Attention à tous les services, intervention majeure en cours..."></textarea></div>
+              <div class="field full"><label>Lien direct du fichier MP3 (Optionnel)</label><input id="alt_sound" placeholder="https://... / mon-son.mp3"></div>
+              <div class="field full"><label>Texte de l'annonce vocale (Optionnel)</label><textarea id="alt_text" placeholder="Attention à tous les services, intervention majeure en cours..."></textarea></div>
             </div>
             <div class="form-actions">
-              <button class="btn" onclick="playSubmit(); saveCustomAlert()">Enregistrer l'alerte</button>
+              <button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte</button>
               <button class="btn secondary" onclick="clearAlertForm()">Effacer / Nouveau</button>
             </div>
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Titre</th><th>Type / MP3</th><th>Annonce / Fichier</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Titre</th><th>Type</th><th>Annonce / Fichier MP3</th><th>Actions</th></tr></thead>
               <tbody id="adminAlertsBody"></tbody>
             </table>
           </div>
@@ -476,130 +475,17 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- MOTEUR AUDIO & INTERACTION ---
-    let audioCtx = null;
-    function getAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      return audioCtx;
-    }
-
-    function playClick() {
-      try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.04);
-      } catch(e){}
-    }
-
-    function playSubmit() {
-      try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(520, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.08);
-      } catch(e){}
-    }
-
-    function playBipNotification() {
-      try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, now);
-        osc.frequency.setValueAtTime(1200, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(now + 0.25);
-      } catch(e){}
-    }
-
-    // --- DIFFUSION AUDIO (MP3 ou SYNTHÈSE VOCALE) ---
-    function triggerVoiceAnnouncement(text, type = 'police', soundUrl = '') {
-      getAudioContext(); // Débloque l'audio sur interaction utilisateur
-
-      // 1. Si un lien MP3 est fourni, on le lit en priorité absolue
+    // --- LECTEUR AUDIO ULTRA-SIMPLE ---
+    function playAlertSound(text, soundUrl) {
       if (soundUrl && soundUrl.trim() !== '') {
         const audio = new Audio(soundUrl.trim());
-        audio.volume = 1.0;
-        audio.play().catch(err => {
-          console.warn("Lecture MP3 bloquée ou URL invalide :", err);
-          toast("Erreur lecture MP3 (Vérifiez l'URL directe)", "error");
-        });
-      } else {
-        // Sinon, sirène synthétique de secours
-        try {
-          const ctx = getAudioContext();
-          const now = ctx.currentTime;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-
-          if (type === 'police') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(550, now);
-            osc.frequency.linearRampToValueAtTime(850, now + 0.35);
-            osc.frequency.linearRampToValueAtTime(550, now + 0.7);
-          } else if (type === 'bspn') {
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(400, now);
-            osc.frequency.linearRampToValueAtTime(900, now + 0.5);
-            osc.frequency.linearRampToValueAtTime(400, now + 1.0);
-          } else if (type === 'samu') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, now);
-            osc.frequency.setValueAtTime(440, now + 0.2);
-            osc.frequency.setValueAtTime(880, now + 0.4);
-          } else {
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(650, now);
-            osc.frequency.setValueAtTime(500, now + 0.3);
-          }
-
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          osc.stop(now + 1.2);
-        } catch(e) {}
+        audio.play().catch(e => console.warn("Erreur lecture MP3:", e));
       }
-
-      // 2. Si du texte est renseigné, la voix le lit
       if (text && text.trim() !== '' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        setTimeout(() => {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'fr-FR';
-          utterance.rate = 1.0;
-          utterance.pitch = 1.0;
-          window.speechSynthesis.speak(utterance);
-        }, soundUrl ? 200 : 900);
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'fr-FR';
+        window.speechSynthesis.speak(msg);
       }
     }
 
@@ -697,7 +583,7 @@
       ['74','Jeniija','GPX','Police Nationale','Occupé','Jeniija.91827'],
       ['75','Libre','Vacant','Police Nationale','Vacant','Libre.75000'],
       ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','Aim.38291'],
-      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}],
+      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}),
       ['99','Rdh','GPX','Police Nationale','Occupé','Rdh.99123'],
       ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','Steven.10023']
     ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
@@ -729,7 +615,6 @@
       t.className='toast'+(type==='error'?' error':'');
       t.textContent=msg;
       $('toastHost').appendChild(t);
-      if(type !== 'error') playBipNotification();
       setTimeout(()=>t.remove(),5000)
     }
     function toggleSidebar(){$('sidebar').classList.toggle('open')}
@@ -755,7 +640,7 @@
           navItems.push(['view-stats','📊','Tableau de bord RH']);
         }
       }
-      $('sideNav').innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="playClick(); showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
+      $('sideNav').innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
     }
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
@@ -1050,7 +935,7 @@
       $('st_total_taj').textContent = tajRecords.length;
     }
 
-    // --- MODULE GESTION & TEST DES ALERTES (MP3 / VOIX) ---
+    // --- MODULE GESTION & TEST DES ALERTES ---
     async function loadCustomAlerts() {
       try {
         const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
@@ -1068,11 +953,11 @@
         <tr>
           <td><b>${esc(a.title)}</b></td>
           <td><span class="pill info">${esc(a.alert_type)}</span></td>
-          <td>${a.sound_url ? '🎵 ' + esc(a.sound_url) : '🗣️ ' + esc(a.announcement_text)}</td>
+          <td>${a.sound_url ? '🎵 MP3: ' + esc(a.sound_url) : '🗣️ Text: ' + esc(a.announcement_text)}</td>
           <td>
-            <button class="btn small" onclick="playSubmit(); broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
-            <button class="btn secondary small" onclick="playClick(); editCustomAlert('${a.id}')">Modifier</button>
-            <button class="btn danger small" onclick="playClick(); deleteCustomAlert('${a.id}')">Supprimer</button>
+            <button class="btn small" onclick="broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
+            <button class="btn secondary small" onclick="editCustomAlert('${a.id}')">Modifier</button>
+            <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button>
           </td>
         </tr>
       `).join('');
@@ -1133,12 +1018,11 @@
       }
     }
 
-    // Diffusion en direct à tous les connectés
     async function broadcastLiveAlert(id) {
       const a = customAlerts.find(x => String(x.id) === String(id));
       if(!a) return;
 
-      triggerVoiceAnnouncement(a.announcement_text, a.alert_type, a.sound_url);
+      playAlertSound(a.announcement_text, a.sound_url);
       toast(`🔊 Diffusion en direct de : "${a.title}" !`);
 
       const channel = sb.channel('nrp_global_alerts');
@@ -1146,7 +1030,7 @@
       await channel.send({
         type: 'broadcast',
         event: 'trigger_alert',
-        payload: { text: a.announcement_text, type: a.alert_type, soundUrl: a.sound_url, title: a.title }
+        payload: { text: a.announcement_text, soundUrl: a.sound_url, title: a.title }
       });
     }
 
@@ -1186,7 +1070,7 @@
               <option ${x.status==='Vacant'?'selected':''}>Vacant</option>
             </select>
           </td>
-          <td><button class="btn small" onclick="playSubmit(); updateMatricule('${x.matricule}')">Enregistrer</button></td>
+          <td><button class="btn small" onclick="updateMatricule('${x.matricule}')">Enregistrer</button></td>
         </tr>
       `).join('');
     }
@@ -1200,7 +1084,7 @@
           <td>${esc(x.name)} (${esc(x.grade)})</td>
           <td>${esc(x.service)}</td>
           <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:150px"></td>
-          <td><button class="btn small" onclick="playSubmit(); updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
+          <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
         </tr>
       `).join('');
     }
@@ -1257,7 +1141,7 @@
         .on('broadcast', { event: 'trigger_alert' }, payload => {
           const data = payload.payload;
           toast(`🚨 ANNONCE OFFICIELLE : ${data.title}`);
-          triggerVoiceAnnouncement(data.text, data.type, data.soundUrl);
+          playAlertSound(data.text, data.soundUrl);
         })
         .subscribe();
     }
@@ -1273,7 +1157,7 @@
           webhookUrls = settingsData.data;
         }
         $('cloudDot').style.background = 'var(--green)';
-        $('connectionLabel').textContent = 'Connecté';
+        $('connectionLabel').textContent = 'Connecté à Supabase Cloud';
       } catch(e) {
         $('cloudDot').style.background = 'var(--yellow)';
         $('connectionLabel').textContent = 'Mode local';
