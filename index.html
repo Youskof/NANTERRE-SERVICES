@@ -344,14 +344,15 @@
         </div>
       </section>
 
-      <!-- ADMINISTRATION : EFFECTIFS -->
+      <!-- ADMINISTRATION : EFFECTIFS (00 A 100) -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
           <h2>Gestion des effectifs (00 à 100)</h2>
-          <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer..." oninput="renderAdminMatricules()"></div>
+          <p class="muted small" style="margin-bottom:15px">Modifiez le nom, le grade et l'affectation des 101 matricules. Les modifications sont répercutées immédiatement pour tous.</p>
+          <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer par nom, grade, matricule..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Nom</th><th>Grade</th><th>Service</th><th>Statut</th><th>Action</th></tr></thead>
+              <thead><tr><th>Matricule</th><th>Nom RP</th><th>Grade</th><th>Service</th><th>Statut</th><th>Action</th></tr></thead>
               <tbody id="adminMatBody"></tbody>
             </table>
           </div>
@@ -384,7 +385,7 @@
       HOOK_GAV: 'https://discord.com/api/webhooks/1360011498428108920/w1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x'
     };
 
-    // La liste complète de vos 101 matricules
+    // La liste complète de vos 101 matricules (00 à 100)
     const DEFAULT_ROSTER = [
       ['00','Youskof Yorka','IGPN','IGPN','Occupé'],
       ['01','Aram','Commandant','Police Nationale','Occupé'],
@@ -480,13 +481,44 @@
       ['Infractions liées aux armes','Braquage de banque / commerces','8 000 €','15 min']
     ];
 
+    // NAVIGATION COMPLETE DONT L'ADMINISTRATION CORRIGEE
     const NAVS = {
-      citoyen: [['view-public-home','⌂','Accueil public'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Zones & règlement']],
-      police: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-gav','⚖','GAV & registre'],['view-directory','♙','Annuaire effectifs'],['view-penal','≡','Code pénal']],
-      bspn: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
-      samu: [['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']],
-      igpn: [['view-staff-home','▦','Tableau de bord'],['view-directory','♙','Annuaire effectifs']],
-      admin: [['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100']]
+      citoyen: [
+        ['view-public-home','⌂','Accueil public'],
+        ['view-complaint','⚖','Dépôt de plainte'],
+        ['view-maincourante','▤','Main courante'],
+        ['view-recruitment','♙','Recrutement'],
+        ['view-zones','⌖','Zones & règlement']
+      ],
+      police: [
+        ['view-staff-home','▦','Tableau de bord'],
+        ['view-report','▤','Rapport d’intervention'],
+        ['view-service','◉','Prise / fin de service'],
+        ['view-gav','⚖','GAV & registre'],
+        ['view-directory','♙','Annuaire effectifs'],
+        ['view-penal','≡','Code pénal']
+      ],
+      bspn: [
+        ['view-staff-home','▦','Tableau de bord'],
+        ['view-report','▤','Rapport d’intervention'],
+        ['view-service','◉','Prise / fin de service'],
+        ['view-directory','♙','Annuaire effectifs']
+      ],
+      samu: [
+        ['view-staff-home','▦','Tableau de bord'],
+        ['view-report','▤','Rapport d’intervention'],
+        ['view-service','◉','Prise / fin de service'],
+        ['view-directory','♙','Annuaire effectifs']
+      ],
+      igpn: [
+        ['view-staff-home','▦','Tableau de bord'],
+        ['view-directory','♙','Annuaire effectifs']
+      ],
+      admin: [
+        ['view-admin-home','↗','Webhooks Discord'],
+        ['view-admin-matricules','▤','Registre 00-100'],
+        ['view-directory','♙','Annuaire global']
+      ]
     };
 
     let activeSpace = 'citoyen';
@@ -498,8 +530,16 @@
     function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
     function toast(msg,type='ok'){const t=document.createElement('div');t.className='toast'+(type==='error'?' error':'');t.textContent=msg;$('toastHost').appendChild(t);setTimeout(()=>t.remove(),5000)}
     function toggleSidebar(){$('sidebar').classList.toggle('open')}
-    function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'})}
-    function buildNav(items){$('sideNav').innerHTML=items.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('')}
+    function showView(id){
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      $(id)?.classList.add('active');
+      document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+      $('sidebar').classList.remove('open');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function buildNav(items){
+      $('sideNav').innerHTML=items.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
+    }
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
     function enterCitizen(){activeSpace='citoyen';$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');$('topTitle').textContent='Portail citoyen';$('topSubtitle').textContent='Services et démarches en ligne';buildNav(NAVS.citoyen);showView('view-public-home');}
@@ -548,6 +588,8 @@
         $('userChip').classList.remove('hidden');
         $('logoutBtn').classList.remove('hidden');
         $('userChip').textContent = 'Administrateur';
+        $('topTitle').textContent = 'Panneau d\'Administration';
+        $('topSubtitle').textContent = 'Gestion globale des webhooks et des matricules';
         initAdminWebhooksUI();
         renderAdminMatricules();
         showView('view-admin-home');
