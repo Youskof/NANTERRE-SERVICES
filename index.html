@@ -97,7 +97,18 @@
         .btn-igpn { background: #b45309; }
         .btn-igpn:hover { background: #92400e; }
 
-        .output-box { margin-top: 20px; background: #090d16; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; font-size: 0.85rem; color: #cbd5e1; max-height: 250px; overflow-y: auto; }
+        /* Style Discord Embed Preview Component */
+        .discord-embed-preview {
+            background: #2f3136; border-left: 4px solid var(--police-blue); padding: 16px; border-radius: 4px;
+            font-family: 'gg sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #dcddde; margin-top: 20px;
+        }
+        .discord-embed-author { font-size: 0.85rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .discord-embed-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .discord-embed-desc { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; margin-bottom: 12px; color: #dcddde; }
+        .discord-embed-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
+        .discord-field-name { font-size: 0.8rem; font-weight: 700; color: #b9bbbe; text-transform: uppercase; margin-bottom: 2px; }
+        .discord-field-value { font-size: 0.85rem; color: #dcddde; white-space: pre-wrap; }
+        .discord-embed-footer { font-size: 0.75rem; color: #72767d; margin-top: 10px; border-top: 1px solid #36393f; padding-top: 6px; }
 
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; }
         .admin-table th, .admin-table td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 0.9rem; }
@@ -129,7 +140,7 @@
             <button class="nav-link active" onclick="showMainSection('accueil', event)">🏠 Accueil Public</button>
             <button class="nav-link" onclick="showMainSection('zones-map', event)">🗺️ Carte & Zones EH</button>
             <button class="nav-link" onclick="showMainSection('recrutement-public', event)">📋 Recrutement</button>
-            <button class="nav-link" onclick="showMainSection('plainte-public', event)">📝 Main Courante</button>
+            <button class="nav-link" onclick="showMainSection('plainte-public', event)">📝 Plaintes & Mains Courantes</button>
             <button class="nav-link" onclick="showMainSection('reglement', event)">📜 Règlements</button>
             <button class="nav-link" onclick="showMainSection('staff-login', event)">🚨 Espace Opérationnel (Agents)</button>
             <button class="nav-link" onclick="showMainSection('admin', event)">🔒 Administration & Audit Logs</button>
@@ -170,8 +181,8 @@
                     <p>Rejoignez les rangs de la Police (BAC, BMO, Standard), de la BSPN ou du SAMU.</p>
                 </div>
                 <div class="action-card" onclick="showMainSection('plainte-public')">
-                    <h4>📝 Dépôt de Plainte en Ligne</h4>
-                    <p>Transmettez une main courante ou un signalement aux services compétents.</p>
+                    <h4>📝 Dépôt de Plainte & Mains Courantes</h4>
+                    <p>Déposez une plainte formelle ou signalez une main courante avec suivi.</p>
                 </div>
                 <div class="action-card" onclick="showMainSection('zones-map')">
                     <h4>🗺️ Recommandations & Zones EH</h4>
@@ -234,33 +245,62 @@
                 </div>
                 <div class="form-group" style="grid-column: span 2;"><label>Motivation & Expérience RP</label><textarea id="rec_motiv" placeholder="Décrivez vos motivations..."></textarea></div>
             </div>
-            <button class="btn" onclick="submitPublicApplication()">Soumettre ma candidature</button>
-            <div class="output-box" id="output_recrutement" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendCustomWebhook('output_recrutement', 'recrutement', document.getElementById('rec_service').value)">🚀 Envoyer sur le salon Candidatures Discord dédié</button>
+            <button class="btn" onclick="submitPublicApplication()">Générer ma candidature</button>
+            
+            <div id="preview_recrutement_container" style="display:none;">
+                <h4 style="margin-top:20px;">🔍 Aperçu du Rich Embed Discord</h4>
+                <div class="discord-embed-preview" id="preview_recrutement"></div>
+                <button class="btn btn-discord" onclick="sendEmbedWebhook('recrutement', document.getElementById('rec_service').value)">🚀 Envoyer au salon Webhook Discord Candidatures</button>
+            </div>
         </section>
 
-        <!-- PLAINTE PUBLIC -->
+        <!-- PLAINTE & MAIN COURANTE AMÉLIORÉE PRO -->
         <section id="plainte-public" class="section-page">
-            <h2>📝 Formulaire de Plainte / Main Courante</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Transmettez un signalement ou une main courante.</p>
+            <h2>📝 Déclaration de Plainte Formelle / Main Courante</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Formulaire officiel pour déclarer une infraction, déposer une plainte ou consigner une main courante.</p>
             
             <div class="form-grid">
-                <div class="form-group"><label>Nom & Prénom du Déclarant</label><input type="text" id="plainte_name" placeholder="Ex: Jean Martin"></div>
-                <div class="form-group"><label>Contact Discord / Tél</label><input type="text" id="plainte_contact" placeholder="Ex: @jean_nanterre"></div>
                 <div class="form-group">
-                    <label>Service destinataire</label>
+                    <label>Nature du Dépôt</label>
+                    <select id="plainte_type">
+                        <option value="⚖️ Plainte Formelle">⚖️ Plainte Formelle (Enquête & Poursuites)</option>
+                        <option value="📝 Main Courante">📝 Main Courante (Consignation de faits sans poursuites directes)</option>
+                        <option value="🔍 Signalement IGPN">🔍 Signalement IGPN (Abus de pouvoir / Bavure policière)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Service Destinataire</label>
                     <select id="plainte_service">
                         <option value="Police Nationale">Police Nationale</option>
                         <option value="BSPN">BSPN (Pompiers)</option>
                         <option value="SAMU">SAMU</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Lieu des faits (Secteur EH)</label><input type="text" id="plainte_location" placeholder="Ex: Banque Centrale / Centre-ville"></div>
-                <div class="form-group" style="grid-column: span 2;"><label>Description détaillée des faits</label><textarea id="plainte_desc" placeholder="Explications..."></textarea></div>
+
+                <!-- DÉPOSITAIRE -->
+                <div class="form-group"><label>Nom & Prénom du Dépositaire (Vous)</label><input type="text" id="plainte_depositaire_name" placeholder="Ex: Jean Martin"></div>
+                <div class="form-group"><label>Identifiant Discord (Pour suivi)</label><input type="text" id="plainte_depositaire_discord" placeholder="Ex: @jean_mart92"></div>
+                <div class="form-group"><label>Numéro de Téléphone RP / Contact</label><input type="text" id="plainte_depositaire_phone" placeholder="Ex: 555-0192 ou Radio #92"></div>
+                <div class="form-group"><label>Disponibilités pour convocation/audition</label><input type="text" id="plainte_depositaire_avail" placeholder="Ex: En soirée / Week-end"></div>
+
+                <!-- AGENTS ET SUSPECTS IMPLIQUÉS -->
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Agents impliqués / Mis en cause / Témoins (Nom, Matricule, Véhicule si connu)</label>
+                    <input type="text" id="plainte_agents_involved" placeholder="Ex: Agent BAC #42 (Patrouille Megane Banalisée) ou Agent Inconnu">
+                </div>
+
+                <div class="form-group"><label>Lieu des faits (Secteur EH)</label><input type="text" id="plainte_location" placeholder="Ex: Parking Concessionnaire / Banque EH"></div>
+                <div class="form-group"><label>Date et Heure estimées des faits</label><input type="text" id="plainte_date_facts" placeholder="Ex: Ce jour à 18h30"></div>
+
+                <div class="form-group" style="grid-column: span 2;"><label>Description détaillée et précise des faits / Preuves</label><textarea id="plainte_desc" placeholder="Racontez le déroulement chronologique..."></textarea></div>
             </div>
-            <button class="btn" onclick="submitPublicComplaint()">Transmettre la plainte</button>
-            <div class="output-box" id="output_plainte" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendCustomWebhook('output_plainte', 'plainte', document.getElementById('plainte_service').value)">🚀 Envoyer sur le salon Plaintes Discord dédié</button>
+            <button class="btn" onclick="submitPublicComplaint()">Valider et Générer la Déclaration</button>
+            
+            <div id="preview_plainte_container" style="display:none;">
+                <h4 style="margin-top:20px;">🔍 Aperçu du Rich Embed Discord</h4>
+                <div class="discord-embed-preview" id="preview_plainte"></div>
+                <button class="btn btn-discord" onclick="sendEmbedWebhook('plainte', document.getElementById('plainte_service').value)">🚀 Envoyer au salon Webhook Plaintes Discord</button>
+            </div>
         </section>
 
         <!-- REGLEMENTS -->
@@ -315,7 +355,7 @@
 
                 <!-- Prise / Fin / Pause de Service Simplifiée -->
                 <div id="service-status-tool" class="tool-panel active">
-                    <h3>📡 Gestion des Prises / Fins de Service</h3>
+                    <h3>📡 Enregistrement de Service</h3>
                     <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
                         <div class="form-group"><label>Indicatif / Unité (ex: BAC-1, BMO-02, VPI-1)</label><input type="text" id="radio_unit" placeholder="Indicatif..."></div>
                         <div class="form-group">
@@ -327,34 +367,46 @@
                             </select>
                         </div>
                     </div>
-                    <button class="btn" onclick="recordServiceStatus()">Valider et enregistrer mon statut de service</button>
-                    <div class="output-box" id="output_service" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_service_discord" style="display:none;" onclick="sendCustomWebhook('output_service', 'service', loggedInServiceCategory)">🚀 Envoyer sur le salon Prise de Service Discord</button>
+                    <button class="btn" onclick="recordServiceStatus()">Valider et Générer le Log</button>
+                    
+                    <div id="preview_service_container" style="display:none;">
+                        <h4 style="margin-top:20px;">🔍 Aperçu du Rich Embed Discord</h4>
+                        <div class="discord-embed-preview" id="preview_service"></div>
+                        <button class="btn btn-discord" onclick="sendEmbedWebhook('service', loggedInServiceCategory)">🚀 Transmettre au salon Discord Prises de Service</button>
+                    </div>
                 </div>
 
-                <!-- Rapport d'Intervention (Agent / BAC / BMO / BSPN / SAMU) -->
+                <!-- RAPPORT AMÉLIORÉ PRO (POLICE / BSPN / SAMU) -->
                 <div id="report-tool" class="tool-panel">
-                    <h3>📋 Rédaction de Rapport d'Intervention</h3>
+                    <h3>📋 Rédaction de Rapport Officiel d'Intervention</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Agent & Matricule</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
-                        <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Banque Centrale EH, Nanterre"></div>
-                        <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
-                        <div class="form-group"><label>Motif / Type d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Refus d'obtempérer / Incendie / Urgence"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé</label><textarea id="rep_details" placeholder="Déroulement complet..."></textarea></div>
+                        <div class="form-group"><label>Agent Rédacteur & Matricule</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group"><label>Agents d'appui / Co-équipiers présents</label><input type="text" id="rep_team" placeholder="Ex: Agent BAC #12, Brigadier Martin"></div>
+                        <div class="form-group"><label>Lieu précis de l'intervention (Secteur EH)</label><input type="text" id="rep_location" placeholder="Ex: Banque Centrale EH, Nanterre"></div>
+                        <div class="form-group"><label>Date / Heure de l'intervention</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
+                        <div class="form-group"><label>Motif principal / Classification</label><input type="text" id="rep_motif" placeholder="Ex: Refus d'obtempérer / Incendie / AVP"></div>
+                        <div class="form-group"><label>Suspects / Individus impliqués</label><input type="text" id="rep_suspects" placeholder="Ex: 2 individus interpellés / 1 fuite"></div>
+
+                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé des faits et actions menées</label><textarea id="rep_details" placeholder="Déroulement chronologique complet..."></textarea></div>
                     </div>
 
+                    <!-- Section Médicale pour BSPN & SAMU -->
                     <div id="medicalVictimSection" style="display:none; background: rgba(14, 116, 144, 0.1); border: 1px solid #0ea5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                         <h4 style="color: #38bdf8; margin-bottom: 10px;">🩺 Bilan Victime / Fiche Médicale d'Urgence (BSPN / SAMU)</h4>
                         <div class="form-grid" style="margin-bottom:0;">
                             <div class="form-group"><label>Glasgow (GCS / 15)</label><input type="text" id="med_glasgow" placeholder="Ex: 15/15"></div>
                             <div class="form-group"><label>Tension & Pouls</label><input type="text" id="med_ta" placeholder="Ex: 12/8 - 80 bpm"></div>
-                            <div class="form-group" style="grid-column: span 2;"><label>Gestes de premiers secours pratiqués</label><textarea id="med_gestes" placeholder="Soin, oxygène..."></textarea></div>
+                            <div class="form-group" style="grid-column: span 2;"><label>Gestes de premiers secours pratiqués</label><textarea id="med_gestes" placeholder="Soin, oxygène, immobilisation..."></textarea></div>
                         </div>
                     </div>
 
-                    <button class="btn" onclick="generateInterventionReport()">Générer le Rapport</button>
-                    <div class="output-box" id="output_intervention" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendCustomWebhook('output_intervention', 'rapport', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Rapport dédié</button>
+                    <button class="btn" onclick="generateInterventionReport()">Générer le Rapport Pro</button>
+                    
+                    <div id="preview_rapport_container" style="display:none;">
+                        <h4 style="margin-top:20px;">🔍 Aperçu du Rich Embed Discord</h4>
+                        <div class="discord-embed-preview" id="preview_rapport"></div>
+                        <button class="btn btn-discord" onclick="sendEmbedWebhook('rapport', loggedInServiceCategory)">🚀 Transmettre au salon Webhook Rapport Dédié</button>
+                    </div>
                 </div>
 
                 <!-- Module Annonce Événement Embed -->
@@ -367,8 +419,12 @@
                         <div class="form-group" style="grid-column: span 2;"><label>Description & Détails de l'événement</label><textarea id="evt_desc" placeholder="Présence obligatoire des unités..."></textarea></div>
                     </div>
                     <button class="btn" onclick="generateEventAnnouncement()">Générer l'Annonce Embed</button>
-                    <div class="output-box" id="output_event" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_event" style="display:none;" onclick="sendCustomWebhook('output_event', 'event', loggedInServiceCategory)">🚀 Envoyer sur le salon Événements Discord</button>
+                    
+                    <div id="preview_event_container" style="display:none;">
+                        <h4 style="margin-top:20px;">🔍 Aperçu du Rich Embed Discord</h4>
+                        <div class="discord-embed-preview" id="preview_event"></div>
+                        <button class="btn btn-discord" onclick="sendEmbedWebhook('event', loggedInServiceCategory)">🚀 Transmettre au salon Événements Discord</button>
+                    </div>
                 </div>
 
                 <!-- Convocations -->
@@ -382,7 +438,6 @@
                     </div>
                     <button class="btn" onclick="generateConvocation()">Générer la Convocation</button>
                     <div class="output-box" id="output_convocation" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_convocation" style="display:none;" onclick="sendCustomWebhook('output_convocation', 'convocation', loggedInServiceCategory)">🚀 Envoyer sur le salon Convocations</button>
                 </div>
 
                 <!-- GAV -->
@@ -397,7 +452,6 @@
                     </div>
                     <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV & Casier</button>
                     <div class="output-box" id="output_gav" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendCustomWebhook('output_gav', 'gav', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook GAV</button>
                 </div>
 
                 <!-- Casier -->
@@ -433,7 +487,6 @@
                     </div>
                     <button class="btn" onclick="submitMandatRequest()">Transmettre la Demande de Mandat</button>
                     <div class="output-box" id="output_mandat" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_mandat" style="display:none;" onclick="sendCustomWebhook('output_mandat', 'mandat', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Mandats</button>
                 </div>
 
                 <!-- Preuves -->
@@ -500,7 +553,6 @@
                     </div>
                     <button class="btn btn-danger" onclick="applyBlameToAgent()">Prononcer et notifier le blâme</button>
                     <div class="output-box" id="output_blame" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_blame" style="display:none;" onclick="sendCustomWebhook('output_blame', 'blame', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Blâmes</button>
                 </div>
 
                 <!-- Dotation -->
@@ -550,7 +602,7 @@
             <h2>🔒 Espace d'Administration & Audit Logs</h2>
 
             <div id="adminLoginBox" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès :</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Mot de passe d'accès Administrateur :</p>
                 <input type="password" id="adminPasswordInput" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
                 <button class="btn" onclick="checkAdminPassword()">Se connecter</button>
             </div>
@@ -558,7 +610,7 @@
             <div id="adminPanelContent" style="display:none;">
                 <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active (Supabase Cloud)</p>
 
-                <h3>🤖 Configuration Intégrale des Webhooks Discord par Spécialité</h3>
+                <h3>🤖 Configuration des 12 Webhooks Discord Officiels</h3>
                 <div class="form-grid">
                     <!-- Candidatures -->
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Candidatures - Police</label><input type="text" id="wh_rec_police" placeholder="https://..."></div>
@@ -575,14 +627,14 @@
                     <!-- Prise de Service -->
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Prises / Fins de Service</label><input type="text" id="wh_service_log" placeholder="https://..."></div>
 
-                    <!-- Rapports Police Séparés -->
+                    <!-- Rapports Police Séparés & Secours -->
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police (Agent Standard / Homme du rang)</label><input type="text" id="wh_report_Police_Agent" placeholder="https://..."></div>
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police BAC</label><input type="text" id="wh_report_Police_BAC" placeholder="https://..."></div>
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police BMO</label><input type="text" id="wh_report_Police_BMO" placeholder="https://..."></div>
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - BSPN</label><input type="text" id="wh_report_BSPN" placeholder="https://..."></div>
                     <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - SAMU</label><input type="text" id="wh_report_SAMU" placeholder="https://..."></div>
 
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhooksConfig()">Enregistrer l'ensemble des Webhooks</button></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhooksConfig()">Enregistrer l'ensemble des 12 Webhooks</button></div>
                 </div>
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
@@ -665,11 +717,31 @@
         const SUPABASE_KEY = "sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG";
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // MOT DE PASSE ADMIN FIXÉ À Nanterre2026
         const ADMIN_SECRET_PASSWORD = "Nanterre2026";
+
+        // DICTIONNAIRE PAR DÉFAUT DES 12 WEBHOOKS FOURNIS
+        const DEFAULT_WEBHOOKS = {
+            wh_rec_police: "https://discord.com/api/webhooks/1569297382175412244/PwWgWM00UdPXdZrwW2As8bitpkR7b_YEyD2p3uxmLbrvjx8jJGTMH7UZSMYWySwpYt3K",
+            wh_rec_bspn: "https://discord.com/api/webhooks/1569299579516751903/_Yq20xD_nBHQp659nfuJuzloyqzTj-bACmevmWlYYgX0OI0K9EPEJSVTDSJry8BRk9EN",
+            wh_rec_samu: "https://discord.com/api/webhooks/1569277703490768926/LI-nAyPt7aVAI3sAxfYWKBqDGc8qCCBCW0_1PtM3iTkBwOwYMHzhMTzWUn4_5eN8Armf",
+            wh_plainte_police: "https://discord.com/api/webhooks/1569297631098966107/D1vOu69J_i9HaE_oacf1_5S91jzYs3Xln3XTyn5tJvSDpN-jwf6VbTBoy3OO8f6vpIR2",
+            wh_plainte_secours: "https://discord.com/api/webhooks/1569299289333833779/WLasjHmLOsRYKCxELXl5U2t26We7oX-Pu_3Ay78ESV4tgR_2-oF89J8_5Uj0tyEwUI9Z",
+            wh_evt_police: "https://discord.com/api/webhooks/1569297780772442134/9rEr1812aO8MMxIqujCNaG6cWIVcjkdsDBzFxaYxtDDNOJGBKPbNuIiGa_sDrnCvoZvj",
+            wh_service_log: "https://discord.com/api/webhooks/1569298015045419099/P3nE1ozvaBJ3H2mA1bAHnXy4MIDCXn_Ov51iUQ6jhNU85H59emWU33JMIebwNb4nbsws",
+            wh_report_Police_Agent: "https://discord.com/api/webhooks/1569091281211228200/PWgDgw461qJGVjuAHIS0_KouEQfnD6QXekH9E95HYtzlnNfV1gl2wLzAZ133BivVhvRi",
+            wh_report_Police_BAC: "https://discord.com/api/webhooks/1569298422836502648/-YasPNS1oeEdoJ7O9303woHZAv5EmrhyJI_RaULRMGCGCpE5WWIguDRE7qod6NP990BB",
+            wh_report_Police_BMO: "https://discord.com/api/webhooks/1569298681725853698/GfZRPIg6BduJdtClTFaGNFRF69zRwIrYNU_4pBUrLLqLMDOSveQoQAi4FVsmFnGUtTMt",
+            wh_report_BSPN: "https://discord.com/api/webhooks/1569299760840450169/TV0JZqd-n1Fl7yLDU1meTO_LXm81OONJHlrfkmPQk8vTHIiZ2A88nlVgJn0XXXreJVBd",
+            wh_report_SAMU: "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q"
+        };
 
         let loggedInAgent = "";
         let loggedInServiceCategory = "";
         let loggedInRole = "";
+
+        // Stockage de l'embed à envoyer courant
+        let currentGeneratedEmbedPayload = null;
 
         const DEFAULT_RULES = [
             { title: "1. OBJECTIF & MISSIONS", content: "Le service de la Police Nationale RP sur Emergency Hamburg a pour but d'assurer la sécurité des citoyens, le maintien de l'ordre public, la prévention et la répression des infractions." },
@@ -716,47 +788,221 @@
             return `${day}/${month}/${year} à ${time}`;
         }
 
-        async function getWebhookUrl(type, serviceCat) {
-            let whs = await cloudGet('nanterre_custom_webhooks', {});
-            if (type === 'recrutement') {
-                if (serviceCat.includes('BSPN')) return whs.wh_rec_bspn || "";
-                if (serviceCat.includes('SAMU')) return whs.wh_rec_samu || "";
-                return whs.wh_rec_police || "";
-            }
-            if (type === 'plainte') {
-                if (serviceCat.includes('Police')) return whs.wh_plainte_police || "";
-                return whs.wh_plainte_secours || "";
-            }
-            if (type === 'event') return whs.wh_evt_police || "";
-            if (type === 'service') return whs.wh_service_log || "";
-            if (['rapport', 'gav', 'convocation', 'mandat', 'preuve', 'blame'].includes(type)) {
-                if (serviceCat === 'Police Nationale - BAC') return whs.wh_report_Police_BAC || "";
-                if (serviceCat === 'Police Nationale - BMO') return whs.wh_report_Police_BMO || "";
-                if (serviceCat.startsWith('Police')) return whs.wh_report_Police_Agent || "";
-                if (serviceCat.startsWith('BSPN')) return whs.wh_report_BSPN || "";
-                if (serviceCat === 'SAMU') return whs.wh_report_SAMU || "";
-            }
-            return "";
+        function getServiceColor(serviceCat) {
+            if (serviceCat.includes('BSPN')) return 14423100; // Rouge #dc2626
+            if (serviceCat.includes('SAMU')) return 13273604; // Jaune #ca8a04
+            if (serviceCat.includes('IGPN')) return 14251782; // Or #d97706
+            return 1920984; // Bleu Police #1d4ed8 par défaut
         }
 
-        async function sendCustomWebhook(elementId, type, serviceCat) {
-            let url = await getWebhookUrl(type, serviceCat);
-            if (!url) return alert(`⚠️ Aucun webhook configuré pour "${serviceCat}" (${type}). Renseignez-le dans l'Admin.`);
+        async function getWebhookUrl(type, serviceCat) {
+            let whs = await cloudGet('nanterre_custom_webhooks', DEFAULT_WEBHOOKS);
+            if (type === 'recrutement') {
+                if (serviceCat.includes('BSPN')) return whs.wh_rec_bspn;
+                if (serviceCat.includes('SAMU')) return whs.wh_rec_samu;
+                return whs.wh_rec_police;
+            }
+            if (type === 'plainte') {
+                if (serviceCat.includes('Police')) return whs.wh_plainte_police;
+                return whs.wh_plainte_secours;
+            }
+            if (type === 'event') return whs.wh_evt_police;
+            if (type === 'service') return whs.wh_service_log;
+            if (['rapport', 'gav', 'convocation', 'mandat', 'preuve', 'blame'].includes(type)) {
+                if (serviceCat === 'Police Nationale - BAC') return whs.wh_report_Police_BAC;
+                if (serviceCat === 'Police Nationale - BMO') return whs.wh_report_Police_BMO;
+                if (serviceCat.startsWith('Police')) return whs.wh_report_Police_Agent;
+                if (serviceCat.startsWith('BSPN')) return whs.wh_report_BSPN;
+                if (serviceCat === 'SAMU') return whs.wh_report_SAMU;
+            }
+            return whs.wh_report_Police_Agent;
+        }
+
+        // RENDU HTML DE L'APERÇU EMBED DISCORD
+        function renderDiscordEmbedPreview(containerId, embedObj) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
             
-            const contentText = document.getElementById(elementId).innerText;
+            let fieldsHtml = '';
+            if (embedObj.fields && embedObj.fields.length > 0) {
+                fieldsHtml = '<div class="discord-embed-fields">';
+                embedObj.fields.forEach(f => {
+                    fieldsHtml += `<div><div class="discord-field-name">${f.name}</div><div class="discord-field-value">${f.value}</div></div>`;
+                });
+                fieldsHtml += '</div>';
+            }
+
+            container.innerHTML = `
+                <div class="discord-embed-author"><span>${embedObj.author ? embedObj.author.name : 'Nanterre Services'}</span></div>
+                <div class="discord-embed-title">${embedObj.title}</div>
+                ${embedObj.description ? `<div class="discord-embed-desc">${embedObj.description}</div>` : ''}
+                ${fieldsHtml}
+                <div class="discord-embed-footer">${embedObj.footer ? embedObj.footer.text : ''}</div>
+            `;
+        }
+
+        // ENVOI EFFECTIF DISCORD JSON EMBED
+        async function sendEmbedWebhook(type, serviceCat) {
+            if (!currentGeneratedEmbedPayload) return alert("Aucun Embed n'a été généré.");
+            let url = await getWebhookUrl(type, serviceCat);
+            if (!url) return alert(`⚠️ Aucun Webhook trouvé pour ${serviceCat}.`);
+
             try {
                 await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
+                    body: JSON.stringify({ embeds: [currentGeneratedEmbedPayload] })
                 });
-                alert(`🚀 Envoyé sur Discord avec succès !`);
-                await saveAuditLog("DISCORD_WEBHOOK_SENT", `Envoi webhook type "${type}" pour ${serviceCat}`);
-            } catch (err) { alert("Erreur réseau Discord."); }
+                alert("🚀 Rich Embed envoyé sur le salon Discord avec succès !");
+                await saveAuditLog("DISCORD_EMBED_SENT", `Transmission d'un embed type "${type}" pour ${serviceCat}`);
+            } catch (err) {
+                alert("Erreur lors de l'envoi vers Discord.");
+            }
+        }
+
+        function submitPublicApplication() {
+            const name = document.getElementById('rec_name').value.trim();
+            const discord = document.getElementById('rec_discord').value.trim();
+            const service = document.getElementById('rec_service').value;
+            const motiv = document.getElementById('rec_motiv').value.trim();
+            if(!name || !motiv) return alert("Veuillez remplir votre nom et vos motivations.");
+
+            currentGeneratedEmbedPayload = {
+                title: `📋 DOSSIER DE CANDIDATURE - ${service.toUpperCase()}`,
+                color: getServiceColor(service),
+                author: { name: `Portail Recrutement Nanterre` },
+                fields: [
+                    { name: "👤 CANDIDAT RP", value: name, inline: true },
+                    { name: "💬 DISCORD", value: discord || "Non spécifié", inline: true },
+                    { name: "🏢 SERVICE VISÉ", value: service, inline: true },
+                    { name: "📝 MOTIVATIONS & EXPÉRIENCE", value: motiv }
+                ],
+                footer: { text: `Soumis le ${getFrenchTimestamp()} | Nanterre RP` }
+            };
+
+            renderDiscordEmbedPreview('preview_recrutement', currentGeneratedEmbedPayload);
+            document.getElementById('preview_recrutement_container').style.display = 'block';
+        }
+
+        function submitPublicComplaint() {
+            const type = document.getElementById('plainte_type').value;
+            const service = document.getElementById('plainte_service').value;
+            const name = document.getElementById('plainte_depositaire_name').value.trim();
+            const discord = document.getElementById('plainte_depositaire_discord').value.trim();
+            const phone = document.getElementById('plainte_depositaire_phone').value.trim();
+            const avail = document.getElementById('plainte_depositaire_avail').value.trim();
+            const agentsInvolved = document.getElementById('plainte_agents_involved').value.trim();
+            const location = document.getElementById('plainte_location').value.trim();
+            const dateFacts = document.getElementById('plainte_date_facts').value.trim();
+            const desc = document.getElementById('plainte_desc').value.trim();
+
+            if(!name || !desc) return alert("Remplissez votre nom et le détail des faits.");
+
+            currentGeneratedEmbedPayload = {
+                title: `${type.toUpperCase()} - ${service.toUpperCase()}`,
+                color: type.includes('IGPN') ? 14251782 : getServiceColor(service),
+                author: { name: `Registre des Mains Courantes & Plaintes` },
+                fields: [
+                    { name: "👤 DÉPOSITAIRE", value: `${name}\nDiscord: ${discord || 'N/A'}`, inline: true },
+                    { name: "📞 RECONTACT / DISPO", value: `Tél: ${phone || 'N/A'}\nDispo: ${avail || 'Non précisé'}`, inline: true },
+                    { name: "🚨 AGENTS / MIS EN CAUSE / TÉMOINS", value: agentsInvolved || "Non identifiés / En cours", inline: false },
+                    { name: "📍 LIEU & DATE DES FAITS", value: `Lieu: ${location || 'Nanterre'}\nHeure: ${dateFacts || 'Récents'}`, inline: true },
+                    { name: "📝 COMPTE-RENDU DÉTAILLÉ DES FAITS", value: desc }
+                ],
+                footer: { text: `Horodatage Officiel : ${getFrenchTimestamp()}` }
+            };
+
+            renderDiscordEmbedPreview('preview_plainte', currentGeneratedEmbedPayload);
+            document.getElementById('preview_plainte_container').style.display = 'block';
+        }
+
+        function generateInterventionReport() {
+            const team = document.getElementById('rep_team').value.trim();
+            const location = document.getElementById('rep_location').value.trim();
+            const datetime = document.getElementById('rep_datetime').value.trim() || getFrenchTimestamp();
+            const motif = document.getElementById('rep_motif').value.trim();
+            const suspects = document.getElementById('rep_suspects').value.trim();
+            const details = document.getElementById('rep_details').value.trim();
+
+            if(!location || !motif || !details) return alert("Remplissez les informations essentielles du rapport.");
+
+            let fields = [
+                { name: "👮 AGENT RÉDACTEUR", value: loggedInAgent, inline: true },
+                { name: "👥 AGENTS EN APPUI", value: team || "Patrouille solo", inline: true },
+                { name: "📍 LOCATION & DATE", value: `${location}\n${datetime}`, inline: true },
+                { name: "🎯 MOTIF INTERVENTION", value: motif, inline: true },
+                { name: "⚖️ SUSPECTS / INDIVIDUS", value: suspects || "Aucun / En fuite", inline: true },
+                { name: "📖 DÉROULEMENT DES FAITS", value: details }
+            ];
+
+            // Si c'est du secours (BSPN/SAMU), ajouter le bilan médical
+            if (loggedInServiceCategory.includes('BSPN') || loggedInServiceCategory.includes('SAMU')) {
+                const glasgow = document.getElementById('med_glasgow').value.trim();
+                const ta = document.getElementById('med_ta').value.trim();
+                const gestes = document.getElementById('med_gestes').value.trim();
+                if (glasgow || gestes) {
+                    fields.push({ name: "🩺 BILAN MÉDICAL / SECOURS", value: `Glasgow: ${glasgow || 'N/A'} | TA/Pouls: ${ta || 'N/A'}\nGestes: ${gestes || 'Aucun'}` });
+                }
+            }
+
+            currentGeneratedEmbedPayload = {
+                title: `📋 RAPPORT D'INTERVENTION OFFICIEL - ${loggedInServiceCategory.toUpperCase()}`,
+                color: getServiceColor(loggedInServiceCategory),
+                author: { name: `Commandement ${loggedInServiceCategory}` },
+                fields: fields,
+                footer: { text: `Rapport validé le ${getFrenchTimestamp()} par ${loggedInAgent}` }
+            };
+
+            renderDiscordEmbedPreview('preview_rapport', currentGeneratedEmbedPayload);
+            document.getElementById('preview_rapport_container').style.display = 'block';
+        }
+
+        function recordServiceStatus() {
+            const unit = document.getElementById('radio_unit').value.trim() || "Unité Standard";
+            const action = document.getElementById('service_action').value;
+
+            currentGeneratedEmbedPayload = {
+                title: `📡 LOG DE SERVICE - ${action.toUpperCase()}`,
+                color: action.includes('🟢') ? 4505472 : (action.includes('🟡') ? 13273604 : 14423100),
+                author: { name: loggedInServiceCategory },
+                fields: [
+                    { name: "👤 AGENT", value: loggedInAgent, inline: true },
+                    { name: "📻 INDICATIF / UNITÉ", value: unit, inline: true },
+                    { name: "🕒 HORODATAGE", value: getFrenchTimestamp(), inline: true }
+                ],
+                footer: { text: `Service Ops Nanterre` }
+            };
+
+            renderDiscordEmbedPreview('preview_service', currentGeneratedEmbedPayload);
+            document.getElementById('preview_service_container').style.display = 'block';
+        }
+
+        function generateEventAnnouncement() {
+            const title = document.getElementById('evt_title').value.trim();
+            const date = document.getElementById('evt_date').value.trim();
+            const lieu = document.getElementById('evt_lieu').value.trim();
+            const desc = document.getElementById('evt_desc').value.trim();
+            if(!title || !desc) return alert("Remplissez le titre et la description.");
+
+            currentGeneratedEmbedPayload = {
+                title: `📢 ANNONCE ÉVÉNEMENT - ${title.toUpperCase()}`,
+                color: getServiceColor(loggedInServiceCategory),
+                author: { name: `Service Communication Nanterre` },
+                fields: [
+                    { name: "📅 DATE & HEURE", value: date || "Immédiat", inline: true },
+                    { name: "📍 LIEU", value: lieu || "Nanterre", inline: true },
+                    { name: "👤 ORGANISATEUR", value: loggedInAgent, inline: true },
+                    { name: "📝 DÉTAILS", value: desc }
+                ],
+                footer: { text: `Publication Officielle ${getFrenchTimestamp()}` }
+            };
+
+            renderDiscordEmbedPreview('preview_event', currentGeneratedEmbedPayload);
+            document.getElementById('preview_event_container').style.display = 'block';
         }
 
         async function applyInterfaceConfig() {
-            let whs = await cloudGet('nanterre_custom_webhooks', {});
+            let whs = await cloudGet('nanterre_custom_webhooks', DEFAULT_WEBHOOKS);
             if(document.getElementById('wh_rec_police')) {
                 document.getElementById('wh_rec_police').value = whs.wh_rec_police || "";
                 document.getElementById('wh_rec_bspn').value = whs.wh_rec_bspn || "";
@@ -792,8 +1038,8 @@
                 wh_report_SAMU: document.getElementById('wh_report_SAMU').value.trim()
             };
             await cloudSave('nanterre_custom_webhooks', whs);
-            await saveAuditLog("CONFIG_WEBHOOKS", "Mise à jour de la configuration des Webhooks Discord");
-            alert("🔗 Configuration des Webhooks enregistrée !");
+            await saveAuditLog("CONFIG_WEBHOOKS", "Mise à jour des 12 Webhooks Discord");
+            alert("🔗 Configuration des Webhooks enregistrée avec succès !");
         }
 
         async function updatePublicServiceStatus() {
@@ -802,7 +1048,7 @@
             let servicesOnline = { "Police": false, "BSPN": false, "SAMU": false };
 
             accounts.forEach(acc => {
-                if (activeStaff.includes(acc.username)) {
+                if (acc && acc.serviceCat && activeStaff.includes(acc.username)) {
                     if (acc.serviceCat.startsWith('Police')) servicesOnline["Police"] = true;
                     if (acc.serviceCat.startsWith('BSPN')) servicesOnline["BSPN"] = true;
                     if (acc.serviceCat === 'SAMU') servicesOnline["SAMU"] = true;
@@ -848,44 +1094,6 @@
             if(toolId === 'police-penal-tool') renderCodePenal();
             if(toolId === 'hc-stats-tool') { renderHCStatsAndReports(); renderPlanningTable(); }
             if(toolId === 'blame-tool') populateBlameAgentsDropdown();
-        }
-
-        async function recordServiceStatus() {
-            const unit = document.getElementById('radio_unit').value.trim() || "Unité standard";
-            const action = document.getElementById('service_action').value;
-            const text = `=== 📡 LOG DE SERVICE ===\nAgent : ${loggedInAgent}\nService : ${loggedInServiceCategory}\nIndicatif/Unité : ${unit}\nAction : ${action}\nDate/Heure : ${getFrenchTimestamp()}`;
-            
-            const out = document.getElementById('output_service');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_service_discord').style.display = 'block';
-
-            let activeStaff = await cloudGet('nanterre_active_staff', []);
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let foundAcc = accounts.find(a => loggedInAgent.includes(a.name));
-
-            if (action.includes('🟢 Prise')) {
-                if(foundAcc && !activeStaff.includes(foundAcc.username)) activeStaff.push(foundAcc.username);
-            } else if (action.includes('🔴 Fin')) {
-                if(foundAcc) activeStaff = activeStaff.filter(u => u !== foundAcc.username);
-            }
-            await cloudSave('nanterre_active_staff', activeStaff);
-            updatePublicServiceStatus();
-            alert("Statut enregistre !");
-        }
-
-        function generateEventAnnouncement() {
-            const title = document.getElementById('evt_title').value.trim();
-            const date = document.getElementById('evt_date').value.trim();
-            const lieu = document.getElementById('evt_lieu').value.trim();
-            const desc = document.getElementById('evt_desc').value.trim();
-            if(!title || !desc) return alert("Remplissez le titre et la description.");
-
-            let text = `=== 📢 ANNONCE ÉVÉNEMENT POLICE ===\n📢 Titre : ${title}\n📅 Date & Heure : ${date}\n📍 Lieu : ${lieu}\n📝 Détails :\n${desc}\nOrganisé par : ${loggedInAgent}`;
-            const out = document.getElementById('output_event');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_event').style.display = 'block';
         }
 
         async function renderAuditLogs() {
@@ -1025,31 +1233,6 @@
             renderCodePenal();
         }
 
-        function submitPublicApplication() {
-            const name = document.getElementById('rec_name').value.trim();
-            const discord = document.getElementById('rec_discord').value.trim();
-            const service = document.getElementById('rec_service').value;
-            const motiv = document.getElementById('rec_motiv').value.trim();
-            if(!name || !motiv) return alert("Veuillez remplir votre nom et vos motivations.");
-            let text = `=== 📋 NOUVELLE CANDIDATURE ===\nService : ${service}\nCandidat : ${name} (${discord})\nMotivations :\n${motiv}`;
-            const out = document.getElementById('output_recrutement');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_rec_discord').style.display = 'block';
-        }
-
-        function submitPublicComplaint() {
-            const name = document.getElementById('plainte_name').value.trim();
-            const service = document.getElementById('plainte_service').value;
-            const desc = document.getElementById('plainte_desc').value.trim();
-            if(!name || !desc) return alert("Remplissez tous les champs.");
-            let text = `=== 📝 PLAINTE / MAIN COURANTE ===\nService : ${service}\nDéclarant : ${name}\nDescription :\n${desc}`;
-            const out = document.getElementById('output_plainte');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_plainte_discord').style.display = 'block';
-        }
-
         function copyMirandaRights() {
             navigator.clipboard.writeText("🔴 DROITS MIRANDA + :\n1. Droit au silence.\n2. Droit à un avocat.\n3. Droit à un appel unique (2 min).\n4. Droit médical d'urgence.").then(() => alert("Droits Miranda copiés !"));
         }
@@ -1069,9 +1252,9 @@
             const out = document.getElementById('output_gav');
             out.innerText = text;
             out.style.display = 'block';
-            document.getElementById('send_gav').style.display = 'block';
+
             await saveAuditLog("GAV_REGISTERED", `GAV enregistrée pour ${suspect} par ${officer}`);
-            alert("GAV enregistrée !");
+            alert("GAV enregistrée au casier !");
         }
 
         async function renderCasierJudiciaire() {
@@ -1124,12 +1307,12 @@
             const user = document.getElementById('staffUser').value.trim().toLowerCase();
             const pass = document.getElementById('staffPass').value.trim();
             let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let found = accounts.find(a => a.username.toLowerCase() === user && a.password === pass);
+            let found = accounts.find(a => a && a.username && a.username.toLowerCase() === user && a.password === pass);
 
             if (found) {
-                loggedInAgent = `${found.name} [Matricule ${found.matricule}]`;
-                loggedInServiceCategory = found.serviceCat;
-                loggedInRole = found.role;
+                loggedInAgent = `${found.name || user} [Matricule ${found.matricule || '00'}]`;
+                loggedInServiceCategory = found.serviceCat || "Police Nationale - Agent Standard";
+                loggedInRole = found.role || "agent";
 
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
@@ -1140,7 +1323,7 @@
                 document.getElementById('igpn_inspector').value = loggedInAgent;
 
                 // Masquage / Affichage par habilitation
-                if (loggedInServiceCategory.startsWith('Police')) {
+                if (loggedInServiceCategory && loggedInServiceCategory.startsWith('Police')) {
                     document.getElementById('policeGAVBtn').style.display = 'inline-block';
                     document.getElementById('policeCasierBtn').style.display = 'inline-block';
                     document.getElementById('policeMirandaBtn').style.display = 'inline-block';
@@ -1155,6 +1338,11 @@
                 if (loggedInRole === 'hc') {
                     document.getElementById('blameToolBtn').style.display = 'inline-block';
                     document.getElementById('hcTabBtn').style.display = 'inline-block';
+                }
+
+                // Affichage formulaire médical si secours
+                if (loggedInServiceCategory && (loggedInServiceCategory.includes('BSPN') || loggedInServiceCategory.includes('SAMU'))) {
+                    document.getElementById('medicalVictimSection').style.display = 'block';
                 }
 
                 updatePublicServiceStatus();
@@ -1182,7 +1370,7 @@
                 await applyInterfaceConfig();
                 alert("✅ Connexion Administrateur réussie !");
             } else {
-                alert("❌ Mot de passe incorrect !");
+                alert("❌ Mot de passe incorrect ! (Secret: Nanterre2026)");
             }
         }
 
