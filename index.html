@@ -26,6 +26,7 @@
         header {
             text-align: center; margin-bottom: 25px; padding: 25px;
             background: var(--card-bg); border-radius: 12px; border-bottom: 4px solid var(--police-blue);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         header h1 { color: var(--text-main); font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 1px; }
         header p { color: var(--text-muted); }
@@ -65,7 +66,7 @@
         .service-status-card { background: #0f172a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; }
 
         .sub-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+        .sub-btn { background: #0f172a; color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
         .sub-btn.active { background: var(--police-dark); color: white; border-color: var(--police-blue); }
         .tool-panel { display: none; }
         .tool-panel.active { display: block; }
@@ -82,7 +83,7 @@
         .stat-card h4 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; }
         .stat-card .stat-val { font-size: 1.8rem; font-weight: bold; color: #4ade80; }
 
-        .btn { background: var(--police-blue); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; }
+        .btn { background: var(--police-blue); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; transition: background 0.2s; }
         .btn:hover { background: var(--police-dark); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; width: auto; }
         .btn-secondary { background: #334155; margin-top: 10px; }
@@ -126,9 +127,9 @@
 
         <!-- ACCUEIL PUBLIC -->
         <section id="accueil" class="section-page active">
-            <div class="hero-banner" id="homeHeroBanner" style="background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80') center/cover;">
-                <h3 id="heroTitle">Sécurité & Secours - Ville de Nanterre</h3>
-                <p id="heroSubtitle">Coordination des services de la Police Nationale, de la BSPN et du SAMU 24h/24 et 7j/7.</p>
+            <div class="hero-banner" id="homeHeroBanner">
+                <h3>Sécurité & Secours - Ville de Nanterre</h3>
+                <p>Coordination des services de la Police Nationale, de la BSPN et du SAMU 24h/24 et 7j/7.</p>
             </div>
 
             <div class="alert-ticker">
@@ -139,7 +140,7 @@
             <h2>Statut Opérationnel des Services en Direct</h2>
             <div class="service-status-grid">
                 <div class="service-status-card">
-                    <div><strong>Police Nationale</strong><br><small style="color:var(--text-muted)">Ordre & Sécurité</small></div>
+                    <div><strong>Police Nationale</strong><br><small style="color:var(--text-muted)">Ordre & Sécurité (Agent, BAC, BMO)</small></div>
                     <div><span class="status-dot" id="dot_police"></span><span id="label_police" style="font-size:0.85rem">Hors service</span></div>
                 </div>
                 <div class="service-status-card">
@@ -178,24 +179,26 @@
                 <div class="form-group"><label>Nom & Prénom / Identité</label><input type="text" id="rec_name" placeholder="Ex: Lucas Bernard"></div>
                 <div class="form-group"><label>Contact Discord</label><input type="text" id="rec_discord" placeholder="Ex: @lucas_92"></div>
                 <div class="form-group">
-                    <label>Service visé</label>
+                    <label>Service / Unité visé(e)</label>
                     <select id="rec_service">
-                        <option value="Police Nationale">Police Nationale</option>
-                        <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                        <option value="Police Nationale - Agent Standard">Police Nationale - Agent Standard</option>
+                        <option value="Police Nationale - BAC">Police Nationale - BAC</option>
+                        <option value="Police Nationale - BMO">Police Nationale - BMO</option>
+                        <option value="BSPN - Homme du rang">BSPN - Homme du rang</option>
                         <option value="SAMU">SAMU</option>
                     </select>
                 </div>
-                <div class="form-group" style="grid-column: span 2;"><label>Motivation & Expérience</label><textarea id="rec_motiv" placeholder="Expliquez vos motivations et vos expériences passées..."></textarea></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Motivation & Expérience</label><textarea id="rec_motiv" placeholder="Expliquez vos motivations..."></textarea></div>
             </div>
             <button class="btn" onclick="submitPublicApplication()">Soumettre ma candidature</button>
             <div class="output-box" id="output_recrutement" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendCustomWebhook('output_recrutement', 'recrutement', document.getElementById('rec_service').value)">🚀 Envoyer sur Discord (Recrutement)</button>
+            <button class="btn btn-discord" id="send_rec_discord" style="display:none;" onclick="sendCustomWebhook('output_recrutement', 'recrutement', document.getElementById('rec_service').value)">🚀 Envoyer sur le salon Recrutement Discord dédié</button>
         </section>
 
         <!-- FORMULAIRE PLAINTE CITOYEN -->
         <section id="plainte-public" class="section-page">
             <h2>📝 Formulaire de Plainte / Main Courante</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Remplissez ce formulaire pour notifier les services officiels de Nanterre.</p>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Transmettez une main courante ou un signalement aux services de Nanterre.</p>
             
             <div class="form-grid">
                 <div class="form-group"><label>Nom & Prénom du Déclarant</label><input type="text" id="plainte_name" placeholder="Ex: Jean Martin"></div>
@@ -211,24 +214,23 @@
                 <div class="form-group"><label>Lieu des faits</label><input type="text" id="plainte_location" placeholder="Ex: Centre-ville, Nanterre"></div>
                 <div class="form-group" style="grid-column: span 2;"><label>Description détaillée des faits</label><textarea id="plainte_desc" placeholder="Décrivez précisément l'événement..."></textarea></div>
             </div>
-            <button class="btn" onclick="submitPublicComplaint()">Transmettre la plainte / main courante</button>
+            <button class="btn" onclick="submitPublicComplaint()">Transmettre la plainte</button>
             <div class="output-box" id="output_plainte" style="display:none;"></div>
-            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendCustomWebhook('output_plainte', 'plainte', document.getElementById('plainte_service').value)">🚀 Envoyer sur Discord (Plainte)</button>
+            <button class="btn btn-discord" id="send_plainte_discord" style="display:none;" onclick="sendCustomWebhook('output_plainte', 'plainte', document.getElementById('plainte_service').value)">🚀 Envoyer sur le salon Plaintes Discord dédié</button>
         </section>
 
         <!-- REGLEMENTS -->
         <section id="reglement" class="section-page">
             <h2>📜 Règlements & Consignes Officielles</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Directives opérationnelles et réglementations en vigueur sur la commune de Nanterre.</p>
             <div id="rulesContainer"></div>
         </section>
 
         <!-- ESPACE OPERATIONNEL (AGENTS & HC) -->
         <section id="staff-login" class="section-page">
-            <h2>🚨 Espace Opérationnel & Haut Comité (HC)</h2>
+            <h2>🚨 Espace Opérationnel & Hiérarchie</h2>
             
             <div id="staffLoginForm" class="admin-login-box">
-                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion agents, cadres ou direction (HC) :</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Connexion agents, cadres ou direction :</p>
                 <input type="text" id="staffUser" placeholder="Identifiant..." style="width: 100%; margin-bottom: 10px;">
                 <input type="password" id="staffPass" placeholder="Mot de passe..." style="width: 100%; margin-bottom: 15px;">
                 <button class="btn" onclick="loginStaff()">Se connecter</button>
@@ -243,33 +245,32 @@
                 <div class="sub-nav">
                     <button class="sub-btn active" onclick="showTool('service-status-tool', event)">📡 Prise de Service & Radio</button>
                     <button class="sub-btn" onclick="showTool('report-tool', event)">📋 Rédiger un Rapport</button>
+                    <button class="sub-btn" onclick="showTool('convocation-tool', event)">📨 Convocations</button>
                     
-                    <!-- NOUVEAUX ONGLETS POLICE / OPERATIONNELS -->
+                    <!-- Outils spécifiques Police -->
                     <button class="sub-btn" id="policeGAVBtn" style="display:none;" onclick="showTool('gav-tool', event)">⚖️ Registre GAV</button>
                     <button class="sub-btn" id="policeCasierBtn" style="display:none; background:#047857; border-color:#10b981;" onclick="showTool('casier-tool', event)">📂 Casier Judiciaire</button>
                     <button class="sub-btn" id="policeMirandaBtn" style="display:none; background:#374151; border-color:#4b5563;" onclick="showTool('miranda-tool', event)">⚖️ Droits Miranda +</button>
-                    <button class="sub-btn" id="policeMandatBtn" style="display:none; background:#1e3a8a; border-color:#3b82f6;" onclick="showTool('mandat-tool', event)">📜 Demande de Mandats</button>
+                    <button class="sub-btn" id="policeMandatBtn" style="display:none; background:#1e3a8a; border-color:#3b82f6;" onclick="showTool('mandat-tool', event)">📜 Mandats</button>
                     <button class="sub-btn" id="policePreuveBtn" style="display:none; background:#6d28d9; border-color:#8b5cf6;" onclick="showTool('preuve-tool', event)">🎥 Caméras & Preuves</button>
-
-                    <button class="sub-btn" id="policeArreteBtn" style="display:none; background: #1e3a8a; border-color: #3b82f6;" onclick="showTool('arrete-tool', event)">📜 Arrêtés (Haut Comm.)</button>
+                    <button class="sub-btn" id="policeArreteBtn" style="display:none; background:#1e3a8a; border-color:#3b82f6;" onclick="showTool('arrete-tool', event)">📜 Arrêtés</button>
                     
-                    <!-- SOUS-ONGLETS EXCLUSIFS POLICE -->
                     <button class="sub-btn police-exclusive-tab" id="policePenalBtn" style="display:none; background:#0f766e; border-color:#14b8a6;" onclick="showTool('police-penal-tool', event)">📖 Code Pénal</button>
-                    <button class="sub-btn police-exclusive-tab" id="policeGradesBtn" style="display:none; background:#0f766e; border-color:#14b8a6;" onclick="showTool('police-grades-tool', event)">🏅 Grades & Hiérarchie</button>
+                    <button class="sub-btn police-exclusive-tab" id="policeGradesBtn" style="display:none; background:#0f766e; border-color:#14b8a6;" onclick="showTool('police-grades-tool', event)">🏅 Grades Police</button>
                     <button class="sub-btn police-exclusive-tab" id="policeRadioBtn" style="display:none; background:#0f766e; border-color:#14b8a6;" onclick="showTool('police-radio-tool', event)">📡 Codes Radio</button>
 
-                    <button class="sub-btn" id="blameToolBtn" style="display:none; background: #7f1d1d; border-color: #ef4444;" onclick="showTool('blame-tool', event)">⚠️ Sanctions & Blâmes (HC)</button>
-                    <button class="sub-btn" onclick="showTool('armement-tool', event)">🔫 Dotation & Matériel</button>
-                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Effectifs & Matricules</button>
+                    <!-- Outils de gestion / HC -->
+                    <button class="sub-btn" id="blameToolBtn" style="display:none; background: #7f1d1d; border-color: #ef4444;" onclick="showTool('blame-tool', event)">⚠️ Blâmes & Sanctions</button>
+                    <button class="sub-btn" onclick="showTool('armement-tool', event)">🔫 Dotation Matériel</button>
+                    <button class="sub-btn" onclick="showTool('staff-list-tool', event)">👥 Annuaire Effectifs</button>
                     <button class="sub-btn" id="hcTabBtn" style="display:none; background: #9a3412; border-color: #c2410c;" onclick="showTool('hc-stats-tool', event)">📊 Panneau HC & Planning</button>
                 </div>
 
                 <!-- Prise de Service & Statut Radio -->
                 <div id="service-status-tool" class="tool-panel active">
                     <h3>📡 Gestion des Prises de Service & Statut Radio</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Indiquez votre position et votre statut actuel sur le terrain :</p>
                     <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
-                        <div class="form-group"><label>Indicatif / Unité</label><input type="text" id="radio_unit" placeholder="Ex: Alpha-1 / VPI-12 / SAMU-02"></div>
+                        <div class="form-group"><label>Indicatif / Unité (ex: BAC-1, BMO-02, VPI-1)</label><input type="text" id="radio_unit" placeholder="Indicatif..."></div>
                         <div class="form-group">
                             <label>Statut Radio / Terrain</label>
                             <select id="radio_state">
@@ -278,202 +279,163 @@
                                 <option value="🟡 En pause / Au QG">🟡 En pause / Au QG</option>
                             </select>
                         </div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="updateAgentRadioStatus()">Mettre à jour mon statut radio</button></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="updateAgentRadioStatus()">Mettre à jour mon statut radio en direct</button></div>
                     </div>
                 </div>
 
-                <!-- Rapport d'Intervention unifié -->
+                <!-- Rapport d'Intervention -->
                 <div id="report-tool" class="tool-panel">
                     <h3>📋 Rédaction de Rapport d'Intervention</h3>
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label>Service Émetteur</label>
-                            <select id="rep_service" onchange="toggleMedicalSection(this.value)">
-                                <option value="Police Nationale">Police Nationale</option>
-                                <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
-                                <option value="SAMU">SAMU</option>
-                            </select>
-                        </div>
                         <div class="form-group"><label>Agent & Matricule</label><input type="text" id="rep_agent" readonly style="background:#090d16; color:#38bdf8;"></div>
                         <div class="form-group"><label>Lieu de l'intervention</label><input type="text" id="rep_location" placeholder="Ex: Avenue Joliot-Curie, Nanterre"></div>
                         <div class="form-group"><label>Date / Heure</label><input type="text" id="rep_datetime" placeholder="JJ/MM/AAAA à HH:MM"></div>
-                        <div class="form-group"><label>Motif / Type d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie / Arrêt Cardiaque / Vol à main armée"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé</label><textarea id="rep_details" placeholder="Rédigez le déroulement..."></textarea></div>
+                        <div class="form-group"><label>Motif / Type d'intervention</label><input type="text" id="rep_motif" placeholder="Ex: Incendie / Braquage / Urgence médicale"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Compte-rendu détaillé</label><textarea id="rep_details" placeholder="Rédigez le déroulement complet de l'intervention..."></textarea></div>
                     </div>
 
-                    <!-- Encart Bilan Victime / Fiche Médicale -->
                     <div id="medicalVictimSection" style="display:none; background: rgba(14, 116, 144, 0.1); border: 1px solid #0ea5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <h4 style="color: #38bdf8; margin-bottom: 10px;">🩺 Bilan Victime / Fiche Médicale d'Urgence</h4>
+                        <h4 style="color: #38bdf8; margin-bottom: 10px;">🩺 Bilan Victime / Fiche Médicale d'Urgence (BSPN / SAMU)</h4>
                         <div class="form-grid" style="margin-bottom:0;">
-                            <div class="form-group"><label>État de conscience (Glasgow / 15)</label><input type="text" id="med_glasgow" placeholder="Ex: GCS 15/15 ou Inconscient"></div>
-                            <div class="form-group"><label>Tension Artérielle & Pouls</label><input type="text" id="med_ta" placeholder="Ex: 12/8 - 80 bpm"></div>
-                            <div class="form-group" style="grid-column: span 2;"><label>Blessures constatées & Gestes d'urgence pratiqués</label><textarea id="med_gestes" placeholder="Oxygénothérapie, massage cardiaque..."></textarea></div>
+                            <div class="form-group"><label>Glasgow (GCS / 15)</label><input type="text" id="med_glasgow" placeholder="Ex: 15/15"></div>
+                            <div class="form-group"><label>Tension & Pouls</label><input type="text" id="med_ta" placeholder="Ex: 12/8 - 80 bpm"></div>
+                            <div class="form-group" style="grid-column: span 2;"><label>Gestes de premiers secours pratiqués</label><textarea id="med_gestes" placeholder="Oxygénothérapie, massage..."></textarea></div>
                         </div>
                     </div>
 
                     <button class="btn" onclick="generateInterventionReport()">Générer le Rapport</button>
                     <div class="output-box" id="output_intervention" style="display:none;"></div>
                     <button class="btn btn-secondary" id="copy_intervention" style="display:none;" onclick="copyToClipboard('output_intervention')">📋 Copier</button>
-                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendCustomWebhook('output_intervention', 'rapport', document.getElementById('rep_service').value)">🚀 Envoyer sur Discord (Rapport)</button>
+                    <button class="btn btn-discord" id="send_intervention" style="display:none;" onclick="sendCustomWebhook('output_intervention', 'rapport', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook dédié de mon service</button>
                 </div>
 
-                <!-- Registre GAV & Infractions -->
-                <div id="gav-tool" class="tool-panel">
-                    <h3 style="color: var(--police-blue);">⚖️ Registre des Gardes à Vue (GAV) & Infractions</h3>
+                <!-- Convocations -->
+                <div id="convocation-tool" class="tool-panel">
+                    <h3>📨 Émission de Convocation Officielle</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Nom & Prénom de l'Interpellé</label><input type="text" id="gav_suspect" placeholder="Ex: Marc Vigne"></div>
-                        <div class="form-group"><label>Motif de l'interpellation</label><input type="text" id="gav_motif" placeholder="Ex: Vol à main armée / Outrage"></div>
-                        <div class="form-group"><label>Durée de la GAV / Amende</label><input type="text" id="gav_duration" placeholder="Ex: 4h / 1500 $ d'amende"></div>
-                        <div class="form-group"><label>Officier en charge</label><input type="text" id="gav_officer" readonly style="background:#090d16; color:#38bdf8;"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Objets saisis & Notes d'enquête</label><textarea id="gav_notes" placeholder="Arme saisie, port d'arme illégal..."></textarea></div>
+                        <div class="form-group"><label>Nom du Convoqué</label><input type="text" id="conv_target" placeholder="Ex: Jean Dupont"></div>
+                        <div class="form-group"><label>Date & Heure du RDV</label><input type="text" id="conv_date" placeholder="Ex: 15/11/2026 à 15h00"></div>
+                        <div class="form-group"><label>Lieu du Rendez-vous</label><input type="text" id="conv_lieu" placeholder="Ex: Commissariat de Nanterre / QG BSPN"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Motif de la convocation</label><textarea id="conv_motif" placeholder="Audition, visite médicale, entretien hiérarchique..."></textarea></div>
                     </div>
-                    <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV & Casier</button>
-                    <div class="output-box" id="output_gav" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendCustomWebhook('output_gav', 'gav', 'Police Nationale')">🚀 Envoyer sur Discord</button>
+                    <button class="btn" onclick="generateConvocation()">Générer la Convocation</button>
+                    <div class="output-box" id="output_convocation" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_convocation" style="display:none;" onclick="sendCustomWebhook('output_convocation', 'convocation', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Convocations dédié</button>
                 </div>
 
-                <!-- 📂 CASIER JUDICIAIRE (Rapports d'arrestation et temps GAV) -->
+                <!-- GAV -->
+                <div id="gav-tool" class="tool-panel">
+                    <h3 style="color: var(--police-blue);">⚖️ Registre des Gardes à Vue & Infractions (Police)</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nom du Suspect</label><input type="text" id="gav_suspect" placeholder="Nom du suspect..."></div>
+                        <div class="form-group"><label>Motif de l'interpellation</label><input type="text" id="gav_motif" placeholder="Motif..."></div>
+                        <div class="form-group"><label>Durée de GAV / Amende</label><input type="text" id="gav_duration" placeholder="Ex: 3h / 1500 $"></div>
+                        <div class="form-group"><label>Officier en charge</label><input type="text" id="gav_officer" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Objets saisis & Notes d'enquête</label><textarea id="gav_notes" placeholder="Arme saisie, éléments..."></textarea></div>
+                    </div>
+                    <button class="btn" onclick="registerGAV()">Enregistrer au Registre GAV & Casier Judiciaire</button>
+                    <div class="output-box" id="output_gav" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_gav" style="display:none;" onclick="sendCustomWebhook('output_gav', 'gav', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook GAV dédié</button>
+                </div>
+
+                <!-- Casier -->
                 <div id="casier-tool" class="tool-panel">
                     <h3 style="color: #10b981;">📂 Casier Judiciaire Centralisé</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Historique complet de toutes les arrestations, motifs et temps de Garde à Vue enregistrés :</p>
                     <table class="admin-table">
-                        <thead><tr><th>Date & Heure</th><th>Suspect</th><th>Motif / Infraction</th><th>Temps GAV & Sanction</th><th>Officier</th></tr></thead>
+                        <thead><tr><th>Date & Heure</th><th>Suspect</th><th>Motif</th><th>Temps GAV & Sanction</th><th>Officier</th></tr></thead>
                         <tbody id="casierTableBody"></tbody>
                     </table>
                 </div>
 
-                <!-- ⚖️ DROITS MIRANDA + -->
+                <!-- Miranda -->
                 <div id="miranda-tool" class="tool-panel">
-                    <h3 style="color: #9ca3af;">⚖️ Notification des Droits Miranda + (Interpellation)</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Lisez ou copiez les droits officiels à notifier immédiatement à l'interpellé :</p>
-                    <div style="background:#090d16; border:1px solid var(--border); padding:20px; border-radius:8px; line-height:1.6; font-size:0.95rem;">
-                        <p style="color:#f87171; font-weight:bold; margin-bottom:10px;">🔴 "Vous êtes interpellé(e) dans le cadre d'une enquête judiciaire sur la voie publique ou les lieux de l'infraction."</p>
-                        <p>1. <strong>Droit au silence :</strong> Vous avez le droit de garder le silence. Tout ce que vous direz pourra être retenu et utilisé contre vous devant la justice.</p>
-                        <p>2. <strong>Droit à un avocat :</strong> Vous avez le droit de demander l'assistance d'un avocat commis d'office ou de votre choix dès le début de votre privation de liberté.</p>
-                        <p>3. <strong>Droit à un appel :</strong> Vous bénéficiez d'un droit à un appel téléphonique unique d'une durée maximale de 2 minutes pour prévenir un proche ou un conseil.</p>
-                        <p>4. <strong>Droit médical :</strong> Si vous présentez des blessures ou un malaise, vous pouvez exiger l'intervention immédiate d'une équipe médicale (SAMU / BSPN).</p>
+                    <h3 style="color: #9ca3af;">⚖️ Droits Miranda + (Interpellation)</h3>
+                    <div style="background:#090d16; border:1px solid var(--border); padding:20px; border-radius:8px; line-height:1.6;">
+                        <p style="color:#f87171; font-weight:bold; margin-bottom:10px;">🔴 "Vous êtes interpellé(e) dans le cadre d'une enquête judiciaire sur la voie publique."</p>
+                        <p>1. <strong>Droit au silence :</strong> Tout ce que vous direz pourra être retenu contre vous.</p>
+                        <p>2. <strong>Droit à un avocat :</strong> Assistance d'un conseil commis d'office ou choisi.</p>
+                        <p>3. <strong>Droit à un appel unique :</strong> Durée maximale de 2 minutes pour prévenir un proche.</p>
+                        <p>4. <strong>Droit médical :</strong> Exigence immédiate d'une équipe médicale en cas de besoin.</p>
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="copyMirandaRights()">📋 Copier les Droits Miranda + pour le Chat</button>
+                    <button class="btn btn-secondary" style="margin-top:20px;" onclick="copyMirandaRights()">📋 Copier les Droits Miranda +</button>
                 </div>
 
-                <!-- 📜 DEMANDE DE MANDATS -->
+                <!-- Mandats -->
                 <div id="mandat-tool" class="tool-panel">
-                    <h3>📜 Demande de Mandat Officiel (Perquisition, Arrestation, Saisie)</h3>
+                    <h3>📜 Demande de Mandats Officiels (Perquisition / Arrestation)</h3>
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label>Type de Mandat</label>
-                            <select id="mandat_type">
-                                <option value="Mandat de Perquisition (Domicile / Local)">Mandat de Perquisition (Domicile / Local)</option>
-                                <option value="Mandat d'Arrestation / Mandat de Recherche">Mandat d'Arrestation / Mandat de Recherche</option>
-                                <option value="Mandat de Saisie de Biens / Véhicules">Mandat de Saisie de Biens / Véhicules</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Nom de la Cible / Suspect ou Propriété</label><input type="text" id="mandat_target" placeholder="Ex: Résidence du suspect Jean Dupont / Entreprise X"></div>
-                        <div class="form-group"><label>Demandeur (Agent & Matricule)</label><input type="text" id="mandat_author" readonly style="background:#090d16; color:#38bdf8;"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Motifs & Éléments justificatifs de l'enquête</label><textarea id="mandat_reason" placeholder="Détaillez les raisons motivant cette demande auprès de la justice..."></textarea></div>
+                        <div class="form-group"><label>Type de Mandat</label><select id="mandat_type"><option value="Mandat de Perquisition">Mandat de Perquisition (Domicile / Local)</option><option value="Mandat d'Arrestation">Mandat d'Arrestation / Recherche</option><option value="Mandat de Saisie">Mandat de Saisie de Biens</option></select></div>
+                        <div class="form-group"><label>Cible / Suspect ou Propriété</label><input type="text" id="mandat_target" placeholder="Nom ou adresse..."></div>
+                        <div class="form-group"><label>Demandeur</label><input type="text" id="mandat_author" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Motifs de l'enquête</label><textarea id="mandat_reason" placeholder="Éléments justificatifs..."></textarea></div>
                     </div>
-                    <button class="btn" style="background:#1d4ed8;" onclick="submitMandatRequest()">Transmettre la Demande de Mandat</button>
+                    <button class="btn" onclick="submitMandatRequest()">Transmettre la Demande de Mandat</button>
                     <div class="output-box" id="output_mandat" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_mandat" style="display:none;" onclick="sendCustomWebhook('output_mandat', 'plainte', 'Police Nationale')">🚀 Envoyer sur le Salon Discord Mandats</button>
+                    <button class="btn btn-discord" id="send_mandat" style="display:none;" onclick="sendCustomWebhook('output_mandat', 'mandat', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Mandats dédié</button>
                 </div>
 
-                <!-- 🎥 CAMÉRAS PIÉTONS & PREUVES (Images / Vidéos) -->
+                <!-- Preuves -->
                 <div id="preuve-tool" class="tool-panel">
-                    <h3 style="color: #8b5cf6;">🎥 Registre des Caméras Piétons & Preuves Numériques</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Consignez les numéros de caméras piétons actives et ajoutez les liens de preuves multimédias (images, vidéos) :</p>
+                    <h3 style="color: #8b5cf6;">🎥 Caméras Piétons & Preuves Numériques</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Numéro / ID Caméra Piéton</label><input type="text" id="cam_id" placeholder="Ex: Caméra-Piéton #PN-Nanterre-04"></div>
-                        <div class="form-group"><label>Auteur de la prise de vue</label><input type="text" id="cam_author" readonly style="background:#090d16; color:#38bdf8;"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Lien Web de la Preuve (Discord, Imgur, Streamable, YouTube...)</label><input type="text" id="cam_link" placeholder="Ex: https://cdn.discordapp.com/... ou https://streamable.com/..."></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Description de l'extrait / de la scène filmée</label><textarea id="cam_desc" placeholder="Ex: Extrait montrant le refus d'obtempérer et l'interpellation du suspect..."></textarea></div>
+                        <div class="form-group"><label>ID Caméra Piéton</label><input type="text" id="cam_id" placeholder="#PN-Nanterre-01"></div>
+                        <div class="form-group"><label>Auteur</label><input type="text" id="cam_author" readonly style="background:#090d16; color:#38bdf8;"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Lien Web de la Preuve (Image, Vidéo, Streamable, Discord...)</label><input type="text" id="cam_link" placeholder="https://..."></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Description de la scène filmée</label><textarea id="cam_desc" placeholder="Description de l'extrait..."></textarea></div>
                     </div>
                     <button class="btn" style="background:#7c3aed;" onclick="registerEvidence()">Enregistrer et Diffuser la Preuve</button>
                     <div class="output-box" id="output_preuve" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_preuve" style="display:none;" onclick="sendCustomWebhook('output_preuve', 'rapport', 'Police Nationale')">🚀 Envoyer la Preuve sur Discord</button>
-                </div>
-
-                <!-- OUTILS EXCLUSIFS POLICE -->
-                <div id="police-penal-tool" class="tool-panel">
-                    <h3 style="color: #14b8a6;">📖 Code Pénal & Barème des Infractions (Police Nationale)</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Infraction / Délit</th><th>Amende indicative</th><th>Temps GAV / Sanction</th></tr></thead>
-                        <tbody>
-                            <tr><td>Outrage à agent / Disqualification</td><td>500 $ - 1 000 $</td><td>1h à 2h</td></tr>
-                            <tr><td>Refus d'obtempérer / Délit de fuite</td><td>1 500 $ - 3 000 $</td><td>3h à 4h + Saisie véhicule</td></tr>
-                            <tr><td>Port d'arme illégal (Catégorie B/A)</td><td>2 000 $ - 5 000 $</td><td>4h + Saisie armement</td></tr>
-                            <tr><td>Vol à main armée / Braquage</td><td>5 000 $ +</td><td>6h max</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="police-grades-tool" class="tool-panel">
-                    <h3 style="color: #14b8a6;">🏅 Grades & Hiérarchie - Police Nationale</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Rang</th><th>Intitulé du Grade</th><th>Rôle & Attributions</th></tr></thead>
-                        <tbody>
-                            <tr><td>1</td><td>Gardien de la Paix / Élève</td><td>Patrouille de terrain, intervention standard.</td></tr>
-                            <tr><td>2</td><td>Brigadier / Brigadier-Chef</td><td>Encadrement de patrouille, gestion de premier niveau.</td></tr>
-                            <tr><td>3</td><td>Officier (Lieutenant / Capitaine)</td><td>Direction d'intervention, gestion des GAV, commandement tactique.</td></tr>
-                            <tr><td>4</td><td>Haut Commandement (Commissaire+)</td><td>Arrêtés municipaux, gestion des effectifs, discipline et relations HC.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="police-radio-tool" class="tool-panel">
-                    <h3 style="color: #14b8a6;">📡 Codes Radio & Lexique Opérationnel</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Code / Terme</th><th>Signification Opérationnelle</th></tr></thead>
-                        <tbody>
-                            <tr><td><strong>QAP</strong></td><td>Êtes-vous prêt / En écoute ?</td></tr>
-                            <tr><td><strong>QRO / QRT</strong></td><td>Augmenter la puissance / Fin de transmission / Silence radio.</td></tr>
-                            <tr><td><strong>Code 1</strong></td><td>Intervention standard (sans urgence lumineuse/sonore).</td></tr>
-                            <tr><td><strong>Code 3</strong></td><td>Intervention d'urgence absolue (gyrophares et deux-tons activés).</td></tr>
-                            <tr><td><strong>10-20</strong></td><td>Position géographique actuelle de l'unité.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Gestion des Blâmes -->
-                <div id="blame-tool" class="tool-panel">
-                    <h3 style="color: #ef4444;">⚠️ Module de Sanction & Attribution de Blâmes</h3>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Agent concerné</label><select id="blame_agent_select"></select></div>
-                        <div class="form-group">
-                            <label>Niveau de Sanction</label>
-                            <select id="blame_level">
-                                <option value="Avertissement oral">Avertissement oral</option>
-                                <option value="Blâme écrit (1er degré)">Blâme écrit (1er degré)</option>
-                                <option value="Blâme avec mise à pied (2nd degré)">Blâme avec mise à pied (2nd degré)</option>
-                                <option value="Rétrogradation / Blâme lourd">Rétrogradation / Blâme lourd</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Motif précis du blâme</label><textarea id="blame_reason" placeholder="Ex: Retard répété..."></textarea></div>
-                    </div>
-                    <button class="btn btn-danger" onclick="applyBlameToAgent()">Enregistrer et notifier le blâme</button>
-                    <div class="output-box" id="output_blame" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_blame" style="display:none;" onclick="sendCustomWebhook('output_blame', 'blame', loggedInService)">🚀 Envoyer le Blâme sur Discord</button>
+                    <button class="btn btn-discord" id="send_preuve" style="display:none;" onclick="sendCustomWebhook('output_preuve', 'preuve', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Preuves dédié</button>
                 </div>
 
                 <!-- Arrêtés -->
                 <div id="arrete-tool" class="tool-panel">
-                    <h3 style="color: #3b82f6;">📜 Rédaction d'un Arrêté Municipal / Permission (Haut Comm. Police)</h3>
+                    <h3 style="color: #3b82f6;">📜 Rédaction d'un Arrêté Municipal</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Titre de l'Arrêté</label><input type="text" id="arr_title" placeholder="Ex: Arrêté portant interdiction de stationnement"></div>
-                        <div class="form-group"><label>Date d'effet</label><input type="text" id="arr_date" placeholder="Ex: Du 12/11/2026 au 15/11/2026"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Contenu légal & Dispositions</label><textarea id="arr_content" placeholder="Rédigez les articles..."></textarea></div>
+                        <div class="form-group"><label>Titre de l'Arrêté</label><input type="text" id="arr_title" placeholder="Titre..."></div>
+                        <div class="form-group"><label>Date d'effet / Période</label><input type="text" id="arr_date" placeholder="Du 12/11 au 15/11"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Dispositions légales</label><textarea id="arr_content" placeholder="Articles de l'arrêté..."></textarea></div>
                     </div>
-                    <button class="btn" style="background:#1d4ed8;" onclick="generateArreteMunicipal()">Publier l'Arrêté</button>
+                    <button class="btn" onclick="generateArreteMunicipal()">Publier l'Arrêté</button>
                     <div class="output-box" id="output_arrete" style="display:none;"></div>
-                    <button class="btn btn-discord" id="send_arrete" style="display:none;" onclick="sendCustomWebhook('output_arrete', 'rapport', 'Police Nationale')">🚀 Diffuser sur Discord</button>
+                    <button class="btn btn-discord" id="send_arrete" style="display:none;" onclick="sendCustomWebhook('output_arrete', 'rapport', loggedInServiceCategory)">🚀 Diffuser sur Discord</button>
+                </div>
+
+                <!-- Codes et Infos Police (Code Pénal dynamique basé sur les documents) -->
+                <div id="police-penal-tool" class="tool-panel">
+                    <h3 style="color: #14b8a6;">📖 Code Pénal Officiel (Nanterre RP 6-8)</h3>
+                    <p style="color:var(--text-muted); margin-bottom:15px;">Barème officiel des amendes (1 000 € à 8 000 €) et GAV (15 min max)[cite: 5]. Tu peux modifier l'intégralité de ce code pénal depuis l'espace Administration.</p>
+                    <div id="dynamicCodePenalContainer"></div>
+                </div>
+                <div id="police-grades-tool" class="tool-panel">
+                    <h3 style="color: #14b8a6;">🏅 Grades & Hiérarchie Police</h3>
+                    <p style="color:var(--text-muted);">Commandant / Directeur -> Commandant Adj. -> Capitaine -> Lieutenant -> Brigadier-Chef -> Brigadier -> Gardien de la Paix[cite: 4].</p>
+                </div>
+                <div id="police-radio-tool" class="tool-panel">
+                    <h3 style="color: #14b8a6;">📡 Codes Radio & Lexique</h3>
+                    <p style="color:var(--text-muted);">QAP, QRT, Code 1, Code 3, 10-20, etc.</p>
+                </div>
+
+                <!-- Blâmes -->
+                <div id="blame-tool" class="tool-panel">
+                    <h3 style="color: #ef4444;">⚠️ Module de Sanction & Attribution de Blâmes</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Agent concerné</label><select id="blame_agent_select"></select></div>
+                        <div class="form-group"><label>Niveau de Sanction</label><select id="blame_level"><option value="Avertissement oral">Avertissement oral</option><option value="Blâme écrit (1er degré)">Blâme écrit (1er degré)</option><option value="Mise à pied / Rétrogradation">Mise à pied / Rétrogradation</option></select></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Motif précis du blâme</label><textarea id="blame_reason" placeholder="Motif..."></textarea></div>
+                    </div>
+                    <button class="btn btn-danger" onclick="applyBlameToAgent()">Prononcer et notifier le blâme</button>
+                    <div class="output-box" id="output_blame" style="display:none;"></div>
+                    <button class="btn btn-discord" id="send_blame" style="display:none;" onclick="sendCustomWebhook('output_blame', 'blame', loggedInServiceCategory)">🚀 Envoyer sur le salon Webhook Blâmes dédié</button>
                 </div>
 
                 <!-- Dotation -->
                 <div id="armement-tool" class="tool-panel">
                     <h3>🔫 Registre de Dotation & Matériel</h3>
                     <div class="form-grid">
-                        <div class="form-group"><label>Type d'équipement</label><input type="text" id="arm_item" placeholder="Ex: Sig Sauer P226"></div>
-                        <div class="form-group"><label>Numéro de série / Immatriculation</label><input type="text" id="arm_serial" placeholder="Ex: #PN-9923"></div>
-                        <div class="form-group" style="grid-column: span 2;"><label>Remarques particulières</label><textarea id="arm_notes" placeholder="État..."></textarea></div>
+                        <div class="form-group"><label>Équipement</label><input type="text" id="arm_item" placeholder="Sig Sauer P226"></div>
+                        <div class="form-group"><label>Numéro de série</label><input type="text" id="arm_serial" placeholder="#PN-99"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Remarques</label><textarea id="arm_notes" placeholder="État du matériel..."></textarea></div>
                     </div>
                     <button class="btn" onclick="registerDotation()">Valider la dotation</button>
                     <div class="output-box" id="output_armement" style="display:none;"></div>
@@ -483,40 +445,25 @@
                 <div id="staff-list-tool" class="tool-panel">
                     <h3>👥 Annuaire des Effectifs & Suivi des Blâmes</h3>
                     <table class="admin-table">
-                        <thead><tr><th>Statut / Radio</th><th>Service & Spécialité</th><th>Matricule & Grade / Nom</th><th>Sanctions & Blâmes Actifs</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Statut & Radio</th><th>Service & Spécialité</th><th>Nom & Matricule</th><th>Blâmes Actifs</th><th>Action</th></tr></thead>
                         <tbody id="directoryStaffTable"></tbody>
                     </table>
                 </div>
 
                 <!-- Panneau HC -->
                 <div id="hc-stats-tool" class="tool-panel">
-                    <h3 style="color: #fb923c;">📊 Tableau de Bord Haut Comité (HC) - <span id="hcServiceNameDisplay">Service</span></h3>
+                    <h3 style="color: #fb923c;">📊 Tableau de Bord Hiérarchie / HC - <span id="hcServiceNameDisplay">Service</span></h3>
                     <div class="stats-grid">
-                        <div class="stat-card"><h4>Total Interventions</h4><div class="stat-val" id="statTotalReports">0</div></div>
-                        <div class="stat-card"><h4>Agents Actifs</h4><div class="stat-val" id="statTotalAgents">0</div></div>
+                        <div class="stat-card"><h4>Total Rapports</h4><div class="stat-val" id="statTotalReports">0</div></div>
+                        <div class="stat-card"><h4>Agents Enregistrés</h4><div class="stat-val" id="statTotalAgents">0</div></div>
                     </div>
-                    <h3 style="color: #fb923c; margin-top: 25px;">📈 Statistiques Avancées par Type de Motif</h3>
-                    <div id="motifStatsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 25px;"></div>
                     <h3>📅 Planification des Permanences</h3>
                     <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
                         <div class="form-group"><label>Créneau</label><input type="text" id="plan_day" placeholder="Ex: Lundi - Soir"></div>
-                        <div class="form-group"><label>Responsable</label><input type="text" id="plan_leader" placeholder="Ex: Cne Dupont"></div>
-                        <div style="grid-column: span 2;"><button class="btn" onclick="savePlanning()">Publier</button></div>
+                        <div class="form-group"><label>Responsable</label><input type="text" id="plan_leader" placeholder="Nom..."></div>
+                        <div style="grid-column: span 2;"><button class="btn" onclick="savePlanning()">Ajouter le créneau</button></div>
                     </div>
-                    <table class="admin-table">
-                        <thead><tr><th>Créneau</th><th>Responsable</th></tr></thead>
-                        <tbody id="planningTable"></tbody>
-                    </table>
-                    <h3 style="margin-top:30px; color: #fb923c;">📂 Registre des Rapports</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Date</th><th>Agent</th><th>Lieu & Motif</th><th>Actions</th></tr></thead>
-                        <tbody id="hcReportsTable"></tbody>
-                    </table>
-                    <h3 style="margin-top:30px; color: #fb923c;">📋 Journal des Activités</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>Horodatage</th><th>Auteur</th><th>Action</th></tr></thead>
-                        <tbody id="auditLogTable"></tbody>
-                    </table>
+                    <table class="admin-table"><thead><tr><th>Créneau</th><th>Responsable</th></tr></thead><tbody id="planningTable"></tbody></table>
                 </div>
             </div>
         </section>
@@ -532,67 +479,47 @@
             </div>
 
             <div id="adminPanelContent" style="display:none;">
-                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active (Cloud Supabase)</p>
+                <p style="color: #4ade80; margin-bottom: 25px; font-weight: bold;">✅ Session Administrateur Active (Supabase Cloud)</p>
 
-                <h3>🎨 Personnalisation du Design & Alerte Publique</h3>
-                <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
-                    <div class="form-group"><label>Nom de l'En-tête</label><input type="text" id="adm_cfg_title" value="🛡️ NANTERRE - SERVICES D'URGENCE"></div>
-                    <div class="form-group"><label>Sous-titre En-tête</label><input type="text" id="adm_cfg_subtitle" value="Portail Officiel : Police Nationale - BSPN - SAMU"></div>
-                    <div class="form-group"><label>Couleur Principale (Hex)</label><input type="color" id="adm_cfg_color" value="#1d4ed8" style="height:45px; width:100%;"></div>
-                    <div class="form-group"><label>URL de la Bannière</label><input type="text" id="adm_cfg_banner" value="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Message d'Alerte</label><input type="text" id="adm_cfg_alert" value="Aucune alerte majeure en cours."></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveInterfaceConfig()">Sauvegarder</button></div>
-                </div>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <h3>🤖 Configuration Avancée des Webhooks Discord par Service & Type</h3>
-                <div class="form-grid">
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police</label><input type="text" id="wh_report_police" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - BSPN</label><input type="text" id="wh_report_bspn" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - SAMU</label><input type="text" id="wh_report_samu" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Sanctions / Blâmes - Police</label><input type="text" id="wh_blame_police" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Sanctions / Blâmes - BSPN / SAMU</label><input type="text" id="wh_blame_bspn" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Recrutements</label><input type="text" id="wh_recrutement" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Plaintes</label><input type="text" id="wh_plainte" placeholder="https://discord.com/api/webhooks/..."></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhooksConfig()">Enregistrer les Webhooks</button></div>
-                </div>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <h3>⚙️ Gestion des Permissions par Grade</h3>
+                <h3>📜 Gestion des Règlements (Règlement Intérieur Police & Consignes)</h3>
                 <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
-                    <input type="hidden" id="adm_perm_index" value="-1">
-                    <div class="form-group">
-                        <label>Service</label>
-                        <select id="adm_perm_service">
-                            <option value="Police Nationale">Police Nationale</option>
-                            <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
-                            <option value="SAMU">SAMU</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Intitulé du Grade</label><input type="text" id="adm_perm_grade" placeholder="Ex: Capitaine"></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Permissions</label><textarea id="adm_perm_desc" placeholder="Ex: Accès GAV, mandats..."></textarea></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="adminSavePermission()">Ajouter / Mettre à jour</button></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Titre de l'article / de la section</label><input type="text" id="adm_rule_title" placeholder="Ex: 1. Objectif & Comportement RP"></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>Contenu détaillé</label><textarea id="adm_rule_content" placeholder="Rédigez le texte..."></textarea></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="adminAddRule()">Ajouter / Mettre à jour dans les Règlements</button></div>
                 </div>
                 <table class="admin-table">
-                    <thead><tr><th>Service</th><th>Grade</th><th>Permissions</th><th>Action</th></tr></thead>
-                    <tbody id="adminPermissionsTable"></tbody>
-                </table>
-
-                <hr style="border-color: var(--border); margin: 30px 0;">
-
-                <h3>📜 Gestion des Règlements</h3>
-                <div class="form-grid" style="background: rgba(29, 78, 216, 0.05); padding: 15px; border-radius: 8px;">
-                    <input type="hidden" id="adm_rule_index" value="-1">
-                    <div class="form-group" style="grid-column: span 2;"><label>Titre</label><input type="text" id="adm_rule_title" placeholder="Titre..."></div>
-                    <div class="form-group" style="grid-column: span 2;"><label>Contenu</label><textarea id="adm_rule_content" placeholder="Contenu..."></textarea></div>
-                    <div style="grid-column: span 2;"><button class="btn" onclick="adminSaveRule()">Ajouter / Modifier</button></div>
-                </div>
-                <table class="admin-table">
-                    <thead><tr><th>Titre</th><th>Contenu</th><th>Date</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Titre</th><th>Contenu</th><th>Action</th></tr></thead>
                     <tbody id="adminRulesTable"></tbody>
                 </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <h3>📖 Gestion du Code Pénal (Infractions, Amendes, GAV)</h3>
+                <div class="form-grid" style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px;">
+                    <div class="form-group"><label>Catégorie (ex: Infractions Routières)</label><input type="text" id="penal_cat" placeholder="Catégorie..."></div>
+                    <div class="form-group"><label>Infraction / Délit</label><input type="text" id="penal_inf" placeholder="Ex: Refus d'obtempérer"></div>
+                    <div class="form-group"><label>Amende (ex: 4 000 €)</label><input type="text" id="penal_amende" placeholder="4 000 €"></div>
+                    <div class="form-group"><label>Temps GAV (ex: 15 min)</label><input type="text" id="penal_gav" placeholder="15 min"></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="adminAddPenalItem()">Ajouter l'infraction au Code Pénal</button></div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Catégorie</th><th>Infraction</th><th>Amende</th><th>GAV</th><th>Action</th></tr></thead>
+                    <tbody id="adminPenalTable"></tbody>
+                </table>
+
+                <hr style="border-color: var(--border); margin: 30px 0;">
+
+                <h3>🤖 Configuration des Webhooks Discord par Spécialité</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook - Recrutements</label><input type="text" id="wh_recrutement" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook - Plaintes</label><input type="text" id="wh_plainte" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police (Agent Standard)</label><input type="text" id="wh_report_Police_Agent" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police BAC</label><input type="text" id="wh_report_Police_BAC" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - Police BMO</label><input type="text" id="wh_report_Police_BMO" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - BSPN</label><input type="text" id="wh_report_BSPN" placeholder="https://..."></div>
+                    <div class="form-group" style="grid-column: span 2;"><label>🔗 Webhook Rapports - SAMU</label><input type="text" id="wh_report_SAMU" placeholder="https://..."></div>
+                    <div style="grid-column: span 2;"><button class="btn" onclick="saveWebhooksConfig()">Enregistrer les Webhooks</button></div>
+                </div>
 
                 <hr style="border-color: var(--border); margin: 30px 0;">
 
@@ -600,37 +527,31 @@
                 <div class="form-grid">
                     <div class="form-group"><label>Identifiant</label><input type="text" id="adm_staff_user" placeholder="ID..."></div>
                     <div class="form-group"><label>Mot de passe</label><input type="password" id="adm_staff_pass" placeholder="MDP..."></div>
-                    <div class="form-group"><label>Grade & Nom</label><input type="text" id="adm_staff_name" placeholder="Nom..."></div>
+                    <div class="form-group"><label>Nom & Grade</label><input type="text" id="adm_staff_name" placeholder="Nom..."></div>
                     <div class="form-group"><label>Matricule (0-100)</label><input type="number" id="adm_staff_matricule" min="0" max="100" placeholder="Matricule..."></div>
+                    
                     <div class="form-group">
-                        <label>Service</label>
-                        <select id="adm_staff_service">
-                            <option value="Police Nationale">Police Nationale</option>
-                            <option value="BSPN (Pompiers)">BSPN (Pompiers)</option>
+                        <label>Service & Spécialité</label>
+                        <select id="adm_staff_service_cat">
+                            <option value="Police Nationale - Agent Standard">Police Nationale - Agent Standard</option>
+                            <option value="Police Nationale - BAC">Police Nationale - BAC</option>
+                            <option value="Police Nationale - BMO">Police Nationale - BMO</option>
+                            <option value="BSPN - Homme du rang">BSPN - Homme du rang</option>
                             <option value="SAMU">SAMU</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Spécialité / Département</label>
-                        <select id="adm_staff_dept">
-                            <option value="Général / Standard">Général / Standard</option>
-                            <option value="Brigade Motorisée (BMO)">Brigade Motorisée (BMO)</option>
-                            <option value="Brigade Anti-Criminalité (BAC)">Brigade Anti-Criminalité (BAC)</option>
-                            <option value="Commandement / HC">Commandement / HC</option>
-                        </select>
-                    </div>
+
                     <div class="form-group">
                         <label>Rôle</label>
                         <select id="adm_staff_role">
                             <option value="agent">Agent Standard</option>
-                            <option value="hc">Haut Comité / Conseil (HC)</option>
-                            <option value="haut_comm_police">Haut Commandement Police</option>
+                            <option value="hc">Haut Comité / Direction (HC)</option>
                         </select>
                     </div>
                     <div style="grid-column: span 2;"><button class="btn" onclick="createStaffAccount()">Enregistrer l'agent</button></div>
                 </div>
                 <table class="admin-table">
-                    <thead><tr><th>Service</th><th>Matricule</th><th>Rôle</th><th>ID</th><th>Nom</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Catégorie / Service</th><th>Matricule</th><th>Rôle</th><th>ID</th><th>Nom</th><th>Action</th></tr></thead>
                     <tbody id="adminStaffAccountsTable"></tbody>
                 </table>
             </div>
@@ -638,16 +559,33 @@
     </div>
 
     <script>
-        // CONFIGURATION SUPABASE CLOUD
         const SUPABASE_URL = "https://fqgecgziekhkmztawgzu.supabase.co";
         const SUPABASE_KEY = "sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG";
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const ADMIN_SECRET_PASSWORD = "76450";
+        const ADMIN_SECRET_PASSWORD = "MonMotDePasseAdminSecurise92!";
 
         let loggedInAgent = "";
-        let loggedInService = "";
+        let loggedInServiceCategory = "";
         let loggedInRole = "";
+
+        const DEFAULT_RULES = [
+            { title: "1. OBJECTIF & MISSIONS", content: "Le service de la Police Nationale RP sur Emergency Hamburg a pour but d'assurer la sécurité des citoyens, le maintien de l'ordre public, la prévention et la répression des infractions, ainsi que des interventions réalistes et immersives[cite: 4]." },
+            { title: "2. COMPORTEMENT RP", content: "Adopter un comportement professionnel et respecter la hiérarchie et les décisions du Commandement. Éviter tout HRP (métagaming, freekill, troll)[cite: 4]." },
+            { title: "3. TENUE ET ÉQUIPEMENT", content: "Port de la tenue officielle PN obligatoire. Équipements autorisés : arme de service, taser, menottes, radio, gilet pare-balles. Aucun équipement non autorisé sans accord[cite: 4]." },
+            { title: "4. USAGE DE LA FORCE", content: "Progressif, proportionné et justifié. Autorisé uniquement en cas de refus d'obtempérer, menace sur une personne, agression contre un agent ou danger grave et immédiat[cite: 4]." }
+        ];
+
+        const DEFAULT_PENAL_CODE = [
+            { cat: "1. Infractions Routières", inf: "Excès de vitesse léger", amende: "1 000 €[cite: 5]", gav: "5 min[cite: 5]" },
+            { cat: "1. Infractions Routières", inf: "Refus d'obtempérer au contrôle routier", amende: "4 000 €[cite: 5]", gav: "15 min[cite: 5]" },
+            { cat: "2. Infractions Contre les Personnes", inf: "Menaces envers un agent de police", amende: "3 000 €[cite: 5]", gav: "15 min[cite: 5]" },
+            { cat: "2. Infractions Contre les Personnes", inf: "Agression envers un agent de police", amende: "5 000 €[cite: 5]", gav: "15 min[cite: 5]" },
+            { cat: "3. Infractions Contre les Forces de l'Ordre", inf: "Outrage à agent", amende: "2 000 €[cite: 5]", gav: "10 min[cite: 5]" },
+            { cat: "3. Infractions Contre les Forces de l'Ordre", inf: "Résistance à l'arrestation", amende: "3 500 €[cite: 5]", gav: "15 min[cite: 5]" },
+            { cat: "4. Infractions Liées aux Armes", inf: "Port illégal d'une arme", amende: "3 000 €[cite: 5]", gav: "15 min[cite: 5]" },
+            { cat: "4. Infractions Liées aux Armes", inf: "Braquage de banque", amende: "8 000 €[cite: 5]", gav: "15 min[cite: 5]" }
+        ];
 
         async function cloudGet(key, defaultValue) {
             try {
@@ -655,17 +593,12 @@
                 if (error || !data) return defaultValue;
                 return data.data;
             } catch (err) {
-                console.error("Erreur lecture cloud", err);
                 return defaultValue;
             }
         }
 
         async function cloudSave(key, value) {
-            let { data, error } = await supabaseClient.from('portail_data').upsert({ key: key, data: value }, { onConflict: 'key' });
-            if (error) {
-                throw new Error(error.message);
-            }
-            return data;
+            await supabaseClient.from('portail_data').upsert({ key: key, data: value }, { onConflict: 'key' });
         }
 
         function getFrenchTimestamp() {
@@ -677,113 +610,80 @@
             return `${day}/${month}/${year} à ${time}`;
         }
 
-        async function logAuditAction(author, actionText) {
-            let logs = await cloudGet('nanterre_audit_logs', []);
-            logs.unshift({ timestamp: getFrenchTimestamp(), author, action: actionText });
-            await cloudSave('nanterre_audit_logs', logs);
-        }
-
-        async function getWebhookUrl(type, service) {
+        async function getWebhookUrl(type, serviceCat) {
             let whs = await cloudGet('nanterre_custom_webhooks', {});
             if (type === 'recrutement') return whs.recrutement || "";
             if (type === 'plainte') return whs.plainte || "";
-            if (type === 'blame') {
-                if (service === "Police Nationale") return whs.blamePolice || "";
-                return whs.blameBspn || "";
-            }
-            if (type === 'rapport' || type === 'gav') {
-                if (service === "Police Nationale") return whs.reportPolice || "https://discord.com/api/webhooks/1569065868867014847/bLpiJ0imxdQ9wgzYZDJ3NUKnWoei01vPgk-bemGJKTJukjWRR9om14F4NMpgLAuRoXFS";
-                if (service === "BSPN (Pompiers)") return whs.reportBspn || "https://discord.com/api/webhooks/1569064829036273664/ogGhoJJ1uvcn7KubGxl9P4M2ZJD_hnWFwGnPhvhQ-iRYBh8r-ax6TWdPOS6R2cO5U66Q";
-                if (service === "SAMU") return whs.reportSamu || "";
+            if (['rapport', 'gav', 'convocation', 'mandat', 'preuve'].includes(type)) {
+                if (serviceCat === 'Police Nationale - BAC') return whs.wh_report_Police_BAC || "";
+                if (serviceCat === 'Police Nationale - BMO') return whs.wh_report_Police_BMO || "";
+                if (serviceCat.startsWith('Police')) return whs.wh_report_Police_Agent || "";
+                if (serviceCat.startsWith('BSPN')) return whs.wh_report_BSPN || "";
+                if (serviceCat === 'SAMU') return whs.wh_report_SAMU || "";
             }
             return "";
         }
 
-        async function sendCustomWebhook(elementId, type, service) {
-            let url = await getWebhookUrl(type, service);
-            if (!url) return alert(`⚠️ Aucun webhook configuré pour ce service (${service}) ou ce type (${type}).`);
+        async function sendCustomWebhook(elementId, type, serviceCat) {
+            let url = await getWebhookUrl(type, serviceCat);
+            if (!url) return alert(`⚠️ Aucun webhook configuré pour "${serviceCat}" et "${type}". Configure-le dans l'Admin.`);
             
             const contentText = document.getElementById(elementId).innerText;
-            if (!contentText) return alert("Aucun texte à envoyer.");
-
             try {
-                const response = await fetch(url, {
+                await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: "```\n" + contentText + "\n```" })
                 });
-                if (response.ok || response.status === 204) alert(`🚀 Envoyé avec succès sur Discord !`);
-                else alert("⚠️ Erreur lors de l'envoi vers Discord.");
+                alert(`🚀 Envoyé sur Discord avec succès !`);
             } catch (err) { alert("Erreur réseau Discord."); }
         }
 
         async function applyInterfaceConfig() {
-            let config = await cloudGet('nanterre_interface_config', {
-                title: "🛡️ NANTERRE - SERVICES D'URGENCE",
-                subtitle: "Portail Officiel : Police Nationale - BSPN - SAMU",
-                primaryColor: "#1d4ed8",
-                bannerUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
-                alertText: "Aucune alerte majeure en cours sur la commune de Nanterre. Restez vigilants."
-            });
-
-            document.getElementById('headerTitleText').innerText = config.title;
-            document.getElementById('headerSubtitleText').innerText = config.subtitle;
-            document.getElementById('publicAlertBannerText').innerText = config.alertText;
-            document.documentElement.style.setProperty('--police-blue', config.primaryColor);
-            document.documentElement.style.setProperty('--police-dark', config.primaryColor);
-            
-            const banner = document.getElementById('homeHeroBanner');
-            if(banner) {
-                banner.style.background = `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('${config.bannerUrl}') center/cover`;
-            }
-
             let whs = await cloudGet('nanterre_custom_webhooks', {});
-            if(document.getElementById('adm_cfg_title')) {
-                document.getElementById('adm_cfg_title').value = config.title;
-                document.getElementById('adm_cfg_subtitle').value = config.subtitle;
-                document.getElementById('adm_cfg_color').value = config.primaryColor;
-                document.getElementById('adm_cfg_banner').value = config.bannerUrl;
-                document.getElementById('adm_cfg_alert').value = config.alertText;
-
-                document.getElementById('wh_report_police').value = whs.reportPolice || "";
-                document.getElementById('wh_report_bspn').value = whs.reportBspn || "";
-                document.getElementById('wh_report_samu').value = whs.reportSamu || "";
-                document.getElementById('wh_blame_police').value = whs.blamePolice || "";
-                document.getElementById('wh_blame_bspn').value = whs.blameBspn || "";
+            if(document.getElementById('wh_recrutement')) {
                 document.getElementById('wh_recrutement').value = whs.recrutement || "";
                 document.getElementById('wh_plainte').value = whs.plainte || "";
+                document.getElementById('wh_report_Police_Agent').value = whs.wh_report_Police_Agent || "";
+                document.getElementById('wh_report_Police_BAC').value = whs.wh_report_Police_BAC || "";
+                document.getElementById('wh_report_Police_BMO').value = whs.wh_report_Police_BMO || "";
+                document.getElementById('wh_report_BSPN').value = whs.wh_report_BSPN || "";
+                document.getElementById('wh_report_SAMU').value = whs.wh_report_SAMU || "";
             }
-
             updatePublicServiceStatus();
+            renderRules();
+            renderCodePenal();
         }
 
         async function saveWebhooksConfig() {
             let whs = {
-                reportPolice: document.getElementById('wh_report_police').value.trim(),
-                reportBspn: document.getElementById('wh_report_bspn').value.trim(),
-                reportSamu: document.getElementById('wh_report_samu').value.trim(),
-                blamePolice: document.getElementById('wh_blame_police').value.trim(),
-                blameBspn: document.getElementById('wh_blame_bspn').value.trim(),
                 recrutement: document.getElementById('wh_recrutement').value.trim(),
-                plainte: document.getElementById('wh_plainte').value.trim()
+                plainte: document.getElementById('wh_plainte').value.trim(),
+                wh_report_Police_Agent: document.getElementById('wh_report_Police_Agent').value.trim(),
+                wh_report_Police_BAC: document.getElementById('wh_report_Police_BAC').value.trim(),
+                wh_report_Police_BMO: document.getElementById('wh_report_Police_BMO').value.trim(),
+                wh_report_BSPN: document.getElementById('wh_report_BSPN').value.trim(),
+                wh_report_SAMU: document.getElementById('wh_report_SAMU').value.trim()
             };
             await cloudSave('nanterre_custom_webhooks', whs);
-            alert("🔗 Webhooks enregistrés avec succès !");
+            alert("🔗 Webhooks enregistrés !");
         }
 
         async function updatePublicServiceStatus() {
             let activeStaff = await cloudGet('nanterre_active_staff', []);
             let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let servicesOnline = { "Police Nationale": false, "BSPN (Pompiers)": false, "SAMU": false };
+            let servicesOnline = { "Police": false, "BSPN": false, "SAMU": false };
 
             accounts.forEach(acc => {
                 if (activeStaff.includes(acc.username)) {
-                    if (servicesOnline[acc.service] !== undefined) servicesOnline[acc.service] = true;
+                    if (acc.serviceCat.startsWith('Police')) servicesOnline["Police"] = true;
+                    if (acc.serviceCat.startsWith('BSPN')) servicesOnline["BSPN"] = true;
+                    if (acc.serviceCat === 'SAMU') servicesOnline["SAMU"] = true;
                 }
             });
 
-            updateStatusElement('police', servicesOnline["Police Nationale"]);
-            updateStatusElement('bspn', servicesOnline["BSPN (Pompiers)"]);
+            updateStatusElement('police', servicesOnline["Police"]);
+            updateStatusElement('bspn', servicesOnline["BSPN"]);
             updateStatusElement('samu', servicesOnline["SAMU"]);
         }
 
@@ -791,7 +691,6 @@
             const dot = document.getElementById(`dot_${serviceKey}`);
             const label = document.getElementById(`label_${serviceKey}`);
             if(!dot || !label) return;
-
             if (isOnline) {
                 dot.className = "status-dot online";
                 label.innerText = "En service (Actif)";
@@ -801,19 +700,6 @@
                 label.innerText = "Hors service";
                 label.style.color = "var(--text-muted)";
             }
-        }
-
-        async function saveInterfaceConfig() {
-            const config = {
-                title: document.getElementById('adm_cfg_title').value.trim(),
-                subtitle: document.getElementById('adm_cfg_subtitle').value.trim(),
-                primaryColor: document.getElementById('adm_cfg_color').value,
-                bannerUrl: document.getElementById('adm_cfg_banner').value.trim(),
-                alertText: document.getElementById('adm_cfg_alert').value.trim()
-            };
-            await cloudSave('nanterre_interface_config', config);
-            applyInterfaceConfig();
-            alert("Design mis à jour !");
         }
 
         function showMainSection(sectionId, ev) {
@@ -832,17 +718,101 @@
             if(ev && ev.target) ev.target.classList.add('active');
             if(toolId === 'staff-list-tool') renderDirectoryStaff();
             if(toolId === 'casier-tool') renderCasierJudiciaire();
+            if(toolId === 'police-penal-tool') renderCodePenal();
             if(toolId === 'hc-stats-tool') { renderHCStatsAndReports(); renderPlanningTable(); }
             if(toolId === 'blame-tool') populateBlameAgentsDropdown();
         }
 
-        function toggleMedicalSection(serviceName) {
-            const sec = document.getElementById('medicalVictimSection');
-            if(serviceName === 'SAMU' || serviceName === 'BSPN (Pompiers)') {
-                sec.style.display = 'block';
-            } else {
-                sec.style.display = 'none';
-            }
+        async function renderRules() {
+            const container = document.getElementById('rulesContainer');
+            if(!container) return;
+            let rules = await cloudGet('nanterre_rules', DEFAULT_RULES);
+            container.innerHTML = '';
+            rules.forEach(r => {
+                container.innerHTML += `<div class="forum-card"><h4 style="color:var(--police-blue);">${r.title}</h4><p style="white-space: pre-wrap;">${r.content}</p></div>`;
+            });
+        }
+
+        async function adminAddRule() {
+            const title = document.getElementById('adm_rule_title').value.trim();
+            const content = document.getElementById('adm_rule_content').value.trim();
+            if(!title || !content) return alert("Remplissez tous les champs.");
+            let rules = await cloudGet('nanterre_rules', DEFAULT_RULES);
+            rules.push({ title, content });
+            await cloudSave('nanterre_rules', rules);
+            alert("Règle ajoutée !");
+            document.getElementById('adm_rule_title').value = "";
+            document.getElementById('adm_rule_content').value = "";
+            renderAdminRulesTable();
+            renderRules();
+        }
+
+        async function renderAdminRulesTable() {
+            const tbody = document.getElementById('adminRulesTable');
+            if(!tbody) return;
+            let rules = await cloudGet('nanterre_rules', DEFAULT_RULES);
+            tbody.innerHTML = '';
+            rules.forEach((r, i) => {
+                tbody.innerHTML += `<tr><td><strong>${r.title}</strong></td><td>${r.content.substring(0, 60)}...</td><td><button class="btn btn-danger btn-sm" onclick="deleteRule(${i})">Supprimer</button></td></tr>`;
+            });
+        }
+
+        async function deleteRule(i) {
+            let rules = await cloudGet('nanterre_rules', DEFAULT_RULES);
+            rules.splice(i, 1);
+            await cloudSave('nanterre_rules', rules);
+            renderAdminRulesTable();
+            renderRules();
+        }
+
+        async function renderCodePenal() {
+            const container = document.getElementById('dynamicCodePenalContainer');
+            if(!container) return;
+            let penal = await cloudGet('nanterre_penal_code', DEFAULT_PENAL_CODE);
+            
+            let html = `<table class="admin-table"><thead><tr><th>Catégorie</th><th>Infraction / Délit</th><th>Amende</th><th>Temps GAV</th></tr></thead><tbody>`;
+            penal.forEach(p => {
+                html += `<tr><td><strong>${p.cat}</strong></td><td>${p.inf}</td><td><span style="color:#f87171;">${p.amende}</span></td><td>${p.gav}</td></tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        async function adminAddPenalItem() {
+            const cat = document.getElementById('penal_cat').value.trim();
+            const inf = document.getElementById('penal_inf').value.trim();
+            const amende = document.getElementById('penal_amende').value.trim();
+            const gav = document.getElementById('penal_gav').value.trim();
+            if(!cat || !inf || !amende) return alert("Remplissez les champs principaux.");
+
+            let penal = await cloudGet('nanterre_penal_code', DEFAULT_PENAL_CODE);
+            penal.push({ cat, inf, amende, gav });
+            await cloudSave('nanterre_penal_code', penal);
+            alert("Infraction ajoutée au Code Pénal !");
+            document.getElementById('penal_cat').value = "";
+            document.getElementById('penal_inf').value = "";
+            document.getElementById('penal_amende').value = "";
+            document.getElementById('penal_gav').value = "";
+            renderAdminPenalTable();
+            renderCodePenal();
+        }
+
+        async function renderAdminPenalTable() {
+            const tbody = document.getElementById('adminPenalTable');
+            if(!tbody) return;
+            let penal = await cloudGet('nanterre_penal_code', DEFAULT_PENAL_CODE);
+            tbody.innerHTML = '';
+            penal.forEach((p, i) => {
+                tbody.innerHTML += `<tr><td>${p.cat}</td><td>${p.inf}</td><td>${p.amende}</td><td>${p.gav}</td><td><button class="btn btn-danger btn-sm" onclick="deletePenal(${i})">Supprimer</button></td></tr>`;
+            });
+        }
+
+        async function deletePenal(i) {
+            let penal = await cloudGet('nanterre_penal_code', DEFAULT_PENAL_CODE);
+            penal.splice(i, 1);
+            await cloudSave('nanterre_penal_code', penal);
+            renderAdminPenalTable();
+            renderCodePenal();
         }
 
         function submitPublicApplication() {
@@ -850,16 +820,8 @@
             const discord = document.getElementById('rec_discord').value.trim();
             const service = document.getElementById('rec_service').value;
             const motiv = document.getElementById('rec_motiv').value.trim();
-
             if(!name || !motiv) return alert("Veuillez remplir votre nom et vos motivations.");
-
-            let text = `=== 📋 NOUVELLE CANDIDATURE EXTERNE ===\n`;
-            text += `🏢 Service visé : ${service}\n`;
-            text += `👤 Candidat : ${name} (Discord: ${discord})\n`;
-            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
-            text += `📝 Motivations & Expérience :\n${motiv}\n`;
-            text += `========================================`;
-
+            let text = `=== 📋 NOUVELLE CANDIDATURE ===\nService : ${service}\nCandidat : ${name} (${discord})\nMotivations :\n${motiv}`;
             const out = document.getElementById('output_recrutement');
             out.innerText = text;
             out.style.display = 'block';
@@ -869,21 +831,10 @@
 
         function submitPublicComplaint() {
             const name = document.getElementById('plainte_name').value.trim();
-            const contact = document.getElementById('plainte_contact').value.trim();
             const service = document.getElementById('plainte_service').value;
-            const location = document.getElementById('plainte_location').value.trim();
             const desc = document.getElementById('plainte_desc').value.trim();
-
-            if(!name || !desc) return alert("Veuillez renseigner votre nom et la description des faits.");
-
-            let text = `=== 📝 MAIN COURANTE / PLAINTE EN LIGNE ===\n`;
-            text += `🏢 Service : ${service}\n`;
-            text += `👤 Déclarant : ${name} (${contact})\n`;
-            text += `📍 Lieu : ${location}\n`;
-            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
-            text += `📝 Description :\n${desc}\n`;
-            text += `==========================================`;
-
+            if(!name || !desc) return alert("Remplissez tous les champs.");
+            let text = `=== 📝 PLAINTE / MAIN COURANTE ===\nService : ${service}\nDéclarant : ${name}\nDescription :\n${desc}`;
             const out = document.getElementById('output_plainte');
             out.innerText = text;
             out.style.display = 'block';
@@ -891,51 +842,27 @@
             alert("Plainte enregistrée !");
         }
 
-        // COPIER LES DROITS MIRANDA +
         function copyMirandaRights() {
-            const text = `🔴 NOTIFICATION DES DROITS MIRANDA + :\n- Vous avez le droit de garder le silence.\n- Tout ce que vous direz pourra être retenu contre vous.\n- Vous avez droit à un avocat commis d'office ou de votre choix.\n- Vous avez droit à un appel téléphonique unique (2 min).\n- Vous pouvez exiger l'intervention d'une équipe médicale en cas de besoin.`;
-            navigator.clipboard.writeText(text).then(() => alert("Droits Miranda + copiés dans le presse-papier !"));
+            navigator.clipboard.writeText("🔴 DROITS MIRANDA + :\n1. Droit au silence.\n2. Droit à un avocat.\n3. Droit à un appel unique (2 min).\n4. Droit médical d'urgence.").then(() => alert("Copié !"));
         }
 
-        // ENREGISTREMENT GAV & CASIER JUDICIAIRE
         async function registerGAV() {
             const suspect = document.getElementById('gav_suspect').value.trim();
             const motif = document.getElementById('gav_motif').value.trim();
             const duration = document.getElementById('gav_duration').value.trim();
             const officer = document.getElementById('gav_officer').value.trim();
-            const notes = document.getElementById('gav_notes').value.trim();
-
             if(!suspect || !motif) return alert("Renseignez le suspect et le motif.");
 
-            let casierEntry = {
-                timestamp: getFrenchTimestamp(),
-                suspect,
-                motif,
-                duration: duration || "Non spécifié",
-                officer,
-                notes
-            };
-
             let casierList = await cloudGet('nanterre_casier_judiciaire', []);
-            casierList.unshift(casierEntry);
+            casierList.unshift({ timestamp: getFrenchTimestamp(), suspect, motif, duration: duration || "Non spécifié", officer });
             await cloudSave('nanterre_casier_judiciaire', casierList);
 
-            let text = `=== ⚖️ REGISTRE DE GARDE À VUE & CASIER JUDICIAIRE ===\n`;
-            text += `👤 Suspect : ${suspect}\n`;
-            text += `⚠️ Motif : ${motif}\n`;
-            text += `⏱️ Durée GAV / Sanction : ${duration}\n`;
-            text += `👮 Officier : ${officer}\n`;
-            text += `📝 Notes & Saisies :\n${notes}\n`;
-            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
-            text += `==================================================`;
-
+            let text = `=== ⚖️ GAV & CASIER ===\nSuspect : ${suspect}\nMotif : ${motif}\nDurée : ${duration}\nOfficier : ${officer}`;
             const out = document.getElementById('output_gav');
             out.innerText = text;
             out.style.display = 'block';
             document.getElementById('send_gav').style.display = 'block';
-
-            await logAuditAction(officer, `Enregistrement GAV / Casier pour ${suspect}`);
-            alert("Fiche GAV enregistrée dans le casier judiciaire !");
+            alert("GAV enregistrée !");
         }
 
         async function renderCasierJudiciaire() {
@@ -943,211 +870,9 @@
             if(!tbody) return;
             let casierList = await cloudGet('nanterre_casier_judiciaire', []);
             tbody.innerHTML = '';
-            if(casierList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted); text-align:center;">Aucun antécédent enregistré dans le casier judiciaire.</td></tr>`;
-                return;
-            }
+            if(casierList.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aucun antécédent.</td></tr>`; return; }
             casierList.forEach(c => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><small>${c.timestamp}</small></td>
-                        <td><strong>${c.suspect}</strong></td>
-                        <td>${c.motif}<br><small style="color:var(--text-muted)">${c.notes || ''}</small></td>
-                        <td><span style="color:#f87171; font-weight:bold;">${c.duration}</span></td>
-                        <td>${c.officer}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        // DEMANDE DE MANDATS
-        async function submitMandatRequest() {
-            const type = document.getElementById('mandat_type').value;
-            const target = document.getElementById('mandat_target').value.trim();
-            const author = document.getElementById('mandat_author').value;
-            const reason = document.getElementById('mandat_reason').value.trim();
-
-            if(!target || !reason) return alert("Veuillez remplir la cible et les motifs.");
-
-            let text = `=== 📜 DEMANDE DE MANDAT OFFICIEL ===\n`;
-            text += `📌 Type : ${type}\n`;
-            text += `🎯 Cible / Propriété : ${target}\n`;
-            text += `👮 Demandeur : ${author}\n`;
-            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
-            text += `📝 Motifs de l'enquête :\n${reason}\n`;
-            text += `====================================`;
-
-            const out = document.getElementById('output_mandat');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_mandat').style.display = 'block';
-
-            await logAuditAction(author, `Demande de mandat (${type}) pour ${target}`);
-            alert("Demande de mandat préparée !");
-        }
-
-        // CAMÉRAS PIÉTONS & PREUVES
-        async function registerEvidence() {
-            const camId = document.getElementById('cam_id').value.trim();
-            const author = document.getElementById('cam_author').value;
-            const link = document.getElementById('cam_link').value.trim();
-            const desc = document.getElementById('cam_desc').value.trim();
-
-            if(!link || !desc) return alert("Veuillez renseigner le lien de la preuve et sa description.");
-
-            let text = `=== 🎥 RAPPORT DE CAMÉRA PIÉTON & PREUVE MULTIMÉDIA ===\n`;
-            text += `📷 Caméra : ${camId || 'Standard'}\n`;
-            text += `👤 Enregistré par : ${author}\n`;
-            text += `🔗 Lien Preuve (Image/Vidéo) : ${link}\n`;
-            text += `🕒 Date : ${getFrenchTimestamp()}\n`;
-            text += `📝 Description :\n${desc}\n`;
-            text += `=====================================================`;
-
-            const out = document.getElementById('output_preuve');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_preuve').style.display = 'block';
-
-            await logAuditAction(author, `Enregistrement preuve caméra piéton (${camId})`);
-            alert("Preuve enregistrée !");
-        }
-
-        // GESTION PERMISSIONS & AUTRES FONCTIONS ADMIN
-        async function adminSavePermission() {
-            const index = parseInt(document.getElementById('adm_perm_index').value);
-            const service = document.getElementById('adm_perm_service').value;
-            const grade = document.getElementById('adm_perm_grade').value.trim();
-            const desc = document.getElementById('adm_perm_desc').value.trim();
-
-            if(!grade || !desc) return alert("Veuillez remplir le grade et les permissions.");
-
-            let permissions = await cloudGet('nanterre_grade_permissions', []);
-            if (index > -1) permissions[index] = { service, grade, desc };
-            else permissions.push({ service, grade, desc });
-
-            await cloudSave('nanterre_grade_permissions', permissions);
-            alert("Permission enregistrée !");
-            document.getElementById('adm_perm_index').value = "-1";
-            document.getElementById('adm_perm_grade').value = "";
-            document.getElementById('adm_perm_desc').value = "";
-            renderAdminPermissionsTable();
-        }
-
-        async function editPermission(index) {
-            let permissions = await cloudGet('nanterre_grade_permissions', []);
-            let p = permissions[index];
-            if(!p) return;
-            document.getElementById('adm_perm_index').value = index;
-            document.getElementById('adm_perm_service').value = p.service;
-            document.getElementById('adm_perm_grade').value = p.grade;
-            document.getElementById('adm_perm_desc').value = p.desc;
-        }
-
-        async function deletePermission(index) {
-            let permissions = await cloudGet('nanterre_grade_permissions', []);
-            permissions.splice(index, 1);
-            await cloudSave('nanterre_grade_permissions', permissions);
-            renderAdminPermissionsTable();
-        }
-
-        async function renderAdminPermissionsTable() {
-            const tbody = document.getElementById('adminPermissionsTable');
-            if(!tbody) return;
-            let permissions = await cloudGet('nanterre_grade_permissions', []);
-            tbody.innerHTML = '';
-            if(permissions.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Aucune permission spécifique.</td></tr>`;
-                return;
-            }
-            permissions.forEach((p, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${p.service}</strong></td>
-                        <td>${p.grade}</td>
-                        <td>${p.desc}</td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm" onclick="editPermission(${i})">Modifier</button>
-                            <button class="btn btn-danger btn-sm" onclick="deletePermission(${i})">Supprimer</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        async function adminSaveRule() {
-            const index = parseInt(document.getElementById('adm_rule_index').value);
-            const title = document.getElementById('adm_rule_title').value.trim();
-            const content = document.getElementById('adm_rule_content').value.trim();
-            if (!title || !content) return alert("Remplissez tous les champs.");
-
-            let rules = await cloudGet('nanterre_rules', []);
-            const timestamp = getFrenchTimestamp();
-            if (index > -1) rules[index] = { title, content, date: timestamp };
-            else rules.push({ title, content, date: timestamp });
-
-            await cloudSave('nanterre_rules', rules);
-            alert("Règle enregistrée !");
-            document.getElementById('adm_rule_index').value = "-1";
-            document.getElementById('adm_rule_title').value = "";
-            document.getElementById('adm_rule_content').value = "";
-            renderAdminRulesTable();
-            renderRules();
-        }
-
-        async function editRule(index) {
-            let rules = await cloudGet('nanterre_rules', []);
-            let r = rules[index];
-            if(!r) return;
-            document.getElementById('adm_rule_index').value = index;
-            document.getElementById('adm_rule_title').value = r.title;
-            document.getElementById('adm_rule_content').value = r.content;
-        }
-
-        async function deleteRule(index) {
-            let rules = await cloudGet('nanterre_rules', []);
-            rules.splice(index, 1);
-            await cloudSave('nanterre_rules', rules);
-            renderAdminRulesTable();
-            renderRules();
-        }
-
-        async function renderRules() {
-            const container = document.getElementById('rulesContainer');
-            if(!container) return;
-            let rules = await cloudGet('nanterre_rules', []);
-            if(rules.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted);">Aucun règlement publié.</p>`;
-                return;
-            }
-            container.innerHTML = '';
-            rules.forEach(r => {
-                container.innerHTML += `
-                    <div class="forum-card">
-                        <h4 style="color:var(--police-blue); margin-bottom:8px;">📜 ${r.title}</h4>
-                        <p style="white-space: pre-wrap; font-size:0.95rem; color:var(--text-main);">${r.content}</p>
-                        <div class="forum-meta">🕒 Date : ${r.date}</div>
-                    </div>
-                `;
-            });
-        }
-
-        async function renderAdminRulesTable() {
-            const tbody = document.getElementById('adminRulesTable');
-            if(!tbody) return;
-            let rules = await cloudGet('nanterre_rules', []);
-            tbody.innerHTML = '';
-            rules.forEach((r, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${r.title}</strong></td>
-                        <td>${r.content.substring(0, 40)}...</td>
-                        <td><small>${r.date}</small></td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm" onclick="editRule(${i})">Modifier</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteRule(${i})">Supprimer</button>
-                        </td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr><td><small>${c.timestamp}</small></td><td><strong>${c.suspect}</strong></td><td>${c.motif}</td><td><span style="color:#f87171;">${c.duration}</span></td><td>${c.officer}</td></tr>`;
             });
         }
 
@@ -1156,126 +881,31 @@
             const password = document.getElementById('adm_staff_pass').value.trim();
             const name = document.getElementById('adm_staff_name').value.trim();
             const matricule = document.getElementById('adm_staff_matricule').value.trim();
-            const service = document.getElementById('adm_staff_service').value;
-            const department = document.getElementById('adm_staff_dept').value;
+            const serviceCat = document.getElementById('adm_staff_service_cat').value;
             const role = document.getElementById('adm_staff_role').value;
 
-            if (!username || !password || !name || matricule === "") return alert("Veuillez remplir tous les champs.");
-            
-            try {
-                let accounts = await cloudGet('nanterre_staff_accounts', []);
-                let formattedMatricule = String(matricule).padStart(2, '0');
-                
-                if (accounts.some(a => a.username.toLowerCase() === username.toLowerCase())) {
-                    return alert("Un compte existe déjà avec cet identifiant !");
-                }
-
-                accounts.push({ username, password, name, matricule: formattedMatricule, service, department, role, radioState: "🟢 Disponible", blames: [] });
-                await cloudSave('nanterre_staff_accounts', accounts);
-                alert("✅ Compte agent créé avec succès !");
-                
-                document.getElementById('adm_staff_user').value = "";
-                document.getElementById('adm_staff_pass').value = "";
-                document.getElementById('adm_staff_name').value = "";
-                document.getElementById('adm_staff_matricule').value = "";
-                await renderAdminStaffAccountsTable();
-            } catch (err) {
-                alert("⚠️ Erreur : " + err.message);
-            }
+            if (!username || !password || !name || matricule === "") return alert("Remplissez tout.");
+            let accounts = await cloudGet('nanterre_staff_accounts', []);
+            accounts.push({ username, password, name, matricule: String(matricule).padStart(2, '0'), serviceCat, role, radioState: "🟢 Disponible", blames: [] });
+            await cloudSave('nanterre_staff_accounts', accounts);
+            alert("✅ Agent enregistré !");
+            renderAdminStaffAccountsTable();
         }
 
-        async function deleteStaffAccount(index) {
+        async function deleteStaffAccount(i) {
             let accounts = await cloudGet('nanterre_staff_accounts', []);
-            accounts.splice(index, 1);
+            accounts.splice(i, 1);
             await cloudSave('nanterre_staff_accounts', accounts);
             renderAdminStaffAccountsTable();
         }
 
-        async function updateAgentGrade(index) {
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let newGrade = prompt("Nouveau nom/grade :", accounts[index].name);
-            if(newGrade && newGrade.trim() !== "") {
-                accounts[index].name = newGrade.trim();
-                await cloudSave('nanterre_staff_accounts', accounts);
-                renderDirectoryStaff();
-                alert("Mis à jour !");
-            }
-        }
-
-        async function updateAgentRadioStatus() {
-            const unit = document.getElementById('radio_unit').value.trim() || "Unité";
-            const state = document.getElementById('radio_state').value;
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let acc = accounts.find(a => loggedInAgent.includes(a.name));
-            if(acc) {
-                acc.radioState = `${unit} : ${state}`;
-                await cloudSave('nanterre_staff_accounts', accounts);
-                alert("Statut radio mis à jour !");
-            }
-        }
-
-        async function populateBlameAgentsDropdown() {
-            const select = document.getElementById('blame_agent_select');
-            if(!select) return;
-            select.innerHTML = '';
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let filtered = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
-            filtered.forEach((acc) => {
-                let opt = document.createElement('option');
-                opt.value = acc.username;
-                opt.text = `[${acc.matricule}] ${acc.name} (${acc.service})`;
-                select.appendChild(opt);
-            });
-        }
-
-        async function applyBlameToAgent() {
-            const username = document.getElementById('blame_agent_select').value;
-            const level = document.getElementById('blame_level').value;
-            const reason = document.getElementById('blame_reason').value.trim();
-
-            if(!reason) return alert("Indiquez le motif du blâme.");
-
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let targetAcc = accounts.find(a => a.username === username);
-            if(!targetAcc) return alert("Agent introuvable.");
-
-            if(!targetAcc.blames) targetAcc.blames = [];
-            targetAcc.blames.push({ level, reason, date: getFrenchTimestamp(), author: loggedInAgent });
-            await cloudSave('nanterre_staff_accounts', accounts);
-
-            let text = `=== ⚠️ SANCTION DISCIPLINAIRE ===\nService : ${targetAcc.service}\nAgent : ${targetAcc.name} [${targetAcc.matricule}]\nSanction : ${level}\nMotif : ${reason}\nPar : ${loggedInAgent}`;
-            const out = document.getElementById('output_blame');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_blame').style.display = 'block';
-            alert("Blâme enregistré !");
-        }
-
-        async function renderDirectoryStaff() {
-            const tbody = document.getElementById('directoryStaffTable');
+        async function renderAdminStaffAccountsTable() {
+            const tbody = document.getElementById('adminStaffAccountsTable');
             if(!tbody) return;
             let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let activeStaff = await cloudGet('nanterre_active_staff', []);
             tbody.innerHTML = '';
-            accounts.forEach((acc, index) => {
-                let isOnline = activeStaff.includes(acc.username) || loggedInAgent.includes(acc.name);
-                let dotClass = isOnline ? "status-dot online" : "status-dot";
-                let radioInfo = acc.radioState ? `<br><small style="color:#38bdf8;">📡 ${acc.radioState}</small>` : "";
-                let blamesHtml = "<span style='color:#4ade80;'>Dossier vierge</span>";
-                if(acc.blames && acc.blames.length > 0) {
-                    blamesHtml = "<ul style='margin-left: 15px; color: #f87171;'>";
-                    acc.blames.forEach(b => { blamesHtml += `<li><strong>${b.level}</strong> (${b.date})</li>`; });
-                    blamesHtml += "</ul>";
-                }
-                tbody.innerHTML += `
-                    <tr>
-                        <td><span class="${dotClass}"></span> ${isOnline ? 'En service' : 'Hors ligne'} ${radioInfo}</td>
-                        <td><strong>${acc.service}</strong></td>
-                        <td><strong>[${acc.matricule}]</strong> - ${acc.name}</td>
-                        <td>${blamesHtml}</td>
-                        <td><button class="btn btn-secondary btn-sm" onclick="updateAgentGrade(${index})">Modifier</button></td>
-                    </tr>
-                `;
+            accounts.forEach((acc, i) => {
+                tbody.innerHTML += `<tr><td>${acc.serviceCat}</td><td>[${acc.matricule}]</td><td>${acc.role}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
             });
         }
 
@@ -1287,183 +917,44 @@
 
             if (found) {
                 loggedInAgent = `${found.name} [Matricule ${found.matricule}]`;
-                loggedInService = found.service;
+                loggedInServiceCategory = found.serviceCat;
                 loggedInRole = found.role;
-                
-                let activeStaff = await cloudGet('nanterre_active_staff', []);
-                if(!activeStaff.includes(found.username)) {
-                    activeStaff.push(found.username);
-                    await cloudSave('nanterre_active_staff', activeStaff);
-                }
 
                 document.getElementById('staffLoginForm').style.display = 'none';
                 document.getElementById('staffDashboard').style.display = 'block';
-                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInService})`;
+                document.getElementById('welcomeStaffMsg').innerText = `✅ Session Active : ${loggedInAgent} (${loggedInServiceCategory})`;
                 
                 document.getElementById('rep_agent').value = loggedInAgent;
                 document.getElementById('gav_officer').value = loggedInAgent;
-                document.getElementById('mandat_author').value = loggedInAgent;
-                document.getElementById('cam_author').value = loggedInAgent;
-                document.getElementById('rep_service').value = loggedInService;
-                toggleMedicalSection(loggedInService);
 
-                const policeTabs = document.querySelectorAll('.police-exclusive-tab');
-                if (loggedInService === "Police Nationale") {
+                if (loggedInServiceCategory.startsWith('Police')) {
                     document.getElementById('policeGAVBtn').style.display = 'inline-block';
                     document.getElementById('policeCasierBtn').style.display = 'inline-block';
                     document.getElementById('policeMirandaBtn').style.display = 'inline-block';
-                    document.getElementById('policeMandatBtn').style.display = 'inline-block';
-                    document.getElementById('policePreuveBtn').style.display = 'inline-block';
-                    policeTabs.forEach(tab => tab.style.display = 'inline-block');
-                } else {
-                    document.getElementById('policeGAVBtn').style.display = 'none';
-                    document.getElementById('policeCasierBtn').style.display = 'none';
-                    document.getElementById('policeMirandaBtn').style.display = 'none';
-                    document.getElementById('policeMandatBtn').style.display = 'none';
-                    document.getElementById('policePreuveBtn').style.display = 'none';
-                    policeTabs.forEach(tab => tab.style.display = 'none');
+                    document.querySelectorAll('.police-exclusive-tab').forEach(t => t.style.display = 'inline-block');
                 }
-
-                if (loggedInRole === 'hc' || loggedInRole === 'haut_comm_police') {
-                    document.getElementById('hcTabBtn').style.display = 'inline-block';
-                    document.getElementById('blameToolBtn').style.display = 'inline-block';
-                    if(loggedInRole === 'haut_comm_police') document.getElementById('policeArreteBtn').style.display = 'inline-block';
-                }
-
-                renderDirectoryStaff();
                 updatePublicServiceStatus();
             } else {
                 alert("Identifiant ou mot de passe incorrect.");
             }
         }
 
-        async function logoutStaff() {
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let currentAcc = accounts.find(a => loggedInAgent.includes(a.name));
-            if(currentAcc) {
-                let activeStaff = await cloudGet('nanterre_active_staff', []);
-                activeStaff = activeStaff.filter(u => u !== currentAcc.username);
-                await cloudSave('nanterre_active_staff', activeStaff);
-            }
+        function logoutStaff() {
             loggedInAgent = "";
-            loggedInService = "";
-            loggedInRole = "";
             document.getElementById('staffLoginForm').style.display = 'block';
             document.getElementById('staffDashboard').style.display = 'none';
-            document.getElementById('hcTabBtn').style.display = 'none';
-            document.getElementById('policeGAVBtn').style.display = 'none';
-            document.getElementById('policeCasierBtn').style.display = 'none';
-            document.getElementById('policeMirandaBtn').style.display = 'none';
-            document.getElementById('policeMandatBtn').style.display = 'none';
-            document.getElementById('policePreuveBtn').style.display = 'none';
-            document.getElementById('policeArreteBtn').style.display = 'none';
-            document.getElementById('blameToolBtn').style.display = 'none';
-            document.querySelectorAll('.police-exclusive-tab').forEach(tab => tab.style.display = 'none');
-            renderDirectoryStaff();
-            updatePublicServiceStatus();
-        }
-
-        async function renderAdminStaffAccountsTable() {
-            const tbody = document.getElementById('adminStaffAccountsTable');
-            if(!tbody) return;
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            tbody.innerHTML = '';
-            accounts.forEach((acc, i) => {
-                tbody.innerHTML += `<tr><td>${acc.service}</td><td>[${acc.matricule}]</td><td>${acc.role}</td><td><code>${acc.username}</code></td><td>${acc.name}</td><td><button class="btn btn-danger btn-sm" onclick="deleteStaffAccount(${i})">Supprimer</button></td></tr>`;
-            });
-        }
-
-        async function generateInterventionReport() {
-            const service = document.getElementById('rep_service').value;
-            const agent = document.getElementById('rep_agent').value || "N/A";
-            const location = document.getElementById('rep_location').value || "N/A";
-            const datetime = document.getElementById('rep_datetime').value || getFrenchTimestamp();
-            const motif = document.getElementById('rep_motif').value || "Intervention";
-            const details = document.getElementById('rep_details').value || "N/A";
-
-            let allReports = await cloudGet('nanterre_all_reports', []);
-            allReports.unshift({ service, agent, location, datetime, motif, details });
-            await cloudSave('nanterre_all_reports', allReports);
-
-            let text = `=== 🚨 RAPPORT D'INTERVENTION - ${service.toUpperCase()} ===\nAgent : ${agent}\nLieu : ${location}\nDate : ${datetime}\nMotif : ${motif}\nCompte-Rendu :\n${details}`;
-            const out = document.getElementById('output_intervention');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('copy_intervention').style.display = 'block';
-            document.getElementById('send_intervention').style.display = 'block';
-            alert("Rapport généré !");
-        }
-
-        async function generateArreteMunicipal() {
-            const title = document.getElementById('arr_title').value.trim();
-            const date = document.getElementById('arr_date').value.trim();
-            const content = document.getElementById('arr_content').value.trim();
-            if(!title || !content) return alert("Remplissez tous les champs.");
-
-            let text = `=== 📜 ARRÊTÉ MUNICIPAL ===\n📌 ${title}\n📅 Période : ${date}\n${content}`;
-            const out = document.getElementById('output_arrete');
-            out.innerText = text;
-            out.style.display = 'block';
-            document.getElementById('send_arrete').style.display = 'block';
-            alert("Arrêté rédigé !");
-        }
-
-        async function registerDotation() {
-            const item = document.getElementById('arm_item').value.trim();
-            const serial = document.getElementById('arm_serial').value.trim();
-            if(!item) return alert("Indiquez l'équipement.");
-            let text = `=== 🔫 DOTATION ===\nAgent : ${loggedInAgent}\nMatériel : ${item} (${serial})`;
-            const out = document.getElementById('output_armement');
-            out.innerText = text;
-            out.style.display = 'block';
-            alert("Dotation enregistrée !");
-        }
-
-        async function savePlanning() {
-            const day = document.getElementById('plan_day').value.trim();
-            const leader = document.getElementById('plan_leader').value.trim();
-            if(!day || !leader) return alert("Remplissez tout.");
-            let planning = await cloudGet('nanterre_planning', []);
-            planning.push({ service: loggedInService, day, leader });
-            await cloudSave('nanterre_planning', planning);
-            renderPlanningTable();
-            alert("Créneau ajouté !");
-        }
-
-        async function renderPlanningTable() {
-            const tbody = document.getElementById('planningTable');
-            if(!tbody) return;
-            let planning = await cloudGet('nanterre_planning', []);
-            let sp = loggedInService === "Administration" ? planning : planning.filter(p => p.service === loggedInService);
-            tbody.innerHTML = '';
-            sp.forEach(p => { tbody.innerHTML += `<tr><td><strong>${p.day}</strong></td><td>${p.leader}</td></tr>`; });
-        }
-
-        async function renderHCStatsAndReports() {
-            document.getElementById('hcServiceNameDisplay').innerText = loggedInService;
-            let allReports = await cloudGet('nanterre_all_reports', []);
-            let sr = loggedInService === "Administration" ? allReports : allReports.filter(r => r.service === loggedInService);
-            document.getElementById('statTotalReports').innerText = sr.length;
-            let accounts = await cloudGet('nanterre_staff_accounts', []);
-            let sa = loggedInService === "Administration" ? accounts : accounts.filter(a => a.service === loggedInService);
-            document.getElementById('statTotalAgents').innerText = sa.length;
-        }
-
-        function copyToClipboard(elementId) {
-            navigator.clipboard.writeText(document.getElementById(elementId).innerText).then(() => alert("Copié !"));
         }
 
         async function checkAdminPassword() {
-            const pwd = document.getElementById('adminPasswordInput').value;
-            if (pwd === ADMIN_SECRET_PASSWORD) {
-                loggedInService = "Administration";
-                loggedInRole = "hc";
+            if (document.getElementById('adminPasswordInput').value === ADMIN_SECRET_PASSWORD) {
+                loggedInServiceCategory = "Administration";
                 document.getElementById('adminLoginBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
                 await renderAdminRulesTable();
+                await renderAdminPenalTable();
                 await renderAdminStaffAccountsTable();
-                await renderAdminPermissionsTable();
                 await applyInterfaceConfig();
+                alert("✅ Connexion Admin réussie !");
             } else {
                 alert("❌ Mot de passe incorrect !");
             }
@@ -1472,7 +963,7 @@
         window.onload = async () => {
             await applyInterfaceConfig();
             await renderRules();
-            await renderDirectoryStaff();
+            await renderCodePenal();
             await updatePublicServiceStatus();
         };
     </script>
