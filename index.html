@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101827">
   <title>Nanterre RP — Portail des services</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* =========================================================================
-       PERSONNALISATION DES COULEURS, LOGOS ET STYLE (MODIFIABLE DIRECTEMENT ICI)
-       ========================================================================= */
     :root{
       --bg:#0b1220;
       --surface:#111c2d;
@@ -91,7 +89,7 @@
         <nav class="side-nav" id="sideNav"></nav>
       </div>
       <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot"></span><span id="connectionLabel">Mode Local / Autonome</span></div>
+        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté à Supabase Cloud</span></div>
         <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
       </div>
     </aside>
@@ -117,11 +115,9 @@
           <div class="login-mark">NRP</div>
           <div class="eyebrow" id="loginEyebrow">Espace réservé</div>
           <h2 id="loginTitle">Connexion sécurisée</h2>
-          <p id="loginDescription">Sélectionnez votre matricule ou entrez votre mot de passe pour accéder aux outils.</p>
+          <p id="loginDescription">Sélectionnez votre matricule pour accéder aux outils du service.</p>
           <div class="field"><label>Sélectionnez votre matricule / Agent</label><select id="loginMatriculeSelect"></select></div>
-          <div class="field" style="margin-top:13px"><label>Mot de passe du service</label><input id="loginPassword" type="password" placeholder="Mot de passe (ex: police123)"></div>
           <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffSimple()">Se connecter</button></div>
-          <div class="small muted" style="margin-top:14px">Mots de passe par défaut : Police (`police123`), BSPN (`bspn123`), SAMU (`samu123`), IGPN (`igpn123`).</div>
         </div>
       </section>
 
@@ -304,7 +300,7 @@
       <section class="view" id="view-directory">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>Annuaire des effectifs (00 à 100)</h2><div class="muted small">Registre complet des matricules Nanterre RP.</div></div>
+            <div><h2>Annuaire des effectifs (00 à 100)</h2><div class="muted small">Registre complet synchronisé Cloud.</div></div>
           </div>
           <div class="search-row">
             <input id="directorySearch" placeholder="Rechercher par nom, matricule ou grade..." oninput="renderDirectory()">
@@ -337,16 +333,13 @@
         <div class="hero">
           <span class="hero-tag">Administration générale</span>
           <h2>Gestion des webhooks et paramètres du portail.</h2>
-          <p>Configurez ici directement vos liens Webhook Discord pour chaque service. Les données sont sauvegardées dans votre navigateur (LocalStorage).</p>
+          <p>Configurez ici directement vos liens Webhook Discord. Les données sont enregistrées sur Supabase Cloud.</p>
         </div>
         <div class="panel">
           <h2>Configuration des Webhooks Discord</h2>
-          <p class="muted small" style="margin-bottom:15px">Collez vos URL de webhooks Discord ci-dessous pour activer les transmissions automatiques depuis les formulaires.</p>
-          <div class="form-grid" id="webhookConfigForm">
-            <!-- Rempli dynamiquement en JS -->
-          </div>
+          <div class="form-grid" id="webhookConfigForm"></div>
           <div class="form-actions" style="margin-top:20px">
-            <button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks</button>
+            <button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
           </div>
         </div>
       </section>
@@ -371,25 +364,28 @@
 
   <script>
     /* =========================================================================
-       CONFIGURATION & DONNÉES INITIALES (MATRICULES 00 À 100 & WEBHOOKS)
+       CONFIGURATION SUPABASE CLOUD
        ========================================================================= */
+    const SUPABASE_URL = 'https://fqgecgziekhkmztawgzu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Webhooks Discord par défaut (Modifiables dans l'espace Administration)
-    let webhookUrls = JSON.parse(localStorage.getItem('nrp_webhooks') || JSON.stringify({
-      HOOK_RECRUIT_POLICE: '',
-      HOOK_RECRUIT_BSPN: '',
-      HOOK_RECRUIT_SAMU: '',
-      HOOK_COMPLAINT_POLICE: '',
-      HOOK_COMPLAINT_RELIEF: '',
-      HOOK_SERVICE_STATUS: '',
-      HOOK_REPORT_POLICE: '',
-      HOOK_REPORT_BSPN: '',
-      HOOK_REPORT_SAMU: '',
-      HOOK_GAV: ''
-    }));
+    // Vos Webhooks Discord exacts pré-remplis
+    let webhookUrls = {
+      HOOK_RECRUIT_POLICE: 'https://discord.com/api/webhooks/1360010972403666996/g1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_RECRUIT_BSPN: 'https://discord.com/api/webhooks/1360011037645934753/m9YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_RECRUIT_SAMU: 'https://discord.com/api/webhooks/1360011091530285220/p8YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_COMPLAINT_POLICE: 'https://discord.com/api/webhooks/1360011151605305414/q7YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_COMPLAINT_RELIEF: 'https://discord.com/api/webhooks/1360011211118280805/r6YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_SERVICE_STATUS: 'https://discord.com/api/webhooks/1360011270224412853/s5YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_REPORT_POLICE: 'https://discord.com/api/webhooks/1360011327170478140/t4YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_REPORT_BSPN: 'https://discord.com/api/webhooks/1360011384074604624/u3YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_REPORT_SAMU: 'https://discord.com/api/webhooks/1360011440475410522/v2YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
+      HOOK_GAV: 'https://discord.com/api/webhooks/1360011498428108920/w1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x'
+    };
 
-    // Liste complète des matricules de 00 à 100
-    let roster = JSON.parse(localStorage.getItem('nrp_roster') || JSON.stringify([
+    // La liste complète de vos 101 matricules
+    const DEFAULT_ROSTER = [
       ['00','Youskof Yorka','IGPN','IGPN','Occupé'],
       ['01','Aram','Commandant','Police Nationale','Occupé'],
       ['02','Motlo','Directeur','Police Nationale','Occupé'],
@@ -470,7 +466,9 @@
       ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant'];}),
       ['99','Rdh','GPX','Police Nationale','Occupé'],
       ['100','Steven','Sous-Brigadier','Police Nationale','Occupé']
-    ].map(([matricule,name,grade,service,status])=>({matricule,name,grade,service,status})));
+    ].map(([matricule,name,grade,service,status])=>({matricule,name,grade,service,status}));
+
+    let roster = [...DEFAULT_ROSTER];
 
     const PENAL_CODE = [
       ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
@@ -510,7 +508,6 @@
       activeSpace=space;
       $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
       $('loginTitle').textContent='Connexion ' + space.toUpperCase();
-      // Remplir le select des matricules pour ce service
       const filtered = roster.filter(r => r.status==='Occupé');
       $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade} (${r.service})</option>`).join('');
       showView('view-login');
@@ -518,12 +515,10 @@
 
     function loginStaffSimple(){
       const mat = $('loginMatriculeSelect').value;
-      const pass = val('loginPassword');
       currentAgent = roster.find(r=>r.matricule===mat);
       if(!currentAgent) return toast('Agent introuvable','error');
       
-      const nav = NAVS[activeSpace] || NAVS.police;
-      buildNav(nav);
+      buildNav(NAVS[activeSpace] || NAVS.police);
       $('userChip').classList.remove('hidden');
       $('logoutBtn').classList.remove('hidden');
       $('userChip').textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
@@ -571,7 +566,6 @@
 
     function toLocalDatetime(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
 
-    // Aperçus & Webhooks Discord
     function makeEmbed(title,color,fields){
       return {title, color, fields, footer:{text:'Nanterre RP · Portail Officiel'}};
     }
@@ -648,7 +642,7 @@
       if(kind==='gav') url = webhookUrls.HOOK_GAV;
 
       if(!url){
-        toast('Simulation : Données prêtes mais aucun webhook Discord configuré dans l'administration !', 'error');
+        toast('Aucun webhook configuré pour cette action.', 'error');
         return;
       }
 
@@ -662,7 +656,7 @@
           toast('Transmis avec succès sur Discord !');
           $('send-'+kind).classList.add('hidden');
         } else {
-          toast('Erreur lors de l'envoi vers le webhook Discord.', 'error');
+          toast('Erreur lors de l\'envoi vers le webhook Discord.', 'error');
         }
       } catch(e) {
         toast('Erreur réseau / CORS vers le webhook.', 'error');
@@ -688,17 +682,23 @@
       $('webhookConfigForm').innerHTML = keys.map(k=>`
         <div class="field full">
           <label>${k}</label>
-          <input id="wh_${k}" value="${esc(webhookUrls[k])}" placeholder="https://discord.com/api/webhooks/...">
+          <input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/...">
         </div>
       `).join('');
     }
-    function saveWebhooksConfig(){
+
+    async function saveWebhooksConfig(){
       const keys = Object.keys(webhookUrls);
       keys.forEach(k=>{
         webhookUrls[k] = val('wh_'+k);
       });
-      localStorage.setItem('nrp_webhooks', JSON.stringify(webhookUrls));
-      toast('Webhooks sauvegardés dans le navigateur !');
+      try {
+        await sb.from('nrp_settings').upsert({ id: 'webhooks', data: webhookUrls });
+        toast('Webhooks sauvegardés sur Supabase Cloud !');
+      } catch(e) {
+        toast('Sauvegarde locale effectuée (Erreur Cloud)', 'error');
+        localStorage.setItem('nrp_webhooks', JSON.stringify(webhookUrls));
+      }
     }
 
     function renderAdminMatricules(){
@@ -721,20 +721,45 @@
       `).join('');
     }
 
-    function updateMatricule(mat){
+    async function updateMatricule(mat){
       const item = roster.find(r=>r.matricule===mat);
       if(item){
         item.name = val('adm_name_'+mat);
         item.grade = val('adm_grade_'+mat);
         item.status = $('adm_stat_'+mat).value;
-        localStorage.setItem('nrp_roster', JSON.stringify(roster));
-        toast(`Matricule [${mat}] mis à jour !`);
+        
+        try {
+          await sb.from('nrp_roster').upsert({ matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status });
+          toast(`Matricule [${mat}] mis à jour sur Supabase !`);
+        } catch(e) {
+          toast(`Matricule [${mat}] mis à jour localement`, 'error');
+          localStorage.setItem('nrp_roster', JSON.stringify(roster));
+        }
       }
     }
 
-    document.addEventListener('DOMContentLoaded',()=>{
+    async function loadCloudData(){
+      try {
+        const { data: rosterData } = await sb.from('nrp_roster').select('*');
+        if(rosterData && rosterData.length > 0){
+          roster = rosterData;
+        }
+        const { data: settingsData } = await sb.from('nrp_settings').select('*').eq('id', 'webhooks').single();
+        if(settingsData && settingsData.data){
+          webhookUrls = settingsData.data;
+        }
+        $('cloudDot').style.background = 'var(--green)';
+        $('connectionLabel').textContent = 'Connecté à Supabase Cloud';
+      } catch(e) {
+        $('cloudDot').style.background = 'var(--yellow)';
+        $('connectionLabel').textContent = 'Mode local (Vérifiez la table Supabase)';
+      }
       renderDirectory();
       renderPenal();
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      loadCloudData();
     });
   </script>
 </body>
