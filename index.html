@@ -48,7 +48,7 @@
     .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);color:#ffb3ba}
     .login-wrap{max-width:480px;margin:7vh auto}.gateway{max-width:1120px;margin:6vh auto;position:relative;z-index:2}.gateway-head{text-align:center;margin-bottom:30px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;transition:.18s}.gateway-card:hover{border-color:#5485c5;transform:translateY(-4px)}.search-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}.search-row input{flex:1;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}
     .toast-host{position:fixed;right:18px;bottom:18px;z-index:99999;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}
-    .toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow)}
+    .toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow);border-left:4px solid var(--blue)}.toast.error{border-left-color:var(--red)}
 
     /* --- BOÎTE D'ALERTE CENTRALE PLEIN MILIEU --- */
     #globalCenterOverlay {
@@ -104,7 +104,6 @@
     </div>
   </div>
 
-  <!-- Lecteur audio invisible pour les liens de sons / musiques -->
   <audio id="customAudioPlayer" style="display:none"></audio>
 
   <!-- PAGE D'ACCUEIL / GATEWAY -->
@@ -296,7 +295,7 @@
         <div class="panel">
           <h2>Prise, pause et fin de service</h2>
           <div class="form-grid">
-            <div class="field"><label>Indicatif / Unité <span class="req">*</span></label><input id="svc_unit" placeholder="Ex: BAC-01"></div>
+            <div class="field"><label>Indicatif / Unité <span class="req">*</span></label><input id="svc_unit" placeholder="Ex: RAID-01"></div>
             <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
             <div class="field full"><label>Observations / Secteur</label><input id="svc_note"></div>
           </div>
@@ -527,20 +526,16 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- LECTURE AUDIO VIA LIEN / FICHIER ---
     function playAudioUrl(url) {
       if(!url) return;
       try {
         const player = document.getElementById('customAudioPlayer');
         player.src = url;
         player.currentTime = 0;
-        player.play().catch(e => {
-          console.log("Lecture audio bloquée ou lien non pris en charge :", e);
-        });
+        player.play().catch(e => console.log("Audio bloqué par le navigateur :", e));
       } catch(e) {}
     }
 
-    // --- BOÎTE D'ALERTE CENTRALE ---
     function showCenterAlert(title, text, bg, color, audioUrl, playSound = true) {
       const overlay = document.getElementById('globalCenterOverlay');
       const card = document.getElementById('centerModalCard');
@@ -587,7 +582,6 @@
       ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min']
     ];
 
-    // --- LISTE COMPLÈTE DE 00 A 100 AVEC PLACES VACANTES ---
     const customAssignedMembers = {
       '00': {name: 'YOUSKOF YORKA', grade: 'IGPN', password: 'Yohan.76450', status: 'Occupé'},
       '03': {name: 'Honey', grade: 'Directrice', password: 'Honey.19420', status: 'Occupé'},
@@ -595,7 +589,7 @@
       '03C': {name: 'Aram', grade: 'Gérant Légal / Commandant', password: 'Aram.33548', status: 'Occupé'},
       '01': {name: 'Baptouste', grade: 'Directeur Adjoint', password: 'Baptouste.1000', status: 'Occupé'},
       '02': {name: 'Tgrm', grade: 'Commandant', password: 'Tgrm.1000', status: 'Occupé'},
-      '22': {name: 'RAPH137', grade: 'Capitaine BAC', password: 'Raph.1000', status: 'Occupé'},
+      '22': {name: 'RAPH137', grade: 'Capitaine RAID', password: 'Raph.1000', status: 'Occupé'},
       '08': {name: 'Aaron', grade: 'Capitaine PN', password: 'Aaron.10492', status: 'Occupé'},
       '04': {name: 'Zappeur', grade: 'Lieutenant', password: 'Zappeur.74102', status: 'Occupé'},
       '21': {name: 'GHOST', grade: 'Lieutenant', password: 'Ghost.1000', status: 'Occupé'},
@@ -638,7 +632,7 @@
       '63': {name: 'RAYANE', grade: 'GPX-Titulaire', password: 'Rayane.1000', status: 'Occupé'},
       '65': {name: 'Nuggetss', grade: 'GPX-Titulaire', password: 'Nuggetss.1000', status: 'Occupé'},
       '67': {name: 'Jean Paul', grade: 'GPX-Titulaire', password: 'Jeanpaul.1000', status: 'Occupé'},
-      '67B': {name: 'Baban', grade: 'GPX-BAC', password: 'Baban.1000', status: 'Occupé'},
+      '67B': {name: 'Baban', grade: 'GPX-RAID', password: 'Baban.1000', status: 'Occupé'},
       '70': {name: 'NEYZ', grade: 'GPX-Titulaire', password: 'Neyz.1000', status: 'Occupé'},
       '99': {name: 'RDH', grade: 'GPX-Titulaire', password: 'Rdh.1000', status: 'Occupé'},
       '18': {name: 'Vorynix', grade: 'GPX-Stagiaire', password: 'Vorynix.1000', status: 'Occupé'},
@@ -675,7 +669,6 @@
       }
     });
 
-    // Ajout des identifiants spéciaux hors format numérique standard (03B, 03C, MNG)
     ['03B', '03C', 'MNG'].forEach(extraKey => {
       if(customAssignedMembers[extraKey]) {
         const c = customAssignedMembers[extraKey];
@@ -822,7 +815,6 @@
       returnGateway();
     }
 
-    // --- CODE PÉNAL & ZONES ---
     function renderPenal(){
       const tbody = $('penalTableBody');
       if(tbody) tbody.innerHTML = penalArticles.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
@@ -881,7 +873,6 @@
       toast('Règlements mis à jour et enregistrés !');
     }
 
-    // --- PERQUISITIONS ---
     function showPerqForm() {
       const container = $('perqAddContainer');
       if(container) container.classList.toggle('hidden');
@@ -937,7 +928,6 @@
       } catch(e){}
     }
 
-    // --- MÉDAILLES & CERTIFICATIONS ---
     async function saveMedalDefinition() {
       const name = val('med_name'); const service = $('med_service')?.value; const desc = val('med_desc');
       if(!name) return toast('Entrez un nom.', 'error');
@@ -990,7 +980,6 @@
       }).join('');
     }
 
-    // --- DESIGN & SUPABASE SETTINGS ---
     async function saveDesignConfig() {
       designConfig.brandName = val('cfg_brandName'); designConfig.brandSub = val('cfg_brandSub'); designConfig.brandDesc = val('cfg_brandDesc');
       await saveSettingsCloud('design', designConfig);
@@ -1005,10 +994,12 @@
     }
 
     async function saveSettingsCloud(id, data){
-      try { await sb.from('nrp_settings').upsert({ id, data }); } catch(e){}
+      try { 
+        const { error } = await sb.from('nrp_settings').upsert({ id, data });
+        if(error) console.error("Erreur saveSettingsCloud:", error);
+      } catch(e){ console.error("Erreur:", e); }
     }
 
-    // --- WEBHOOKS & STATS ---
     function initAdminWebhooksUI(){
       const keys = Object.keys(webhookUrls);
       const wf = $('webhookConfigForm');
@@ -1085,7 +1076,7 @@
       try {
         await sb.from('nrp_taj').insert([rec]);
         toast('Ajouté au TAJ !');
-        if($('taj_citizen')) $('taj_citizen').value='';
+        if($('taj_citizen')) $('taj_citizen'].value='';
         if($('taj_details')) $('taj_details').value='';
         if($('taj_roblox')) $('taj_roblox').value='';
         if($('taj_sanction')) $('taj_sanction').value='';
@@ -1118,13 +1109,24 @@
     // --- ALERTES CENTRALES, LIENS & AUDIO ---
     async function loadCustomAlerts() {
       try {
-        const { data } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
-        if(data) { customAlerts = data; renderAdminAlertsTable(); }
-      } catch(e){}
+        const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
+        if(error) {
+          console.error("Erreur chargement alertes:", error);
+          return;
+        }
+        if(data) { 
+          customAlerts = data; 
+          renderAdminAlertsTable(); 
+        }
+      } catch(e){ console.error("Exception loadCustomAlerts:", e); }
     }
 
     function renderAdminAlertsTable() {
       const tbody = $('adminAlertsBody'); if(!tbody) return;
+      if(!customAlerts || customAlerts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted)">Aucune alerte enregistrée pour le moment.</td></tr>`;
+        return;
+      }
       tbody.innerHTML = customAlerts.map(a => `
         <tr>
           <td><b>${esc(a.title)}</b></td>
@@ -1151,18 +1153,27 @@
       
       const newAlert = { title, type, announcement_text: text, audio_url: audioUrl, bg_color: bg, text_color: color };
       try {
-        await sb.from('nrp_custom_alerts').insert([newAlert]);
+        const { error } = await sb.from('nrp_custom_alerts').insert([newAlert]);
+        if(error) {
+          console.error("Erreur Supabase insert alert:", error);
+          toast('Erreur Supabase : ' + error.message, 'error');
+          return;
+        }
         toast('Alerte et lien audio enregistrés avec succès dans le Cloud !');
         if($('alt_title')) $('alt_title').value='';
         if($('alt_text')) $('alt_text').value='';
         if($('alt_audio_url')) $('alt_audio_url').value='';
         loadCustomAlerts();
-      } catch(e){toast('Erreur lors de l\'enregistrement','error');}
+      } catch(e){
+        console.error("Exception saveCustomAlert:", e);
+        toast('Erreur technique lors de l\'enregistrement', 'error');
+      }
     }
 
     async function deleteCustomAlert(id) {
       try { 
-        await sb.from('nrp_custom_alerts').delete().eq('id', id); 
+        const { error } = await sb.from('nrp_custom_alerts').delete().eq('id', id); 
+        if(error) { toast('Erreur suppression : ' + error.message, 'error'); return; }
         loadCustomAlerts(); 
         toast('Alerte supprimée.'); 
       } catch(e){}
@@ -1190,7 +1201,6 @@
       await channel.send({ type: 'broadcast', event: 'clear_center_alert', payload: {} });
     }
 
-    // --- PRÉVISUALISATION & DISCORD ---
     function makeEmbed(title, color, fields){ return {title, color, fields, footer:{text:'Nanterre RP · Portail Officiel'}}; }
     function renderPreview(kind, embed){
       drafts[kind]=embed;
@@ -1314,7 +1324,7 @@
             }
           });
         }
-      } catch(e){}
+      } catch(e){ console.error("Erreur loadCloudData:", e); }
       renderDirectory(); renderPenal(); loadMedalsCloud(); loadPerquisitionsCloud(); loadCustomAlerts(); loadTajCloudData(); renderZonesContent(); renderAdminMatricules(); renderAdminPasswords(); setupRealtimeListeners();
     }
 
