@@ -465,7 +465,7 @@
       <!-- ADMIN : EFFECTIFS -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
-          <h2>Gestion des effectifs</h2>
+          <h2>Gestion des effectifs (00 à 100)</h2>
           <div class="search-row"><input id="adminMatSearch" placeholder="Rechercher..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Nom</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead><tbody id="adminMatBody"></tbody></table></div>
         </div>
@@ -535,7 +535,7 @@
         player.src = url;
         player.currentTime = 0;
         player.play().catch(e => {
-          console.log("Lecture audio bloquée ou lien non pris en charge par le navigateur :", e);
+          console.log("Lecture audio bloquée ou lien non pris en charge :", e);
         });
       } catch(e) {}
     }
@@ -587,83 +587,101 @@
       ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min']
     ];
 
-    // --- LISTE COMPLÈTE MISE À JOUR DES EFFECTIFS ---
-    let roster = [
-      ['00', 'YOUSKOF YORKA', 'IGPN', 'IGPN', 'Occupé', 'Yohan.76450', ''],
-      ['03', 'Honey', 'Directrice', 'Police Nationale', 'Occupé', 'Honey.19420', ''],
-      ['03B', 'Motlo', 'Co-Gérant Légal', 'Police Nationale', 'Occupé', 'Motlo.85462', ''],
-      ['03C', 'Aram', 'Gérant Légal / Commandant', 'Police Nationale', 'Occupé', 'Aram.33548', ''],
-      ['001', 'Baptouste', 'Directeur Adjoint', 'Police Nationale', 'Occupé', 'Baptouste.1000', ''],
-      ['002', 'Tgrm', 'Commandant', 'Police Nationale', 'Occupé', 'Tgrm.1000', ''],
-      ['022', 'RAPH137', 'Capitaine BAC', 'Police Nationale', 'Occupé', 'Raph.1000', ''],
-      ['08', 'Aaron', 'Capitaine PN', 'Police Nationale', 'Occupé', 'Aaron.10492', ''],
-      ['04', 'Zappeur', 'Lieutenant', 'Police Nationale', 'Occupé', 'Zappeur.74102', ''],
-      ['21', 'GHOST', 'Lieutenant', 'Police Nationale', 'Occupé', 'Ghost.1000', ''],
-      ['28', 'GAB', 'Major', 'Police Nationale', 'Occupé', 'Gab.1000', ''],
-      ['06', 'PABLO', 'Brigadier-Chef', 'Police Nationale', 'Occupé', 'Pablo.48512', ''],
-      ['56', 'Trk', 'Brigadier Chef', 'Police Nationale', 'Occupé', 'Trk.1000', ''],
-      ['061', 'Alex', 'Brigadier', 'Police Nationale', 'Occupé', 'Alex.1000', ''],
-      ['24', 'TUICAREU', 'Brigadier', 'Police Nationale', 'Occupé', 'Tuicareu.1000', ''],
-      ['49', 'Louija', 'Brigadier', 'Police Nationale', 'Occupé', 'Louija.1000', ''],
-      ['015', 'YVEN', 'Sous-Brigadier', 'Police Nationale', 'Occupé', 'Yven.1000', ''],
-      ['020', 'PEFFCORSE', 'Sous-Brigadier', 'Police Nationale', 'Occupé', 'Peffcorse.1000', ''],
-      ['023', 'thymote', 'Sous-Brigadier', 'Police Nationale', 'Occupé', 'Thymote.1000', ''],
-      ['042', 'HALOWER', 'Sous-Brigadier', 'Police Nationale', 'Occupé', 'Halower.1000', ''],
-      ['052', 'Bobstant', 'Sous-Brigadier / Formateur', 'Police Nationale', 'Occupé', 'Bobstant.1000', ''],
-      ['100', 'Steven', 'Sous-Brigadier', 'Police Nationale', 'Occupé', 'Steven.1000', ''],
-      ['012', 'Onur', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Onur.1000', ''],
-      ['016', 'Nono', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Nono.1000', ''],
-      ['05', 'Osman', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Osman.93214', ''],
-      ['050', 'B4ptz02', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'B4ptz.1000', ''],
-      ['057', 'BLABLACAR', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Blablacar.1000', ''],
-      ['069', 'Lastreet', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Lastreet.1000', ''],
-      ['07', 'LE T', 'GPX-Titulaire / Formateur', 'Police Nationale', 'Occupé', 'LeT.62914', ''],
-      ['072', 'Godly', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Godly.1000', ''],
-      ['074', 'Jeniija', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Jeniija.1000', ''],
-      ['09', 'Lyky', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Lyky.83719', ''],
-      ['10', 'TATOU', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Tatou.1000', ''],
-      ['11', 'OMBRE', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Ombre.1000', ''],
-      ['17', 'WDY', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Wdy.1000', ''],
-      ['30', 'JAYMAZE', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Jaymaze.1000', ''],
-      ['31', 'LOENZO', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Loenzo.1000', ''],
-      ['35', 'BLK', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Blk.1000', ''],
-      ['36', 'Adn', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Adn.1000', ''],
-      ['37', 'VALENTINE', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Valentine.1000', ''],
-      ['38', 'Dodoby', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Dodoby.1000', ''],
-      ['40', 'Scarface', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Scarface.1000', ''],
-      ['51', 'Lebiscuit', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Lebiscuit.1000', ''],
-      ['53', 'STABAL620', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Stabal.1000', ''],
-      ['58', 'Axel', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Axel.1000', ''],
-      ['59', 'DARKOZZ21', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Darkozz.1000', ''],
-      ['63', 'RAYANE', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Rayane.1000', ''],
-      ['65', 'Nuggetss', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Nuggetss.1000', ''],
-      ['67', 'Jean Paul', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Jeanpaul.1000', ''],
-      ['67B', 'Baban', 'GPX-BAC', 'Police Nationale', 'Occupé', 'Baban.1000', ''],
-      ['70', 'NEYZ', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Neyz.1000', ''],
-      ['99', 'RDH', 'GPX-Titulaire', 'Police Nationale', 'Occupé', 'Rdh.1000', ''],
-      ['018', 'Vorynix', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Vorynix.1000', ''],
-      ['019', 'Anto', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Anto.1000', ''],
-      ['029', 'Tatin', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Tatin.1000', ''],
-      ['032', 'Yui', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Yui.1000', ''],
-      ['033', 'Nino', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Nino.1000', ''],
-      ['039', 'Yaya', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Yaya.1000', ''],
-      ['041', 'Terax', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Terax.1000', ''],
-      ['047', 'D.34', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'D34.1000', ''],
-      ['048', 'Noxyral', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Noxyral.1000', ''],
-      ['054', 'Lsk', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Lsk.1000', ''],
-      ['055', 'Ds', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Ds.1000', ''],
-      ['071', 'Baptiste', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Baptiste.1000', ''],
-      ['073', 'M4rv1n77', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Marvin.1000', ''],
-      ['076', 'Aim76', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Aim.1000', ''],
-      ['34', 's4ch47', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Sachat.1000', ''],
-      ['43', 'GAB', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Gabst.1000', ''],
-      ['44', 'Noam', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Noam.1000', ''],
-      ['46', 'Hisoka', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Hisoka.1000', ''],
-      ['62', 'AIden', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Aiden.1000', ''],
-      ['64', 'LAYS', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Lays.1000', ''],
-      ['68', 'Moha', 'GPX-Stagiaire', 'Police Nationale', 'Occupé', 'Moha.1000', ''],
-      ['MNG', 'MONAGE', 'Formateur Police', 'Police Nationale', 'Occupé', 'Monage.1000', '']
-    ].map(([matricule,name,grade,service,status,password,distinctions])=>({matricule,name,grade,service,status,password,distinctions}));
+    // --- LISTE COMPLÈTE DE 00 A 100 AVEC PLACES VACANTES ---
+    const customAssignedMembers = {
+      '00': {name: 'YOUSKOF YORKA', grade: 'IGPN', password: 'Yohan.76450', status: 'Occupé'},
+      '03': {name: 'Honey', grade: 'Directrice', password: 'Honey.19420', status: 'Occupé'},
+      '03B': {name: 'Motlo', grade: 'Co-Gérant Légal', password: 'Motlo.85462', status: 'Occupé'},
+      '03C': {name: 'Aram', grade: 'Gérant Légal / Commandant', password: 'Aram.33548', status: 'Occupé'},
+      '01': {name: 'Baptouste', grade: 'Directeur Adjoint', password: 'Baptouste.1000', status: 'Occupé'},
+      '02': {name: 'Tgrm', grade: 'Commandant', password: 'Tgrm.1000', status: 'Occupé'},
+      '22': {name: 'RAPH137', grade: 'Capitaine BAC', password: 'Raph.1000', status: 'Occupé'},
+      '08': {name: 'Aaron', grade: 'Capitaine PN', password: 'Aaron.10492', status: 'Occupé'},
+      '04': {name: 'Zappeur', grade: 'Lieutenant', password: 'Zappeur.74102', status: 'Occupé'},
+      '21': {name: 'GHOST', grade: 'Lieutenant', password: 'Ghost.1000', status: 'Occupé'},
+      '28': {name: 'GAB', grade: 'Major', password: 'Gab.1000', status: 'Occupé'},
+      '06': {name: 'PABLO', grade: 'Brigadier-Chef', password: 'Pablo.48512', status: 'Occupé'},
+      '56': {name: 'Trk', grade: 'Brigadier Chef', password: 'Trk.1000', status: 'Occupé'},
+      '61': {name: 'Alex', grade: 'Brigadier', password: 'Alex.1000', status: 'Occupé'},
+      '24': {name: 'TUICAREU', grade: 'Brigadier', password: 'Tuicareu.1000', status: 'Occupé'},
+      '49': {name: 'Louija', grade: 'Brigadier', password: 'Louija.1000', status: 'Occupé'},
+      '15': {name: 'YVEN', grade: 'Sous-Brigadier', password: 'Yven.1000', status: 'Occupé'},
+      '20': {name: 'PEFFCORSE', grade: 'Sous-Brigadier', password: 'Peffcorse.1000', status: 'Occupé'},
+      '23': {name: 'thymote', grade: 'Sous-Brigadier', password: 'Thymote.1000', status: 'Occupé'},
+      '42': {name: 'HALOWER', grade: 'Sous-Brigadier', password: 'Halower.1000', status: 'Occupé'},
+      '52': {name: 'Bobstant', grade: 'Sous-Brigadier / Formateur', password: 'Bobstant.1000', status: 'Occupé'},
+      '100': {name: 'Steven', grade: 'Sous-Brigadier', password: 'Steven.1000', status: 'Occupé'},
+      '12': {name: 'Onur', grade: 'GPX-Titulaire', password: 'Onur.1000', status: 'Occupé'},
+      '16': {name: 'Nono', grade: 'GPX-Titulaire', password: 'Nono.1000', status: 'Occupé'},
+      '05': {name: 'Osman', grade: 'GPX-Titulaire', password: 'Osman.93214', status: 'Occupé'},
+      '50': {name: 'B4ptz02', grade: 'GPX-Titulaire', password: 'B4ptz.1000', status: 'Occupé'},
+      '57': {name: 'BLABLACAR', grade: 'GPX-Titulaire', password: 'Blablacar.1000', status: 'Occupé'},
+      '69': {name: 'Lastreet', grade: 'GPX-Titulaire', password: 'Lastreet.1000', status: 'Occupé'},
+      '07': {name: 'LE T', grade: 'GPX-Titulaire / Formateur', password: 'LeT.62914', status: 'Occupé'},
+      '72': {name: 'Godly', grade: 'GPX-Stagiaire', password: 'Godly.1000', status: 'Occupé'},
+      '74': {name: 'Jeniija', grade: 'GPX-Titulaire', password: 'Jeniija.1000', status: 'Occupé'},
+      '09': {name: 'Lyky', grade: 'GPX-Titulaire', password: 'Lyky.83719', status: 'Occupé'},
+      '10': {name: 'TATOU', grade: 'GPX-Titulaire', password: 'Tatou.1000', status: 'Occupé'},
+      '11': {name: 'OMBRE', grade: 'GPX-Titulaire', password: 'Ombre.1000', status: 'Occupé'},
+      '17': {name: 'WDY', grade: 'GPX-Titulaire', password: 'Wdy.1000', status: 'Occupé'},
+      '30': {name: 'JAYMAZE', grade: 'GPX-Titulaire', password: 'Jaymaze.1000', status: 'Occupé'},
+      '31': {name: 'LOENZO', grade: 'GPX-Titulaire', password: 'Loenzo.1000', status: 'Occupé'},
+      '35': {name: 'BLK', grade: 'GPX-Titulaire', password: 'Blk.1000', status: 'Occupé'},
+      '36': {name: 'Adn', grade: 'GPX-Titulaire', password: 'Adn.1000', status: 'Occupé'},
+      '37': {name: 'VALENTINE', grade: 'GPX-Titulaire', password: 'Valentine.1000', status: 'Occupé'},
+      '38': {name: 'Dodoby', grade: 'GPX-Titulaire', password: 'Dodoby.1000', status: 'Occupé'},
+      '40': {name: 'Scarface', grade: 'GPX-Titulaire', password: 'Scarface.1000', status: 'Occupé'},
+      '51': {name: 'Lebiscuit', grade: 'GPX-Titulaire', password: 'Lebiscuit.1000', status: 'Occupé'},
+      '53': {name: 'STABAL620', grade: 'GPX-Titulaire', password: 'Stabal.1000', status: 'Occupé'},
+      '58': {name: 'Axel', grade: 'GPX-Titulaire', password: 'Axel.1000', status: 'Occupé'},
+      '59': {name: 'DARKOZZ21', grade: 'GPX-Titulaire', password: 'Darkozz.1000', status: 'Occupé'},
+      '63': {name: 'RAYANE', grade: 'GPX-Titulaire', password: 'Rayane.1000', status: 'Occupé'},
+      '65': {name: 'Nuggetss', grade: 'GPX-Titulaire', password: 'Nuggetss.1000', status: 'Occupé'},
+      '67': {name: 'Jean Paul', grade: 'GPX-Titulaire', password: 'Jeanpaul.1000', status: 'Occupé'},
+      '67B': {name: 'Baban', grade: 'GPX-BAC', password: 'Baban.1000', status: 'Occupé'},
+      '70': {name: 'NEYZ', grade: 'GPX-Titulaire', password: 'Neyz.1000', status: 'Occupé'},
+      '99': {name: 'RDH', grade: 'GPX-Titulaire', password: 'Rdh.1000', status: 'Occupé'},
+      '18': {name: 'Vorynix', grade: 'GPX-Stagiaire', password: 'Vorynix.1000', status: 'Occupé'},
+      '19': {name: 'Anto', grade: 'GPX-Stagiaire', password: 'Anto.1000', status: 'Occupé'},
+      '29': {name: 'Tatin', grade: 'GPX-Stagiaire', password: 'Tatin.1000', status: 'Occupé'},
+      '32': {name: 'Yui', grade: 'GPX-Stagiaire', password: 'Yui.1000', status: 'Occupé'},
+      '33': {name: 'Nino', grade: 'GPX-Stagiaire', password: 'Nino.1000', status: 'Occupé'},
+      '39': {name: 'Yaya', grade: 'GPX-Stagiaire', password: 'Yaya.1000', status: 'Occupé'},
+      '41': {name: 'Terax', grade: 'GPX-Stagiaire', password: 'Terax.1000', status: 'Occupé'},
+      '47': {name: 'D.34', grade: 'GPX-Stagiaire', password: 'D34.1000', status: 'Occupé'},
+      '48': {name: 'Noxyral', grade: 'GPX-Stagiaire', password: 'Noxyral.1000', status: 'Occupé'},
+      '54': {name: 'Lsk', grade: 'GPX-Stagiaire', password: 'Lsk.1000', status: 'Occupé'},
+      '55': {name: 'Ds', grade: 'GPX-Stagiaire', password: 'Ds.1000', status: 'Occupé'},
+      '71': {name: 'Baptiste', grade: 'GPX-Stagiaire', password: 'Baptiste.1000', status: 'Occupé'},
+      '73': {name: 'M4rv1n77', grade: 'GPX-Stagiaire', password: 'Marvin.1000', status: 'Occupé'},
+      '76': {name: 'Aim76', grade: 'GPX-Stagiaire', password: 'Aim.1000', status: 'Occupé'},
+      '34': {name: 's4ch47', grade: 'GPX-Stagiaire', password: 'Sachat.1000', status: 'Occupé'},
+      '43': {name: 'GAB', grade: 'GPX-Stagiaire', password: 'Gabst.1000', status: 'Occupé'},
+      '44': {name: 'Noam', grade: 'GPX-Stagiaire', password: 'Noam.1000', status: 'Occupé'},
+      '46': {name: 'Hisoka', grade: 'GPX-Stagiaire', password: 'Hisoka.1000', status: 'Occupé'},
+      '62': {name: 'AIden', grade: 'GPX-Stagiaire', password: 'Aiden.1000', status: 'Occupé'},
+      '64': {name: 'LAYS', grade: 'GPX-Stagiaire', password: 'Lays.1000', status: 'Occupé'},
+      '68': {name: 'Moha', grade: 'GPX-Stagiaire', password: 'Moha.1000', status: 'Occupé'},
+      'MNG': {name: 'MONAGE', grade: 'Formateur Police', password: 'Monage.1000', status: 'Occupé'}
+    };
+
+    let roster = Array.from({length: 101}, (_, i) => {
+      const matStr = String(i).padStart(2, '0');
+      const custom = customAssignedMembers[matStr];
+      if(custom) {
+        return { matricule: matStr, name: custom.name, grade: custom.grade, service: 'Police Nationale', status: custom.status, password: custom.password, distinctions: '' };
+      } else {
+        return { matricule: matStr, name: 'Libre', grade: 'Vacant', service: 'Police Nationale', status: 'Vacant', password: `Agent.${matStr}000`, distinctions: '' };
+      }
+    });
+
+    // Ajout des identifiants spéciaux hors format numérique standard (03B, 03C, MNG)
+    ['03B', '03C', 'MNG'].forEach(extraKey => {
+      if(customAssignedMembers[extraKey]) {
+        const c = customAssignedMembers[extraKey];
+        roster.push({ matricule: extraKey, name: c.name, grade: c.grade, service: 'Police Nationale', status: c.status, password: c.password, distinctions: '' });
+      }
+    });
 
     let tajRecords = [];
     let customAlerts = [];
@@ -743,7 +761,7 @@
       const gw = $('gateway'); const sh = $('appShell');
       if(gw) gw.classList.add('hidden');
       if(sh) sh.classList.remove('hidden');
-      const filtered = roster;
+      const filtered = roster.filter(r => r.status==='Occupé');
       const sel = $('loginMatriculeSelect');
       if(sel) sel.innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
       showView('view-login');
@@ -1036,6 +1054,7 @@
           await sb.from('nrp_roster').upsert(item); 
           toast(`[${mat}] mis à jour dans le Cloud !`); 
           renderAdminPasswords(); 
+          renderDashboardStats();
         } catch(e){toast('Erreur','error');}
       }
     }
@@ -1272,7 +1291,6 @@
       try {
         const { data: rosterData } = await sb.from('nrp_roster').select('*');
         if(rosterData && rosterData.length > 0) {
-          // Fusion intelligente pour garder les ajouts de la base sans perdre les nouveaux
           rosterData.forEach(dbAgent => {
             const index = roster.findIndex(r => r.matricule === dbAgent.matricule);
             if(index !== -1) {
@@ -1297,7 +1315,7 @@
           });
         }
       } catch(e){}
-      renderDirectory(); renderPenal(); loadMedalsCloud(); loadPerquisitionsCloud(); loadCustomAlerts(); loadTajCloudData(); renderZonesContent(); setupRealtimeListeners();
+      renderDirectory(); renderPenal(); loadMedalsCloud(); loadPerquisitionsCloud(); loadCustomAlerts(); loadTajCloudData(); renderZonesContent(); renderAdminMatricules(); renderAdminPasswords(); setupRealtimeListeners();
     }
 
     document.addEventListener('DOMContentLoaded', () => { loadCloudData(); });
