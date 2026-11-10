@@ -1076,7 +1076,7 @@
       try {
         await sb.from('nrp_taj').insert([rec]);
         toast('Ajouté au TAJ !');
-        if($('taj_citizen')) $('taj_citizen'].value='';
+        if($('taj_citizen')) $('taj_citizen').value='';
         if($('taj_details')) $('taj_details').value='';
         if($('taj_roblox')) $('taj_roblox').value='';
         if($('taj_sanction')) $('taj_sanction').value='';
@@ -1320,7 +1320,8 @@
             if(s.id === 'penal_file' && s.data) { penalFileName = s.data; renderPenal(); }
             if(s.id === 'webhooks' && s.data) { webhookUrls = s.data; }
             if(s.id === 'active_center_alert' && s.data && s.data.active) {
-              showCenterAlert(s.data.title, s.data.text, s.data.bg, s.data.color, s.data.audioUrl, false);
+              // Ne s'affiche au démarrage que si explicitement requis, sinon évite le blocage des clics
+              // showCenterAlert(s.data.title, s.data.text, s.data.bg, s.data.color, s.data.audioUrl, false);
             }
           });
         }
