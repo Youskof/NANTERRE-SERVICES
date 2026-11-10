@@ -20,8 +20,6 @@
       --red:#e45a66;
       --gold:#e2ad55;
       --green:#40c58a;
-      --yellow:#e6bd55;
-      --purple:#a78bfa;
       --radius:16px;
       --shadow:0 18px 50px rgba(0,0,0,.25)
     }
@@ -33,58 +31,47 @@
     .brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#397fe8,#1b477e);display:grid;place-items:center;font-weight:900;letter-spacing:-1px;box-shadow:0 7px 22px rgba(45,111,211,.25)}
     .brand strong{display:block;font-size:14px;letter-spacing:.08em}.brand small{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
     .side-label{color:#687c97;text-transform:uppercase;letter-spacing:.13em;font-size:10px;font-weight:800;padding:0 11px;margin:4px 0}
-    .side-nav{display:grid;gap:5px}.side-nav button{border:1px solid transparent;background:transparent;color:#b7c5d8;text-align:left;padding:11px 12px;border-radius:10px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:650;transition:.18s}
+    .side-nav{display:grid;gap:5px}.side-nav button{border:1px solid transparent;background:transparent;color:#b7c5d8;text-align:left;padding:11px 12px;border-radius:10px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:650;transition:.18s;width:100%}
     .side-nav button:hover{background:var(--surface-2);color:white}.side-nav button.active{background:rgba(65,128,220,.17);border-color:rgba(77,141,255,.35);color:#dceaff}.nav-ico{width:19px;text-align:center;color:#83a9df;font-size:15px}
     .side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 2px}.connection-state{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(64,197,138,.1)}
     .main{min-width:0;padding:26px clamp(16px,3vw,40px) 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.eyebrow{color:#8ba0bc;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.page-title{font-size:clamp(23px,3vw,31px);letter-spacing:-.035em;margin:4px 0 3px}.page-subtitle{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.user-chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:#d4deeb;font-size:12px}
     .view{display:none;animation:appear .2s ease}.view.active{display:block}@keyframes appear{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
     .panel{background:linear-gradient(160deg,rgba(24,39,60,.96),rgba(16,28,45,.98));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.panel h3{font-size:14px;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}
-    .hero{position:relative;overflow:hidden;padding:clamp(24px,4vw,42px);min-height:240px;border-radius:20px;border:1px solid #2d4667;background:linear-gradient(110deg,rgba(11,22,39,.96),rgba(17,47,81,.88)),radial-gradient(circle at 83% 15%,rgba(92,152,234,.38),transparent 32%);margin-bottom:18px}
-    .hero:after{content:"NRP";position:absolute;right:3%;bottom:-45px;font-size:clamp(100px,18vw,210px);font-weight:950;letter-spacing:-.1em;color:rgba(175,207,250,.045);pointer-events:none}.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(137,180,240,.25);background:rgba(46,97,161,.18);padding:6px 10px;border-radius:99px;color:#bdd8ff;font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.hero h2{font-size:clamp(26px,4vw,42px);max-width:720px;line-height:1.1;margin:17px 0 10px;letter-spacing:-.045em}.hero p{max-width:650px;color:#b3c4d9;margin:0;font-size:14px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px;position:relative;z-index:1}
-    .grid{display:grid;gap:14px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-    .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.stat-label{color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.1em}.stat-value{font-size:28px;font-weight:850;margin:5px 0 2px;letter-spacing:-.04em}.stat-note{color:#7186a2;font-size:11px}
-    .service-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.service-title{display:flex;align-items:center;gap:11px}.service-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;background:rgba(77,141,255,.12)}.service-icon.red{background:rgba(228,90,102,.13)}.service-icon.gold{background:rgba(226,173,85,.13)}.service-count{font-size:20px;font-weight:850}.service-status{font-size:11px;color:var(--muted)}
-    .btn{border:1px solid transparent;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:white;padding:10px 15px;border-radius:10px;font-weight:750;font-size:12px;box-shadow:0 7px 18px rgba(37,99,200,.18);transition:.18s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.secondary{background:var(--surface-3);border-color:#3a4d67;box-shadow:none;color:#dce7f5}.btn.ghost{background:transparent;border-color:var(--line);box-shadow:none;color:#b8c8dd}.btn.danger{background:rgba(185,54,68,.18);border-color:rgba(228,90,102,.4);box-shadow:none;color:#ffb3ba}.btn.discord{background:#5865f2;box-shadow:none}.btn.small{padding:7px 10px;font-size:11px}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#aabbd0;font-weight:750;letter-spacing:.02em}.field label .req{color:#ff8c97}.field input,.field select,.field textarea{width:100%;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:11px 12px;color:#edf4ff;outline:none;min-width:0;font-size:13px;transition:.16s}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(77,141,255,.12)}.field textarea{min-height:110px;resize:vertical}.field input::placeholder,.field textarea::placeholder{color:#647994}.field select option{background:#0b1627}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-    .preview{margin-top:17px;background:#20242b;border:1px solid #414853;border-left:4px solid #4d8dff;border-radius:10px;padding:16px;color:#e9edf3;max-width:820px}.preview h4{font-size:16px;margin:0 0 9px;color:white}
-    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.data-table{border-collapse:collapse;width:100%;min-width:640px;background:#0f1a2a}.data-table th,.data-table td{padding:11px 12px;text-align:left;border-bottom:1px solid #26374e;font-size:12px}.data-table th{background:#17263b;color:#a9bdd6;font-size:10px;text-transform:uppercase;letter-spacing:.1em;position:sticky;top:0}.data-table td{color:#d8e1ed}.data-table tr:last-child td{border:0}.data-table tr:hover td{background:rgba(77,141,255,.045)}
-    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);border-color:#3b4b61;color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);border-color:rgba(77,141,255,.25);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);border-color:rgba(226,173,85,.25);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);border-color:rgba(228,90,102,.25);color:#ffb3ba}
-    .login-wrap{max-width:480px;margin:7vh auto}.login-mark{width:56px;height:56px;border-radius:16px;background:linear-gradient(145deg,#397fe8,#1b477e);display:grid;place-items:center;font-weight:900;font-size:19px;margin-bottom:17px}.login-wrap h2{font-size:23px;margin:0 0 7px}.login-wrap p{color:var(--muted);font-size:13px;margin:0 0 22px}
-    .gateway{max-width:1120px;margin:6vh auto}.gateway-head{text-align:center;margin-bottom:30px}.gateway-head .brand-mark{margin:0 auto 15px;width:58px;height:58px;font-size:19px}.gateway-head h1{font-size:clamp(28px,5vw,46px);letter-spacing:-.05em;margin:0 0 10px}.gateway-head p{color:var(--muted);max-width:680px;margin:0 auto;font-size:14px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;min-height:162px;color:var(--text);transition:.18s;display:flex;flex-direction:column}.gateway-card:hover{transform:translateY(-4px);border-color:#5485c5;box-shadow:var(--shadow)}.gateway-card .g-icon{font-size:22px;margin-bottom:15px}.gateway-card strong{font-size:15px}.gateway-card p{color:var(--muted);font-size:12px;margin:6px 0 0}.gateway-card .g-enter{margin-top:auto;padding-top:17px;color:#9ec3ff;font-size:11px;font-weight:800}.footnote{font-size:10px;color:#6f829c;margin-top:22px;text-align:center}
-    .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.search-row input{flex:1;min-width:200px;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}.toast-host{position:fixed;right:18px;bottom:18px;z-index:30;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}.toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow)}.toast.error{border-color:#9a4651;background:#321d29}.mobile-menu{display:none}
-    
-    /* STYLE BANNIÈRE D'ALERTE VISUELLE GLOBALE */
-    #globalAlertBanner { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; text-align: center; padding: 14px 20px; font-weight: 800; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-    #globalAlertBanner button { background: rgba(255,255,255,0.2); border: 1px solid currentColor; color: inherit; padding: 4px 10px; border-radius: 6px; margin-left: 15px; font-size: 11px; cursor: pointer; }
-
-    @media(max-width:1050px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.gateway-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s}.sidebar.open{left:0;box-shadow:var(--shadow)}.main{padding:18px 14px 40px}.mobile-menu{display:inline-flex}}
+    .hero{position:relative;overflow:hidden;padding:clamp(24px,4vw,42px);min-height:240px;border-radius:20px;border:1px solid #2d4667;background:linear-gradient(110deg,rgba(11,22,39,.96),rgba(17,47,81,.88));margin-bottom:18px}
+    .hero h2{font-size:clamp(26px,4vw,42px);max-width:720px;line-height:1.1;margin:17px 0 10px;letter-spacing:-.045em}.hero p{max-width:650px;color:#b3c4d9;margin:0;font-size:14px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+    .grid{display:grid;gap:14px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.stat-label{color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.1em}.stat-value{font-size:28px;font-weight:850;margin:5px 0 2px}
+    .service-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.service-title{display:flex;align-items:center;gap:11px}.service-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;background:rgba(77,141,255,.12)}.service-icon.red{background:rgba(228,90,102,.13)}.service-icon.gold{background:rgba(226,173,85,.13)}.service-count{font-size:20px;font-weight:850}
+    .btn{border:1px solid transparent;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:white;padding:10px 15px;border-radius:10px;font-weight:750;font-size:12px;cursor:pointer;transition:.18s}.btn:hover{filter:brightness(1.08)}.btn.secondary{background:var(--surface-3);border-color:#3a4d67;color:#dce7f5}.btn.ghost{background:transparent;border-color:var(--line);color:#b8c8dd}.btn.danger{background:rgba(185,54,68,.18);border-color:rgba(228,90,102,.4);color:#ffb3ba}.btn.discord{background:#5865f2}.btn.small{padding:7px 10px;font-size:11px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#aabbd0;font-weight:750}.field label .req{color:#ff8c97}.field input,.field select,.field textarea{width:100%;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:11px 12px;color:#edf4ff;outline:none;font-size:13px}.field textarea{min-height:110px}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .preview{margin-top:17px;background:#20242b;border:1px solid #414853;border-left:4px solid #4d8dff;border-radius:10px;padding:16px;color:#e9edf3}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.data-table{border-collapse:collapse;width:100%;min-width:640px;background:#0f1a2a}.data-table th,.data-table td{padding:11px 12px;text-align:left;border-bottom:1px solid #26374e;font-size:12px}.data-table th{background:#17263b;color:#a9bdd6;font-size:10px;text-transform:uppercase;position:sticky;top:0}.data-table td{color:#d8e1ed}
+    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);color:#ffb3ba}
+    .login-wrap{max-width:480px;margin:7vh auto}.gateway{max-width:1120px;margin:6vh auto}.gateway-head{text-align:center;margin-bottom:30px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;transition:.18s}.gateway-card:hover{border-color:#5485c5;transform:translateY(-4px)}.search-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}.search-row input{flex:1;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}
+    .toast-host{position:fixed;right:18px;bottom:18px;z-index:30;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}.toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px}
+    #globalAlertBanner{position:fixed;top:0;left:0;width:100%;z-index:100;text-align:center;padding:14px 20px;font-weight:800;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    #globalAlertBanner button{background:rgba(255,255,255,0.2);border:1px solid currentColor;color:inherit;padding:4px 10px;border-radius:6px;margin-left:15px;font-size:11px;cursor:pointer}
+    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s}.sidebar.open{left:0}.gateway-grid,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <!-- BANNIÈRE D'ALERTE VISUELLE EN DIRECT -->
-  <div id="globalAlertBanner">
-    <span id="bannerTextContent"></span>
-    <button onclick="hideGlobalBanner()">Fermer</button>
-  </div>
+  <div id="globalAlertBanner"><span id="bannerTextContent"></span><button onclick="hideGlobalBanner()">Fermer</button></div>
 
   <!-- PAGE D'ACCUEIL / GATEWAY -->
   <div id="gateway" class="gateway">
     <div class="gateway-head">
-      <div class="brand-mark" id="brandLogoText">NRP</div>
-      <div class="eyebrow" id="brandSubHeader">Portail institutionnel · Emergency Hamburg</div>
+      <div class="brand-mark">NRP</div>
       <h1 id="brandTitle">Nanterre RP</h1>
       <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne.</p>
     </div>
     <div class="gateway-grid">
-      <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
-      <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, perquisitions et GAV.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Gestion globale, designs, médailles, certifications et webhooks.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
+      <button class="gateway-card" onclick="enterCitizen()"><span style="font-size:22px;margin-bottom:12px">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes et tickets.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÉDER →</span></button>
+      <button class="gateway-card" onclick="enterStaff('police')"><span style="font-size:22px;margin-bottom:12px">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports et perquisitions.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
+      <button class="gateway-card" onclick="enterStaff('bspn')"><span style="font-size:22px;margin-bottom:12px">🚒</span><strong>BSPN</strong><p>Secours et rapports d'intervention.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
+      <button class="gateway-card" onclick="enterStaff('samu')"><span style="font-size:22px;margin-bottom:12px">🚑</span><strong>SAMU 92</strong><p>Prise de service et suivi médical.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
+      <button class="gateway-card" onclick="enterStaff('igpn')"><span style="font-size:22px;margin-bottom:12px">⚖️</span><strong>IGPN</strong><p>Enquêtes et dossiers confidentiels.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÈS HABILITÉ →</span></button>
+      <button class="gateway-card" onclick="enterAdminDirect()"><span style="font-size:22px;margin-bottom:12px">⚙️</span><strong>Administration</strong><p>Gestion totale, Code pénal, Règlements & Paramètres.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÈS ADMIN →</span></button>
     </div>
-    <div class="footnote">NANTERRE RP · PORTAIL DE GESTION DES SERVICES · ENVIRONNEMENT ROLEPLAY</div>
   </div>
 
   <!-- APPLICATION SHELL -->
@@ -95,107 +82,88 @@
         <div><strong id="sidebarTitle">NANTERRE RP</strong><small>Portail des services</small></div>
       </div>
       <div>
-        <div class="side-label" id="navLabel">Navigation</div>
+        <div class="side-label">Navigation</div>
         <nav class="side-nav" id="sideNav"></nav>
       </div>
       <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot" id="cloudDot"></span><span id="connectionLabel">Connecté</span></div>
+        <div class="connection-state"><span class="live-dot"></span><span>Cloud Supabase actif</span></div>
         <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
       </div>
     </aside>
     <main class="main">
       <div class="topbar">
         <div style="display:flex;gap:12px;align-items:flex-start">
-          <button class="btn secondary small mobile-menu" onclick="toggleSidebar()">☰</button>
-          <div>
-            <div class="eyebrow" id="topEyebrow">Nanterre RP</div>
-            <h1 class="page-title" id="topTitle">Portail citoyen</h1>
-            <div class="page-subtitle" id="topSubtitle">Services et démarches en ligne</div>
-          </div>
+          <button class="btn secondary small" onclick="toggleSidebar()">☰</button>
+          <div><h1 class="page-title" id="topTitle">Portail Nanterre RP</h1><div class="page-subtitle" id="topSubtitle">Gestion centralisée</div></div>
         </div>
-        <div class="top-actions">
-          <span class="user-chip hidden" id="userChip"></span>
-          <button class="btn ghost small hidden" id="logoutBtn" onclick="logout()">Déconnexion</button>
-        </div>
+        <div class="top-actions"><span class="user-chip hidden" id="userChip"></span><button class="btn ghost small hidden" id="logoutBtn" onclick="logout()">Déconnexion</button></div>
       </div>
 
-      <!-- VUE CONNEXION AGENT -->
+      <!-- CONNEXION AGENT -->
       <section class="view" id="view-login">
         <div class="panel login-wrap">
-          <div class="login-mark">NRP</div>
-          <div class="eyebrow">Espace réservé</div>
-          <h2 id="loginTitle">Connexion sécurisée agent</h2>
-          <p>Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
+          <h2>Connexion agent</h2>
           <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule</label><select id="loginMatriculeSelect"></select></div>
-          <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password" placeholder="Votre mot de passe secret"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter en sécurité</button></div>
+          <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password"></div>
+          <button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter</button>
         </div>
       </section>
 
-      <!-- VUE CONNEXION ADMIN -->
+      <!-- CONNEXION ADMIN -->
       <section class="view" id="view-admin-login">
         <div class="panel login-wrap">
-          <div class="login-mark">NRP</div>
-          <div class="eyebrow">Accès restreint</div>
           <h2>Administration générale</h2>
-          <p>Entrez le code administrateur sécurisé.</p>
-          <div class="field"><label>Code administrateur</label><input id="adminCode" type="password" placeholder="Code secret admin"></div>
-          <div class="form-actions"><button class="btn" style="width:100%" onclick="loginAdminSimple()">Ouvrir l'administration</button></div>
+          <div class="field"><label>Code administrateur</label><input id="adminCode" type="password"></div>
+          <button class="btn" style="width:100%;margin-top:15px" onclick="loginAdminSimple()">Ouvrir l'administration</button>
         </div>
       </section>
 
-      <!-- ACCUEIL CITOYEN -->
+      <!-- ACCUEIL PUBLIC -->
       <section class="view" id="view-public-home">
         <div class="hero">
-          <span class="hero-tag">● Portail officiel · Nanterre RP</span>
-          <h2 id="heroMainTitle">Protéger, secourir et accompagner les citoyens.</h2>
-          <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations.</p>
+          <span class="hero-tag">● Officiel</span>
+          <h2 id="heroMainTitle">Protéger, secourir et accompagner.</h2>
+          <p id="heroMainDesc">Retrouvez les démarches publiques et l'ouverture de tickets.</p>
           <div class="hero-actions">
             <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
             <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
           </div>
         </div>
-        <div class="panel">
-          <div class="panel-head"><div><h2>État opérationnel des services</h2><div class="muted small">Statuts en temps réel.</div></div></div>
-          <div class="grid grid-3">
-            <div class="service-card"><div class="service-title"><div class="service-icon">🛡️</div><div><strong>Police Nationale</strong><div class="service-status">En service</div></div></div><div class="service-count">3</div></div>
-            <div class="service-card"><div class="service-title"><div class="service-icon red">🚒</div><div><strong>BSPN</strong><div class="service-status">En service</div></div></div><div class="service-count">2</div></div>
-            <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status">En service</div></div></div><div class="service-count">1</div></div>
-          </div>
-        </div>
       </section>
 
-      <!-- OUVERTURE DE TICKET -->
+      <!-- TICKET -->
       <section class="view" id="view-ticket">
         <div class="panel">
-          <div class="panel-head"><div><div class="eyebrow">Support & Assistance</div><h2>Ouvrir un ticket de service</h2></div><span class="pill info">Nouveau ticket</span></div>
+          <h2>Ouvrir un ticket</h2>
           <div class="form-grid">
-            <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Objet / Sujet <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information..."></div>
-            <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name" placeholder="Identité RP"></div>
-            <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="tkt_roblox" placeholder="Pseudo en jeu"></div>
-            <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="tkt_discord" placeholder="@pseudo"></div>
-            <div class="field"><label>Date de la demande <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Description détaillée <span class="req">*</span></label><textarea id="tkt_desc" placeholder="Détails du ticket..."></textarea></div>
+            <div class="field"><label>Service <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
+            <div class="field"><label>Sujet <span class="req">*</span></label><input id="tkt_subject"></div>
+            <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name"></div>
+            <div class="field"><label>Roblox <span class="req">*</span></label><input id="tkt_roblox"></div>
+            <div class="field"><label>Discord <span class="req">*</span></label><input id="tkt_discord"></div>
+            <div class="field"><label>Date <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
+            <div class="field full"><label>Description <span class="req">*</span></label><textarea id="tkt_desc"></textarea></div>
+            <div class="field full"><label>Pièce jointe (Image / Fichier optionnel)</label><input id="tkt_file" type="file"></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser le ticket</button></div>
+          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser</button></div>
           <div id="preview-ticket" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">Envoyer sur Discord</button></div>
         </div>
       </section>
 
       <!-- PLAINTE -->
       <section class="view" id="view-complaint">
         <div class="panel">
-          <div class="panel-head"><div><div class="eyebrow">Guichet citoyen</div><h2>Dépôt de plainte</h2></div><span class="pill info">Public</span></div>
+          <h2>Dépôt de plainte</h2>
           <div class="form-grid">
-            <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="plt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nature des faits <span class="req">*</span></label><select id="plt_category"><option>Vol / Dégradation</option><option>Agression / Menaces</option><option>Infraction routière</option><option>Autre fait</option></select></div>
-            <div class="field"><label>Nom et prénom <span class="req">*</span></label><input id="plt_name" placeholder="Identité RP"></div>
-            <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="plt_roblox" placeholder="Pseudo en jeu"></div>
-            <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="plt_discord" placeholder="@pseudo"></div>
-            <div class="field"><label>Date et heure <span class="req">*</span></label><input id="plt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Exposé des faits <span class="req">*</span></label><textarea id="plt_desc" placeholder="Décrivez les faits..."></textarea></div>
+            <div class="field"><label>Service <span class="req">*</span></label><select id="plt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
+            <div class="field"><label>Nature <span class="req">*</span></label><select id="plt_category"><option>Vol</option><option>Agression</option><option>Infraction routière</option><option>Autre</option></select></div>
+            <div class="field"><label>Nom <span class="req">*</span></label><input id="plt_name"></div>
+            <div class="field"><label>Roblox <span class="req">*</span></label><input id="plt_roblox"></div>
+            <div class="field"><label>Discord <span class="req">*</span></label><input id="plt_discord"></div>
+            <div class="field"><label>Date <span class="req">*</span></label><input id="plt_datetime" type="datetime-local"></div>
+            <div class="field full"><label>Faits <span class="req">*</span></label><textarea id="plt_desc"></textarea></div>
+            <div class="field full"><label>Pièce jointe / Preuve (Optionnel)</label><input id="plt_file" type="file"></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('plainte')">Prévisualiser</button></div>
           <div id="preview-plainte" class="preview hidden"></div>
@@ -206,13 +174,14 @@
       <!-- MAIN COURANTE -->
       <section class="view" id="view-maincourante">
         <div class="panel">
-          <div class="panel-head"><div><div class="eyebrow">Guichet citoyen</div><h2>Déclaration de main courante</h2></div><span class="pill info">Public</span></div>
+          <h2>Main courante</h2>
           <div class="form-grid">
-            <div class="field"><label>Service concerné <span class="req">*</span></label><select id="mc_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nom et prénom <span class="req">*</span></label><input id="mc_name" placeholder="Identité RP"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="mc_contact" placeholder="@pseudo"></div>
-            <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Récit des faits <span class="req">*</span></label><textarea id="mc_desc" placeholder="Détails..."></textarea></div>
+            <div class="field"><label>Service <span class="req">*</span></label><select id="mc_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
+            <div class="field"><label>Nom <span class="req">*</span></label><input id="mc_name"></div>
+            <div class="field"><label>Discord <span class="req">*</span></label><input id="mc_contact"></div>
+            <div class="field"><label>Date <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
+            <div class="field full"><label>Récit <span class="req">*</span></label><textarea id="mc_desc"></textarea></div>
+            <div class="field full"><label>Pièce jointe (Optionnel)</label><input id="mc_file" type="file"></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('maincourante')">Prévisualiser</button></div>
           <div id="preview-maincourante" class="preview hidden"></div>
@@ -223,12 +192,13 @@
       <!-- RECRUTEMENT -->
       <section class="view" id="view-recruitment">
         <div class="panel">
-          <div class="eyebrow">Ressources humaines</div><h2>Candidature externe</h2>
+          <h2>Candidature externe</h2>
           <div class="form-grid">
-            <div class="field"><label>Service demandeur <span class="req">*</span></label><select id="rec_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nom & Prénom RP <span class="req">*</span></label><input id="rec_name" placeholder="Nom RP"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="rec_discord" placeholder="@pseudo"></div>
-            <div class="field full"><label>Motivations <span class="req">*</span></label><textarea id="rec_motivation" placeholder="Pourquoi intégrer ce service ?"></textarea></div>
+            <div class="field"><label>Service <span class="req">*</span></label><select id="rec_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
+            <div class="field"><label>Nom <span class="req">*</span></label><input id="rec_name"></div>
+            <div class="field"><label>Discord <span class="req">*</span></label><input id="rec_discord"></div>
+            <div class="field full"><label>Motivations <span class="req">*</span></label><textarea id="rec_motivation"></textarea></div>
+            <div class="field full"><label>CV / Dossier (Optionnel)</label><input id="rec_file" type="file"></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('recrutement')">Prévisualiser</button></div>
           <div id="preview-recrutement" class="preview hidden"></div>
@@ -236,34 +206,38 @@
         </div>
       </section>
 
-      <!-- ZONES -->
+      <!-- RÈGLEMENTS & ZONES -->
       <section class="view" id="view-zones">
         <div class="panel">
-          <h2>Sectorisation & règles des zones</h2>
-          <p class="muted">Consignes RP officielles de Nanterre sur Emergency Hamburg.</p>
-          <div class="grid" style="gap:12px; margin-top:15px">
-            <div class="service-card"><div><strong>🏢 Bâtiments officiels</strong><p class="muted small">Commissariat, hôpital, caserne BSPN.</p></div><span class="pill info">Masse RP</span></div>
-            <div class="service-card"><div><strong>🟢 Zones protégées (Safe zone)</strong><p class="muted small">Spawn, concessionnaire.</p></div><span class="pill">Safe zone</span></div>
-            <div class="service-card"><div><strong>🔴 Quartiers sensibles</strong><p class="muted small">Secteurs à risque et zones d'intervention.</p></div><span class="pill warn">Zone sensible</span></div>
-          </div>
+          <h2>Règlements & Zones</h2>
+          <div id="dynamicZonesContent" style="white-space:pre-wrap;margin-top:15px;font-size:13px;color:#d8e1ed">Chargement des règlements...</div>
+          <div id="dynamicZonesFile" style="margin-top:15px"></div>
         </div>
       </section>
 
-      <!-- ESPACE STAFF / TABLEAU DE BORD -->
+      <!-- DASHBOARD STAFF -->
       <section class="view" id="view-staff-home">
         <div class="hero">
-          <span class="hero-tag" id="staffServiceTag">ESPACE OPÉRATIONNEL</span>
-          <h2 id="staffWelcome">Bienvenue dans votre espace de service.</h2>
-          <p>Gérez vos rapports, prises de service et perquisitions.</p>
-          <div class="hero-actions">
-            <button class="btn" onclick="showView('view-report')">Rédiger un rapport</button>
-            <button class="btn secondary" onclick="showView('view-perquisition')">Demandes de perquisition</button>
-          </div>
+          <h2 id="staffWelcome">Espace opérationnel</h2>
+          <p>Gérez vos rapports et perquisitions.</p>
         </div>
-        <div class="grid grid-3" style="margin-bottom:18px">
-          <div class="stat"><div class="stat-label">Matricule</div><div class="stat-value" id="staffMatricule">[00]</div><div class="stat-note" id="staffGrade">Grade</div></div>
-          <div class="stat"><div class="stat-label">Service</div><div class="stat-value" style="font-size:18px" id="staffService">Police</div><div class="stat-note">Actif</div></div>
-          <div class="stat"><div class="stat-label">Statut</div><div class="stat-value" style="font-size:18px" id="staffStatusDisp">En service</div><div class="stat-note">Radio OK</div></div>
+      </section>
+
+      <!-- RAPPORT -->
+      <section class="view" id="view-report">
+        <div class="panel">
+          <h2>Rapport d'intervention</h2>
+          <div class="form-grid">
+            <div class="field"><label>Type <span class="req">*</span></label><select id="rep_type"><option>Interpellation</option><option>Contrôle</option><option>Secours</option></select></div>
+            <div class="field"><label>Date <span class="req">*</span></label><input id="rep_datetime" type="datetime-local"></div>
+            <div class="field"><label>Lieu <span class="req">*</span></label><input id="rep_location"></div>
+            <div class="field"><label>Effectifs</label><input id="rep_team"></div>
+            <div class="field full"><label>Faits <span class="req">*</span></label><textarea id="rep_timeline"></textarea></div>
+            <div class="field full"><label>Photo / Preuve jointe (Optionnel)</label><input id="rep_file" type="file"></div>
+          </div>
+          <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser</button></div>
+          <div id="preview-rapport" class="preview hidden"></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Envoyer sur Discord</button></div>
         </div>
       </section>
 
@@ -272,285 +246,238 @@
         <div class="panel">
           <h2>Prise, pause et fin de service</h2>
           <div class="form-grid">
-            <div class="field"><label>Indicatif / Unité <span class="req">*</span></label><input id="svc_unit" placeholder="Ex: BAC-01, VPI-1"></div>
+            <div class="field"><label>Indicatif / Unité <span class="req">*</span></label><input id="svc_unit" placeholder="Ex: BAC-01"></div>
             <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
-            <div class="field full"><label>Observations / Secteur</label><input id="svc_note" placeholder="Secteur patrouillé..."></div>
+            <div class="field full"><label>Observations / Secteur</label><input id="svc_note"></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer et diffuser</button></div>
+          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer le statut</button></div>
         </div>
       </section>
 
-      <!-- RAPPORT D'INTERVENTION -->
-      <section class="view" id="view-report">
-        <div class="panel">
-          <h2>Rapport d'intervention</h2>
-          <div class="form-grid">
-            <div class="field"><label>Type d'intervention <span class="req">*</span></label><select id="rep_type"><option>Interpellation</option><option>Contrôle routier</option><option>Secours à personne</option><option>Incendie</option><option>Autre</option></select></div>
-            <div class="field"><label>Date et heure <span class="req">*</span></label><input id="rep_datetime" type="datetime-local"></div>
-            <div class="field"><label>Lieu <span class="req">*</span></label><input id="rep_location" placeholder="Lieu précis"></div>
-            <div class="field"><label>Effectifs engagés</label><input id="rep_team" placeholder="Noms / Matricules"></div>
-            <div class="field full"><label>Déroulement des faits <span class="req">*</span></label><textarea id="rep_timeline" placeholder="Récit chronologique..."></textarea></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser le rapport</button></div>
-          <div id="preview-rapport" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Transmettre sur Discord</button></div>
-        </div>
-      </section>
-
-      <!-- GAV & REGISTRE -->
+      <!-- GAV -->
       <section class="view" id="view-gav">
         <div class="panel">
-          <h2>Registre de garde à vue / Interpellation</h2>
+          <h2>Registre de garde à vue</h2>
           <div class="form-grid">
-            <div class="field"><label>Personne interpellée <span class="req">*</span></label><input id="gav_suspect" placeholder="Nom RP"></div>
-            <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="gav_datetime" type="datetime-local"></div>
-            <div class="field"><label>Motif / Infractions <span class="req">*</span></label><input id="gav_reason" placeholder="Motif RP"></div>
-            <div class="field"><label>Amende / Sanction</label><input id="gav_duration" placeholder="Ex: 4000 € / 15 min"></div>
-            <div class="field full"><label>Notes & droits notifiés</label><textarea id="gav_notes" placeholder="Détails..."></textarea></div>
+            <div class="field"><label>Suspect <span class="req">*</span></label><input id="gav_suspect"></div>
+            <div class="field"><label>Date <span class="req">*</span></label><input id="gav_datetime" type="datetime-local"></div>
+            <div class="field"><label>Motif <span class="req">*</span></label><input id="gav_reason"></div>
+            <div class="field"><label>Sanction</label><input id="gav_duration"></div>
+            <div class="field full"><label>Notes</label><textarea id="gav_notes"></textarea></div>
+            <div class="field full"><label>Pièce jointe / PV (Optionnel)</label><input id="gav_file" type="file"></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewStaff('gav')">Prévisualiser</button></div>
           <div id="preview-gav" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="sendDiscordWebhook('gav')">Enregistrer et transmettre</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="sendDiscordWebhook('gav')">Enregistrer</button></div>
         </div>
       </section>
 
       <!-- CODE PÉNAL -->
       <section class="view" id="view-penal">
         <div class="panel">
-          <h2>⚖️ Code pénal RP — Nanterre</h2>
-          <p class="muted small">Barème officiel des infractions, amendes et peines de garde à vue.</p>
-          <div class="table-wrap" style="margin-top:15px">
+          <h2>⚖️ Code pénal RP</h2>
+          <div id="dynamicPenalFile" style="margin-bottom:15px"></div>
+          <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Catégorie</th><th>Infraction RP</th><th>Amende</th><th>GAV</th></tr></thead>
+              <thead><tr><th>Catégorie</th><th>Infraction</th><th>Amende</th><th>GAV</th></tr></thead>
               <tbody id="penalTableBody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- DEMANDES DE PERQUISITION -->
+      <!-- PERQUISITIONS -->
       <section class="view" id="view-perquisition">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>🔍 Demandes de perquisition</h2><div class="muted small">Gestion des perquisitions (Acceptées, Refusées, En attente).</div></div>
+            <h2>🔍 Demandes de perquisition</h2>
             <button class="btn small" onclick="showPerqForm()">+ Nouvelle demande</button>
           </div>
           <div id="perqAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
-            <h3>Formulaire de Demande de Perquisition</h3>
+            <h3>Nouvelle demande</h3>
             <div class="form-grid">
-              <div class="field"><label>Nom du suspect / Propriétaire <span class="req">*</span></label><input id="perq_suspect" placeholder="Nom RP"></div>
-              <div class="field"><label>Adresse / Localisation <span class="req">*</span></label><input id="perq_location" placeholder="Ex: Appartement 42, Quartier Nord"></div>
-              <div class="field full"><label>Motifs / Indices justifiant la perquisition <span class="req">*</span></label><textarea id="perq_reasons" placeholder="Précisez les éléments d'enquête..."></textarea></div>
+              <div class="field"><label>Suspect <span class="req">*</span></label><input id="perq_suspect"></div>
+              <div class="field"><label>Adresse <span class="req">*</span></label><input id="perq_location"></div>
+              <div class="field full"><label>Motifs <span class="req">*</span></label><textarea id="perq_reasons"></textarea></div>
+              <div class="field full"><label>Mandat / Preuve (Optionnel)</label><input id="perq_file" type="file"></div>
             </div>
-            <div class="form-actions"><button class="btn" onclick="savePerquisition()">Soumettre la demande</button></div>
+            <button class="btn" style="margin-top:12px" onclick="savePerquisition()">Soumettre</button>
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Date</th><th>Demandeur</th><th>Suspect / Lieu</th><th>Motifs</th><th>Statut</th><th>Actions (Haut gradé / Admin)</th></tr></thead>
+              <thead><tr><th>Date</th><th>Demandeur</th><th>Suspect / Adresse</th><th>Motifs</th><th>Statut</th><th>Action</th></tr></thead>
               <tbody id="perqBody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- TAJ / FICHIER DE POLICE CENTRALISÉ -->
+      <!-- TAJ -->
       <section class="view" id="view-taj">
         <div class="panel">
-          <div class="panel-head">
-            <div><h2>🗂️ Fichier de Police Centralisé (TAJ / STIC)</h2><div class="muted small">Antécédents judiciaires des citoyens.</div></div>
-            <span class="pill danger">Confidentiel</span>
-          </div>
-          <div class="search-row">
-            <input id="tajSearch" placeholder="Rechercher par nom de citoyen..." oninput="renderTajData()">
-            <button class="btn small" onclick="showTajAddForm()">+ Ajouter une inscription</button>
-          </div>
-          <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-top:10px">
-            <h3>Nouvelle Inscription au Fichier TAJ</h3>
+          <div class="panel-head"><h2>🗂️ Fichier TAJ</h2><button class="btn small" onclick="showTajAddForm()">+ Ajouter</button></div>
+          <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:15px">
             <div class="form-grid">
-              <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="taj_citizen" placeholder="Nom RP"></div>
-              <div class="field"><label>Pseudo Roblox</label><input id="taj_roblox" placeholder="Roblox"></div>
-              <div class="field"><label>Catégorie <span class="req">*</span></label><select id="taj_category"><option>Garde à Vue</option><option>Amende / Infraction</option><option>Avis de Recherche</option><option>Signalement RP</option></select></div>
-              <div class="field"><label>Sanction</label><input id="taj_sanction" placeholder="Ex: 5000€"></div>
-              <div class="field full"><label>Détails <span class="req">*</span></label><textarea id="taj_details" placeholder="Faits..."></textarea></div>
+              <div class="field"><label>Nom <span class="req">*</span></label><input id="taj_citizen"></div>
+              <div class="field"><label>Roblox</label><input id="taj_roblox"></div>
+              <div class="field"><label>Catégorie</label><select id="taj_category"><option>Garde à Vue</option><option>Amende</option><option>Avis de recherche</option></select></div>
+              <div class="field"><label>Sanction</label><input id="taj_sanction"></div>
+              <div class="field full"><label>Détails <span class="req">*</span></label><textarea id="taj_details"></textarea></div>
+              <div class="field full"><label>Fichier / Photo (Optionnel)</label><input id="taj_file" type="file"></div>
             </div>
-            <div class="form-actions"><button class="btn" onclick="saveTajEntry()">Enregistrer</button></div>
+            <button class="btn" style="margin-top:12px" onclick="saveTajEntry()">Enregistrer</button>
           </div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Date</th><th>Citoyen RP</th><th>Roblox</th><th>Catégorie</th><th>Motifs</th><th>Sanction</th><th>Agent</th></tr></thead>
-              <tbody id="tajBody"></tbody>
-            </table>
-          </div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Citoyen</th><th>Catégorie</th><th>Détails</th><th>Sanction</th><th>Agent</th></tr></thead><tbody id="tajBody"></tbody></table></div>
         </div>
       </section>
 
-      <!-- DASHBOARD STATISTIQUES & RH -->
+      <!-- STATS RH -->
       <section class="view" id="view-stats">
         <div class="panel">
-          <h2>📊 Tableau de Bord & Statistiques RH</h2>
+          <h2>📊 Statistiques RH</h2>
           <div class="grid grid-4" style="margin-top:15px">
             <div class="stat"><div class="stat-label">Total Effectifs</div><div class="stat-value" id="st_total_agents">0</div></div>
-            <div class="stat"><div class="stat-label">Agents Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div></div>
-            <div class="stat"><div class="stat-label">Postes Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div></div>
-            <div class="stat"><div class="stat-label">Inscriptions TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div></div>
+            <div class="stat"><div class="stat-label">Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div></div>
+            <div class="stat"><div class="stat-label">Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div></div>
+            <div class="stat"><div class="stat-label">Fiches TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div></div>
           </div>
         </div>
       </section>
 
-      <!-- ANNUAIRE DES EFFECTIFS & ATTRIBUTION DE MÉDAILLES -->
+      <!-- ANNUAIRE -->
       <section class="view" id="view-directory">
         <div class="panel">
-          <div class="panel-head">
-            <div><h2>🎖️ Annuaire des effectifs & Attributions</h2><div class="muted small">Consultez les agents et attribuez médailles et certifications (Hauts gradés / Admin).</div></div>
-          </div>
-          <div class="search-row"><input id="directorySearch" placeholder="Rechercher par nom, matricule ou grade..." oninput="renderDirectory()"></div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th><th>Distinctions / Certifications</th><th>Action</th></tr></thead>
-              <tbody id="directoryBody"></tbody>
-            </table>
-          </div>
+          <h2>🎖️ Annuaire & Médailles</h2>
+          <div class="search-row"><input id="directorySearch" placeholder="Rechercher..." oninput="renderDirectory()"></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th><th>Distinctions</th><th>Action</th></tr></thead><tbody id="directoryBody"></tbody></table></div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : DESIGN & TEXTES -->
+      <!-- ADMIN : DESIGN & TEXTES -->
       <section class="view" id="view-admin-design">
-        <div class="hero"><span class="hero-tag">Personnalisation</span><h2>Design, Titres et Textes de l'accueil.</h2></div>
         <div class="panel">
-          <h2>Paramètres généraux</h2>
+          <h2>🎨 Design & Textes de l'accueil</h2>
           <div class="form-grid">
-            <div class="field"><label>Nom du serveur / Titre principal</label><input id="cfg_brandName" value="Nanterre RP"></div>
-            <div class="field"><label>Sous-titre / En-tête</label><input id="cfg_brandSub" value="Portail institutionnel · Emergency Hamburg"></div>
-            <div class="field full"><label>Description principale</label><textarea id="cfg_brandDesc">Portail central des services de sécurité, de secours et de contrôle interne.</textarea></div>
+            <div class="field"><label>Nom du serveur</label><input id="cfg_brandName" value="Nanterre RP"></div>
+            <div class="field"><label>Sous-titre</label><input id="cfg_brandSub" value="Portail institutionnel"></div>
+            <div class="field full"><label>Description</label><textarea id="cfg_brandDesc">Portail central des services de sécurité.</textarea></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="saveDesignConfig()">Sauvegarder le design</button></div>
+          <button class="btn" style="margin-top:15px" onclick="saveDesignConfig()">Sauvegarder</button>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : WEBHOOKS -->
+      <!-- ADMIN : GESTION CODE PÉNAL -->
+      <section class="view" id="view-admin-penal">
+        <div class="panel">
+          <h2>⚖️ Gestion du Code Pénal (Panel Admin)</h2>
+          <p class="muted small">Ajoutez ou modifiez les articles et joignez un document ou un livret officiel.</p>
+          <div class="form-grid" style="margin-top:15px">
+            <div class="field full"><label>Fichier / Document officiel du Code Pénal (PDF, Image, etc.)</label><input id="adm_penal_file" type="file"></div>
+            <div class="field"><label>Catégorie <span class="req">*</span></label><input id="adm_penal_cat" placeholder="Ex: Infractions routières"></div>
+            <div class="field"><label>Infraction <span class="req">*</span></label><input id="adm_penal_inf" placeholder="Ex: Excès de vitesse"></div>
+            <div class="field"><label>Amende <span class="req">*</span></label><input id="adm_penal_fine" placeholder="Ex: 1 000 €"></div>
+            <div class="field"><label>GAV <span class="req">*</span></label><input id="adm_penal_gav" placeholder="Ex: 5 min"></div>
+          </div>
+          <button class="btn" style="margin-top:15px" onclick="addPenalArticle()">Ajouter au Code Pénal</button>
+          <div class="table-wrap" style="margin-top:20px">
+            <table class="data-table"><thead><tr><th>Catégorie</th><th>Infraction</th><th>Amende</th><th>GAV</th><th>Action</th></tr></thead><tbody id="adminPenalTableBody"></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN : GESTION RÈGLEMENTS / ZONES -->
+      <section class="view" id="view-admin-zones">
+        <div class="panel">
+          <h2>📋 Gestion des Règlements & Zones (Panel Admin)</h2>
+          <div class="form-grid" style="margin-top:10px">
+            <div class="field full">
+              <label>Texte intégral des règlements et consignes de zones</label>
+              <textarea id="adm_zones_text" style="min-height:220px"></textarea>
+            </div>
+            <div class="field full">
+              <label>Joindre un fichier / règlement officiel (PDF, Image)</label>
+              <input id="adm_zones_file" type="file">
+            </div>
+          </div>
+          <button class="btn" style="margin-top:15px" onclick="saveZonesConfig()">Mettre à jour les règlements</button>
+        </div>
+      </section>
+
+      <!-- ADMIN : WEBHOOKS -->
       <section class="view" id="view-admin-home">
         <div class="panel">
-          <h2>Configuration des Webhooks Discord</h2>
+          <h2>Webhooks Discord</h2>
           <div class="form-grid" id="webhookConfigForm"></div>
-          <div class="form-actions"><button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks</button></div>
+          <button class="btn" style="margin-top:15px" onclick="saveWebhooksConfig()">Sauvegarder</button>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : EFFECTIFS -->
+      <!-- ADMIN : EFFECTIFS -->
       <section class="view" id="view-admin-matricules">
         <div class="panel">
-          <h2>Gestion des effectifs (00 à 100)</h2>
-          <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer..." oninput="renderAdminMatricules()"></div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Nom RP</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead>
-              <tbody id="adminMatBody"></tbody>
-            </table>
-          </div>
+          <h2>Gestion des effectifs</h2>
+          <div class="search-row"><input id="adminMatSearch" placeholder="Rechercher..." oninput="renderAdminMatricules()"></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Nom</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead><tbody id="adminMatBody"></tbody></table></div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : MOTS DE PASSE -->
+      <!-- ADMIN : MOTS DE PASSE -->
       <section class="view" id="view-admin-passwords">
         <div class="panel">
-          <h2>🔑 Gestion des accès & Mots de passe agents</h2>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe actuel</th><th>Action</th></tr></thead>
-              <tbody id="adminPwdBody"></tbody>
-            </table>
-          </div>
+          <h2>🔑 Mots de passe agents</h2>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe</th><th>Action</th></tr></thead><tbody id="adminPwdBody"></tbody></table></div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : GESTION DES MÉDAILLES & CERTIFICATIONS -->
+      <!-- ADMIN : MÉDAILLES -->
       <section class="view" id="view-admin-medals">
         <div class="panel">
-          <h2>🎖️ Création des Médailles & Certifications par Entité</h2>
-          <p class="muted small">Définissez ici les médailles et acos/certifications disponibles pour chaque service (Police, BSPN, SAMU).</p>
+          <h2>🎖️ Création des Médailles & Certifications</h2>
           <div class="form-grid" style="margin-top:15px">
-            <div class="field"><label>Nom de la distinction / certification <span class="req">*</span></label><input id="med_name" placeholder="Ex: Médaille d'or / Formation BAC"></div>
-            <div class="field"><label>Entité / Service cible <span class="req">*</span></label>
-              <select id="med_service">
-                <option value="Police Nationale">Police Nationale</option>
-                <option value="BSPN">BSPN</option>
-                <option value="SAMU 92">SAMU 92</option>
-                <option value="Tous">Tous les services</option>
-              </select>
-            </div>
-            <div class="field full"><label>Description</label><input id="med_desc" placeholder="Détails de l'attribution..."></div>
+            <div class="field"><label>Nom <span class="req">*</span></label><input id="med_name"></div>
+            <div class="field"><label>Service</label><select id="med_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option><option value="Tous">Tous</option></select></div>
+            <div class="field full"><label>Description</label><input id="med_desc"></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="saveMedalDefinition()">Créer la distinction</button></div>
-          <div class="table-wrap" style="margin-top:20px">
-            <table class="data-table">
-              <thead><tr><th>Service</th><th>Nom</th><th>Description</th><th>Action</th></tr></thead>
-              <tbody id="adminMedalsBody"></tbody>
-            </table>
-          </div>
+          <button class="btn" style="margin-top:15px" onclick="saveMedalDefinition()">Créer</button>
+          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Service</th><th>Nom</th><th>Description</th><th>Action</th></tr></thead><tbody id="adminMedalsBody"></tbody></table></div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : ALERTES & BANNIÈRES VISUELLES -->
+      <!-- ADMIN : BANNIÈRES -->
       <section class="view" id="view-admin-alerts">
         <div class="panel">
-          <div class="panel-head">
-            <div><h2>📢 Gestion & Design des Bannières d'Annonce Visuelle</h2><div class="muted small">Personnalisez l'affichage visuel en direct sur l'écran de tous les connectés.</div></div>
+          <h2>📢 Bannières d'Annonce Visuelle</h2>
+          <div class="form-grid" style="margin-top:15px">
+            <input type="hidden" id="alert_edit_id">
+            <div class="field"><label>Titre <span class="req">*</span></label><input id="alt_title"></div>
+            <div class="field"><label>Type</label><select id="alt_type"><option value="police">Police</option><option value="general">Général</option></select></div>
+            <div class="field full"><label>Texte affiché <span class="req">*</span></label><textarea id="alt_text"></textarea></div>
+            <div class="field"><label>Couleur de fond</label><input id="alt_bg" type="color" value="#e45a66" style="height:42px"></div>
+            <div class="field"><label>Couleur texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
           </div>
-          <div class="panel" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
-            <h3>Créer / Modifier une Alerte Visuelle</h3>
-            <div class="form-grid">
-              <input type="hidden" id="alert_edit_id">
-              <div class="field"><label>Titre interne <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
-              <div class="field"><label>Type / Service</label>
-                <select id="alt_type">
-                  <option value="police">Police Nationale</option>
-                  <option value="bspn">BSPN Pompiers</option>
-                  <option value="samu">SAMU 92</option>
-                  <option value="general">Alerte Générale</option>
-                </select>
-              </div>
-              <div class="field full"><label>Texte à afficher sur la bannière <span class="req">*</span></label><textarea id="alt_text" placeholder="ATTENTION : Intervention majeure en cours secteur Nord..."></textarea></div>
-              <div class="field"><label>Couleur de fond (Background)</label><input id="alt_bg" type="color" value="#e45a66" style="height:42px"></div>
-              <div class="field"><label>Couleur du texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
-              <div class="field"><label>Taille de police</label><select id="alt_size"><option value="14px">Normale (14px)</option><option value="18px" selected>Moyenne (18px)</option><option value="24px">Grande (24px)</option></select></div>
-            </div>
-            <div class="form-actions">
-              <button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte visuelle</button>
-              <button class="btn secondary" onclick="clearAlertForm()">Effacer</button>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Titre</th><th>Type</th><th>Texte affiché</th><th>Actions</th></tr></thead>
-              <tbody id="adminAlertsBody"></tbody>
-            </table>
-          </div>
+          <div class="form-actions"><button class="btn" onclick="saveCustomAlert()">Enregistrer</button></div>
+          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Titre</th><th>Texte</th><th>Actions</th></tr></thead><tbody id="adminAlertsBody"></tbody></table></div>
         </div>
       </section>
 
     </main>
   </div>
-  <div class="toast-host" id="toastHost" aria-live="polite"></div>
+  <div class="toast-host" id="toastHost"></div>
 
   <script>
     const SUPABASE_URL = 'https://fqgecgziekhkmztawgzu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- GESTION BANNIÈRE VISUELLE GLOBALE ---
-    function showGlobalBanner(text, bg, color, size) {
-      const banner = $('globalAlertBanner');
-      const content = $('bannerTextContent');
+    function showGlobalBanner(text, bg, color) {
+      const banner = document.getElementById('globalAlertBanner');
+      const content = document.getElementById('bannerTextContent');
       content.textContent = text;
-      content.style.fontSize = size || '18px';
       banner.style.backgroundColor = bg || '#e45a66';
       banner.style.color = color || '#ffffff';
       banner.style.display = 'block';
     }
-
-    function hideGlobalBanner() {
-      $('globalAlertBanner').style.display = 'none';
-    }
+    function hideGlobalBanner() { document.getElementById('globalAlertBanner').style.display = 'none'; }
 
     let webhookUrls = {
       HOOK_TICKET_POLICE: '', HOOK_TICKET_BSPN: '', HOOK_TICKET_SAMU: '',
@@ -558,35 +485,36 @@
       HOOK_COMPLAINT_POLICE: '', HOOK_COMPLAINT_RELIEF: '', HOOK_SERVICE_STATUS: '',
       HOOK_REPORT_POLICE: '', HOOK_REPORT_BSPN: '', HOOK_REPORT_SAMU: '', HOOK_GAV: ''
     };
+    let designConfig = { brandName: "Nanterre RP", brandSub: "Portail institutionnel", brandDesc: "Portail central." };
+    let zonesText = "Consignes officielles de Nanterre sur Emergency Hamburg.";
+    let zonesFileName = "";
+    let penalFileName = "";
+    let penalArticles = [
+      ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
+      ['Infractions routières',"Refus d'obtempérer",'4 000 €','15 min'],
+      ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min']
+    ];
 
-    let designConfig = {
-      brandName: "Nanterre RP",
-      brandSub: "Portail institutionnel · Emergency Hamburg",
-      brandDesc: "Portail central des services de sécurité, de secours et de contrôle interne."
-    };
-
-    const DEFAULT_ROSTER = [
+    let roster = [
       ['00','Youskof Yorka','IGPN','IGPN','Occupé','Yohan.76450',''],
       ['01','Aram','Commandant','Police Nationale','Occupé','Aram.33548',''],
       ['02','Motlo','Directeur','Police Nationale','Occupé','Motlo.85462',''],
-      ...Array.from({length:99},(_,i)=>{const n=3+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`,''];})
-    ].map(([matricule,name,grade,service,status,password,distinctions])=>({matricule,name,grade,service,status,password,distinctions}));
+      ['03','Honey','Directrice','Police Nationale','Occupé','Honey.19420',''],
+      ['04','Zappeur','Lieutenant','Police Nationale','Occupé','Zappeur.74102',''],
+      ['05','Osman','GPX','Police Nationale','Occupé','Osman.93214',''],
+      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé','Pablo.48512',''],
+      ['07','Le T','GPX','Police Nationale','Occupé','LeT.62914',''],
+      ['08','Aaron','Capitaine','Police Nationale','Occupé','Aaron.10492',''],
+      ['09','Lyky','GPX','Police Nationale','Occupé','Lyky.83719','']
+    ].concat(Array.from({length:91},(_,i)=>{
+      const n = 10 + i;
+      return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`,''];
+    })).map(([matricule,name,grade,service,status,password,distinctions])=>({matricule,name,grade,service,status,password,distinctions}));
 
-    let roster = [...DEFAULT_ROSTER];
     let tajRecords = [];
     let customAlerts = [];
     let medalsList = [];
     let perquisitionsList = [];
-
-    const PENAL_CODE = [
-      ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
-      ['Infractions routières',"Refus d'obtempérer",'4 000 €','15 min'],
-      ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min'],
-      ['Infractions contre les personnes',"Agression envers un agent",'5 000 €','15 min'],
-      ['Infractions forces de l’ordre','Outrage à agent','2 000 €','10 min'],
-      ['Armes','Port illégal d’arme','3 000 €','15 min'],
-      ['Armes','Braquage de banque / commerces','8 000 €','15 min']
-    ];
 
     let activeSpace = 'citoyen';
     let currentAgent = null;
@@ -601,10 +529,17 @@
       t.className='toast'+(type==='error'?' error':'');
       t.textContent=msg;
       $('toastHost').appendChild(t);
-      setTimeout(()=>t.remove(),5000)
+      setTimeout(()=>t.remove(),4000);
     }
     function toggleSidebar(){$('sidebar').classList.toggle('open')}
-    function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));$('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'})}
+    function showView(id){
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      const target = $(id);
+      if(target) target.classList.add('active');
+      document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+      $('sidebar').classList.remove('open');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
 
     function isHighRank(grade) {
       if (!grade) return false;
@@ -615,29 +550,27 @@
     function buildDynamicNav() {
       const navItems = [];
       if (activeSpace === 'citoyen') {
-        navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Zones & règlement']);
+        navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Règlements & Zones']);
       } else if (activeSpace === 'admin') {
-        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles & Certif'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH'],['view-admin-alerts','📢','Bannières Alertes']);
+        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-penal','⚖️','Gérer Code Pénal'],['view-admin-zones','📋','Gérer Règlements'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles'],['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH'],['view-admin-alerts','📢','Bannières']);
       } else {
-        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise de service'],['view-directory','🎖️','Annuaire & Médailles'],['view-perquisition','🔍','Perquisitions'],['view-penal','⚖️','Code pénal']);
-        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV & registre']);
+        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise de service'],['view-directory','🎖️','Annuaire'],['view-perquisition','🔍','Perquisitions'],['view-penal','⚖️','Code pénal'],['view-zones','⌖','Règlements & Zones']);
+        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV']);
         if (isAdminUser || (currentAgent && isHighRank(currentAgent.grade))) {
-          navItems.push(['view-taj','🗂️','Fichier TAJ/STIC']);
-          navItems.push(['view-stats','📊','Tableau de bord RH']);
+          navItems.push(['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH']);
         }
       }
       $('sideNav').innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
     }
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
-    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');buildDynamicNav();showView('view-public-home');}
+    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');buildDynamicNav();renderZonesContent();showView('view-public-home');}
 
     function enterStaff(space){
       activeSpace=space;isAdminUser=false;
       $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
-      $('loginTitle').textContent='Connexion ' + space.toUpperCase();
       const filtered = roster.filter(r => r.status==='Occupé');
-      $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade} (${r.service})</option>`).join('');
+      $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
       showView('view-login');
     }
 
@@ -646,7 +579,7 @@
       const pwd = val('loginPasswordInput');
       const agent = roster.find(r=>r.matricule===mat);
       if(!agent) return toast('Agent introuvable','error');
-      if(agent.password && agent.password !== pwd) return toast('❌ Mot de passe incorrect !','error');
+      if(agent.password && agent.password !== pwd) return toast('❌ Mot de passe incorrect','error');
 
       currentAgent = agent;
       isAdminUser = false;
@@ -654,21 +587,14 @@
       $('userChip').classList.remove('hidden');
       $('logoutBtn').classList.remove('hidden');
       $('userChip').textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
-      $('staffMatricule').textContent = `[${currentAgent.matricule}]`;
-      $('staffGrade').textContent = currentAgent.grade;
-      $('staffService').textContent = currentAgent.service;
       $('staffWelcome').textContent = `Bienvenue, ${currentAgent.name}.`;
-      
-      renderDirectory();
-      renderPenal();
-      renderPerquisitions();
+      renderDirectory(); renderPenal(); renderPerquisitions(); renderZonesContent();
       showView('view-staff-home');
       toast('Connexion réussie !');
     }
 
-    function enterAdmin(){
+    function enterAdminDirect() {
       $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
-      $('adminCode').value = '';
       showView('view-admin-login');
     }
 
@@ -681,89 +607,116 @@
         $('userChip').classList.remove('hidden');
         $('logoutBtn').classList.remove('hidden');
         $('userChip').textContent = 'Administrateur';
+        renderAdminMatricules(); renderAdminPasswords(); renderAdminMedalsTable(); renderAdminPenalTable(); renderTajData(); renderPerquisitions(); loadCustomAlerts();
+        $('adm_zones_text').value = zonesText;
         initAdminWebhooksUI();
-        renderAdminMatricules();
-        renderAdminPasswords();
-        renderAdminMedalsTable();
-        renderTajData();
-        renderPerquisitions();
-        loadCustomAlerts();
         showView('view-admin-design');
         toast('Accès administrateur autorisé.');
       } else {
-        toast('Code administrateur incorrect','error');
+        toast('Code incorrect','error');
       }
     }
 
     function logout(){
-      currentAgent=null;
-      isAdminUser=false;
-      $('userChip').classList.add('hidden');
-      $('logoutBtn').classList.add('hidden');
+      currentAgent=null; isAdminUser=false;
+      $('userChip').classList.add('hidden'); $('logoutBtn').classList.add('hidden');
       returnGateway();
     }
 
+    // --- RENDU DYNAMIQUE CODE PÉNAL & ZONES ---
     function renderPenal(){
-      $('penalTableBody').innerHTML = PENAL_CODE.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+      $('penalTableBody').innerHTML = penalArticles.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+      if(penalFileName) {
+        $('dynamicPenalFile').innerHTML = `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document officiel joint :</b> ${esc(penalFileName)}</div>`;
+      } else {
+        $('dynamicPenalFile').innerHTML = '';
+      }
     }
 
-    // --- MODULE PERQUISITIONS ---
+    function renderZonesContent(){
+      $('dynamicZonesContent').textContent = zonesText;
+      if(zonesFileName) {
+        $('dynamicZonesFile').innerHTML = `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document de règlement joint :</b> ${esc(zonesFileName)}</div>`;
+      } else {
+        $('dynamicZonesFile').innerHTML = '';
+      }
+    }
+
+    async function addPenalArticle(){
+      const cat = val('adm_penal_cat'); const inf = val('adm_penal_inf'); const fine = val('adm_penal_fine'); const gav = val('adm_penal_gav');
+      const fileInput = $('adm_penal_file');
+      if(fileInput && fileInput.files[0]) penalFileName = fileInput.files[0].name;
+
+      if(!cat || !inf) return toast('Remplissez les champs obligatoires.', 'error');
+      penalArticles.push([cat, inf, fine, gav]);
+      await saveSettingsCloud('penal', penalArticles);
+      await saveSettingsCloud('penal_file', penalFileName);
+      renderAdminPenalTable(); renderPenal();
+      toast('Article ajouté avec succès !');
+      $('adm_penal_cat').value=''; $('adm_penal_inf').value=''; $('adm_penal_fine').value=''; $('adm_penal_gav'].value='';
+    }
+
+    async function deletePenalArticle(index){
+      penalArticles.splice(index, 1);
+      await saveSettingsCloud('penal', penalArticles);
+      renderAdminPenalTable(); renderPenal();
+      toast('Article supprimé.');
+    }
+
+    function renderAdminPenalTable(){
+      $('adminPenalTableBody').innerHTML = penalArticles.map((r, i)=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}<td><button class="btn danger small" onclick="deletePenalArticle(${i})">Supprimer</button></td></tr>`).join('');
+    }
+
+    async function saveZonesConfig(){
+      zonesText = val('adm_zones_text');
+      const fileInput = $('adm_zones_file');
+      if(fileInput && fileInput.files[0]) zonesFileName = fileInput.files[0].name;
+
+      await saveSettingsCloud('zones', zonesText);
+      await saveSettingsCloud('zones_file', zonesFileName);
+      renderZonesContent();
+      toast('Règlements mis à jour avec succès !');
+    }
+
+    // --- PERQUISITIONS ---
     function showPerqForm() { $('perqAddContainer').classList.toggle('hidden'); }
 
     async function savePerquisition() {
-      const suspect = val('perq_suspect');
-      const location = val('perq_location');
-      const reasons = val('perq_reasons');
-      if(!suspect || !location || !reasons) return toast('Veuillez remplir tous les champs.', 'error');
+      const suspect = val('perq_suspect'); const location = val('perq_location'); const reasons = val('perq_reasons');
+      const fileInput = $('perq_file');
+      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : null;
 
-      const newPerq = {
-        suspect: suspect,
-        location: location,
-        reasons: reasons,
-        status: 'En attente',
-        officer: currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Admin'
-      };
-
+      if(!suspect || !location || !reasons) return toast('Remplissez tous les champs.', 'error');
+      const newPerq = { suspect, location, reasons, status: 'En attente', officer: currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Admin', file_name: fileName };
       try {
         await sb.from('nrp_perquisitions').insert([newPerq]).select();
-        toast('Demande de perquisition soumise !');
-        $('perq_suspect').value = '';
-        $('perq_location').value = '';
-        $('perq_reasons').value = '';
+        toast('Demande soumise !');
+        $('perq_suspect').value=''; $('perq_location').value=''; $('perq_reasons').value='';
         $('perqAddContainer').classList.add('hidden');
         loadPerquisitionsCloud();
-      } catch(e) {
-        toast('Erreur sauvegarde perquisition', 'error');
-      }
+      } catch(e){toast('Erreur','error');}
     }
 
     async function updatePerqStatus(id, newStatus) {
       try {
         await sb.from('nrp_perquisitions').update({ status: newStatus }).eq('id', id);
-        toast(`Perquisition ${newStatus} avec succès !`);
+        toast(`Perquisition ${newStatus} !`);
         loadPerquisitionsCloud();
-      } catch(e) {
-        toast('Erreur mise à jour statut', 'error');
-      }
+      } catch(e){toast('Erreur','error');}
     }
 
     function renderPerquisitions() {
-      const tbody = $('perqBody');
-      if(!tbody) return;
+      const tbody = $('perqBody'); if(!tbody) return;
       const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
-
       tbody.innerHTML = perquisitionsList.map(p => `
         <tr>
           <td><small class="muted">${new Date(p.created_at || Date.now()).toLocaleDateString('fr-FR')}</small></td>
           <td>${esc(p.officer)}</td>
-          <td><b>${esc(p.suspect)}</b><br><small class="muted">${esc(p.location)}</small></td>
+          <td><b>${esc(p.suspect)}</b><br><small class="muted">${esc(p.location)}</small>${p.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(p.file_name)}</small>` : ''}</td>
           <td>${esc(p.reasons)}</td>
           <td><span class="pill ${p.status==='Acceptée'?'info':(p.status==='Refusée'?'danger':'warn')}">${esc(p.status)}</span></td>
           <td>
-            ${canManage ? `
-              <button class="btn small" style="background:var(--green)" onclick="updatePerqStatus('${p.id}', 'Acceptée')">✔ Accepter</button>
-              <button class="btn danger small" onclick="updatePerqStatus('${p.id}', 'Refusée')">✖ Refuser</button>
-            : '<small class="muted">Réservé haut gradé</small>'}
+            ${canManage ? `<button class="btn small" style="background:var(--green)" onclick="updatePerqStatus('${p.id}', 'Acceptée')">✔ Accepter</button> <button class="btn danger small" onclick="updatePerqStatus('${p.id}', 'Refusée')">✖ Refuser</button>` : '<small class="muted">-</small>'}
           </td>
         </tr>
       `).join('');
@@ -772,61 +725,36 @@
     async function loadPerquisitionsCloud() {
       try {
         const { data } = await sb.from('nrp_perquisitions').select('*').order('created_at', { ascending: false });
-        if(data) {
-          perquisitionsList = data;
-          renderPerquisitions();
-        }
-      } catch(e) {}
+        if(data) { perquisitionsList = data; renderPerquisitions(); }
+      } catch(e){}
     }
 
-    // --- MODULE MÉDAILLES & CERTIFICATIONS ---
+    // --- MÉDAILLES & CERTIFICATIONS ---
     async function saveMedalDefinition() {
-      const name = val('med_name');
-      const service = $('med_service').value;
-      const desc = val('med_desc');
-      if(!name) return toast('Veuillez entrer un nom.', 'error');
-
+      const name = val('med_name'); const service = $('med_service').value; const desc = val('med_desc');
+      if(!name) return toast('Entrez un nom.', 'error');
       try {
         await sb.from('nrp_medals_def').insert([{ name, service, description: desc }]);
-        toast('Distinction créée avec succès !');
-        $('med_name').value = '';
-        $('med_desc').value = '';
+        toast('Distinction créée !');
+        $('med_name').value=''; $('med_desc').value='';
         loadMedalsCloud();
-      } catch(e) {
-        toast('Erreur création', 'error');
-      }
+      } catch(e){toast('Erreur','error');}
     }
 
     async function loadMedalsCloud() {
       try {
         const { data } = await sb.from('nrp_medals_def').select('*');
-        if(data) {
-          medalsList = data;
-          renderAdminMedalsTable();
-          renderDirectory();
-        }
-      } catch(e) {}
+        if(data) { medalsList = data; renderAdminMedalsTable(); renderDirectory(); }
+      } catch(e){}
     }
 
     function renderAdminMedalsTable() {
-      const tbody = $('adminMedalsBody');
-      if(!tbody) return;
-      tbody.innerHTML = medalsList.map(m => `
-        <tr>
-          <td><span class="pill info">${esc(m.service)}</span></td>
-          <td><b>${esc(m.name)}</b></td>
-          <td>${esc(m.description || '-')}</td>
-          <td><button class="btn danger small" onclick="deleteMedalDef('${m.id}')">Supprimer</button></td>
-        </tr>
-      `).join('');
+      const tbody = $('adminMedalsBody'); if(!tbody) return;
+      tbody.innerHTML = medalsList.map(m => `<tr><td><span class="pill info">${esc(m.service)}</span></td><td><b>${esc(m.name)}</b></td><td>${esc(m.description||'-')}</td><td><button class="btn danger small" onclick="deleteMedalDef('${m.id}')">Supprimer</button></td></tr>`).join('');
     }
 
     async function deleteMedalDef(id) {
-      try {
-        await sb.from('nrp_medals_def').delete().eq('id', id);
-        toast('Supprimé.');
-        loadMedalsCloud();
-      } catch(e){}
+      try { await sb.from('nrp_medals_def').delete().eq('id', id); loadMedalsCloud(); toast('Supprimé.'); } catch(e){}
     }
 
     async function assignMedalToAgent(matricule, medalName) {
@@ -835,139 +763,41 @@
       let current = agent.distinctions ? agent.distinctions.split(',').map(s=>s.trim()).filter(Boolean) : [];
       if(!current.includes(medalName)) current.push(medalName);
       agent.distinctions = current.join(', ');
-
       try {
         await sb.from('nrp_roster').upsert({ matricule: agent.matricule, name: agent.name, grade: agent.grade, service: agent.service, status: agent.status, password: agent.password, distinctions: agent.distinctions });
-        toast(`Distinction attribuée à [${matricule}] !`);
-        renderDirectory();
-      } catch(e){
-        toast('Erreur attribution', 'error');
-      }
+        toast('Distinction attribuée !'); renderDirectory();
+      } catch(e){toast('Erreur','error');}
     }
 
     function renderDirectory(){
       const q = (val('directorySearch')||'').toLowerCase();
       const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
       const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
-
       $('directoryBody').innerHTML = rows.map(x=>{
         const medalsOpts = medalsList.map(m=>`<option value="${esc(m.name)}">${esc(m.name)}</option>`).join('');
-        return `
-          <tr>
-            <td><b>[${esc(x.matricule)}]</b></td>
-            <td>${esc(x.name)}</td>
-            <td>${esc(x.grade)}</td>
-            <td>${esc(x.service)}</td>
-            <td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td>
-            <td>${esc(x.distinctions || 'Aucune')}</td>
-            <td>
-              ${canManage ? `
-                <div style="display:flex;gap:5px">
-                  <select id="assign_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;border-radius:4px;font-size:11px">${medalsOpts}</select>
-                  <button class="btn small" onclick="assignMedalToAgent('${x.matricule}', val('assign_${x.matricule}'))">Attribuer</button>
-                </div>
-              ` : '<small class="muted">-</small>'}
-            </td>
-          </tr>
-        `;
+        return `<tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)}</td><td>${esc(x.grade)}</td><td>${esc(x.service)}</td><td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td><td>${esc(x.distinctions||'Aucune')}</td><td>${canManage ? `<select id="assign_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;font-size:11px">${medalsOpts}</select> <button class="btn small" onclick="assignMedalToAgent('${x.matricule}', val('assign_${x.matricule}'))">Attribuer</button>` : '-'}</td></tr>`;
       }).join('');
     }
 
-    // --- DESIGN & TEXTES ---
+    // --- DESIGN & SUPABASE SETTINGS ---
     async function saveDesignConfig() {
-      designConfig.brandName = val('cfg_brandName');
-      designConfig.brandSub = val('cfg_brandSub');
-      designConfig.brandDesc = val('cfg_brandDesc');
-      applyDesignConfig();
-      try { await sb.from('nrp_settings').upsert({ id: 'design', data: designConfig }); toast('Design sauvegardé !'); } catch(e){}
+      designConfig.brandName = val('cfg_brandName'); designConfig.brandSub = val('cfg_brandSub'); designConfig.brandDesc = val('cfg_brandDesc');
+      await saveSettingsCloud('design', designConfig);
+      applyDesignConfig(); toast('Design sauvegardé !');
     }
 
     function applyDesignConfig() {
       $('brandTitle').textContent = designConfig.brandName;
       $('sidebarTitle').textContent = designConfig.brandName.toUpperCase();
-      $('brandSubHeader').textContent = designConfig.brandSub;
       $('brandDesc').textContent = designConfig.brandDesc;
       $('heroMainTitle').textContent = `Protéger, secourir et accompagner — ${designConfig.brandName}.`;
     }
 
-    // --- ALERTES & BANNIÈRES VISUELLES ---
-    async function loadCustomAlerts() {
-      try {
-        const { data } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
-        if (data) { customAlerts = data; renderAdminAlertsTable(); }
-      } catch(e) {}
+    async function saveSettingsCloud(id, data){
+      try { await sb.from('nrp_settings').upsert({ id, data }); } catch(e){}
     }
 
-    function renderAdminAlertsTable() {
-      const tbody = $('adminAlertsBody');
-      if(!tbody) return;
-      tbody.innerHTML = customAlerts.map(a => `
-        <tr>
-          <td><b>${esc(a.title)}</b></td>
-          <td><span class="pill info">${esc(a.alert_type)}</span></td>
-          <td><span style="color:${esc(a.text_color)};background:${esc(a.bg_color)};padding:3px 6px;border-radius:4px">${esc(a.announcement_text)}</span></td>
-          <td>
-            <button class="btn small" onclick="broadcastLiveAlert('${a.id}')">📢 Afficher en direct</button>
-            <button class="btn secondary small" onclick="editCustomAlert('${a.id}')">Modifier</button>
-            <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function saveCustomAlert() {
-      const id = $('alert_edit_id').value;
-      const title = val('alt_title');
-      const text = val('alt_text');
-      const type = $('alt_type').value;
-      const bg = $('alt_bg').value;
-      const color = $('alt_color').value;
-      const size = $('alt_size').value;
-
-      if(!title || !text) return toast('Remplissez le titre et le texte de l’alerte.', 'error');
-      const payload = { title, announcement_text: text, alert_type: type, bg_color: bg, text_color: color, font_size: size };
-
-      try {
-        if(id) await sb.from('nrp_custom_alerts').update(payload).eq('id', id);
-        else await sb.from('nrp_custom_alerts').insert([payload]);
-        toast('Alerte visuelle enregistrée !');
-        clearAlertForm();
-        loadCustomAlerts();
-      } catch(e) { toast('Erreur enregistrement', 'error'); }
-    }
-
-    function editCustomAlert(id) {
-      const a = customAlerts.find(x => String(x.id) === String(id));
-      if(!a) return;
-      $('alert_edit_id').value = a.id;
-      $('alt_title').value = a.title;
-      $('alt_text').value = a.announcement_text || '';
-      $('alt_type').value = a.alert_type || 'police';
-      $('alt_bg').value = a.bg_color || '#e45a66';
-      $('alt_color').value = a.text_color || '#ffffff';
-      $('alt_size').value = a.font_size || '18px';
-    }
-
-    function clearAlertForm() {
-      $('alert_edit_id').value = ''; $('alt_title').value = ''; $('alt_text').value = '';
-    }
-
-    async function deleteCustomAlert(id) {
-      if(!confirm('Supprimer cette alerte ?')) return;
-      try { await sb.from('nrp_custom_alerts').delete().eq('id', id); loadCustomAlerts(); toast('Supprimé.'); } catch(e){}
-    }
-
-    async function broadcastLiveAlert(id) {
-      const a = customAlerts.find(x => String(x.id) === String(id));
-      if(!a) return;
-      showGlobalBanner(a.announcement_text, a.bg_color, a.text_color, a.font_size);
-      toast(`📢 Bannière activée : "${a.title}" !`);
-
-      const channel = sb.channel('nrp_global_alerts');
-      await channel.subscribe();
-      await channel.send({ type: 'broadcast', event: 'trigger_banner', payload: a });
-    }
-
+    // --- WEBHOOKS & STATS ---
     function initAdminWebhooksUI(){
       const keys = Object.keys(webhookUrls);
       $('webhookConfigForm').innerHTML = keys.map(k=>`<div class="field full"><label>${k}</label><input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/..."></div>`).join('');
@@ -975,7 +805,8 @@
 
     async function saveWebhooksConfig(){
       Object.keys(webhookUrls).forEach(k=>{ webhookUrls[k] = val('wh_'+k); });
-      try { await sb.from('nrp_settings').upsert({ id: 'webhooks', data: webhookUrls }); toast('Webhooks sauvegardés !'); } catch(e){}
+      await saveSettingsCloud('webhooks', webhookUrls);
+      toast('Webhooks sauvegardés !');
     }
 
     function renderAdminMatricules(){
@@ -1017,11 +848,170 @@
       }
     }
 
+    function showTajAddForm(){ $('tajAddContainer').classList.toggle('hidden'); }
+
+    async function saveTajEntry(){
+      const citizen = val('taj_citizen'); const details = val('taj_details');
+      const fileInput = $('taj_file');
+      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : null;
+
+      if(!citizen || !details) return toast('Remplissez les champs obligatoires.', 'error');
+      const rec = { citizen_name: citizen, roblox_name: val('taj_roblox'), category: $('taj_category').value, details, sanction: val('taj_sanction'), officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : 'Admin', file_name: fileName };
+      try {
+        await sb.from('nrp_taj').insert([rec]);
+        toast('Ajouté au TAJ !');
+        $('taj_citizen').value=''; $('taj_details').value=''; $('taj_roblox').value=''; $('taj_sanction').value='';
+        $('tajAddContainer').classList.add('hidden');
+        loadTajCloudData();
+      } catch(e){toast('Erreur','error');}
+    }
+
+    async function loadTajCloudData(){
+      try {
+        const { data } = await sb.from('nrp_taj').select('*').order('created_at', { ascending: false });
+        if(data) { tajRecords = data; renderTajData(); renderDashboardStats(); }
+      } catch(e){}
+    }
+
+    function renderTajData(){
+      const q = (val('tajSearch')||'').toLowerCase();
+      const rows = tajRecords.filter(t => [t.citizen_name, t.category, t.details].join(' ').toLowerCase().includes(q));
+      $('tajBody').innerHTML = rows.map(t=>`<tr><td><small>${new Date(t.created_at||Date.now()).toLocaleDateString('fr-FR')}</small></td><td><b>${esc(t.citizen_name)}</b></td><td><span class="pill info">${esc(t.category)}</span></td><td>${esc(t.details)}${t.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(t.file_name)}</small>` : ''}</td><td>${esc(t.sanction||'-')}</td><td><small>${esc(t.officer_matricule)}</small></td></tr>`).join('');
+    }
+
+    function renderDashboardStats(){
+      $('st_total_agents').textContent = roster.length;
+      $('st_active_agents').textContent = roster.filter(r => r.status === 'Occupé').length;
+      $('st_vacant_agents').textContent = roster.filter(r => r.status === 'Vacant').length;
+      $('st_total_taj').textContent = tajRecords.length;
+    }
+
+    // --- BANNIÈRES VISUELLES ---
+    async function loadCustomAlerts() {
+      try {
+        const { data } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
+        if(data) { customAlerts = data; renderAdminAlertsTable(); }
+      } catch(e){}
+    }
+
+    function renderAdminAlertsTable() {
+      const tbody = $('adminAlertsBody'); if(!tbody) return;
+      tbody.innerHTML = customAlerts.map(a => `<tr><td><b>${esc(a.title)}</b></td><td><span style="color:${esc(a.text_color)};background:${esc(a.bg_color)};padding:3px 6px;border-radius:4px">${esc(a.announcement_text)}</span></td><td><button class="btn small" onclick="broadcastLiveAlert('${a.id}')">📢 Diffuser</button> <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button></td></tr>`).join('');
+    }
+
+    async function saveCustomAlert() {
+      const title = val('alt_title'); const text = val('alt_text'); const type = $('alt_type').value; const bg = $('alt_bg').value; const color = $('alt_color').value;
+      if(!title || !text) return toast('Remplissez le titre et le texte.', 'error');
+      try {
+        await sb.from('nrp_custom_alerts').insert([{ title, announcement_text: text, alert_type: type, bg_color: bg, text_color: color }]);
+        toast('Alerte enregistrée !');
+        $('alt_title').value=''; $('alt_text').value='';
+        loadCustomAlerts();
+      } catch(e){toast('Erreur','error');}
+    }
+
+    async function deleteCustomAlert(id) {
+      try { await sb.from('nrp_custom_alerts').delete().eq('id', id); loadCustomAlerts(); toast('Supprimé.'); } catch(e){}
+    }
+
+    async function broadcastLiveAlert(id) {
+      const a = customAlerts.find(x => String(x.id) === String(id));
+      if(!a) return;
+      showGlobalBanner(a.announcement_text, a.bg_color, a.text_color);
+      toast(`📢 Bannière activée : "${a.title}" !`);
+      const channel = sb.channel('nrp_global_alerts');
+      await channel.subscribe();
+      await channel.send({ type: 'broadcast', event: 'trigger_banner', payload: a });
+    }
+
+    // --- PRÉVISUALISATION & DISCORD ---
+    function makeEmbed(title, color, fields){ return {title, color, fields, footer:{text:'Nanterre RP · Portail Officiel'}}; }
+    function renderPreview(kind, embed){
+      drafts[kind]=embed;
+      const box=$('preview-'+kind);
+      if(!box)return;
+      box.innerHTML=`<h4>${esc(embed.title)}</h4>` + embed.fields.map(f=>`<div><b>${esc(f.name)}:</b> ${esc(f.value)}</div>`).join('');
+      box.classList.remove('hidden');
+      $('send-'+kind)?.classList.remove('hidden');
+    }
+
+    function previewPublic(kind){
+      let embed;
+      const fileInput = $(kind==='ticket'?'tkt_file':(kind==='plainte'?'plt_file':(kind==='maincourante'?'mc_file':'rec_file')));
+      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : 'Aucun';
+
+      if(kind==='ticket'){
+        embed=makeEmbed(`🎫 TICKET — ${val('tkt_service').toUpperCase()}`, 0x4D8DFF, [
+          {name:'Sujet', value:val('tkt_subject')}, {name:'Demandeur', value:`${val('tkt_name')} (Roblox: ${val('tkt_roblox')})`, inline:true}, {name:'Discord', value:val('tkt_discord'), inline:true}, {name:'Description', value:val('tkt_desc')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      } else if(kind==='plainte'){
+        embed=makeEmbed(`PLAINTE — ${val('plt_service').toUpperCase()}`, 0xD85B65, [
+          {name:'Déposant', value:`${val('plt_name')} (Roblox: ${val('plt_roblox')})`, inline:true}, {name:'Nature', value:val('plt_category'), inline:true}, {name:'Faits', value:val('plt_desc')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      } else if(kind==='maincourante'){
+        embed=makeEmbed(`MAIN COURANTE — ${val('mc_service').toUpperCase()}`, 0x4D8DFF, [
+          {name:'Déposant', value:val('mc_name'), inline:true}, {name:'Contact', value:val('mc_contact'), inline:true}, {name:'Récit', value:val('mc_desc')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      } else if(kind==='recrutement'){
+        embed=makeEmbed(`CANDIDATURE — ${val('rec_service').toUpperCase()}`, 0x40C58A, [
+          {name:'Candidat', value:val('rec_name'), inline:true}, {name:'Discord', value:val('rec_discord'), inline:true}, {name:'Motivations', value:val('rec_motivation')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      }
+      renderPreview(kind, embed);
+    }
+
+    function previewStaff(type){
+      let embed;
+      const author = currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Agent';
+      const fileInput = $(type==='rapport'?'rep_file':'gav_file');
+      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : 'Aucun';
+
+      if(type==='rapport'){
+        embed=makeEmbed(`RAPPORT D'INTERVENTION`, 0x4D8DFF, [
+          {name:'Rédacteur', value:author, inline:true}, {name:'Type', value:val('rep_type'), inline:true}, {name:'Lieu', value:val('rep_location'), inline:true}, {name:'Déroulement', value:val('rep_timeline')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      } else if(type==='gav'){
+        embed=makeEmbed(`REGISTRE GAV`, 0xE2AD55, [
+          {name:'Officier', value:author, inline:true}, {name:'Interpellé', value:val('gav_suspect'), inline:true}, {name:'Motif', value:val('gav_reason'), inline:true}, {name:'Sanction', value:val('gav_duration'), inline:true}, {name:'Notes', value:val('gav_notes')}, {name:'Pièce jointe', value:fileName}
+        ]);
+      }
+      renderPreview(type, embed);
+    }
+
+    async function sendDiscordWebhook(kind){
+      const embed = drafts[kind];
+      if(!embed) return toast('Aucun aperçu généré','error');
+      let url = webhookUrls.HOOK_REPORT_POLICE;
+      if(kind === 'ticket') {
+        const s = val('tkt_service');
+        url = s==='Police Nationale' ? webhookUrls.HOOK_TICKET_POLICE : (s==='BSPN' ? webhookUrls.HOOK_TICKET_BSPN : webhookUrls.HOOK_TICKET_SAMU);
+      } else if(kind==='plainte'||kind==='maincourante') {
+        const s = val(kind==='plainte'?'plt_service':'mc_service');
+        url = s==='Police Nationale' ? webhookUrls.HOOK_COMPLAINT_POLICE : webhookUrls.HOOK_COMPLAINT_RELIEF;
+      } else if(kind==='recrutement') {
+        const s = val('rec_service');
+        url = s==='Police Nationale' ? webhookUrls.HOOK_RECRUIT_POLICE : (s==='BSPN' ? webhookUrls.HOOK_RECRUIT_BSPN : webhookUrls.HOOK_RECRUIT_SAMU);
+      } else if(kind==='gav') url = webhookUrls.HOOK_GAV;
+
+      if(!url) return toast('Aucun webhook configuré pour ce service.', 'error');
+      try {
+        const res = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({embeds: [embed]}) });
+        if(res.ok || res.type==='opaque'){
+          toast('Transmis avec succès sur Discord !');
+          $('send-'+kind).classList.add('hidden');
+        } else { toast('Erreur envoi Discord.', 'error'); }
+      } catch(e) { toast('Erreur réseau / CORS.', 'error'); }
+    }
+
+    function submitServiceStatus(){
+      toast('Statut mis à jour : ' + val('svc_status') + ' (' + val('svc_unit') + ')');
+    }
+
     function setupRealtimeListeners() {
       sb.channel('nrp_global_alerts')
         .on('broadcast', { event: 'trigger_banner' }, payload => {
           const d = payload.payload;
-          showGlobalBanner(d.announcement_text, d.bg_color, d.text_color, d.font_size);
+          showGlobalBanner(d.announcement_text, d.bg_color, d.text_color);
         })
         .subscribe();
     }
@@ -1030,17 +1020,19 @@
       try {
         const { data: rosterData } = await sb.from('nrp_roster').select('*');
         if(rosterData && rosterData.length > 0) roster = rosterData;
-        const { data: settingsData } = await sb.from('nrp_settings').select('*').eq('id', 'webhooks').single();
-        if(settingsData && settingsData.data) webhookUrls = settingsData.data;
-        const { data: designData } = await sb.from('nrp_settings').select('*').eq('id', 'design').single();
-        if(designData && designData.data) { designConfig = designData.data; applyDesignConfig(); }
-      } catch(e) {}
-      renderDirectory();
-      renderPenal();
-      loadMedalsCloud();
-      loadPerquisitionsCloud();
-      loadCustomAlerts();
-      setupRealtimeListeners();
+        const { data: setAll } = await sb.from('nrp_settings').select('*');
+        if(setAll) {
+          setAll.forEach(s => {
+            if(s.id === 'design' && s.data) { designConfig = s.data; applyDesignConfig(); }
+            if(s.id === 'zones' && s.data) { zonesText = s.data; renderZonesContent(); }
+            if(s.id === 'zones_file' && s.data) { zonesFileName = s.data; renderZonesContent(); }
+            if(s.id === 'penal' && s.data) { penalArticles = s.data; renderPenal(); renderAdminPenalTable(); }
+            if(s.id === 'penal_file' && s.data) { penalFileName = s.data; renderPenal(); }
+            if(s.id === 'webhooks' && s.data) { webhookUrls = s.data; }
+          });
+        }
+      } catch(e){}
+      renderDirectory(); renderPenal(); loadMedalsCloud(); loadPerquisitionsCloud(); loadCustomAlerts(); loadTajCloudData(); renderZonesContent(); setupRealtimeListeners();
     }
 
     document.addEventListener('DOMContentLoaded', () => { loadCloudData(); });
