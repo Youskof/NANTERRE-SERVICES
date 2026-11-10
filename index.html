@@ -38,41 +38,51 @@
     .side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 2px}.connection-state{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(64,197,138,.1)}
     .main{min-width:0;padding:26px clamp(16px,3vw,40px) 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.eyebrow{color:#8ba0bc;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.page-title{font-size:clamp(23px,3vw,31px);letter-spacing:-.035em;margin:4px 0 3px}.page-subtitle{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.user-chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:#d4deeb;font-size:12px}
     .view{display:none;animation:appear .2s ease}.view.active{display:block}@keyframes appear{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
-    .panel{background:linear-gradient(160deg,rgba(24,39,60,.96),rgba(16,28,45,.98));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.panel h3{font-size:14px;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}.divider{height:1px;background:var(--line);margin:18px 0}
+    .panel{background:linear-gradient(160deg,rgba(24,39,60,.96),rgba(16,28,45,.98));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.panel h3{font-size:14px;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}
     .hero{position:relative;overflow:hidden;padding:clamp(24px,4vw,42px);min-height:240px;border-radius:20px;border:1px solid #2d4667;background:linear-gradient(110deg,rgba(11,22,39,.96),rgba(17,47,81,.88)),radial-gradient(circle at 83% 15%,rgba(92,152,234,.38),transparent 32%);margin-bottom:18px}
     .hero:after{content:"NRP";position:absolute;right:3%;bottom:-45px;font-size:clamp(100px,18vw,210px);font-weight:950;letter-spacing:-.1em;color:rgba(175,207,250,.045);pointer-events:none}.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(137,180,240,.25);background:rgba(46,97,161,.18);padding:6px 10px;border-radius:99px;color:#bdd8ff;font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.hero h2{font-size:clamp(26px,4vw,42px);max-width:720px;line-height:1.1;margin:17px 0 10px;letter-spacing:-.045em}.hero p{max-width:650px;color:#b3c4d9;margin:0;font-size:14px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px;position:relative;z-index:1}
     .grid{display:grid;gap:14px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
     .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.stat-label{color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.1em}.stat-value{font-size:28px;font-weight:850;margin:5px 0 2px;letter-spacing:-.04em}.stat-note{color:#7186a2;font-size:11px}
     .service-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.service-title{display:flex;align-items:center;gap:11px}.service-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;background:rgba(77,141,255,.12)}.service-icon.red{background:rgba(228,90,102,.13)}.service-icon.gold{background:rgba(226,173,85,.13)}.service-count{font-size:20px;font-weight:850}.service-status{font-size:11px;color:var(--muted)}
-    .quick-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-height:150px;transition:.18s}.quick-card:hover{transform:translateY(-3px);border-color:#46658c}.quick-card .q-icon{font-size:20px}.quick-card strong{font-size:14px}.quick-card p{font-size:12px;color:var(--muted);margin:0}.quick-card button{margin-top:auto;align-self:flex-start}
-    .btn{border:1px solid transparent;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:white;padding:10px 15px;border-radius:10px;font-weight:750;font-size:12px;box-shadow:0 7px 18px rgba(37,99,200,.18);transition:.18s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.secondary{background:var(--surface-3);border-color:#3a4d67;box-shadow:none;color:#dce7f5}.btn.ghost{background:transparent;border-color:var(--line);box-shadow:none;color:#b8c8dd}.btn.danger{background:rgba(185,54,68,.18);border-color:rgba(228,90,102,.4);box-shadow:none;color:#ffb3ba}.btn.discord{background:#5865f2;box-shadow:none}.btn.small{padding:7px 10px;font-size:11px}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#aabbd0;font-weight:750;letter-spacing:.02em}.field label .req{color:#ff8c97}.field input,.field select,.field textarea{width:100%;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:11px 12px;color:#edf4ff;outline:none;min-width:0;font-size:13px;transition:.16s}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(77,141,255,.12)}.field textarea{min-height:110px;resize:vertical}.field input::placeholder,.field textarea::placeholder{color:#647994}.field select option{background:#0b1627}.help{font-size:10px;color:#7e93ae}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.section-title{font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.12em;color:#91a9c8;margin:22px 0 12px}.notice{padding:12px 14px;border-radius:10px;border:1px solid #344d6c;background:rgba(52,103,161,.13);color:#c5d9f3;font-size:12px;margin-bottom:16px}.notice.warning{border-color:rgba(226,173,85,.35);background:rgba(226,173,85,.09);color:#f0d8a8}.notice.danger{border-color:rgba(228,90,102,.35);background:rgba(228,90,102,.08);color:#ffc0c6}
-    .preview{margin-top:17px;background:#20242b;border:1px solid #414853;border-left:4px solid #4d8dff;border-radius:10px;padding:16px;color:#e9edf3;max-width:820px}.preview-top{display:flex;gap:9px;align-items:center;font-size:11px;color:#b8c4d4;font-weight:800;margin-bottom:8px}.preview h4{font-size:16px;margin:0 0 9px;color:white}.preview-desc{font-size:12px;color:#d6dce5;white-space:pre-wrap;margin-bottom:10px}.preview-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.preview-field{background:#171b20;border:1px solid #333a44;border-radius:7px;padding:9px}.preview-field b{display:block;font-size:10px;color:#aab6c7;margin-bottom:4px}.preview-field span{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}.preview-footer{border-top:1px solid #3b424b;padding-top:8px;margin-top:10px;color:#929eae;font-size:10px}
+    .btn{border:1px solid transparent;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:white;padding:10px 15px;border-radius:10px;font-weight:750;font-size:12px;box-shadow:0 7px 18px rgba(37,99,200,.18);transition:.18s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.secondary{background:var(--surface-3);border-color:#3a4d67;box-shadow:none;color:#dce7f5}.btn.ghost{background:transparent;border-color:var(--line);box-shadow:none;color:#b8c8dd}.btn.danger{background:rgba(185,54,68,.18);border-color:rgba(228,90,102,.4);box-shadow:none;color:#ffb3ba}.btn.discord{background:#5865f2;box-shadow:none}.btn.small{padding:7px 10px;font-size:11px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#aabbd0;font-weight:750;letter-spacing:.02em}.field label .req{color:#ff8c97}.field input,.field select,.field textarea{width:100%;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:11px 12px;color:#edf4ff;outline:none;min-width:0;font-size:13px;transition:.16s}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(77,141,255,.12)}.field textarea{min-height:110px;resize:vertical}.field input::placeholder,.field textarea::placeholder{color:#647994}.field select option{background:#0b1627}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .preview{margin-top:17px;background:#20242b;border:1px solid #414853;border-left:4px solid #4d8dff;border-radius:10px;padding:16px;color:#e9edf3;max-width:820px}.preview h4{font-size:16px;margin:0 0 9px;color:white}
     .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.data-table{border-collapse:collapse;width:100%;min-width:640px;background:#0f1a2a}.data-table th,.data-table td{padding:11px 12px;text-align:left;border-bottom:1px solid #26374e;font-size:12px}.data-table th{background:#17263b;color:#a9bdd6;font-size:10px;text-transform:uppercase;letter-spacing:.1em;position:sticky;top:0}.data-table td{color:#d8e1ed}.data-table tr:last-child td{border:0}.data-table tr:hover td{background:rgba(77,141,255,.045)}
-    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);border-color:#3b4b61;color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);border-color:rgba(77,141,255,.25);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);border-color:rgba(226,173,85,.25);color:#f0ca82}
+    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);border-color:#3b4b61;color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);border-color:rgba(77,141,255,.25);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);border-color:rgba(226,173,85,.25);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);border-color:rgba(228,90,102,.25);color:#ffb3ba}
     .login-wrap{max-width:480px;margin:7vh auto}.login-mark{width:56px;height:56px;border-radius:16px;background:linear-gradient(145deg,#397fe8,#1b477e);display:grid;place-items:center;font-weight:900;font-size:19px;margin-bottom:17px}.login-wrap h2{font-size:23px;margin:0 0 7px}.login-wrap p{color:var(--muted);font-size:13px;margin:0 0 22px}
     .gateway{max-width:1120px;margin:6vh auto}.gateway-head{text-align:center;margin-bottom:30px}.gateway-head .brand-mark{margin:0 auto 15px;width:58px;height:58px;font-size:19px}.gateway-head h1{font-size:clamp(28px,5vw,46px);letter-spacing:-.05em;margin:0 0 10px}.gateway-head p{color:var(--muted);max-width:680px;margin:0 auto;font-size:14px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;min-height:162px;color:var(--text);transition:.18s;display:flex;flex-direction:column}.gateway-card:hover{transform:translateY(-4px);border-color:#5485c5;box-shadow:var(--shadow)}.gateway-card .g-icon{font-size:22px;margin-bottom:15px}.gateway-card strong{font-size:15px}.gateway-card p{color:var(--muted);font-size:12px;margin:6px 0 0}.gateway-card .g-enter{margin-top:auto;padding-top:17px;color:#9ec3ff;font-size:11px;font-weight:800}.footnote{font-size:10px;color:#6f829c;margin-top:22px;text-align:center}
     .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.search-row input{flex:1;min-width:200px;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}.toast-host{position:fixed;right:18px;bottom:18px;z-index:30;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}.toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow)}.toast.error{border-color:#9a4651;background:#321d29}.mobile-menu{display:none}
+    
+    /* STYLE BANNIÈRE D'ALERTE VISUELLE GLOBALE */
+    #globalAlertBanner { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; text-align: center; padding: 14px 20px; font-weight: 800; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    #globalAlertBanner button { background: rgba(255,255,255,0.2); border: 1px solid currentColor; color: inherit; padding: 4px 10px; border-radius: 6px; margin-left: 15px; font-size: 11px; cursor: pointer; }
+
     @media(max-width:1050px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}.gateway-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s}.sidebar.open{left:0;box-shadow:var(--shadow)}.main{padding:18px 14px 40px}.mobile-menu{display:inline-flex}.topbar{align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.grid-3,.grid-2,.grid-4,.gateway-grid,.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{min-height:270px}.preview-fields{grid-template-columns:1fr}.panel{padding:17px}.topbar .page-subtitle{max-width:240px}.service-card{align-items:flex-start}}
+    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s}.sidebar.open{left:0;box-shadow:var(--shadow)}.main{padding:18px 14px 40px}.mobile-menu{display:inline-flex}}
   </style>
 </head>
 <body>
+  <!-- BANNIÈRE D'ALERTE VISUELLE EN DIRECT -->
+  <div id="globalAlertBanner">
+    <span id="bannerTextContent"></span>
+    <button onclick="hideGlobalBanner()">Fermer</button>
+  </div>
+
   <!-- PAGE D'ACCUEIL / GATEWAY -->
   <div id="gateway" class="gateway">
     <div class="gateway-head">
       <div class="brand-mark" id="brandLogoText">NRP</div>
       <div class="eyebrow" id="brandSubHeader">Portail institutionnel · Emergency Hamburg</div>
       <h1 id="brandTitle">Nanterre RP</h1>
-      <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne. Sélectionnez votre espace pour accéder aux démarches ou aux outils correspondant à vos fonctions.</p>
+      <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne.</p>
     </div>
     <div class="gateway-grid">
       <button class="gateway-card" onclick="enterCitizen()"><span class="g-icon">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes, tickets et informations publiques.</p><span class="g-enter">ACCÉDER À L'ESPACE →</span></button>
-      <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, GAV et outils de commandement.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports d'intervention.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi des interventions.</p><span class="g-enter">CONNEXION AGENT →</span></button>
-      <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et suivi des dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Matricules, effectifs, comptes, webhooks et gestion des mots de passe.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
+      <button class="gateway-card" onclick="enterStaff('police')"><span class="g-icon">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports, radio, perquisitions et GAV.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('bspn')"><span class="g-icon">🚒</span><strong>BSPN</strong><p>Activité opérationnelle, bilans de secours et rapports.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('samu')"><span class="g-icon">🚑</span><strong>SAMU 92</strong><p>Prise de service, bilan médical RP et suivi.</p><span class="g-enter">CONNEXION AGENT →</span></button>
+      <button class="gateway-card" onclick="enterStaff('igpn')"><span class="g-icon">⚖️</span><strong>IGPN</strong><p>Signalements, enquêtes internes et dossiers confidentiels.</p><span class="g-enter">ACCÈS HABILITÉ →</span></button>
+      <button class="gateway-card" onclick="enterAdmin()"><span class="g-icon">⚙️</span><strong>Administration</strong><p>Gestion globale, designs, médailles, certifications et webhooks.</p><span class="g-enter">ACCÈS ADMINISTRATEUR →</span></button>
     </div>
     <div class="footnote">NANTERRE RP · PORTAIL DE GESTION DES SERVICES · ENVIRONNEMENT ROLEPLAY</div>
   </div>
@@ -113,9 +123,9 @@
       <section class="view" id="view-login">
         <div class="panel login-wrap">
           <div class="login-mark">NRP</div>
-          <div class="eyebrow" id="loginEyebrow">Espace réservé</div>
+          <div class="eyebrow">Espace réservé</div>
           <h2 id="loginTitle">Connexion sécurisée agent</h2>
-          <p id="loginDescription">Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
+          <p>Sélectionnez votre matricule et entrez votre mot de passe personnel.</p>
           <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule</label><select id="loginMatriculeSelect"></select></div>
           <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password" placeholder="Votre mot de passe secret"></div>
           <div class="form-actions"><button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter en sécurité</button></div>
@@ -139,17 +149,15 @@
         <div class="hero">
           <span class="hero-tag">● Portail officiel · Nanterre RP</span>
           <h2 id="heroMainTitle">Protéger, secourir et accompagner les citoyens.</h2>
-          <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations opérationnelles des services.</p>
+          <p id="heroMainDesc">Retrouvez les démarches publiques, l'ouverture de tickets et les informations.</p>
           <div class="hero-actions">
             <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
             <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
           </div>
         </div>
         <div class="panel">
-          <div class="panel-head">
-            <div><h2>État opérationnel des services</h2><div class="muted small">Statuts en temps réel.</div></div>
-          </div>
-          <div class="grid grid-3" id="publicStatusGrid">
+          <div class="panel-head"><div><h2>État opérationnel des services</h2><div class="muted small">Statuts en temps réel.</div></div></div>
+          <div class="grid grid-3">
             <div class="service-card"><div class="service-title"><div class="service-icon">🛡️</div><div><strong>Police Nationale</strong><div class="service-status">En service</div></div></div><div class="service-count">3</div></div>
             <div class="service-card"><div class="service-title"><div class="service-icon red">🚒</div><div><strong>BSPN</strong><div class="service-status">En service</div></div></div><div class="service-count">2</div></div>
             <div class="service-card"><div class="service-title"><div class="service-icon gold">🚑</div><div><strong>SAMU 92</strong><div class="service-status">En service</div></div></div><div class="service-count">1</div></div>
@@ -160,13 +168,10 @@
       <!-- OUVERTURE DE TICKET -->
       <section class="view" id="view-ticket">
         <div class="panel">
-          <div class="panel-head">
-            <div><div class="eyebrow">Support & Assistance</div><h2>Ouvrir un ticket de service</h2></div>
-            <span class="pill info">Nouveau ticket</span>
-          </div>
+          <div class="panel-head"><div><div class="eyebrow">Support & Assistance</div><h2>Ouvrir un ticket de service</h2></div><span class="pill info">Nouveau ticket</span></div>
           <div class="form-grid">
             <div class="field"><label>Service destinataire <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Objet / Sujet du ticket <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information..."></div>
+            <div class="field"><label>Objet / Sujet <span class="req">*</span></label><input id="tkt_subject" placeholder="Ex: Demande d'information..."></div>
             <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name" placeholder="Identité RP"></div>
             <div class="field"><label>Pseudonyme Roblox <span class="req">*</span></label><input id="tkt_roblox" placeholder="Pseudo en jeu"></div>
             <div class="field"><label>Identifiant Discord <span class="req">*</span></label><input id="tkt_discord" placeholder="@pseudo"></div>
@@ -175,7 +180,7 @@
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser le ticket</button></div>
           <div id="preview-ticket" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer le ticket sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">🚀 Envoyer sur Discord</button></div>
         </div>
       </section>
 
@@ -194,7 +199,7 @@
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('plainte')">Prévisualiser</button></div>
           <div id="preview-plainte" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="sendDiscordWebhook('plainte')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="sendDiscordWebhook('plainte')">Envoyer sur Discord</button></div>
         </div>
       </section>
 
@@ -207,11 +212,11 @@
             <div class="field"><label>Nom et prénom <span class="req">*</span></label><input id="mc_name" placeholder="Identité RP"></div>
             <div class="field"><label>Discord <span class="req">*</span></label><input id="mc_contact" placeholder="@pseudo"></div>
             <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Récit des faits <span class="req">*</span></label><textarea id="mc_desc" placeholder="Détails de la main courante..."></textarea></div>
+            <div class="field full"><label>Récit des faits <span class="req">*</span></label><textarea id="mc_desc" placeholder="Détails..."></textarea></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('maincourante')">Prévisualiser</button></div>
           <div id="preview-maincourante" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="sendDiscordWebhook('maincourante')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="sendDiscordWebhook('maincourante')">Envoyer sur Discord</button></div>
         </div>
       </section>
 
@@ -227,7 +232,7 @@
           </div>
           <div class="form-actions"><button class="btn" onclick="previewPublic('recrutement')">Prévisualiser</button></div>
           <div id="preview-recrutement" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="sendDiscordWebhook('recrutement')">Envoyer sur Discord (Webhook)</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="sendDiscordWebhook('recrutement')">Envoyer sur Discord</button></div>
         </div>
       </section>
 
@@ -249,10 +254,10 @@
         <div class="hero">
           <span class="hero-tag" id="staffServiceTag">ESPACE OPÉRATIONNEL</span>
           <h2 id="staffWelcome">Bienvenue dans votre espace de service.</h2>
-          <p id="staffWelcomeSub">Gérez vos rapports, prises de service et interventions.</p>
+          <p>Gérez vos rapports, prises de service et perquisitions.</p>
           <div class="hero-actions">
             <button class="btn" onclick="showView('view-report')">Rédiger un rapport</button>
-            <button class="btn secondary" onclick="showView('view-service')">Changer mon statut</button>
+            <button class="btn secondary" onclick="showView('view-perquisition')">Demandes de perquisition</button>
           </div>
         </div>
         <div class="grid grid-3" style="margin-bottom:18px">
@@ -271,7 +276,7 @@
             <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
             <div class="field full"><label>Observations / Secteur</label><input id="svc_note" placeholder="Secteur patrouillé..."></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer et diffuser sur Discord</button></div>
+          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer et diffuser</button></div>
         </div>
       </section>
 
@@ -288,7 +293,7 @@
           </div>
           <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser le rapport</button></div>
           <div id="preview-rapport" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Transmettre le rapport sur Discord</button></div>
+          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Transmettre sur Discord</button></div>
         </div>
       </section>
 
@@ -301,7 +306,7 @@
             <div class="field"><label>Date / Heure <span class="req">*</span></label><input id="gav_datetime" type="datetime-local"></div>
             <div class="field"><label>Motif / Infractions <span class="req">*</span></label><input id="gav_reason" placeholder="Motif RP"></div>
             <div class="field"><label>Amende / Sanction</label><input id="gav_duration" placeholder="Ex: 4000 € / 15 min"></div>
-            <div class="field full"><label>Notes & droits notifiés</label><textarea id="gav_notes" placeholder="Détails de l'interpellation..."></textarea></div>
+            <div class="field full"><label>Notes & droits notifiés</label><textarea id="gav_notes" placeholder="Détails..."></textarea></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="previewStaff('gav')">Prévisualiser</button></div>
           <div id="preview-gav" class="preview hidden"></div>
@@ -309,31 +314,70 @@
         </div>
       </section>
 
+      <!-- CODE PÉNAL -->
+      <section class="view" id="view-penal">
+        <div class="panel">
+          <h2>⚖️ Code pénal RP — Nanterre</h2>
+          <p class="muted small">Barème officiel des infractions, amendes et peines de garde à vue.</p>
+          <div class="table-wrap" style="margin-top:15px">
+            <table class="data-table">
+              <thead><tr><th>Catégorie</th><th>Infraction RP</th><th>Amende</th><th>GAV</th></tr></thead>
+              <tbody id="penalTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEMANDES DE PERQUISITION -->
+      <section class="view" id="view-perquisition">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>🔍 Demandes de perquisition</h2><div class="muted small">Gestion des perquisitions (Acceptées, Refusées, En attente).</div></div>
+            <button class="btn small" onclick="showPerqForm()">+ Nouvelle demande</button>
+          </div>
+          <div id="perqAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
+            <h3>Formulaire de Demande de Perquisition</h3>
+            <div class="form-grid">
+              <div class="field"><label>Nom du suspect / Propriétaire <span class="req">*</span></label><input id="perq_suspect" placeholder="Nom RP"></div>
+              <div class="field"><label>Adresse / Localisation <span class="req">*</span></label><input id="perq_location" placeholder="Ex: Appartement 42, Quartier Nord"></div>
+              <div class="field full"><label>Motifs / Indices justifiant la perquisition <span class="req">*</span></label><textarea id="perq_reasons" placeholder="Précisez les éléments d'enquête..."></textarea></div>
+            </div>
+            <div class="form-actions"><button class="btn" onclick="savePerquisition()">Soumettre la demande</button></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Demandeur</th><th>Suspect / Lieu</th><th>Motifs</th><th>Statut</th><th>Actions (Haut gradé / Admin)</th></tr></thead>
+              <tbody id="perqBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- TAJ / FICHIER DE POLICE CENTRALISÉ -->
       <section class="view" id="view-taj">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>🗂️ Fichier de Police Centralisé (TAJ / STIC)</h2><div class="muted small">Recherche et consultation des antécédents judiciaires des citoyens.</div></div>
-            <span class="pill danger">Fichier Confidentiel</span>
+            <div><h2>🗂️ Fichier de Police Centralisé (TAJ / STIC)</h2><div class="muted small">Antécédents judiciaires des citoyens.</div></div>
+            <span class="pill danger">Confidentiel</span>
           </div>
           <div class="search-row">
-            <input id="tajSearch" placeholder="Rechercher par nom de citoyen RP..." oninput="renderTajData()">
+            <input id="tajSearch" placeholder="Rechercher par nom de citoyen..." oninput="renderTajData()">
             <button class="btn small" onclick="showTajAddForm()">+ Ajouter une inscription</button>
           </div>
           <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-top:10px">
             <h3>Nouvelle Inscription au Fichier TAJ</h3>
             <div class="form-grid">
-              <div class="field"><label>Nom & Prénom du citoyen <span class="req">*</span></label><input id="taj_citizen" placeholder="Nom RP complet"></div>
-              <div class="field"><label>Pseudonyme Roblox</label><input id="taj_roblox" placeholder="Pseudo Roblox"></div>
+              <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="taj_citizen" placeholder="Nom RP"></div>
+              <div class="field"><label>Pseudo Roblox</label><input id="taj_roblox" placeholder="Roblox"></div>
               <div class="field"><label>Catégorie <span class="req">*</span></label><select id="taj_category"><option>Garde à Vue</option><option>Amende / Infraction</option><option>Avis de Recherche</option><option>Signalement RP</option></select></div>
-              <div class="field"><label>Sanction / Peine octroyée</label><input id="taj_sanction" placeholder="Ex: 5000€ / 15 min GAV"></div>
-              <div class="field full"><label>Détails des faits inscrits <span class="req">*</span></label><textarea id="taj_details" placeholder="Motifs précis de l'inscription au fichier..."></textarea></div>
+              <div class="field"><label>Sanction</label><input id="taj_sanction" placeholder="Ex: 5000€"></div>
+              <div class="field full"><label>Détails <span class="req">*</span></label><textarea id="taj_details" placeholder="Faits..."></textarea></div>
             </div>
-            <div class="form-actions"><button class="btn" onclick="saveTajEntry()">Enregistrer au fichier central</button></div>
+            <div class="form-actions"><button class="btn" onclick="saveTajEntry()">Enregistrer</button></div>
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Date</th><th>Citoyen RP</th><th>Roblox</th><th>Catégorie</th><th>Motifs</th><th>Sanction</th><th>Agent Rédacteur</th></tr></thead>
+              <thead><tr><th>Date</th><th>Citoyen RP</th><th>Roblox</th><th>Catégorie</th><th>Motifs</th><th>Sanction</th><th>Agent</th></tr></thead>
               <tbody id="tajBody"></tbody>
             </table>
           </div>
@@ -344,61 +388,51 @@
       <section class="view" id="view-stats">
         <div class="panel">
           <h2>📊 Tableau de Bord & Statistiques RH</h2>
-          <p class="muted small">Bilan des effectifs et indicateurs généraux des services.</p>
           <div class="grid grid-4" style="margin-top:15px">
-            <div class="stat"><div class="stat-label">Total Effectifs</div><div class="stat-value" id="st_total_agents">0</div><div class="stat-note">Matricules répertoriés</div></div>
-            <div class="stat"><div class="stat-label">Agents Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div><div class="stat-note">Postes occupés</div></div>
-            <div class="stat"><div class="stat-label">Postes Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div><div class="stat-note">Places disponibles</div></div>
-            <div class="stat"><div class="stat-label">Inscriptions TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div><div class="stat-note">Fiches répertoriées</div></div>
+            <div class="stat"><div class="stat-label">Total Effectifs</div><div class="stat-value" id="st_total_agents">0</div></div>
+            <div class="stat"><div class="stat-label">Agents Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div></div>
+            <div class="stat"><div class="stat-label">Postes Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div></div>
+            <div class="stat"><div class="stat-label">Inscriptions TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div></div>
           </div>
         </div>
       </section>
 
-      <!-- ANNUAIRE DES EFFECTIFS -->
+      <!-- ANNUAIRE DES EFFECTIFS & ATTRIBUTION DE MÉDAILLES -->
       <section class="view" id="view-directory">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>Annuaire des effectifs (00 à 100)</h2><div class="muted small">Registre complet synchronisé Cloud.</div></div>
+            <div><h2>🎖️ Annuaire des effectifs & Attributions</h2><div class="muted small">Consultez les agents et attribuez médailles et certifications (Hauts gradés / Admin).</div></div>
           </div>
-          <div class="search-row">
-            <input id="directorySearch" placeholder="Rechercher par nom, matricule ou grade..." oninput="renderDirectory()">
-            <select id="directoryFilter" onchange="renderDirectory()"><option value="all">Tous</option><option value="occupied">Occupés</option><option value="vacant">Vacants</option></select>
-          </div>
+          <div class="search-row"><input id="directorySearch" placeholder="Rechercher par nom, matricule ou grade..." oninput="renderDirectory()"></div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th></tr></thead>
+              <thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th><th>Distinctions / Certifications</th><th>Action</th></tr></thead>
               <tbody id="directoryBody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- CODE PENAL -->
-      <section class="view" id="view-penal">
+      <!-- ADMINISTRATION : DESIGN & TEXTES -->
+      <section class="view" id="view-admin-design">
+        <div class="hero"><span class="hero-tag">Personnalisation</span><h2>Design, Titres et Textes de l'accueil.</h2></div>
         <div class="panel">
-          <h2>Code pénal RP — Nanterre</h2>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Catégorie</th><th>Infraction RP</th><th>Amende</th><th>GAV</th></tr></thead>
-              <tbody id="penalTableBody"></tbody>
-            </table>
+          <h2>Paramètres généraux</h2>
+          <div class="form-grid">
+            <div class="field"><label>Nom du serveur / Titre principal</label><input id="cfg_brandName" value="Nanterre RP"></div>
+            <div class="field"><label>Sous-titre / En-tête</label><input id="cfg_brandSub" value="Portail institutionnel · Emergency Hamburg"></div>
+            <div class="field full"><label>Description principale</label><textarea id="cfg_brandDesc">Portail central des services de sécurité, de secours et de contrôle interne.</textarea></div>
           </div>
+          <div class="form-actions"><button class="btn" onclick="saveDesignConfig()">Sauvegarder le design</button></div>
         </div>
       </section>
 
-      <!-- ADMINISTRATION : WEBHOOKS & CONFIG -->
+      <!-- ADMINISTRATION : WEBHOOKS -->
       <section class="view" id="view-admin-home">
-        <div class="hero">
-          <span class="hero-tag">Administration générale</span>
-          <h2>Gestion des webhooks et paramètres du portail.</h2>
-          <p>Configurez ici directement vos liens Webhook Discord. Les données sont enregistrées sur Supabase Cloud.</p>
-        </div>
         <div class="panel">
           <h2>Configuration des Webhooks Discord</h2>
           <div class="form-grid" id="webhookConfigForm"></div>
-          <div class="form-actions" style="margin-top:20px">
-            <button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks sur le Cloud</button>
-          </div>
+          <div class="form-actions"><button class="btn" onclick="saveWebhooksConfig()">Sauvegarder les webhooks</button></div>
         </div>
       </section>
 
@@ -406,7 +440,7 @@
       <section class="view" id="view-admin-matricules">
         <div class="panel">
           <h2>Gestion des effectifs (00 à 100)</h2>
-          <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer par nom, grade, matricule..." oninput="renderAdminMatricules()"></div>
+          <div class="search-row"><input id="adminMatSearch" placeholder="Filtrer..." oninput="renderAdminMatricules()"></div>
           <div class="table-wrap">
             <table class="data-table">
               <thead><tr><th>Matricule</th><th>Nom RP</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead>
@@ -420,7 +454,6 @@
       <section class="view" id="view-admin-passwords">
         <div class="panel">
           <h2>🔑 Gestion des accès & Mots de passe agents</h2>
-          <div class="search-row"><input id="adminPwdSearch" placeholder="Rechercher par nom ou matricule..." oninput="renderAdminPasswords()"></div>
           <div class="table-wrap">
             <table class="data-table">
               <thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe actuel</th><th>Action</th></tr></thead>
@@ -430,18 +463,45 @@
         </div>
       </section>
 
-      <!-- ADMINISTRATION : ALERTES & VOIX LIVE -->
+      <!-- ADMINISTRATION : GESTION DES MÉDAILLES & CERTIFICATIONS -->
+      <section class="view" id="view-admin-medals">
+        <div class="panel">
+          <h2>🎖️ Création des Médailles & Certifications par Entité</h2>
+          <p class="muted small">Définissez ici les médailles et acos/certifications disponibles pour chaque service (Police, BSPN, SAMU).</p>
+          <div class="form-grid" style="margin-top:15px">
+            <div class="field"><label>Nom de la distinction / certification <span class="req">*</span></label><input id="med_name" placeholder="Ex: Médaille d'or / Formation BAC"></div>
+            <div class="field"><label>Entité / Service cible <span class="req">*</span></label>
+              <select id="med_service">
+                <option value="Police Nationale">Police Nationale</option>
+                <option value="BSPN">BSPN</option>
+                <option value="SAMU 92">SAMU 92</option>
+                <option value="Tous">Tous les services</option>
+              </select>
+            </div>
+            <div class="field full"><label>Description</label><input id="med_desc" placeholder="Détails de l'attribution..."></div>
+          </div>
+          <div class="form-actions"><button class="btn" onclick="saveMedalDefinition()">Créer la distinction</button></div>
+          <div class="table-wrap" style="margin-top:20px">
+            <table class="data-table">
+              <thead><tr><th>Service</th><th>Nom</th><th>Description</th><th>Action</th></tr></thead>
+              <tbody id="adminMedalsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMINISTRATION : ALERTES & BANNIÈRES VISUELLES -->
       <section class="view" id="view-admin-alerts">
         <div class="panel">
           <div class="panel-head">
-            <div><h2>🔊 Gestion & Test des Alertes Vocales / MP3</h2><div class="muted small">Ajoutez vos alertes avec texte ou lien MP3 direct, audibles par tous en temps réel.</div></div>
+            <div><h2>📢 Gestion & Design des Bannières d'Annonce Visuelle</h2><div class="muted small">Personnalisez l'affichage visuel en direct sur l'écran de tous les connectés.</div></div>
           </div>
           <div class="panel" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
-            <h3>Ajouter / Modifier une Alerte</h3>
+            <h3>Créer / Modifier une Alerte Visuelle</h3>
             <div class="form-grid">
               <input type="hidden" id="alert_edit_id">
-              <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
-              <div class="field"><label>Type d'alerte</label>
+              <div class="field"><label>Titre interne <span class="req">*</span></label><input id="alt_title" placeholder="Ex: Alerte Attentat / Code Noir"></div>
+              <div class="field"><label>Type / Service</label>
                 <select id="alt_type">
                   <option value="police">Police Nationale</option>
                   <option value="bspn">BSPN Pompiers</option>
@@ -449,18 +509,19 @@
                   <option value="general">Alerte Générale</option>
                 </select>
               </div>
-              <div class="field full"><label>Lien direct du fichier MP3 (Optionnel)</label><input id="alt_sound" placeholder="https://... / mon-son.mp3"></div>
-              <div class="field full"><label>Texte de l'annonce vocale (Optionnel)</label><textarea id="alt_text" placeholder="Attention à tous les services, intervention majeure en cours..."></textarea></div>
+              <div class="field full"><label>Texte à afficher sur la bannière <span class="req">*</span></label><textarea id="alt_text" placeholder="ATTENTION : Intervention majeure en cours secteur Nord..."></textarea></div>
+              <div class="field"><label>Couleur de fond (Background)</label><input id="alt_bg" type="color" value="#e45a66" style="height:42px"></div>
+              <div class="field"><label>Couleur du texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
+              <div class="field"><label>Taille de police</label><select id="alt_size"><option value="14px">Normale (14px)</option><option value="18px" selected>Moyenne (18px)</option><option value="24px">Grande (24px)</option></select></div>
             </div>
             <div class="form-actions">
-              <button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte</button>
-              <button class="btn danger" onclick="stopAlertSound()">⏹️ Arrêter le son (STOP)</button>
-              <button class="btn secondary" onclick="clearAlertForm()">Effacer / Nouveau</button>
+              <button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte visuelle</button>
+              <button class="btn secondary" onclick="clearAlertForm()">Effacer</button>
             </div>
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>Titre</th><th>Type</th><th>Annonce / Fichier MP3</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Titre</th><th>Type</th><th>Texte affiché</th><th>Actions</th></tr></thead>
               <tbody id="adminAlertsBody"></tbody>
             </table>
           </div>
@@ -476,147 +537,55 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- LECTEUR AUDIO AVEC CONTRÔLE ET BOUTON STOP ---
-    let currentAudio = null;
-
-    function stopAlertSound() {
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-        currentAudio = null;
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      toast('⏹️ Lecture audio arrêtée.');
+    // --- GESTION BANNIÈRE VISUELLE GLOBALE ---
+    function showGlobalBanner(text, bg, color, size) {
+      const banner = $('globalAlertBanner');
+      const content = $('bannerTextContent');
+      content.textContent = text;
+      content.style.fontSize = size || '18px';
+      banner.style.backgroundColor = bg || '#e45a66';
+      banner.style.color = color || '#ffffff';
+      banner.style.display = 'block';
     }
 
-    function playAlertSound(text, soundUrl) {
-      stopAlertSound();
-
-      if (soundUrl && soundUrl.trim() !== '') {
-        currentAudio = new Audio(soundUrl.trim());
-        currentAudio.play().catch(e => console.warn("Erreur lecture MP3:", e));
-      }
-
-      if (text && text.trim() !== '' && 'speechSynthesis' in window) {
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'fr-FR';
-        window.speechSynthesis.speak(msg);
-      }
+    function hideGlobalBanner() {
+      $('globalAlertBanner').style.display = 'none';
     }
 
     let webhookUrls = {
-      HOOK_TICKET_POLICE: '',
-      HOOK_TICKET_BSPN: '',
-      HOOK_TICKET_SAMU: '',
-      HOOK_RECRUIT_POLICE: 'https://discord.com/api/webhooks/1360010972403666996/g1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_RECRUIT_BSPN: 'https://discord.com/api/webhooks/1360011037645934753/m9YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_RECRUIT_SAMU: 'https://discord.com/api/webhooks/1360011091530285220/p8YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_COMPLAINT_POLICE: 'https://discord.com/api/webhooks/1360011151605305414/q7YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_COMPLAINT_RELIEF: 'https://discord.com/api/webhooks/1360011211118280805/r6YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_SERVICE_STATUS: 'https://discord.com/api/webhooks/1360011270224412853/s5YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_REPORT_POLICE: 'https://discord.com/api/webhooks/1360011327170478140/t4YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_REPORT_BSPN: 'https://discord.com/api/webhooks/1360011384074604624/u3YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_REPORT_SAMU: 'https://discord.com/api/webhooks/1360011440475410522/v2YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x',
-      HOOK_GAV: 'https://discord.com/api/webhooks/1360011498428108920/w1YcZ03hD_lD078z8S5pTfVf7Yn5n-v-y56yYvjZ3S4x'
+      HOOK_TICKET_POLICE: '', HOOK_TICKET_BSPN: '', HOOK_TICKET_SAMU: '',
+      HOOK_RECRUIT_POLICE: '', HOOK_RECRUIT_BSPN: '', HOOK_RECRUIT_SAMU: '',
+      HOOK_COMPLAINT_POLICE: '', HOOK_COMPLAINT_RELIEF: '', HOOK_SERVICE_STATUS: '',
+      HOOK_REPORT_POLICE: '', HOOK_REPORT_BSPN: '', HOOK_REPORT_SAMU: '', HOOK_GAV: ''
+    };
+
+    let designConfig = {
+      brandName: "Nanterre RP",
+      brandSub: "Portail institutionnel · Emergency Hamburg",
+      brandDesc: "Portail central des services de sécurité, de secours et de contrôle interne."
     };
 
     const DEFAULT_ROSTER = [
-      ['00','Youskof Yorka','IGPN','IGPN','Occupé','Yohan.76450'],
-      ['01','Aram','Commandant','Police Nationale','Occupé','Aram.33548'],
-      ['02','Motlo','Directeur','Police Nationale','Occupé','Motlo.85462'],
-      ['03','Honey','Directrice','Police Nationale','Occupé','Honey.19420'],
-      ['04','Zappeur','Lieutenant','Police Nationale','Occupé','Zappeur.74102'],
-      ['05','Osman','GPX','Police Nationale','Occupé','Osman.93214'],
-      ['06','Pablo','Brigadier-Chef','Police Nationale','Occupé','Pablo.48512'],
-      ['07','Le T','GPX','Police Nationale','Occupé','LeT.62914'],
-      ['08','Aaron','Capitaine','Police Nationale','Occupé','Aaron.10492'],
-      ['09','Lyky','GPX','Police Nationale','Occupé','Lyky.83719'],
-      ['10','Tatou','GPX','Police Nationale','Occupé','Tatou.29481'],
-      ['11','Ombre','GPX','Police Nationale','Occupé','Ombre.57291'],
-      ['12','Onur','GPX','Police Nationale','Occupé','Onur.48102'],
-      ['13','Tgrm','Commandant','Police Nationale','Occupé','Tgrm.91823'],
-      ['14','Monage','Formateur','Police Nationale','Occupé','Monage.37192'],
-      ['15','Yven','Sous-Brigadier','Police Nationale','Occupé','Yven.64910'],
-      ['16','Nono','GPX','Police Nationale','Occupé','Nono.28471'],
-      ['17','Wdy','GPX','Police Nationale','Occupé','Wdy.94720'],
-      ['18','Vorynix','GPX-Stagiaire','Police Nationale','Occupé','Vorynix.18392'],
-      ['19','Anto','GPX-Stagiaire','Police Nationale','Occupé','Anto.47291'],
-      ['20','Peffcorse','Sous-Brigadier','Police Nationale','Occupé','Peffcorse.83019'],
-      ['21','Ghost','Lieutenant','Police Nationale','Occupé','Ghost.29183'],
-      ['22','Raph137','Capitaine-BAC','Police Nationale - BAC','Occupé','Raph.58291'],
-      ['23','Thymote','Sous-Brigadier','Police Nationale','Occupé','Thymote.47192'],
-      ['24','Tuicareu','Brigadier','Police Nationale','Occupé','Tuicareu.83920'],
-      ['25','Libre','Vacant','Police Nationale','Vacant','Libre.25000'],
-      ['26','Baptouste','Directeur-Adjoint','Police Nationale','Occupé','Baptouste.93812'],
-      ['27','Libre','Vacant','Police Nationale','Vacant','Libre.27000'],
-      ['28','Gab','Major','Police Nationale','Occupé','Gab.48291'],
-      ['29','Tatin','GPX-Stagiaire','Police Nationale','Occupé','Tatin.91823'],
-      ['30','Jaymaze','GPX','Police Nationale','Occupé','Jaymaze.37281'],
-      ['31','Loenzo','GPX','Police Nationale','Occupé','Loenzo.84910'],
-      ['32','Yui','GPX-Stagiaire','Police Nationale','Occupé','Yui.28471'],
-      ['33','Nino','GPX-Stagiaire','Police Nationale','Occupé','Nino.59281'],
-      ['34','S4ch47','GPX-Stagiaire','Police Nationale','Occupé','Sacha.38291'],
-      ['35','Blk','GPX','Police Nationale','Occupé','Blk.91823'],
-      ['36','Adn','GPX','Police Nationale','Occupé','Adn.47281'],
-      ['37','Valentine','GPX','Police Nationale','Occupé','Valentine.83912'],
-      ['38','Dodoby','GPX','Police Nationale','Occupé','Dodoby.19283'],
-      ['39','Yaya','GPX-Stagiaire','Police Nationale','Occupé','Yaya.48291'],
-      ['40','Scarface','GPX','Police Nationale','Occupé','Scarface.91827'],
-      ['41','Terax','GPX-Stagiaire','Police Nationale','Occupé','Terax.38291'],
-      ['42','Halower','Sous-Brigadier','Police Nationale','Occupé','Halower.74829'],
-      ['43','Gab','GPX-Stagiaire','Police Nationale','Occupé','Gab.19283'],
-      ['44','Noam','GPX-Stagiaire','Police Nationale','Occupé','Noam.48291'],
-      ['45','Libre','Vacant','Police Nationale','Vacant','Libre.45000'],
-      ['46','Hisoka','GPX-Stagiaire','Police Nationale','Occupé','Hisoka.91827'],
-      ['47','D.34','GPX-Stagiaire','Police Nationale','Occupé','D34.48291'],
-      ['48','Noxyral','GPX-Stagiaire','Police Nationale','Occupé','Noxyral.19283'],
-      ['49','Louija','Brigadier','Police Nationale','Occupé','Louija.74829'],
-      ['50','B4ptz02','GPX','Police Nationale','Occupé','Baptz.48291'],
-      ['51','Lebiscuit','GPX','Police Nationale','Occupé','Lebiscuit.91823'],
-      ['52','Bobstant','Sous-Brigadier','Police Nationale','Occupé','Bobstant.38291'],
-      ['53','Stabal620','GPX','Police Nationale','Occupé','Stabal.83912'],
-      ['54','Lsk','GPX-Stagiaire','Police Nationale','Occupé','Lsk.19283'],
-      ['55','Ds','GPX-Stagiaire','Police Nationale','Occupé','Ds.48291'],
-      ['56','Trk','Brigadier-Chef','Police Nationale','Occupé','Trk.91827'],
-      ['57','Blablacar','GPX','Police Nationale','Occupé','Blablacar.38291'],
-      ['58','Axel','GPX','Police Nationale','Occupé','Axel.74829'],
-      ['59','Darkozz21','GPX','Police Nationale','Occupé','Darkozz.48291'],
-      ['60','Warlib','GPX','Police Nationale','Occupé','Warlib.91823'],
-      ['61','Alex','Brigadier','Police Nationale','Occupé','Alex.38291'],
-      ['62','Alden','GPX-Stagiaire','Police Nationale','Occupé','Alden.83912'],
-      ['63','Rayane','GPX','Police Nationale','Occupé','Rayane.19283'],
-      ['64','Lays','GPX','Police Nationale','Occupé','Lays.48291'],
-      ['65','Nuggetss','GPX','Police Nationale','Occupé','Nuggetss.91827'],
-      ['66','Jean Paul','GPX','Police Nationale','Occupé','JeanPaul.38291'],
-      ['67','Baban','GPX','Police Nationale','Occupé','Baban.74829'],
-      ['68','Moha','GPX-Stagiaire','Police Nationale','Occupé','Moha.48291'],
-      ['69','Lastreet','GPX','Police Nationale','Occupé','Lastreet.91823'],
-      ['70','Neyz','GPX','Police Nationale','Occupé','Neyz.38291'],
-      ['71','Baptiste','GPX-Stagiaire','Police Nationale','Occupé','Baptiste.83912'],
-      ['72','Godly','GPX-Stagiaire','Police Nationale','Occupé','Godly.19283'],
-      ['73','M4rv1n77','GPX-Stagiaire','Police Nationale','Occupé','Marvin.48291'],
-      ['74','Jeniija','GPX','Police Nationale','Occupé','Jeniija.91827'],
-      ['75','Libre','Vacant','Police Nationale','Vacant','Libre.75000'],
-      ['76','Aim76','GPX-Stagiaire','Police Nationale','Occupé','Aim.38291'],
-      ...Array.from({length:22},(_,i)=>{const n=77+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`];}),
-      ['99','Rdh','GPX','Police Nationale','Occupé','Rdh.99123'],
-      ['100','Steven','Sous-Brigadier','Police Nationale','Occupé','Steven.10023']
-    ].map(([matricule,name,grade,service,status,password])=>({matricule,name,grade,service,status,password}));
+      ['00','Youskof Yorka','IGPN','IGPN','Occupé','Yohan.76450',''],
+      ['01','Aram','Commandant','Police Nationale','Occupé','Aram.33548',''],
+      ['02','Motlo','Directeur','Police Nationale','Occupé','Motlo.85462',''],
+      ...Array.from({length:99},(_,i)=>{const n=3+i;return [String(n).padStart(2,'0'),'Libre','Vacant','Police Nationale','Vacant',`Agent.${n}000`,''];})
+    ].map(([matricule,name,grade,service,status,password,distinctions])=>({matricule,name,grade,service,status,password,distinctions}));
 
     let roster = [...DEFAULT_ROSTER];
     let tajRecords = [];
     let customAlerts = [];
+    let medalsList = [];
+    let perquisitionsList = [];
 
     const PENAL_CODE = [
       ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
-      ['Infractions routières',"Refus d'obtempérer au contrôle routier",'4 000 €','15 min'],
-      ['Infractions contre les personnes',"Menaces envers un agent de police",'3 000 €','15 min'],
-      ['Infractions contre les personnes',"Agression envers un agent de police",'5 000 €','15 min'],
-      ['Infractions contre les forces de l’ordre','Outrage à agent','2 000 €','10 min'],
-      ['Infractions liées aux armes','Port illégal d’une arme','3 000 €','15 min'],
-      ['Infractions liées aux armes','Braquage de banque / commerces','8 000 €','15 min']
+      ['Infractions routières',"Refus d'obtempérer",'4 000 €','15 min'],
+      ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min'],
+      ['Infractions contre les personnes',"Agression envers un agent",'5 000 €','15 min'],
+      ['Infractions forces de l’ordre','Outrage à agent','2 000 €','10 min'],
+      ['Armes','Port illégal d’arme','3 000 €','15 min'],
+      ['Armes','Braquage de banque / commerces','8 000 €','15 min']
     ];
 
     let activeSpace = 'citoyen';
@@ -648,10 +617,10 @@
       if (activeSpace === 'citoyen') {
         navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Zones & règlement']);
       } else if (activeSpace === 'admin') {
-        navItems.push(['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe agents'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH'],['view-admin-alerts','🔊','Alertes & Voix Live']);
+        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles & Certif'],['view-taj','🗂️','Fichier TAJ/STIC'],['view-stats','📊','Tableau de bord RH'],['view-admin-alerts','📢','Bannières Alertes']);
       } else {
-        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise / fin de service'],['view-directory','♙','Annuaire effectifs']);
-        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV & registre'],['view-penal','≡','Code pénal']);
+        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise de service'],['view-directory','🎖️','Annuaire & Médailles'],['view-perquisition','🔍','Perquisitions'],['view-penal','⚖️','Code pénal']);
+        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV & registre']);
         if (isAdminUser || (currentAgent && isHighRank(currentAgent.grade))) {
           navItems.push(['view-taj','🗂️','Fichier TAJ/STIC']);
           navItems.push(['view-stats','📊','Tableau de bord RH']);
@@ -661,7 +630,7 @@
     }
 
     function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
-    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');$('topTitle').textContent='Portail citoyen';$('topSubtitle').textContent='Services et démarches en ligne';buildDynamicNav();showView('view-public-home');}
+    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');buildDynamicNav();showView('view-public-home');}
 
     function enterStaff(space){
       activeSpace=space;isAdminUser=false;
@@ -669,7 +638,6 @@
       $('loginTitle').textContent='Connexion ' + space.toUpperCase();
       const filtered = roster.filter(r => r.status==='Occupé');
       $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade} (${r.service})</option>`).join('');
-      $('loginPasswordInput').value = '';
       showView('view-login');
     }
 
@@ -677,11 +645,8 @@
       const mat = $('loginMatriculeSelect').value;
       const pwd = val('loginPasswordInput');
       const agent = roster.find(r=>r.matricule===mat);
-
       if(!agent) return toast('Agent introuvable','error');
-      if(agent.password && agent.password !== pwd){
-        return toast('❌ Mot de passe incorrect pour cet agent !','error');
-      }
+      if(agent.password && agent.password !== pwd) return toast('❌ Mot de passe incorrect !','error');
 
       currentAgent = agent;
       isAdminUser = false;
@@ -696,15 +661,9 @@
       
       renderDirectory();
       renderPenal();
-      renderTajData();
-      renderDashboardStats();
-      $('rep_datetime').value = toLocalDatetime();
-      $('plt_datetime').value = toLocalDatetime();
-      $('mc_datetime').value = toLocalDatetime();
-      $('gav_datetime').value = toLocalDatetime();
-      $('tkt_datetime').value = toLocalDatetime();
+      renderPerquisitions();
       showView('view-staff-home');
-      toast('Connexion sécurisée réussie !');
+      toast('Connexion réussie !');
     }
 
     function enterAdmin(){
@@ -725,10 +684,11 @@
         initAdminWebhooksUI();
         renderAdminMatricules();
         renderAdminPasswords();
+        renderAdminMedalsTable();
         renderTajData();
-        renderDashboardStats();
+        renderPerquisitions();
         loadCustomAlerts();
-        showView('view-admin-home');
+        showView('view-admin-design');
         toast('Accès administrateur autorisé.');
       } else {
         toast('Code administrateur incorrect','error');
@@ -743,223 +703,198 @@
       returnGateway();
     }
 
-    function toLocalDatetime(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
-
-    function makeEmbed(title,color,fields){
-      return {title, color, fields, footer:{text:'Nanterre RP · Portail Officiel'}};
-    }
-    function renderPreview(kind, embed){
-      drafts[kind]=embed;
-      const box=$('preview-'+kind);
-      if(!box)return;
-      box.innerHTML=`<h4>${esc(embed.title)}</h4>` + embed.fields.map(f=>`<div><b>${esc(f.name)}:</b> ${esc(f.value)}</div>`).join('');
-      box.classList.remove('hidden');
-      $('send-'+kind)?.classList.remove('hidden');
-    }
-
-    function previewPublic(kind){
-      let embed;
-      if(kind==='ticket'){
-        const p={s:val('tkt_service'), subj:val('tkt_subject'), n:val('tkt_name'), r:val('tkt_roblox'), d:val('tkt_discord'), dt:val('tkt_datetime'), desc:val('tkt_desc')};
-        embed=makeEmbed(`🎫 NOUVEAU TICKET — ${p.s.toUpperCase()}`, 0x4D8DFF, [
-          {name:'Sujet', value:p.subj, inline:false},
-          {name:'Demandeur', value:`${p.n} (Roblox: ${p.r})`, inline:true},
-          {name:'Discord', value:p.d, inline:true},
-          {name:'Date ouverture', value:p.dt, inline:true},
-          {name:'Statut', value:'🟢 En attente de prise en charge', inline:true},
-          {name:'Description', value:p.desc}
-        ]);
-      } else if(kind==='plainte'){
-        const p={s:val('plt_service'), c:val('plt_category'), n:val('plt_name'), r:val('plt_roblox'), d:val('plt_discord'), dt:val('plt_datetime'), desc:val('plt_desc')};
-        embed=makeEmbed(`PLAINTE — ${p.s.toUpperCase()}`, 0xD85B65, [
-          {name:'Déposant', value:`${p.n} (Roblox: ${p.r})`, inline:true},
-          {name:'Discord', value:p.d, inline:true},
-          {name:'Nature', value:p.c, inline:true},
-          {name:'Date', value:p.dt, inline:true},
-          {name:'Faits', value:p.desc}
-        ]);
-      } else if(kind==='maincourante'){
-        const p={s:val('mc_service'), n:val('mc_name'), c:val('mc_contact'), dt:val('mc_datetime'), desc:val('mc_desc')};
-        embed=makeEmbed(`MAIN COURANTE — ${p.s.toUpperCase()}`, 0x4D8DFF, [
-          {name:'Déposant', value:p.n, inline:true},
-          {name:'Contact', value:p.c, inline:true},
-          {name:'Date', value:p.dt, inline:true},
-          {name:'Récit', value:p.desc}
-        ]);
-      } else if(kind==='recrutement'){
-        const p={s:val('rec_service'), n:val('rec_name'), d:val('rec_discord'), m:val('rec_motivation')};
-        embed=makeEmbed(`CANDIDATURE — ${p.s.toUpperCase()}`, 0x40C58A, [
-          {name:'Candidat', value:p.n, inline:true},
-          {name:'Discord', value:p.d, inline:true},
-          {name:'Service', value:p.s, inline:true},
-          {name:'Motivations', value:p.m}
-        ]);
-      }
-      renderPreview(kind, embed);
-    }
-
-    function previewStaff(type){
-      let embed;
-      const author = currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Agent';
-      if(type==='rapport'){
-        embed=makeEmbed(`RAPPORT D'INTERVENTION`, 0x4D8DFF, [
-          {name:'Rédacteur', value:author, inline:true},
-          {name:'Type', value:val('rep_type'), inline:true},
-          {name:'Lieu', value:val('rep_location'), inline:true},
-          {name:'Date', value:val('rep_datetime'), inline:true},
-          {name:'Déroulement', value:val('rep_timeline')}
-        ]);
-      } else if(type==='gav'){
-        embed=makeEmbed(`REGISTRE GAV`, 0xE2AD55, [
-          {name:'Officier', value:author, inline:true},
-          {name:'Interpellé', value:val('gav_suspect'), inline:true},
-          {name:'Motif', value:val('gav_reason'), inline:true},
-          {name:'Sanction', value:val('gav_duration'), inline:true},
-          {name:'Notes', value:val('gav_notes')}
-        ]);
-      }
-      renderPreview(type, embed);
-    }
-
-    async function sendDiscordWebhook(kind){
-      const embed = drafts[kind];
-      if(!embed) return toast('Aucun aperçu généré','error');
-      
-      let url = webhookUrls.HOOK_REPORT_POLICE;
-      if(kind === 'ticket') {
-        const s = val('tkt_service');
-        if(s === 'Police Nationale') url = webhookUrls.HOOK_TICKET_POLICE;
-        else if(s === 'BSPN') url = webhookUrls.HOOK_TICKET_BSPN;
-        else if(s === 'SAMU 92') url = webhookUrls.HOOK_TICKET_SAMU;
-      } else if(kind==='plainte' || kind==='maincourante') {
-        const s = val(kind==='plainte'?'plt_service':'mc_service');
-        url = (s === 'Police Nationale') ? webhookUrls.HOOK_COMPLAINT_POLICE : webhookUrls.HOOK_COMPLAINT_RELIEF;
-      } else if(kind==='recrutement') {
-        const s = val('rec_service');
-        if(s === 'Police Nationale') url = webhookUrls.HOOK_RECRUIT_POLICE;
-        else if(s === 'BSPN') url = webhookUrls.HOOK_RECRUIT_BSPN;
-        else if(s === 'SAMU 92') url = webhookUrls.HOOK_RECRUIT_SAMU;
-      } else if(kind==='gav') url = webhookUrls.HOOK_GAV;
-
-      if(!url){
-        toast('Aucun webhook configuré pour ce service.', 'error');
-        return;
-      }
-
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({embeds: [embed]})
-        });
-        if(res.ok || res.type==='opaque'){
-          toast('Transmis avec succès sur Discord !');
-          $('send-'+kind).classList.add('hidden');
-        } else {
-          toast('Erreur lors de l\'envoi vers Discord.', 'error');
-        }
-      } catch(e) {
-        toast('Erreur réseau / CORS.', 'error');
-      }
-    }
-
-    function submitServiceStatus(){
-      toast('Statut mis à jour : ' + val('svc_status') + ' (' + val('svc_unit') + ')');
-    }
-
-    function renderDirectory(){
-      const q = (val('directorySearch')||'').toLowerCase();
-      const f = val('directoryFilter')||'all';
-      const rows = roster.filter(x=>(f==='all'||(f==='vacant'?x.status==='Vacant':x.status!=='Vacant'))&&[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
-      $('directoryBody').innerHTML = rows.map(x=>`<tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)}</td><td>${esc(x.grade)}</td><td>${esc(x.service)}</td><td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td></tr>`).join('');
-    }
-    
     function renderPenal(){
       $('penalTableBody').innerHTML = PENAL_CODE.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
     }
 
-    // --- MODULE TAJ / STIC ---
-    function showTajAddForm(){
-      $('tajAddContainer').classList.toggle('hidden');
-    }
+    // --- MODULE PERQUISITIONS ---
+    function showPerqForm() { $('perqAddContainer').classList.toggle('hidden'); }
 
-    async function saveTajEntry(){
-      const citizen = val('taj_citizen');
-      const category = $('taj_category').value;
-      const details = val('taj_details');
-      if(!citizen || !details) return toast('Veuillez remplir le nom du citoyen et les détails.', 'error');
+    async function savePerquisition() {
+      const suspect = val('perq_suspect');
+      const location = val('perq_location');
+      const reasons = val('perq_reasons');
+      if(!suspect || !location || !reasons) return toast('Veuillez remplir tous les champs.', 'error');
 
-      const newRecord = {
-        citizen_name: citizen,
-        roblox_name: val('taj_roblox'),
-        officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : '[00] Admin',
-        category: category,
-        details: details,
-        sanction: val('taj_sanction')
+      const newPerq = {
+        suspect: suspect,
+        location: location,
+        reasons: reasons,
+        status: 'En attente',
+        officer: currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Admin'
       };
 
       try {
-        const { data, error } = await sb.from('nrp_taj').insert([newRecord]).select();
-        if(error) throw error;
-        toast('Nouvelle fiche ajoutée au TAJ avec succès !');
-        $('taj_citizen').value = '';
-        $('taj_roblox').value = '';
-        $('taj_details').value = '';
-        $('taj_sanction').value = '';
-        $('tajAddContainer').classList.add('hidden');
-        loadTajCloudData();
+        await sb.from('nrp_perquisitions').insert([newPerq]).select();
+        toast('Demande de perquisition soumise !');
+        $('perq_suspect').value = '';
+        $('perq_location').value = '';
+        $('perq_reasons').value = '';
+        $('perqAddContainer').classList.add('hidden');
+        loadPerquisitionsCloud();
       } catch(e) {
-        toast('Erreur lors de la sauvegarde sur Supabase', 'error');
+        toast('Erreur sauvegarde perquisition', 'error');
       }
     }
 
-    function renderTajData(){
-      const q = (val('tajSearch')||'').toLowerCase();
-      const rows = tajRecords.filter(t => [t.citizen_name, t.roblox_name, t.category, t.details, t.officer_matricule].join(' ').toLowerCase().includes(q));
-      $('tajBody').innerHTML = rows.map(t=>`
+    async function updatePerqStatus(id, newStatus) {
+      try {
+        await sb.from('nrp_perquisitions').update({ status: newStatus }).eq('id', id);
+        toast(`Perquisition ${newStatus} avec succès !`);
+        loadPerquisitionsCloud();
+      } catch(e) {
+        toast('Erreur mise à jour statut', 'error');
+      }
+    }
+
+    function renderPerquisitions() {
+      const tbody = $('perqBody');
+      if(!tbody) return;
+      const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
+
+      tbody.innerHTML = perquisitionsList.map(p => `
         <tr>
-          <td><small class="muted">${new Date(t.created_at || Date.now()).toLocaleDateString('fr-FR')}</small></td>
-          <td><b>${esc(t.citizen_name)}</b></td>
-          <td>${esc(t.roblox_name || '-')}</td>
-          <td><span class="pill ${t.category==='Avis de Recherche'?'warn':'info'}">${esc(t.category)}</span></td>
-          <td>${esc(t.details)}</td>
-          <td>${esc(t.sanction || '-')}</td>
-          <td><small>${esc(t.officer_matricule)}</small></td>
+          <td><small class="muted">${new Date(p.created_at || Date.now()).toLocaleDateString('fr-FR')}</small></td>
+          <td>${esc(p.officer)}</td>
+          <td><b>${esc(p.suspect)}</b><br><small class="muted">${esc(p.location)}</small></td>
+          <td>${esc(p.reasons)}</td>
+          <td><span class="pill ${p.status==='Acceptée'?'info':(p.status==='Refusée'?'danger':'warn')}">${esc(p.status)}</span></td>
+          <td>
+            ${canManage ? `
+              <button class="btn small" style="background:var(--green)" onclick="updatePerqStatus('${p.id}', 'Acceptée')">✔ Accepter</button>
+              <button class="btn danger small" onclick="updatePerqStatus('${p.id}', 'Refusée')">✖ Refuser</button>
+            : '<small class="muted">Réservé haut gradé</small>'}
+          </td>
         </tr>
       `).join('');
     }
 
-    async function loadTajCloudData(){
+    async function loadPerquisitionsCloud() {
       try {
-        const { data, error } = await sb.from('nrp_taj').select('*').order('created_at', { ascending: false });
+        const { data } = await sb.from('nrp_perquisitions').select('*').order('created_at', { ascending: false });
         if(data) {
-          tajRecords = data;
-          renderTajData();
-          renderDashboardStats();
+          perquisitionsList = data;
+          renderPerquisitions();
         }
+      } catch(e) {}
+    }
+
+    // --- MODULE MÉDAILLES & CERTIFICATIONS ---
+    async function saveMedalDefinition() {
+      const name = val('med_name');
+      const service = $('med_service').value;
+      const desc = val('med_desc');
+      if(!name) return toast('Veuillez entrer un nom.', 'error');
+
+      try {
+        await sb.from('nrp_medals_def').insert([{ name, service, description: desc }]);
+        toast('Distinction créée avec succès !');
+        $('med_name').value = '';
+        $('med_desc').value = '';
+        loadMedalsCloud();
+      } catch(e) {
+        toast('Erreur création', 'error');
+      }
+    }
+
+    async function loadMedalsCloud() {
+      try {
+        const { data } = await sb.from('nrp_medals_def').select('*');
+        if(data) {
+          medalsList = data;
+          renderAdminMedalsTable();
+          renderDirectory();
+        }
+      } catch(e) {}
+    }
+
+    function renderAdminMedalsTable() {
+      const tbody = $('adminMedalsBody');
+      if(!tbody) return;
+      tbody.innerHTML = medalsList.map(m => `
+        <tr>
+          <td><span class="pill info">${esc(m.service)}</span></td>
+          <td><b>${esc(m.name)}</b></td>
+          <td>${esc(m.description || '-')}</td>
+          <td><button class="btn danger small" onclick="deleteMedalDef('${m.id}')">Supprimer</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteMedalDef(id) {
+      try {
+        await sb.from('nrp_medals_def').delete().eq('id', id);
+        toast('Supprimé.');
+        loadMedalsCloud();
       } catch(e){}
     }
 
-    // --- MODULE DASHBOARD STATS RH ---
-    function renderDashboardStats(){
-      const total = roster.length;
-      const active = roster.filter(r => r.status === 'Occupé').length;
-      const vacant = roster.filter(r => r.status === 'Vacant').length;
-      
-      $('st_total_agents').textContent = total;
-      $('st_active_agents').textContent = active;
-      $('st_vacant_agents').textContent = vacant;
-      $('st_total_taj').textContent = tajRecords.length;
+    async function assignMedalToAgent(matricule, medalName) {
+      const agent = roster.find(r => r.matricule === matricule);
+      if(!agent) return;
+      let current = agent.distinctions ? agent.distinctions.split(',').map(s=>s.trim()).filter(Boolean) : [];
+      if(!current.includes(medalName)) current.push(medalName);
+      agent.distinctions = current.join(', ');
+
+      try {
+        await sb.from('nrp_roster').upsert({ matricule: agent.matricule, name: agent.name, grade: agent.grade, service: agent.service, status: agent.status, password: agent.password, distinctions: agent.distinctions });
+        toast(`Distinction attribuée à [${matricule}] !`);
+        renderDirectory();
+      } catch(e){
+        toast('Erreur attribution', 'error');
+      }
     }
 
-    // --- MODULE GESTION & TEST DES ALERTES ---
+    function renderDirectory(){
+      const q = (val('directorySearch')||'').toLowerCase();
+      const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
+      const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
+
+      $('directoryBody').innerHTML = rows.map(x=>{
+        const medalsOpts = medalsList.map(m=>`<option value="${esc(m.name)}">${esc(m.name)}</option>`).join('');
+        return `
+          <tr>
+            <td><b>[${esc(x.matricule)}]</b></td>
+            <td>${esc(x.name)}</td>
+            <td>${esc(x.grade)}</td>
+            <td>${esc(x.service)}</td>
+            <td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td>
+            <td>${esc(x.distinctions || 'Aucune')}</td>
+            <td>
+              ${canManage ? `
+                <div style="display:flex;gap:5px">
+                  <select id="assign_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;border-radius:4px;font-size:11px">${medalsOpts}</select>
+                  <button class="btn small" onclick="assignMedalToAgent('${x.matricule}', val('assign_${x.matricule}'))">Attribuer</button>
+                </div>
+              ` : '<small class="muted">-</small>'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // --- DESIGN & TEXTES ---
+    async function saveDesignConfig() {
+      designConfig.brandName = val('cfg_brandName');
+      designConfig.brandSub = val('cfg_brandSub');
+      designConfig.brandDesc = val('cfg_brandDesc');
+      applyDesignConfig();
+      try { await sb.from('nrp_settings').upsert({ id: 'design', data: designConfig }); toast('Design sauvegardé !'); } catch(e){}
+    }
+
+    function applyDesignConfig() {
+      $('brandTitle').textContent = designConfig.brandName;
+      $('sidebarTitle').textContent = designConfig.brandName.toUpperCase();
+      $('brandSubHeader').textContent = designConfig.brandSub;
+      $('brandDesc').textContent = designConfig.brandDesc;
+      $('heroMainTitle').textContent = `Protéger, secourir et accompagner — ${designConfig.brandName}.`;
+    }
+
+    // --- ALERTES & BANNIÈRES VISUELLES ---
     async function loadCustomAlerts() {
       try {
-        const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
-        if (data) {
-          customAlerts = data;
-          renderAdminAlertsTable();
-        }
+        const { data } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
+        if (data) { customAlerts = data; renderAdminAlertsTable(); }
       } catch(e) {}
     }
 
@@ -970,10 +905,9 @@
         <tr>
           <td><b>${esc(a.title)}</b></td>
           <td><span class="pill info">${esc(a.alert_type)}</span></td>
-          <td>${a.sound_url ? '🎵 MP3: ' + esc(a.sound_url) : '🗣️ Text: ' + esc(a.announcement_text)}</td>
+          <td><span style="color:${esc(a.text_color)};background:${esc(a.bg_color)};padding:3px 6px;border-radius:4px">${esc(a.announcement_text)}</span></td>
           <td>
-            <button class="btn small" onclick="broadcastLiveAlert('${a.id}')">🔊 Tester & Diffuser</button>
-            <button class="btn danger small" onclick="stopAlertSound()">⏹️ Stop</button>
+            <button class="btn small" onclick="broadcastLiveAlert('${a.id}')">📢 Afficher en direct</button>
             <button class="btn secondary small" onclick="editCustomAlert('${a.id}')">Modifier</button>
             <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button>
           </td>
@@ -986,25 +920,20 @@
       const title = val('alt_title');
       const text = val('alt_text');
       const type = $('alt_type').value;
-      const soundUrl = val('alt_sound');
+      const bg = $('alt_bg').value;
+      const color = $('alt_color').value;
+      const size = $('alt_size').value;
 
-      if(!title) return toast('Veuillez donner un titre à l’alerte.', 'error');
-
-      const payload = { title, announcement_text: text, alert_type: type, sound_url: soundUrl };
+      if(!title || !text) return toast('Remplissez le titre et le texte de l’alerte.', 'error');
+      const payload = { title, announcement_text: text, alert_type: type, bg_color: bg, text_color: color, font_size: size };
 
       try {
-        if(id) {
-          await sb.from('nrp_custom_alerts').update(payload).eq('id', id);
-          toast('Alerte mise à jour avec succès !');
-        } else {
-          await sb.from('nrp_custom_alerts').insert([payload]);
-          toast('Nouvelle alerte créée !');
-        }
+        if(id) await sb.from('nrp_custom_alerts').update(payload).eq('id', id);
+        else await sb.from('nrp_custom_alerts').insert([payload]);
+        toast('Alerte visuelle enregistrée !');
         clearAlertForm();
         loadCustomAlerts();
-      } catch(e) {
-        toast('Erreur lors de l’enregistrement de l’alerte.', 'error');
-      }
+      } catch(e) { toast('Erreur enregistrement', 'error'); }
     }
 
     function editCustomAlert(id) {
@@ -1014,63 +943,39 @@
       $('alt_title').value = a.title;
       $('alt_text').value = a.announcement_text || '';
       $('alt_type').value = a.alert_type || 'police';
-      $('alt_sound').value = a.sound_url || '';
+      $('alt_bg').value = a.bg_color || '#e45a66';
+      $('alt_color').value = a.text_color || '#ffffff';
+      $('alt_size').value = a.font_size || '18px';
     }
 
     function clearAlertForm() {
-      $('alert_edit_id').value = '';
-      $('alt_title').value = '';
-      $('alt_text').value = '';
-      $('alt_sound').value = '';
-      $('alt_type').value = 'police';
+      $('alert_edit_id').value = ''; $('alt_title').value = ''; $('alt_text').value = '';
     }
 
     async function deleteCustomAlert(id) {
-      if(!confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?')) return;
-      try {
-        await sb.from('nrp_custom_alerts').delete().eq('id', id);
-        toast('Alerte supprimée.');
-        loadCustomAlerts();
-      } catch(e) {
-        toast('Erreur lors de la suppression.', 'error');
-      }
+      if(!confirm('Supprimer cette alerte ?')) return;
+      try { await sb.from('nrp_custom_alerts').delete().eq('id', id); loadCustomAlerts(); toast('Supprimé.'); } catch(e){}
     }
 
     async function broadcastLiveAlert(id) {
       const a = customAlerts.find(x => String(x.id) === String(id));
       if(!a) return;
-
-      playAlertSound(a.announcement_text, a.sound_url);
-      toast(`🔊 Diffusion en direct de : "${a.title}" !`);
+      showGlobalBanner(a.announcement_text, a.bg_color, a.text_color, a.font_size);
+      toast(`📢 Bannière activée : "${a.title}" !`);
 
       const channel = sb.channel('nrp_global_alerts');
       await channel.subscribe();
-      await channel.send({
-        type: 'broadcast',
-        event: 'trigger_alert',
-        payload: { text: a.announcement_text, soundUrl: a.sound_url, title: a.title }
-      });
+      await channel.send({ type: 'broadcast', event: 'trigger_banner', payload: a });
     }
 
     function initAdminWebhooksUI(){
       const keys = Object.keys(webhookUrls);
-      $('webhookConfigForm').innerHTML = keys.map(k=>`
-        <div class="field full">
-          <label>${k}</label>
-          <input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/...">
-        </div>
-      `).join('');
+      $('webhookConfigForm').innerHTML = keys.map(k=>`<div class="field full"><label>${k}</label><input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/..."></div>`).join('');
     }
 
     async function saveWebhooksConfig(){
-      const keys = Object.keys(webhookUrls);
-      keys.forEach(k=>{ webhookUrls[k] = val('wh_'+k); });
-      try {
-        await sb.from('nrp_settings').upsert({ id: 'webhooks', data: webhookUrls });
-        toast('Webhooks sauvegardés sur Supabase Cloud !');
-      } catch(e) {
-        toast('Sauvegarde locale effectuée', 'error');
-      }
+      Object.keys(webhookUrls).forEach(k=>{ webhookUrls[k] = val('wh_'+k); });
+      try { await sb.from('nrp_settings').upsert({ id: 'webhooks', data: webhookUrls }); toast('Webhooks sauvegardés !'); } catch(e){}
     }
 
     function renderAdminMatricules(){
@@ -1079,51 +984,28 @@
       $('adminMatBody').innerHTML = rows.map(x=>`
         <tr>
           <td><b>[${esc(x.matricule)}]</b></td>
-          <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
-          <td><input id="adm_grade_${x.matricule}" value="${esc(x.grade)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
-          <td><input id="adm_pwd_${x.matricule}" value="${esc(x.password||'1234')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;border-radius:4px;width:110px"></td>
-          <td>
-            <select id="adm_stat_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;border-radius:4px">
-              <option ${x.status==='Occupé'?'selected':''}>Occupé</option>
-              <option ${x.status==='Vacant'?'selected':''}>Vacant</option>
-            </select>
-          </td>
+          <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
+          <td><input id="adm_grade_${x.matricule}" value="${esc(x.grade)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
+          <td><input id="adm_pwd_${x.matricule}" value="${esc(x.password||'1234')}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
+          <td><select id="adm_stat_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px"><option ${x.status==='Occupé'?'selected':''}>Occupé</option><option ${x.status==='Vacant'?'selected':''}>Vacant</option></select></td>
           <td><button class="btn small" onclick="updateMatricule('${x.matricule}')">Enregistrer</button></td>
         </tr>
       `).join('');
     }
 
     function renderAdminPasswords(){
-      const q = (val('adminPwdSearch')||'').toLowerCase();
-      const rows = roster.filter(x=>[x.matricule,x.name,x.service].join(' ').toLowerCase().includes(q));
-      $('adminPwdBody').innerHTML = rows.map(x=>`
-        <tr>
-          <td><b>[${esc(x.matricule)}]</b></td>
-          <td>${esc(x.name)} (${esc(x.grade)})</td>
-          <td>${esc(x.service)}</td>
-          <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" type="text" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px 8px;border-radius:6px;width:150px"></td>
-          <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer mot de passe</button></td>
-        </tr>
+      $('adminPwdBody').innerHTML = roster.map(x=>`
+        <tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)} (${esc(x.grade)})</td><td>${esc(x.service)}</td>
+        <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px;width:150px"></td>
+        <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer</button></td></tr>
       `).join('');
     }
 
     async function updateMatricule(mat){
       const item = roster.find(r=>r.matricule===mat);
       if(item){
-        item.name = val('adm_name_'+mat);
-        item.grade = val('adm_grade_'+mat);
-        item.password = val('adm_pwd_'+mat);
-        item.status = $('adm_stat_'+mat).value;
-        try {
-          await sb.from('nrp_roster').upsert({ 
-            matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status, password: item.password 
-          });
-          toast(`Matricule [${mat}] mis à jour sur Supabase !`);
-          renderAdminPasswords();
-          renderDashboardStats();
-        } catch(e) {
-          toast(`Erreur d'enregistrement Cloud`, 'error');
-        }
+        item.name = val('adm_name_'+mat); item.grade = val('adm_grade_'+mat); item.password = val('adm_pwd_'+mat); item.status = $('adm_stat_'+mat).value;
+        try { await sb.from('nrp_roster').upsert(item); toast(`[${mat}] mis à jour !`); renderAdminPasswords(); } catch(e){toast('Erreur','error');}
       }
     }
 
@@ -1131,35 +1013,15 @@
       const item = roster.find(r=>r.matricule===mat);
       if(item){
         item.password = val('adm_pwd_only_'+mat);
-        try {
-          await sb.from('nrp_roster').upsert({ 
-            matricule: mat, name: item.name, grade: item.grade, service: item.service, status: item.status, password: item.password 
-          });
-          toast(`🔑 Mot de passe de [${mat}] mis à jour !`);
-          renderAdminMatricules();
-        } catch(e) {
-          toast(`Erreur d'enregistrement Cloud`, 'error');
-        }
+        try { await sb.from('nrp_roster').upsert(item); toast('Mot de passe mis à jour !'); } catch(e){toast('Erreur','error');}
       }
     }
 
-    // --- TEMPS RÉEL GLOBAL (SUPABASE REALTIME) ---
     function setupRealtimeListeners() {
-      sb.channel('realtime:nrp_taj')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'nrp_taj' }, payload => {
-          tajRecords.unshift(payload.new);
-          renderTajData();
-          renderDashboardStats();
-          toast(`📢 Nouvel ajout au fichier TAJ : ${payload.new.citizen_name}`);
-        })
-        .subscribe();
-
-      const alertChannel = sb.channel('nrp_global_alerts');
-      alertChannel
-        .on('broadcast', { event: 'trigger_alert' }, payload => {
-          const data = payload.payload;
-          toast(`🚨 ANNONCE OFFICIELLE : ${data.title}`);
-          playAlertSound(data.text, data.soundUrl);
+      sb.channel('nrp_global_alerts')
+        .on('broadcast', { event: 'trigger_banner' }, payload => {
+          const d = payload.payload;
+          showGlobalBanner(d.announcement_text, d.bg_color, d.text_color, d.font_size);
         })
         .subscribe();
     }
@@ -1167,29 +1029,21 @@
     async function loadCloudData(){
       try {
         const { data: rosterData } = await sb.from('nrp_roster').select('*');
-        if(rosterData && rosterData.length > 0){
-          roster = rosterData;
-        }
+        if(rosterData && rosterData.length > 0) roster = rosterData;
         const { data: settingsData } = await sb.from('nrp_settings').select('*').eq('id', 'webhooks').single();
-        if(settingsData && settingsData.data){
-          webhookUrls = settingsData.data;
-        }
-        $('cloudDot').style.background = 'var(--green)';
-        $('connectionLabel').textContent = 'Connecté';
-      } catch(e) {
-        $('cloudDot').style.background = 'var(--yellow)';
-        $('connectionLabel').textContent = 'Mode local';
-      }
+        if(settingsData && settingsData.data) webhookUrls = settingsData.data;
+        const { data: designData } = await sb.from('nrp_settings').select('*').eq('id', 'design').single();
+        if(designData && designData.data) { designConfig = designData.data; applyDesignConfig(); }
+      } catch(e) {}
       renderDirectory();
       renderPenal();
-      loadTajCloudData();
+      loadMedalsCloud();
+      loadPerquisitionsCloud();
       loadCustomAlerts();
       setupRealtimeListeners();
     }
 
-    document.addEventListener('DOMContentLoaded',()=>{
-      loadCloudData();
-    });
+    document.addEventListener('DOMContentLoaded', () => { loadCloudData(); });
   </script>
 </body>
 </html>
