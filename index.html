@@ -443,20 +443,23 @@
         </div>
       </section>
 
-      <!-- ADMIN : BANNIÈRES -->
+      <!-- ADMIN : BANNIÈRES & ALERTES -->
       <section class="view" id="view-admin-alerts">
         <div class="panel">
-          <h2>📢 Bannières d'Annonce Visuelle</h2>
+          <div class="panel-head">
+            <h2>📢 Bannières d'Annonce Visuelle & Sonores</h2>
+            <button class="btn danger small" onclick="clearLiveAlert()">✖ Éteindre l'alerte en direct</button>
+          </div>
           <div class="form-grid" style="margin-top:15px">
             <input type="hidden" id="alert_edit_id">
-            <div class="field"><label>Titre <span class="req">*</span></label><input id="alt_title"></div>
+            <div class="field"><label>Titre <span class="req">*</span></label><input id="alt_title" placeholder="Ex: ALERTE ATTENTAT"></div>
             <div class="field"><label>Type</label><select id="alt_type"><option value="police">Police</option><option value="general">Général</option></select></div>
-            <div class="field full"><label>Texte affiché <span class="req">*</span></label><textarea id="alt_text"></textarea></div>
+            <div class="field full"><label>Texte de l'annonce visuelle <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Plan Épervier déclenché sur l'ensemble de la commune."></textarea></div>
             <div class="field"><label>Couleur de fond</label><input id="alt_bg" type="color" value="#e45a66" style="height:42px"></div>
-            <div class="field"><label>Couleur texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
+            <div class="field"><label>Couleur du texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="saveCustomAlert()">Enregistrer</button></div>
-          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Titre</th><th>Texte</th><th>Actions</th></tr></thead><tbody id="adminAlertsBody"></tbody></table></div>
+          <div class="form-actions"><button class="btn" onclick="saveCustomAlert()">Enregistrer dans la liste</button></div>
+          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Titre</th><th>Aperçu texte</th><th>Actions</th></tr></thead><tbody id="adminAlertsBody"></tbody></table></div>
         </div>
       </section>
 
@@ -469,7 +472,32 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function showGlobalBanner(text, bg, color) {
+    // --- MOTEUR SONORE (APIs Web Audio - Bip / Carillon sans synthétiseur vocal) ---
+    function playAlertSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const playTone = (freq, start, duration) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime + start);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + start + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + start);
+          osc.stop(ctx.currentTime + start + duration);
+        };
+        // Carillon d'alerte à 3 tons
+        playTone(880, 0, 0.2);
+        playTone(659.25, 0.25, 0.2);
+        playTone(880, 0.5, 0.4);
+      } catch(e) {}
+    }
+
+    function showGlobalBanner(text, bg, color, playSound = true) {
       const banner = document.getElementById('globalAlertBanner');
       const content = document.getElementById('bannerTextContent');
       if(content) content.textContent = text;
@@ -478,7 +506,9 @@
         banner.style.color = color || '#ffffff';
         banner.style.display = 'block';
       }
+      if(playSound) playAlertSound();
     }
+
     function hideGlobalBanner() {
       const banner = document.getElementById('globalAlertBanner');
       if(banner) banner.style.display = 'none';
@@ -940,7 +970,7 @@
       if($('st_total_taj')) $('st_total_taj').textContent = tajRecords.length;
     }
 
-    // --- BANNIÈRES VISUELLES ---
+    // --- BANNIÈRES VISUELLES ET DIFFUSION EN DIRECT ---
     async function loadCustomAlerts() {
       try {
         const { data } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
@@ -972,11 +1002,26 @@
     async function broadcastLiveAlert(id) {
       const a = customAlerts.find(x => String(x.id) === String(id));
       if(!a) return;
-      showGlobalBanner(a.announcement_text, a.bg_color, a.text_color);
+      // 1. Affichage local
+      showGlobalBanner(a.announcement_text, a.bg_color, a.text_color, true);
       toast(`📢 Bannière activée : "${a.title}" !`);
+      
+      // 2. Persistance dans la BDD pour les nouveaux visiteurs ou rafraîchissements
+      await saveSettingsCloud('active_alert', { text: a.announcement_text, bg: a.bg_color, color: a.text_color, active: true });
+      
+      // 3. Diffusion temps réel Websocket vers les autres écrans
       const channel = sb.channel('nrp_global_alerts');
       await channel.subscribe();
       await channel.send({ type: 'broadcast', event: 'trigger_banner', payload: a });
+    }
+
+    async function clearLiveAlert() {
+      hideGlobalBanner();
+      await saveSettingsCloud('active_alert', { active: false });
+      toast('Alerte masquée.');
+      const channel = sb.channel('nrp_global_alerts');
+      await channel.subscribe();
+      await channel.send({ type: 'broadcast', event: 'clear_banner', payload: {} });
     }
 
     // --- PRÉVISUALISATION & DISCORD ---
@@ -1068,7 +1113,10 @@
       sb.channel('nrp_global_alerts')
         .on('broadcast', { event: 'trigger_banner' }, payload => {
           const d = payload.payload;
-          showGlobalBanner(d.announcement_text, d.bg_color, d.text_color);
+          showGlobalBanner(d.announcement_text, d.bg_color, d.text_color, true);
+        })
+        .on('broadcast', { event: 'clear_banner' }, () => {
+          hideGlobalBanner();
         })
         .subscribe();
     }
@@ -1086,6 +1134,9 @@
             if(s.id === 'penal' && s.data) { penalArticles = s.data; renderPenal(); renderAdminPenalTable(); }
             if(s.id === 'penal_file' && s.data) { penalFileName = s.data; renderPenal(); }
             if(s.id === 'webhooks' && s.data) { webhookUrls = s.data; }
+            if(s.id === 'active_alert' && s.data && s.data.active) {
+              showGlobalBanner(s.data.text, s.data.bg, s.data.color, false);
+            }
           });
         }
       } catch(e){}
