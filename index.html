@@ -49,9 +49,9 @@
     .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);color:#ffb3ba}
     .login-wrap{max-width:480px;margin:7vh auto}.gateway{max-width:1120px;margin:6vh auto}.gateway-head{text-align:center;margin-bottom:30px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;transition:.18s}.gateway-card:hover{border-color:#5485c5;transform:translateY(-4px)}.search-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}.search-row input{flex:1;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}
     .toast-host{position:fixed;right:18px;bottom:18px;z-index:30;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}.toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px}
-    #globalAlertBanner{position:fixed;top:0;left:0;width:100%;z-index:100;text-align:center;padding:14px 20px;font-weight:800;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    #globalAlertBanner{position:fixed;top:0;left:0;width:100%;z-index:9999;text-align:center;padding:14px 20px;font-weight:800;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.5);pointer-events:auto}
     #globalAlertBanner button{background:rgba(255,255,255,0.2);border:1px solid currentColor;color:inherit;padding:4px 10px;border-radius:6px;margin-left:15px;font-size:11px;cursor:pointer}
-    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s}.sidebar.open{left:0}.gateway-grid,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s;z-index:1000}.sidebar.open{left:0}.gateway-grid,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -472,12 +472,17 @@
     function showGlobalBanner(text, bg, color) {
       const banner = document.getElementById('globalAlertBanner');
       const content = document.getElementById('bannerTextContent');
-      content.textContent = text;
-      banner.style.backgroundColor = bg || '#e45a66';
-      banner.style.color = color || '#ffffff';
-      banner.style.display = 'block';
+      if(content) content.textContent = text;
+      if(banner){
+        banner.style.backgroundColor = bg || '#e45a66';
+        banner.style.color = color || '#ffffff';
+        banner.style.display = 'block';
+      }
     }
-    function hideGlobalBanner() { document.getElementById('globalAlertBanner').style.display = 'none'; }
+    function hideGlobalBanner() {
+      const banner = document.getElementById('globalAlertBanner');
+      if(banner) banner.style.display = 'none';
+    }
 
     let webhookUrls = {
       HOOK_TICKET_POLICE: '', HOOK_TICKET_BSPN: '', HOOK_TICKET_SAMU: '',
@@ -528,16 +533,21 @@
       const t=document.createElement('div');
       t.className='toast'+(type==='error'?' error':'');
       t.textContent=msg;
-      $('toastHost').appendChild(t);
+      const host = $('toastHost');
+      if(host) host.appendChild(t);
       setTimeout(()=>t.remove(),4000);
     }
-    function toggleSidebar(){$('sidebar').classList.toggle('open')}
+    function toggleSidebar(){
+      const sb = $('sidebar');
+      if(sb) sb.classList.toggle('open');
+    }
     function showView(id){
       document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
       const target = $(id);
       if(target) target.classList.add('active');
       document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-      $('sidebar').classList.remove('open');
+      const sb = $('sidebar');
+      if(sb) sb.classList.remove('open');
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
@@ -560,22 +570,38 @@
           navItems.push(['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH']);
         }
       }
-      $('sideNav').innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
+      const navEl = $('sideNav');
+      if(navEl) navEl.innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
     }
 
-    function returnGateway(){$('gateway').classList.remove('hidden');$('appShell').classList.add('hidden');}
-    function enterCitizen(){activeSpace='citoyen';isAdminUser=false;currentAgent=null;$('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');buildDynamicNav();renderZonesContent();showView('view-public-home');}
+    function returnGateway(){
+      const gw = $('gateway');
+      const sh = $('appShell');
+      if(gw) gw.classList.remove('hidden');
+      if(sh) sh.classList.add('hidden');
+    }
+
+    function enterCitizen(){
+      activeSpace='citoyen';isAdminUser=false;currentAgent=null;
+      const gw = $('gateway'); const sh = $('appShell');
+      if(gw) gw.classList.add('hidden');
+      if(sh) sh.classList.remove('hidden');
+      buildDynamicNav();renderZonesContent();showView('view-public-home');
+    }
 
     function enterStaff(space){
       activeSpace=space;isAdminUser=false;
-      $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
+      const gw = $('gateway'); const sh = $('appShell');
+      if(gw) gw.classList.add('hidden');
+      if(sh) sh.classList.remove('hidden');
       const filtered = roster.filter(r => r.status==='Occupé');
-      $('loginMatriculeSelect').innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
+      const sel = $('loginMatriculeSelect');
+      if(sel) sel.innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
       showView('view-login');
     }
 
     function loginStaffWithPassword(){
-      const mat = $('loginMatriculeSelect').value;
+      const mat = $('loginMatriculeSelect')?.value;
       const pwd = val('loginPasswordInput');
       const agent = roster.find(r=>r.matricule===mat);
       if(!agent) return toast('Agent introuvable','error');
@@ -584,17 +610,21 @@
       currentAgent = agent;
       isAdminUser = false;
       buildDynamicNav();
-      $('userChip').classList.remove('hidden');
-      $('logoutBtn').classList.remove('hidden');
-      $('userChip').textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
-      $('staffWelcome').textContent = `Bienvenue, ${currentAgent.name}.`;
+      $('userChip')?.classList.remove('hidden');
+      $('logoutBtn')?.classList.remove('hidden');
+      const chip = $('userChip');
+      if(chip) chip.textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
+      const sw = $('staffWelcome');
+      if(sw) sw.textContent = `Bienvenue, ${currentAgent.name}.`;
       renderDirectory(); renderPenal(); renderPerquisitions(); renderZonesContent();
       showView('view-staff-home');
       toast('Connexion réussie !');
     }
 
     function enterAdminDirect() {
-      $('gateway').classList.add('hidden');$('appShell').classList.remove('hidden');
+      const gw = $('gateway'); const sh = $('appShell');
+      if(gw) gw.classList.add('hidden');
+      if(sh) sh.classList.remove('hidden');
       showView('view-admin-login');
     }
 
@@ -604,11 +634,13 @@
         isAdminUser = true;
         currentAgent = { name: 'Administrateur', matricule: '00', grade: 'Directeur', service: 'Administration' };
         buildDynamicNav();
-        $('userChip').classList.remove('hidden');
-        $('logoutBtn').classList.remove('hidden');
-        $('userChip').textContent = 'Administrateur';
+        $('userChip')?.classList.remove('hidden');
+        $('logoutBtn')?.classList.remove('hidden');
+        const chip = $('userChip');
+        if(chip) chip.textContent = 'Administrateur';
         renderAdminMatricules(); renderAdminPasswords(); renderAdminMedalsTable(); renderAdminPenalTable(); renderTajData(); renderPerquisitions(); loadCustomAlerts();
-        $('adm_zones_text').value = zonesText;
+        const zText = $('adm_zones_text');
+        if(zText) zText.value = zonesText;
         initAdminWebhooksUI();
         showView('view-admin-design');
         toast('Accès administrateur autorisé.');
@@ -619,26 +651,26 @@
 
     function logout(){
       currentAgent=null; isAdminUser=false;
-      $('userChip').classList.add('hidden'); $('logoutBtn').classList.add('hidden');
+      $('userChip')?.classList.add('hidden'); $('logoutBtn')?.classList.add('hidden');
       returnGateway();
     }
 
     // --- RENDU DYNAMIQUE CODE PÉNAL & ZONES ---
     function renderPenal(){
-      $('penalTableBody').innerHTML = penalArticles.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
-      if(penalFileName) {
-        $('dynamicPenalFile').innerHTML = `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document officiel joint :</b> ${esc(penalFileName)}</div>`;
-      } else {
-        $('dynamicPenalFile').innerHTML = '';
+      const tbody = $('penalTableBody');
+      if(tbody) tbody.innerHTML = penalArticles.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
+      const pFile = $('dynamicPenalFile');
+      if(pFile) {
+        pFile.innerHTML = penalFileName ? `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document officiel joint :</b> ${esc(penalFileName)}</div>` : '';
       }
     }
 
     function renderZonesContent(){
-      $('dynamicZonesContent').textContent = zonesText;
-      if(zonesFileName) {
-        $('dynamicZonesFile').innerHTML = `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document de règlement joint :</b> ${esc(zonesFileName)}</div>`;
-      } else {
-        $('dynamicZonesFile').innerHTML = '';
+      const zc = $('dynamicZonesContent');
+      if(zc) zc.textContent = zonesText;
+      const zf = $('dynamicZonesFile');
+      if(zf) {
+        zf.innerHTML = zonesFileName ? `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document de règlement joint :</b> ${esc(zonesFileName)}</div>` : '';
       }
     }
 
@@ -653,7 +685,10 @@
       await saveSettingsCloud('penal_file', penalFileName);
       renderAdminPenalTable(); renderPenal();
       toast('Article ajouté avec succès !');
-      $('adm_penal_cat').value=''; $('adm_penal_inf').value=''; $('adm_penal_fine').value=''; $('adm_penal_gav'].value='';
+      if($('adm_penal_cat')) $('adm_penal_cat').value='';
+      if($('adm_penal_inf')) $('adm_penal_inf').value='';
+      if($('adm_penal_fine')) $('adm_penal_fine').value='';
+      if($('adm_penal_gav')) $('adm_penal_gav').value='';
     }
 
     async function deletePenalArticle(index){
@@ -664,7 +699,8 @@
     }
 
     function renderAdminPenalTable(){
-      $('adminPenalTableBody').innerHTML = penalArticles.map((r, i)=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}<td><button class="btn danger small" onclick="deletePenalArticle(${i})">Supprimer</button></td></tr>`).join('');
+      const tbody = $('adminPenalTableBody');
+      if(tbody) tbody.innerHTML = penalArticles.map((r, i)=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}<td><button class="btn danger small" onclick="deletePenalArticle(${i})">Supprimer</button></td></tr>`).join('');
     }
 
     async function saveZonesConfig(){
@@ -679,7 +715,10 @@
     }
 
     // --- PERQUISITIONS ---
-    function showPerqForm() { $('perqAddContainer').classList.toggle('hidden'); }
+    function showPerqForm() {
+      const container = $('perqAddContainer');
+      if(container) container.classList.toggle('hidden');
+    }
 
     async function savePerquisition() {
       const suspect = val('perq_suspect'); const location = val('perq_location'); const reasons = val('perq_reasons');
@@ -691,8 +730,10 @@
       try {
         await sb.from('nrp_perquisitions').insert([newPerq]).select();
         toast('Demande soumise !');
-        $('perq_suspect').value=''; $('perq_location').value=''; $('perq_reasons').value='';
-        $('perqAddContainer').classList.add('hidden');
+        if($('perq_suspect')) $('perq_suspect').value='';
+        if($('perq_location')) $('perq_location').value='';
+        if($('perq_reasons')) $('perq_reasons').value='';
+        if($('perqAddContainer')) $('perqAddContainer').classList.add('hidden');
         loadPerquisitionsCloud();
       } catch(e){toast('Erreur','error');}
     }
@@ -731,12 +772,13 @@
 
     // --- MÉDAILLES & CERTIFICATIONS ---
     async function saveMedalDefinition() {
-      const name = val('med_name'); const service = $('med_service').value; const desc = val('med_desc');
+      const name = val('med_name'); const service = $('med_service')?.value; const desc = val('med_desc');
       if(!name) return toast('Entrez un nom.', 'error');
       try {
         await sb.from('nrp_medals_def').insert([{ name, service, description: desc }]);
         toast('Distinction créée !');
-        $('med_name').value=''; $('med_desc').value='';
+        if($('med_name')) $('med_name').value='';
+        if($('med_desc')) $('med_desc').value='';
         loadMedalsCloud();
       } catch(e){toast('Erreur','error');}
     }
@@ -773,7 +815,9 @@
       const q = (val('directorySearch')||'').toLowerCase();
       const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
       const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
-      $('directoryBody').innerHTML = rows.map(x=>{
+      const tbody = $('directoryBody');
+      if(!tbody) return;
+      tbody.innerHTML = rows.map(x=>{
         const medalsOpts = medalsList.map(m=>`<option value="${esc(m.name)}">${esc(m.name)}</option>`).join('');
         return `<tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)}</td><td>${esc(x.grade)}</td><td>${esc(x.service)}</td><td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td><td>${esc(x.distinctions||'Aucune')}</td><td>${canManage ? `<select id="assign_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;font-size:11px">${medalsOpts}</select> <button class="btn small" onclick="assignMedalToAgent('${x.matricule}', val('assign_${x.matricule}'))">Attribuer</button>` : '-'}</td></tr>`;
       }).join('');
@@ -787,10 +831,10 @@
     }
 
     function applyDesignConfig() {
-      $('brandTitle').textContent = designConfig.brandName;
-      $('sidebarTitle').textContent = designConfig.brandName.toUpperCase();
-      $('brandDesc').textContent = designConfig.brandDesc;
-      $('heroMainTitle').textContent = `Protéger, secourir et accompagner — ${designConfig.brandName}.`;
+      if($('brandTitle')) $('brandTitle').textContent = designConfig.brandName;
+      if($('sidebarTitle')) $('sidebarTitle').textContent = designConfig.brandName.toUpperCase();
+      if($('brandDesc')) $('brandDesc').textContent = designConfig.brandDesc;
+      if($('heroMainTitle')) $('heroMainTitle').textContent = `Protéger, secourir et accompagner — ${designConfig.brandName}.`;
     }
 
     async function saveSettingsCloud(id, data){
@@ -800,7 +844,8 @@
     // --- WEBHOOKS & STATS ---
     function initAdminWebhooksUI(){
       const keys = Object.keys(webhookUrls);
-      $('webhookConfigForm').innerHTML = keys.map(k=>`<div class="field full"><label>${k}</label><input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/..."></div>`).join('');
+      const wf = $('webhookConfigForm');
+      if(wf) wf.innerHTML = keys.map(k=>`<div class="field full"><label>${k}</label><input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/..."></div>`).join('');
     }
 
     async function saveWebhooksConfig(){
@@ -812,7 +857,8 @@
     function renderAdminMatricules(){
       const q = (val('adminMatSearch')||'').toLowerCase();
       const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
-      $('adminMatBody').innerHTML = rows.map(x=>`
+      const body = $('adminMatBody');
+      if(body) body.innerHTML = rows.map(x=>`
         <tr>
           <td><b>[${esc(x.matricule)}]</b></td>
           <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
@@ -825,7 +871,8 @@
     }
 
     function renderAdminPasswords(){
-      $('adminPwdBody').innerHTML = roster.map(x=>`
+      const body = $('adminPwdBody');
+      if(body) body.innerHTML = roster.map(x=>`
         <tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)} (${esc(x.grade)})</td><td>${esc(x.service)}</td>
         <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px;width:150px"></td>
         <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer</button></td></tr>
@@ -835,7 +882,7 @@
     async function updateMatricule(mat){
       const item = roster.find(r=>r.matricule===mat);
       if(item){
-        item.name = val('adm_name_'+mat); item.grade = val('adm_grade_'+mat); item.password = val('adm_pwd_'+mat); item.status = $('adm_stat_'+mat).value;
+        item.name = val('adm_name_'+mat); item.grade = val('adm_grade_'+mat); item.password = val('adm_pwd_'+mat); item.status = $('adm_stat_'+mat)?.value;
         try { await sb.from('nrp_roster').upsert(item); toast(`[${mat}] mis à jour !`); renderAdminPasswords(); } catch(e){toast('Erreur','error');}
       }
     }
@@ -848,7 +895,10 @@
       }
     }
 
-    function showTajAddForm(){ $('tajAddContainer').classList.toggle('hidden'); }
+    function showTajAddForm(){
+      const container = $('tajAddContainer');
+      if(container) container.classList.toggle('hidden');
+    }
 
     async function saveTajEntry(){
       const citizen = val('taj_citizen'); const details = val('taj_details');
@@ -856,12 +906,15 @@
       const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : null;
 
       if(!citizen || !details) return toast('Remplissez les champs obligatoires.', 'error');
-      const rec = { citizen_name: citizen, roblox_name: val('taj_roblox'), category: $('taj_category').value, details, sanction: val('taj_sanction'), officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : 'Admin', file_name: fileName };
+      const rec = { citizen_name: citizen, roblox_name: val('taj_roblox'), category: $('taj_category')?.value, details, sanction: val('taj_sanction'), officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : 'Admin', file_name: fileName };
       try {
         await sb.from('nrp_taj').insert([rec]);
         toast('Ajouté au TAJ !');
-        $('taj_citizen').value=''; $('taj_details').value=''; $('taj_roblox').value=''; $('taj_sanction').value='';
-        $('tajAddContainer').classList.add('hidden');
+        if($('taj_citizen')) $('taj_citizen').value='';
+        if($('taj_details')) $('taj_details').value='';
+        if($('taj_roblox')) $('taj_roblox').value='';
+        if($('taj_sanction')) $('taj_sanction').value='';
+        if($('tajAddContainer')) $('tajAddContainer').classList.add('hidden');
         loadTajCloudData();
       } catch(e){toast('Erreur','error');}
     }
@@ -876,14 +929,15 @@
     function renderTajData(){
       const q = (val('tajSearch')||'').toLowerCase();
       const rows = tajRecords.filter(t => [t.citizen_name, t.category, t.details].join(' ').toLowerCase().includes(q));
-      $('tajBody').innerHTML = rows.map(t=>`<tr><td><small>${new Date(t.created_at||Date.now()).toLocaleDateString('fr-FR')}</small></td><td><b>${esc(t.citizen_name)}</b></td><td><span class="pill info">${esc(t.category)}</span></td><td>${esc(t.details)}${t.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(t.file_name)}</small>` : ''}</td><td>${esc(t.sanction||'-')}</td><td><small>${esc(t.officer_matricule)}</small></td></tr>`).join('');
+      const body = $('tajBody');
+      if(body) body.innerHTML = rows.map(t=>`<tr><td><small>${new Date(t.created_at||Date.now()).toLocaleDateString('fr-FR')}</small></td><td><b>${esc(t.citizen_name)}</b></td><td><span class="pill info">${esc(t.category)}</span></td><td>${esc(t.details)}${t.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(t.file_name)}</small>` : ''}</td><td>${esc(t.sanction||'-')}</td><td><small>${esc(t.officer_matricule)}</small></td></tr>`).join('');
     }
 
     function renderDashboardStats(){
-      $('st_total_agents').textContent = roster.length;
-      $('st_active_agents').textContent = roster.filter(r => r.status === 'Occupé').length;
-      $('st_vacant_agents').textContent = roster.filter(r => r.status === 'Vacant').length;
-      $('st_total_taj').textContent = tajRecords.length;
+      if($('st_total_agents')) $('st_total_agents').textContent = roster.length;
+      if($('st_active_agents')) $('st_active_agents').textContent = roster.filter(r => r.status === 'Occupé').length;
+      if($('st_vacant_agents')) $('st_vacant_agents').textContent = roster.filter(r => r.status === 'Vacant').length;
+      if($('st_total_taj')) $('st_total_taj').textContent = tajRecords.length;
     }
 
     // --- BANNIÈRES VISUELLES ---
@@ -900,12 +954,13 @@
     }
 
     async function saveCustomAlert() {
-      const title = val('alt_title'); const text = val('alt_text'); const type = $('alt_type').value; const bg = $('alt_bg').value; const color = $('alt_color').value;
+      const title = val('alt_title'); const text = val('alt_text'); const type = $('alt_type')?.value; const bg = $('alt_bg')?.value; const color = $('alt_color')?.value;
       if(!title || !text) return toast('Remplissez le titre et le texte.', 'error');
       try {
         await sb.from('nrp_custom_alerts').insert([{ title, announcement_text: text, alert_type: type, bg_color: bg, text_color: color }]);
         toast('Alerte enregistrée !');
-        $('alt_title').value=''; $('alt_text').value='';
+        if($('alt_title')) $('alt_title').value='';
+        if($('alt_text')) $('alt_text').value='';
         loadCustomAlerts();
       } catch(e){toast('Erreur','error');}
     }
@@ -932,7 +987,8 @@
       if(!box)return;
       box.innerHTML=`<h4>${esc(embed.title)}</h4>` + embed.fields.map(f=>`<div><b>${esc(f.name)}:</b> ${esc(f.value)}</div>`).join('');
       box.classList.remove('hidden');
-      $('send-'+kind)?.classList.remove('hidden');
+      const sendBtn = $('send-'+kind);
+      if(sendBtn) sendBtn.classList.remove('hidden');
     }
 
     function previewPublic(kind){
@@ -998,7 +1054,8 @@
         const res = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({embeds: [embed]}) });
         if(res.ok || res.type==='opaque'){
           toast('Transmis avec succès sur Discord !');
-          $('send-'+kind).classList.add('hidden');
+          const sendBtn = $('send-'+kind);
+          if(sendBtn) sendBtn.classList.add('hidden');
         } else { toast('Erreur envoi Discord.', 'error'); }
       } catch(e) { toast('Erreur réseau / CORS.', 'error'); }
     }
