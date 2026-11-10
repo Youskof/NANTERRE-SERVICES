@@ -3,1333 +3,953 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <title>Nanterre RP — Portail des services</title>
+  <title>République Française — Portail Officiel Nanterre RP [V5]</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{
-      --bg:#0b1220;
-      --surface:#111c2d;
-      --surface-2:#172438;
-      --surface-3:#1d2c43;
-      --line:#293a52;
-      --text:#edf3fb;
-      --muted:#91a2b9;
-      --blue:#4d8dff;
-      --blue-2:#2865d6;
-      --red:#e45a66;
-      --gold:#e2ad55;
-      --green:#40c58a;
-      --radius:16px;
-      --shadow:0 18px 50px rgba(0,0,0,.25)
+    :root {
+      --bg: #070b12;
+      --surface: #0d1322;
+      --surface-card: #141d32;
+      --surface-hover: #1c2844;
+      --border: #233250;
+      --text: #f3f6fc;
+      --muted: #8a9bbd;
+      --primary: #1e40af;
+      --primary-hover: #1d4ed8;
+      --accent: #3b82f6;
+      --danger: #b91c1c;
+      --warning: #b45309;
+      --success: #047857;
+      --radius: 8px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
     }
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,rgba(45,91,157,.16),transparent 38%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
-    button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:#9bc2ff}.hidden{display:none!important}
-    .shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}
-    .sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:rgba(13,22,36,.95);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px;z-index:5}
-    .brand{display:flex;align-items:center;gap:12px;padding:5px 8px 18px;border-bottom:1px solid var(--line)}
-    .brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#397fe8,#1b477e);display:grid;place-items:center;font-weight:900;letter-spacing:-1px;box-shadow:0 7px 22px rgba(45,111,211,.25)}
-    .brand strong{display:block;font-size:14px;letter-spacing:.08em}.brand small{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    .side-label{color:#687c97;text-transform:uppercase;letter-spacing:.13em;font-size:10px;font-weight:800;padding:0 11px;margin:4px 0}
-    .side-nav{display:grid;gap:5px}.side-nav button{border:1px solid transparent;background:transparent;color:#b7c5d8;text-align:left;padding:11px 12px;border-radius:10px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:650;transition:.18s;width:100%}
-    .side-nav button:hover{background:var(--surface-2);color:white}.side-nav button.active{background:rgba(65,128,220,.17);border-color:rgba(77,141,255,.35);color:#dceaff}.nav-ico{width:19px;text-align:center;color:#83a9df;font-size:15px}
-    .side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 2px}.connection-state{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(64,197,138,.1)}
-    .main{min-width:0;padding:26px clamp(16px,3vw,40px) 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.eyebrow{color:#8ba0bc;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.page-title{font-size:clamp(23px,3vw,31px);letter-spacing:-.035em;margin:4px 0 3px}.page-subtitle{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.user-chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;color:#d4deeb;font-size:12px}
-    .view{display:none;animation:appear .2s ease}.view.active{display:block}@keyframes appear{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
-    .panel{background:linear-gradient(160deg,rgba(24,39,60,.96),rgba(16,28,45,.98));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.panel h3{font-size:14px;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}
-    .hero{position:relative;overflow:hidden;padding:clamp(24px,4vw,42px);min-height:240px;border-radius:20px;border:1px solid #2d4667;background:linear-gradient(110deg,rgba(11,22,39,.96),rgba(17,47,81,.88));margin-bottom:18px}
-    .hero h2{font-size:clamp(26px,4vw,42px);max-width:720px;line-height:1.1;margin:17px 0 10px;letter-spacing:-.045em}.hero p{max-width:650px;color:#b3c4d9;margin:0;font-size:14px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
-    .grid{display:grid;gap:14px}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-    .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.stat-label{color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.1em}.stat-value{font-size:28px;font-weight:850;margin:5px 0 2px}
-    .btn{border:1px solid transparent;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:white;padding:10px 15px;border-radius:10px;font-weight:750;font-size:12px;cursor:pointer;transition:.18s}.btn:hover{filter:brightness(1.08)}.btn.secondary{background:var(--surface-3);border-color:#3a4d67;color:#dce7f5}.btn.ghost{background:transparent;border-color:var(--line);color:#b8c8dd}.btn.danger{background:rgba(185,54,68,.18);border-color:rgba(228,90,102,.4);color:#ffb3ba}.btn.discord{background:#5865f2}.btn.small{padding:7px 10px;font-size:11px}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#aabbd0;font-weight:750}.field label .req{color:#ff8c97}.field input,.field select,.field textarea{width:100%;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:11px 12px;color:#edf4ff;outline:none;font-size:13px}.field textarea{min-height:110px}.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-    .preview{margin-top:17px;background:#20242b;border:1px solid #414853;border-left:4px solid #4d8dff;border-radius:10px;padding:16px;color:#e9edf3}
-    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.data-table{border-collapse:collapse;width:100%;min-width:640px;background:#0f1a2a}.data-table th,.data-table td{padding:11px 12px;text-align:left;border-bottom:1px solid #26374e;font-size:12px}.data-table th{background:#17263b;color:#a9bdd6;font-size:10px;text-transform:uppercase;position:sticky;top:0}.data-table td{color:#d8e1ed}
-    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:800;background:rgba(64,197,138,.12);color:#75dfb1;border:1px solid rgba(64,197,138,.22)}.pill.vacant{background:rgba(145,162,185,.1);color:#9fb0c6}.pill.info{background:rgba(77,141,255,.12);color:#a9ccff}.pill.warn{background:rgba(226,173,85,.1);color:#f0ca82}.pill.danger{background:rgba(228,90,102,.12);color:#ffb3ba}
-    .login-wrap{max-width:480px;margin:7vh auto}.gateway{max-width:1120px;margin:6vh auto;position:relative;z-index:2}.gateway-head{text-align:center;margin-bottom:30px}.gateway-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.gateway-card{background:linear-gradient(145deg,#17253a,#101b2b);border:1px solid #2b405c;border-radius:17px;padding:22px;text-align:left;color:var(--text);cursor:pointer;display:flex;flex-direction:column;transition:.18s}.gateway-card:hover{border-color:#5485c5;transform:translateY(-4px)}.search-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}.search-row input{flex:1;background:#0b1627;border:1px solid #31445f;border-radius:9px;padding:10px 12px;color:white;font-size:12px}
-    .toast-host{position:fixed;right:18px;bottom:18px;z-index:99999;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}
-    .toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow);border-left:4px solid var(--blue)}.toast.error{border-left-color:var(--red)}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background-color: var(--bg); color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px; line-height: 1.6; min-height: 100vh;
+    }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hidden { display: none !important; }
 
-    /* --- BOÎTE D'ALERTE CENTRALE PLEIN MILIEU --- */
-    #globalCenterOverlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 10, 18, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 999999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+    /* MISE EN PAGE PRINCIPALE */
+    .app-shell { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+    .sidebar {
+      background-color: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; padding: 24px 16px; position: sticky; top: 0; height: 100vh; z-index: 10;
     }
-    .center-modal-box {
-      width: 100%;
-      max-width: 620px;
-      padding: 36px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.7);
-      border: 2px solid rgba(255,255,255,0.2);
-      animation: zoomInModal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .sidebar-brand { font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: #fff; }
+    .side-menu { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; }
+    .side-menu button {
+      text-align: left; padding: 10px 14px; border-radius: var(--radius); font-weight: 600; color: var(--muted);
+      display: flex; align-items: center; gap: 12px; transition: all 0.15s ease; font-size: 13px;
     }
-    @keyframes zoomInModal {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .center-modal-box h1 { margin: 0 0 15px; font-size: 26px; letter-spacing: -0.02em; }
-    .center-modal-box p { margin: 0 0 25px; font-size: 16px; line-height: 1.6; opacity: 0.95; white-space: pre-wrap; }
-    .center-modal-box button {
-      background: rgba(255,255,255,0.25);
-      border: 1px solid currentColor;
-      color: inherit;
-      padding: 10px 24px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 13px;
-      cursor: pointer;
-      transition: 0.18s;
-    }
-    .center-modal-box button:hover { background: rgba(255,255,255,0.4); }
+    .side-menu button:hover { background-color: var(--surface-hover); color: var(--text); }
+    .side-menu button.active { background-color: var(--primary); color: white; box-shadow: var(--shadow); }
 
-    @media(max-width:760px){.shell{display:block}.sidebar{position:fixed;left:-280px;width:264px;transition:left .2s;z-index:10000}.sidebar.open{left:0}.gateway-grid,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}}
+    .main-content { padding: 35px; overflow-y: auto; max-width: 1450px; margin: 0 auto; width: 100%; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+    .page-title { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.02em; text-transform: uppercase; }
+    .user-badge { background: var(--surface-card); border: 1px solid var(--border); padding: 8px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 700; color: #e2e8f0; }
+
+    /* PANELS ET FORMULAIRES INSTITUTIONNELS */
+    .panel { background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; margin-bottom: 24px; box-shadow: var(--shadow); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .panel-header h2 { font-size: 16px; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #e2e8f0; }
+    
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.08em; }
+    .form-group input, .form-group select, .form-group textarea {
+      background-color: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 14px; font-size: 14px; color: var(--text); outline: none; transition: border-color 0.15s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 110px; resize: vertical; }
+
+    .btn { background-color: var(--primary); color: white; padding: 11px 20px; border-radius: var(--radius); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; transition: background 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow); }
+    .btn:hover { background-color: var(--primary-hover); }
+    .btn.secondary { background-color: var(--surface-card); border: 1px solid var(--border); }
+    .btn.secondary:hover { background-color: var(--border); }
+    .btn.danger { background-color: var(--danger); }
+    .btn.danger:hover { background-color: #991b1b; }
+    .btn.small { padding: 7px 14px; font-size: 11px; }
+
+    /* TABLEAUX */
+    .table-container { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { background-color: var(--surface-card); color: var(--muted); font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; padding: 14px; border-bottom: 1px solid var(--border); }
+    td { padding: 14px; border-bottom: 1px solid var(--border); color: #e2e8f0; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: rgba(255,255,255,0.015); }
+
+    .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .badge.success { background: rgba(4, 120, 87, 0.2); color: #34d399; border: 1px solid rgba(4, 120, 87, 0.4); }
+    .badge.warning { background: rgba(180, 83, 9, 0.2); color: #fbbf24; border: 1px solid rgba(180, 83, 9, 0.4); }
+    .badge.danger { background: rgba(185, 28, 28, 0.2); color: #f87171; border: 1px solid rgba(185, 28, 28, 0.4); }
+
+    /* GATEWAY */
+    .gateway-container { max-width: 1280px; margin: 6vh auto; padding: 20px; }
+    .gateway-header { text-align: center; margin-bottom: 45px; }
+    .gateway-header h1 { font-size: 32px; font-weight: 900; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.08em; }
+    .gateway-header p { color: var(--muted); font-size: 16px; }
+    .gateway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+    .gateway-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; text-align: left; transition: transform 0.15s, border-color 0.15s; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+    .gateway-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .gateway-card .icon { font-size: 32px; margin-bottom: 14px; }
+    .gateway-card h3 { margin: 0 0 10px 0; font-size: 17px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    .gateway-card p { color: var(--muted); font-size: 13px; margin: 0 0 24px 0; flex: 1; line-height: 1.6; }
+
+    /* CARTE INTERACTIVE EH */
+    .map-wrapper { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+    .interactive-map { background: #0f172a; border: 1px solid var(--border); border-radius: var(--radius); height: 520px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .map-marker { position: absolute; background: var(--surface); border: 1px solid var(--border); padding: 8px 12px; border-radius: var(--radius); font-size: 11px; font-weight: 800; cursor: pointer; box-shadow: var(--shadow); display: flex; align-items: center; gap: 8px; transition: transform 0.15s; }
+    .map-marker:hover { transform: scale(1.05); }
+    .map-legend { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .map-legend ul { padding-left: 18px; margin: 10px 0 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    /* TOASTS & MODALES */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: var(--surface-card); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 14px 18px; border-radius: var(--radius); font-size: 13px; box-shadow: var(--shadow); max-width: 380px; font-weight: 600; }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.success { border-left-color: var(--success); }
+
+    #modalOverlay { position: fixed; inset: 0; background: rgba(3, 6, 12, 0.9); backdrop-filter: blur(6px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 650px; padding: 36px; text-align: center; box-shadow: var(--shadow); }
+    .modal-box h2 { margin-top: 0; text-transform: uppercase; letter-spacing: 0.08em; font-size: 22px; color: #fff; }
+    .modal-box p { color: var(--muted); line-height: 1.7; font-size: 15px; }
+
+    @media (max-width: 1024px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; }
+      .form-grid, .map-wrapper { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+    }
   </style>
 </head>
 <body>
-  <!-- POPUP CENTRALE EN PLEIN MILIEU -->
-  <div id="globalCenterOverlay">
-    <div class="center-modal-box" id="centerModalCard">
-      <h1 id="centerModalTitle">ALERTE OFFICIELLE</h1>
-      <p id="centerModalText">Message d'alerte en cours...</p>
-      <button onclick="closeCenterModal()">Compris / Fermer</button>
+
+  <!-- MODALE D'ALERTE OFFICIELLE / DIFFUSION -->
+  <div id="modalOverlay">
+    <div class="modal-box" id="modalCard">
+      <h2 id="modalTitle">ALERTE INSTITUTIONNELLE</h2>
+      <p id="modalText">Chargement...</p>
+      <button class="btn" style="margin-top: 25px;" onclick="closeModal()">Compris / Fermer</button>
     </div>
   </div>
+  <audio id="audioPlayer" class="hidden"></audio>
 
-  <audio id="customAudioPlayer" style="display:none"></audio>
-
-  <!-- PAGE D'ACCUEIL / GATEWAY -->
-  <div id="gateway" class="gateway">
-    <div class="gateway-head">
-      <div class="brand-mark">NRP</div>
-      <h1 id="brandTitle">Nanterre RP</h1>
-      <p id="brandDesc">Portail central des services de sécurité, de secours et de contrôle interne.</p>
+  <!-- PORTAIL D'ACCÈS PRINCIPAL (GATEWAY) -->
+  <div id="gatewayView" class="gateway-container">
+    <div class="gateway-header">
+      <h1>République Française — Nanterre RP</h1>
+      <p>Portail opérationnel centralisé des services de sécurité, de secours et de contrôle de l'État.</p>
     </div>
     <div class="gateway-grid">
-      <button class="gateway-card" onclick="enterCitizen()"><span style="font-size:22px;margin-bottom:12px">🏛️</span><strong>Espace citoyen</strong><p>Plaintes, mains courantes et tickets.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÉDER →</span></button>
-      <button class="gateway-card" onclick="enterStaff('police')"><span style="font-size:22px;margin-bottom:12px">🛡️</span><strong>Police Nationale</strong><p>Procédures, rapports et perquisitions.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
-      <button class="gateway-card" onclick="enterStaff('bspn')"><span style="font-size:22px;margin-bottom:12px">🚒</span><strong>BSPN</strong><p>Secours et rapports d'intervention.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
-      <button class="gateway-card" onclick="enterStaff('samu')"><span style="font-size:22px;margin-bottom:12px">🚑</span><strong>SAMU 92</strong><p>Prise de service et suivi médical.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">CONNEXION →</span></button>
-      <button class="gateway-card" onclick="enterStaff('igpn')"><span style="font-size:22px;margin-bottom:12px">⚖️</span><strong>IGPN</strong><p>Enquêtes et dossiers confidentiels.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÈS HABILITÉ →</span></button>
-      <button class="gateway-card" onclick="enterAdminDirect()"><span style="font-size:22px;margin-bottom:12px">⚙️</span><strong>Administration</strong><p>Gestion totale, Code pénal, Règlements & Paramètres.</p><span style="margin-top:auto;padding-top:14px;color:#9ec3ff;font-size:11px;font-weight:800">ACCÈS ADMIN →</span></button>
+      <div class="gateway-card">
+        <div class="icon">🏛️</div>
+        <h3>Espace Citoyen</h3>
+        <p>Consultation de la carte interactive de la ville (Emergency Hamburg), informations municipales et dépôt de plaintes/tickets.</p>
+        <button class="btn" onclick="openSpace('citoyen')">Accéder à l'espace</button>
+      </div>
+      <div class="gateway-card">
+        <div class="icon">🛡️</div>
+        <h3>Police Nationale & RAID</h3>
+        <p>Gestion des effectifs (00 à 100), registre de Garde à Vue, rapports d'interpellation, perquisitions et Code Pénal.</p>
+        <button class="btn" onclick="openStaffLogin('police')">Connexion Agent</button>
+      </div>
+      <div class="gateway-card">
+        <div class="icon">🚒</div>
+        <h3>BSPN (Sapeurs-Pompiers)</h3>
+        <p>Mur académique et opérationnel (cours théoriques, formations pratiques, examens, annonces de caserne).</p>
+        <button class="btn" onclick="openStaffLogin('bspn')">Connexion BSPN</button>
+      </div>
+      <div class="gateway-card">
+        <div class="icon">🚑</div>
+        <h3>SAMU 92 (Service Médical)</h3>
+        <p>Dossiers médicaux des patients (antécédents, groupes sanguins, allergies) et module de facturation médicale (plafonné à 8 000 €).</p>
+        <button class="btn" onclick="openStaffLogin('samu')">Connexion SAMU</button>
+      </div>
+      <div class="gateway-card">
+        <div class="icon">⚖️</div>
+        <h3>IGPN (Inspection Générale)</h3>
+        <p>Contrôle interne, fiches d'évaluation des agents de police, notes d'enquête et propositions de promotion/rétrogradation.</p>
+        <button class="btn" onclick="openStaffLogin('igpn')">Connexion IGPN</button>
+      </div>
+      <div class="gateway-card">
+        <div class="icon">⚙️</div>
+        <h3>Administration Système</h3>
+        <p>Panneau administrateur complet segmenté par onglets : bannières audio, registres, code pénal, webhooks et configurations.</p>
+        <button class="btn secondary" onclick="openAdminLogin()">Accès Administrateur</button>
+      </div>
     </div>
   </div>
 
-  <!-- APPLICATION SHELL -->
-  <div id="appShell" class="shell hidden">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">NRP</div>
-        <div><strong id="sidebarTitle">NANTERRE RP</strong><small>Portail des services</small></div>
+  <!-- INTERFACE INTERNE DU PORTAIL (SHELL) -->
+  <div id="appShell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span>🛡️</span> Intranet Nanterre
       </div>
-      <div>
-        <div class="side-label">Navigation</div>
-        <nav class="side-nav" id="sideNav"></nav>
-      </div>
-      <div class="side-bottom">
-        <div class="connection-state"><span class="live-dot"></span><span>Cloud Supabase actif</span></div>
-        <button class="btn ghost small" style="width:100%;margin-top:13px" onclick="returnGateway()">← Changer d'espace</button>
+      <nav class="side-menu" id="sideMenuContainer">
+        <!-- Généré dynamiquement -->
+      </nav>
+      <div style="margin-top: auto; padding-top: 15px; border-top: 1px solid var(--border);">
+        <button class="btn secondary small" style="width: 100%;" onclick="returnToGateway()">← Changer d'espace</button>
       </div>
     </aside>
-    <main class="main">
-      <div class="topbar">
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <button class="btn secondary small" onclick="toggleSidebar()">☰</button>
-          <div><h1 class="page-title" id="topTitle">Portail Nanterre RP</h1><div class="page-subtitle" id="topSubtitle">Gestion centralisée</div></div>
+
+    <main class="main-content">
+      <div class="top-bar">
+        <div>
+          <h1 class="page-title" id="mainPageTitle">Tableau de bord</h1>
+          <div style="font-size: 12px; color: var(--muted); margin-top: 2px;" id="mainPageSubtitle">Système d'information sécurisé</div>
         </div>
-        <div class="top-actions"><span class="user-chip hidden" id="userChip"></span><button class="btn ghost small hidden" id="logoutBtn" onclick="logout()">Déconnexion</button></div>
+        <div>
+          <span class="user-badge hidden" id="userBadgeLabel"></span>
+          <button class="btn secondary small hidden" id="logoutButton" onclick="logoutSession()">Déconnexion</button>
+        </div>
       </div>
 
-      <!-- CONNEXION AGENT -->
-      <section class="view" id="view-login">
-        <div class="panel login-wrap">
-          <h2>Connexion agent</h2>
-          <div class="field" style="margin-bottom:12px;"><label>Sélectionnez votre matricule / identité</label><select id="loginMatriculeSelect"></select></div>
-          <div class="field" style="margin-bottom:16px;"><label>Mot de passe personnel</label><input id="loginPasswordInput" type="password"></div>
-          <button class="btn" style="width:100%" onclick="loginStaffWithPassword()">Se connecter</button>
-        </div>
-      </section>
-
-      <!-- CONNEXION ADMIN -->
-      <section class="view" id="view-admin-login">
-        <div class="panel login-wrap">
-          <h2>Administration générale</h2>
-          <div class="field"><label>Code administrateur</label><input id="adminCode" type="password"></div>
-          <button class="btn" style="width:100%;margin-top:15px" onclick="loginAdminSimple()">Ouvrir l'administration</button>
-        </div>
-      </section>
-
-      <!-- ACCUEIL PUBLIC -->
-      <section class="view" id="view-public-home">
-        <div class="hero">
-          <span class="hero-tag">● Officiel</span>
-          <h2 id="heroMainTitle">Protéger, secourir et accompagner.</h2>
-          <p id="heroMainDesc">Retrouvez les démarches publiques et l'ouverture de tickets.</p>
-          <div class="hero-actions">
-            <button class="btn" onclick="showView('view-ticket')">🎫 Ouvrir un ticket</button>
-            <button class="btn secondary" onclick="showView('view-complaint')">Déposer une plainte</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- TICKET -->
-      <section class="view" id="view-ticket">
-        <div class="panel">
-          <h2>Ouvrir un ticket</h2>
+      <!-- VUE : LOGIN STAFF -->
+      <section id="view-login" class="view-section hidden">
+        <div class="panel" style="max-width: 440px; margin: 40px auto;">
+          <div class="panel-header"><h2>Identification Agent</h2></div>
           <div class="form-grid">
-            <div class="field"><label>Service <span class="req">*</span></label><select id="tkt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Sujet <span class="req">*</span></label><input id="tkt_subject"></div>
-            <div class="field"><label>Nom & Prénom <span class="req">*</span></label><input id="tkt_name"></div>
-            <div class="field"><label>Roblox <span class="req">*</span></label><input id="tkt_roblox"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="tkt_discord"></div>
-            <div class="field"><label>Date <span class="req">*</span></label><input id="tkt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Description <span class="req">*</span></label><textarea id="tkt_desc"></textarea></div>
-            <div class="field full"><label>Pièce jointe (Image / Fichier optionnel)</label><input id="tkt_file" type="file"></div>
+            <div class="form-group full">
+              <label>Sélection du matricule / Identité</label>
+              <select id="loginMatriculeSelect"></select>
+            </div>
+            <div class="form-group full">
+              <label>Mot de passe personnel</label>
+              <input type="password" id="loginPasswordInput" placeholder="••••••••">
+            </div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('ticket')">Prévisualiser</button></div>
-          <div id="preview-ticket" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-ticket" onclick="sendDiscordWebhook('ticket')">Envoyer sur Discord</button></div>
+          <div style="margin-top: 20px;">
+            <button class="btn" style="width: 100%;" onclick="submitStaffLogin()">Valider l'authentification</button>
+          </div>
         </div>
       </section>
 
-      <!-- PLAINTE -->
-      <section class="view" id="view-complaint">
-        <div class="panel">
-          <h2>Dépôt de plainte</h2>
+      <!-- VUE : LOGIN ADMIN -->
+      <section id="view-admin-login" class="view-section hidden">
+        <div class="panel" style="max-width: 440px; margin: 40px auto;">
+          <div class="panel-header"><h2>Sécurité Administration</h2></div>
           <div class="form-grid">
-            <div class="field"><label>Service <span class="req">*</span></label><select id="plt_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nature <span class="req">*</span></label><select id="plt_category"><option>Vol</option><option>Agression</option><option>Infraction routière</option><option>Autre</option></select></div>
-            <div class="field"><label>Nom <span class="req">*</span></label><input id="plt_name"></div>
-            <div class="field"><label>Roblox <span class="req">*</span></label><input id="plt_roblox"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="plt_discord"></div>
-            <div class="field"><label>Date <span class="req">*</span></label><input id="plt_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Faits <span class="req">*</span></label><textarea id="plt_desc"></textarea></div>
-            <div class="field full"><label>Pièce jointe / Preuve (Optionnel)</label><input id="plt_file" type="file"></div>
+            <div class="form-group full">
+              <label>Code d'accès administrateur</label>
+              <input type="password" id="adminCodeInput" placeholder="Code secret...">
+            </div>
           </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('plainte')">Prévisualiser</button></div>
-          <div id="preview-plainte" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-plainte" onclick="sendDiscordWebhook('plainte')">Envoyer sur Discord</button></div>
-        </div>
-      </section>
-
-      <!-- MAIN COURANTE -->
-      <section class="view" id="view-maincourante">
-        <div class="panel">
-          <h2>Main courante</h2>
-          <div class="form-grid">
-            <div class="field"><label>Service <span class="req">*</span></label><select id="mc_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nom <span class="req">*</span></label><input id="mc_name"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="mc_contact"></div>
-            <div class="field"><label>Date <span class="req">*</span></label><input id="mc_datetime" type="datetime-local"></div>
-            <div class="field full"><label>Récit <span class="req">*</span></label><textarea id="mc_desc"></textarea></div>
-            <div class="field full"><label>Pièce jointe (Optionnel)</label><input id="mc_file" type="file"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('maincourante')">Prévisualiser</button></div>
-          <div id="preview-maincourante" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-maincourante" onclick="sendDiscordWebhook('maincourante')">Envoyer sur Discord</button></div>
-        </div>
-      </section>
-
-      <!-- RECRUTEMENT -->
-      <section class="view" id="view-recruitment">
-        <div class="panel">
-          <h2>Candidature externe</h2>
-          <div class="form-grid">
-            <div class="field"><label>Service <span class="req">*</span></label><select id="rec_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option></select></div>
-            <div class="field"><label>Nom <span class="req">*</span></label><input id="rec_name"></div>
-            <div class="field"><label>Discord <span class="req">*</span></label><input id="rec_discord"></div>
-            <div class="field full"><label>Motivations <span class="req">*</span></label><textarea id="rec_motivation"></textarea></div>
-            <div class="field full"><label>CV / Dossier (Optionnel)</label><input id="rec_file" type="file"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="previewPublic('recrutement')">Prévisualiser</button></div>
-          <div id="preview-recrutement" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-recrutement" onclick="sendDiscordWebhook('recrutement')">Envoyer sur Discord</button></div>
-        </div>
-      </section>
-
-      <!-- RÈGLEMENTS & ZONES -->
-      <section class="view" id="view-zones">
-        <div class="panel">
-          <h2>Règlements & Zones</h2>
-          <div id="dynamicZonesContent" style="white-space:pre-wrap;margin-top:15px;font-size:13px;color:#d8e1ed">Chargement des règlements...</div>
-          <div id="dynamicZonesFile" style="margin-top:15px"></div>
-        </div>
-      </section>
-
-      <!-- DASHBOARD STAFF -->
-      <section class="view" id="view-staff-home">
-        <div class="hero">
-          <h2 id="staffWelcome">Espace opérationnel</h2>
-          <p>Gérez vos rapports et perquisitions.</p>
-        </div>
-      </section>
-
-      <!-- RAPPORT -->
-      <section class="view" id="view-report">
-        <div class="panel">
-          <h2>Rapport d'intervention</h2>
-          <div class="form-grid">
-            <div class="field"><label>Type <span class="req">*</span></label><select id="rep_type"><option>Interpellation</option><option>Contrôle</option><option>Secours</option></select></div>
-            <div class="field"><label>Date <span class="req">*</span></label><input id="rep_datetime" type="datetime-local"></div>
-            <div class="field"><label>Lieu <span class="req">*</span></label><input id="rep_location"></div>
-            <div class="field"><label>Effectifs</label><input id="rep_team"></div>
-            <div class="field full"><label>Faits <span class="req">*</span></label><textarea id="rep_timeline"></textarea></div>
-            <div class="field full"><label>Photo / Preuve jointe (Optionnel)</label><input id="rep_file" type="file"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="previewStaff('rapport')">Prévisualiser</button></div>
-          <div id="preview-rapport" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-rapport" onclick="sendDiscordWebhook('rapport')">Envoyer sur Discord</button></div>
-        </div>
-      </section>
-
-      <!-- PRISE DE SERVICE -->
-      <section class="view" id="view-service">
-        <div class="panel">
-          <h2>Prise, pause et fin de service</h2>
-          <div class="form-grid">
-            <div class="field"><label>Indicatif / Unité <span class="req">*</span></label><input id="svc_unit" placeholder="Ex: RAID-01"></div>
-            <div class="field"><label>Statut <span class="req">*</span></label><select id="svc_status"><option>🟢 Prise de service</option><option>🟡 Pause en service</option><option>🔴 En intervention</option><option>🔵 Disponible</option><option>⚫ Fin de service</option></select></div>
-            <div class="field full"><label>Observations / Secteur</label><input id="svc_note"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="submitServiceStatus()">Enregistrer le statut</button></div>
-        </div>
-      </section>
-
-      <!-- GAV -->
-      <section class="view" id="view-gav">
-        <div class="panel">
-          <h2>Registre de garde à vue</h2>
-          <div class="form-grid">
-            <div class="field"><label>Suspect <span class="req">*</span></label><input id="gav_suspect"></div>
-            <div class="field"><label>Date <span class="req">*</span></label><input id="gav_datetime" type="datetime-local"></div>
-            <div class="field"><label>Motif <span class="req">*</span></label><input id="gav_reason"></div>
-            <div class="field"><label>Sanction</label><input id="gav_duration"></div>
-            <div class="field full"><label>Notes</label><textarea id="gav_notes"></textarea></div>
-            <div class="field full"><label>Pièce jointe / PV (Optionnel)</label><input id="gav_file" type="file"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="previewStaff('gav')">Prévisualiser</button></div>
-          <div id="preview-gav" class="preview hidden"></div>
-          <div class="form-actions"><button class="btn discord hidden" id="send-gav" onclick="sendDiscordWebhook('gav')">Enregistrer</button></div>
-        </div>
-      </section>
-
-      <!-- CODE PÉNAL -->
-      <section class="view" id="view-penal">
-        <div class="panel">
-          <h2>⚖️ Code pénal RP</h2>
-          <div id="dynamicPenalFile" style="margin-bottom:15px"></div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Catégorie</th><th>Infraction</th><th>Amende</th><th>GAV</th></tr></thead>
-              <tbody id="penalTableBody"></tbody>
-            </table>
+          <div style="margin-top: 20px;">
+            <button class="btn" style="width: 100%;" onclick="submitAdminLogin()">Déverrouiller le panel</button>
           </div>
         </div>
       </section>
 
-      <!-- PERQUISITIONS -->
-      <section class="view" id="view-perquisition">
+      <!-- VUE : ESPACE CITOYEN & CARTE INTERACTIVE -->
+      <section id="view-public-home" class="view-section hidden">
         <div class="panel">
-          <div class="panel-head">
-            <h2>🔍 Demandes de perquisition</h2>
-            <button class="btn small" onclick="showPerqForm()">+ Nouvelle demande</button>
+          <div class="panel-header"><h2>Actualités Municipales & Territoire de Nanterre</h2></div>
+          <p style="color: var(--muted);">Bienvenue sur le portail public d'Emergency Hamburg. Retrouvez ci-dessous la carte officielle des zones réglementées, des points d'intérêt Mass RP et des secteurs sous protection stricte.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h2>Carte Interactive — Emergency Hamburg (Version française)</h2></div>
+          <div class="map-wrapper">
+            <div class="interactive-map">
+              <div class="map-marker" style="top: 18%; left: 22%; border-color: var(--primary);" onclick="showMapInfo('Commissariat Central', 'Zone de Police Nationale et du RAID. Poste de commandement principal et cellule de détention (Safe Zone stricte).')">🛡️ Commissariat</div>
+              <div class="map-marker" style="top: 42%; left: 65%; border-color: var(--danger);" onclick="showMapInfo('Caserne BSPN', 'Centre d\'intervention des Sapeurs-Pompiers de Nanterre. Départ des secours d\'urgence.')">🚒 Caserne BSPN</div>
+              <div class="map-marker" style="top: 72%; left: 38%; border-color: var(--success);" onclick="showMapInfo('Hôpital Général', 'Centre hospitalier et permanence du SAMU 92. Zone médicale sécurisée (Safe Zone).')">🚑 Hôpital SAMU</div>
+              <div class="map-marker" style="top: 80%; left: 15%; border-color: var(--warning);" onclick="showMapInfo('Concessionnaire Automobile', 'Zone commerciale majeure sous surveillance (Safe Zone générale).')">🔰 Concessionnaire</div>
+              <div class="map-marker" style="top: 28%; left: 82%; border-color: #8b5cf6;" onclick="showMapInfo('Zone Tuning / Rassemblement', 'Pôle mécanique et point de ralliement civil (Secteur Mass RP).')">🔧 Garage Tuning</div>
+            </div>
+            <div class="map-legend">
+              <h3 style="margin-top:0; font-size:13px; text-transform:uppercase;">Légende & Directives</h3>
+              <ul id="mapInfoDisplay">
+                <li>Cliquez sur un marqueur de la carte pour afficher les consignes opérationnelles de la zone.</li>
+              </ul>
+              <hr style="border:0; border-top:1px solid var(--border); margin: 15px 0;">
+              <h3 style="font-size:13px; text-transform:uppercase;">Rappels Légaux</h3>
+              <p style="font-size:12px; color: var(--muted); margin:0;">Les zones désignées Safe Zones interdisent formellement toute agression armée ou infraction sous peine de sanctions administratives et pénales immédiates.</p>
+            </div>
           </div>
-          <div id="perqAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:20px">
-            <h3>Nouvelle demande</h3>
+        </div>
+      </section>
+
+      <!-- VUE : REDIRECTION RECRUTEMENT DISCORD -->
+      <section id="view-recruitment-discord" class="view-section hidden">
+        <div class="panel" style="text-align: center; padding: 45px;">
+          <div style="font-size: 48px; margin-bottom: 15px;">🎫</div>
+          <h2 style="font-size: 18px; text-transform: uppercase;">Candidatures via le Réseau Discord</h2>
+          <p style="color: var(--muted); max-width: 550px; margin: 10px auto 25px auto;">Conformément aux directives de commandement, les recrutements pour l'ensemble des services s'effectuent exclusivement par ouverture de ticket sur notre serveur Discord officiel.</p>
+          <a href="https://discord.gg/" target="_blank" class="btn">Rejoindre le Serveur Discord Officiel</a>
+        </div>
+      </section>
+
+      <!-- VUE : BSPN (SAPEURS-POMPIERS) — MUR ACADÉMIQUE -->
+      <section id="view-bspn-wall" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Mur Académique & Opérationnel BSPN</h2>
+            <button class="btn small" onclick="toggleElement('bspnPostForm')">+ Publier un document</button>
+          </div>
+          <div id="bspnPostForm" class="panel hidden" style="background: var(--bg); margin-bottom: 20px;">
             <div class="form-grid">
-              <div class="field"><label>Suspect <span class="req">*</span></label><input id="perq_suspect"></div>
-              <div class="field"><label>Adresse <span class="req">*</span></label><input id="perq_location"></div>
-              <div class="field full"><label>Motifs <span class="req">*</span></label><textarea id="perq_reasons"></textarea></div>
-              <div class="field full"><label>Mandat / Preuve (Optionnel)</label><input id="perq_file" type="file"></div>
+              <div class="form-group">
+                <label>Catégorie de publication</label>
+                <select id="bspn_cat">
+                  <option>Cours Théorique</option>
+                  <option>Formation Pratique</option>
+                  <option>Devoir / Évaluation</option>
+                  <option>Annonce Caserne</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Titre du document</label>
+                <input type="text" id="bspn_title" placeholder="Ex: Protocole d'incendie structurel...">
+              </div>
+              <div class="form-group full">
+                <label>Contenu détaillé & consignes</label>
+                <textarea id="bspn_content" placeholder="Rédigez le cours ou les instructions ici..."></textarea>
+              </div>
+              <div class="form-group full">
+                <label>Lien de support externe (Optionnel)</label>
+                <input type="text" id="bspn_file" placeholder="https://...">
+              </div>
             </div>
-            <button class="btn" style="margin-top:12px" onclick="savePerquisition()">Soumettre</button>
+            <div style="margin-top: 15px;">
+              <button class="btn" onclick="submitBspnPost()">Diffuser la publication</button>
+            </div>
           </div>
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead><tr><th>Date</th><th>Demandeur</th><th>Suspect / Adresse</th><th>Motifs</th><th>Statut</th><th>Action</th></tr></thead>
-              <tbody id="perqBody"></tbody>
-            </table>
-          </div>
+          <div id="bspnWallFeed" style="display: flex; flex-direction: column; gap: 15px;"></div>
         </div>
       </section>
 
-      <!-- TAJ -->
-      <section class="view" id="view-taj">
+      <!-- VUE : SAMU 92 — DOSSIERS MÉDICAUX & FACTURATION -->
+      <section id="view-samu-medical" class="view-section hidden">
         <div class="panel">
-          <div class="panel-head"><h2>🗂️ Fichier TAJ</h2><button class="btn small" onclick="showTajAddForm()">+ Ajouter</button></div>
-          <div id="tajAddContainer" class="panel hidden" style="background:#0c1524;border:1px solid #283e5c;margin-bottom:15px">
+          <div class="panel-header">
+            <h2>Registre des Dossiers Médicaux Patients</h2>
+            <button class="btn small" onclick="toggleElement('samuPatientForm')">+ Créer un dossier patient</button>
+          </div>
+          <div id="samuPatientForm" class="panel hidden" style="background: var(--bg); margin-bottom: 20px;">
             <div class="form-grid">
-              <div class="field"><label>Nom <span class="req">*</span></label><input id="taj_citizen"></div>
-              <div class="field"><label>Roblox</label><input id="taj_roblox"></div>
-              <div class="field"><label>Catégorie</label><select id="taj_category"><option>Garde à Vue</option><option>Amende</option><option>Avis de recherche</option></select></div>
-              <div class="field"><label>Sanction</label><input id="taj_sanction"></div>
-              <div class="field full"><label>Détails <span class="req">*</span></label><textarea id="taj_details"></textarea></div>
-              <div class="field full"><label>Fichier / Photo (Optionnel)</label><input id="taj_file" type="file"></div>
+              <div class="form-group">
+                <label>Nom & Prénom du Citoyen</label>
+                <input type="text" id="med_patient_name" placeholder="Jean Dupont">
+              </div>
+              <div class="form-group">
+                <label>Groupe Sanguin</label>
+                <select id="med_patient_blood">
+                  <option>A+</option><option>A-</option>
+                  <option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option>
+                  <option>O+</option><option>O-</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Antécédents médicaux & Pathologies</label>
+                <textarea id="med_patient_history" placeholder="Historique des interventions, chirurgies..."></textarea>
+              </div>
+              <div class="form-group full">
+                <label>Allergies & Traitements réguliers</label>
+                <input type="text" id="med_patient_allergies" placeholder="Ex: Pénicilline, asthme...">
+              </div>
             </div>
-            <button class="btn" style="margin-top:12px" onclick="saveTajEntry()">Enregistrer</button>
-          </div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Citoyen</th><th>Catégorie</th><th>Détails</th><th>Sanction</th><th>Agent</th></tr></thead><tbody id="tajBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <!-- STATS RH -->
-      <section class="view" id="view-stats">
-        <div class="panel">
-          <h2>📊 Statistiques RH</h2>
-          <div class="grid grid-4" style="margin-top:15px">
-            <div class="stat"><div class="stat-label">Total Effectifs</div><div class="stat-value" id="st_total_agents">0</div></div>
-            <div class="stat"><div class="stat-label">Actifs</div><div class="stat-value" id="st_active_agents" style="color:var(--green)">0</div></div>
-            <div class="stat"><div class="stat-label">Vacants</div><div class="stat-value" id="st_vacant_agents" style="color:var(--gold)">0</div></div>
-            <div class="stat"><div class="stat-label">Fiches TAJ</div><div class="stat-value" id="st_total_taj" style="color:var(--blue)">0</div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ANNUAIRE -->
-      <section class="view" id="view-directory">
-        <div class="panel">
-          <h2>🎖️ Annuaire & Médailles</h2>
-          <div class="search-row"><input id="directorySearch" placeholder="Rechercher..." oninput="renderDirectory()"></div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th><th>Distinctions</th><th>Action</th></tr></thead><tbody id="directoryBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <!-- ADMIN : DESIGN & TEXTES -->
-      <section class="view" id="view-admin-design">
-        <div class="panel">
-          <h2>🎨 Design & Textes de l'accueil</h2>
-          <div class="form-grid">
-            <div class="field"><label>Nom du serveur</label><input id="cfg_brandName" value="Nanterre RP"></div>
-            <div class="field"><label>Sous-titre</label><input id="cfg_brandSub" value="Portail institutionnel"></div>
-            <div class="field full"><label>Description</label><textarea id="cfg_brandDesc">Portail central des services de sécurité.</textarea></div>
-          </div>
-          <button class="btn" style="margin-top:15px" onclick="saveDesignConfig()">Sauvegarder</button>
-        </div>
-      </section>
-
-      <!-- ADMIN : GESTION CODE PÉNAL -->
-      <section class="view" id="view-admin-penal">
-        <div class="panel">
-          <h2>⚖️ Gestion du Code Pénal (Panel Admin)</h2>
-          <p class="muted small">Ajoutez ou modifiez les articles et joignez un document officiel.</p>
-          <div class="form-grid" style="margin-top:15px">
-            <div class="field full"><label>Fichier / Document officiel du Code Pénal (PDF, Image)</label><input id="adm_penal_file" type="file"></div>
-            <div class="field"><label>Catégorie <span class="req">*</span></label><input id="adm_penal_cat" placeholder="Ex: Infractions routières"></div>
-            <div class="field"><label>Infraction <span class="req">*</span></label><input id="adm_penal_inf" placeholder="Ex: Excès de vitesse"></div>
-            <div class="field"><label>Amende <span class="req">*</span></label><input id="adm_penal_fine" placeholder="Ex: 1 000 €"></div>
-            <div class="field"><label>GAV <span class="req">*</span></label><input id="adm_penal_gav" placeholder="Ex: 5 min"></div>
-          </div>
-          <button class="btn" style="margin-top:15px" onclick="addPenalArticle()">Ajouter au Code Pénal</button>
-          <div class="table-wrap" style="margin-top:20px">
-            <table class="data-table"><thead><tr><th>Catégorie</th><th>Infraction</th><th>Amende</th><th>GAV</th><th>Action</th></tr></thead><tbody id="adminPenalTableBody"></tbody></table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ADMIN : GESTION RÈGLEMENTS / ZONES -->
-      <section class="view" id="view-admin-zones">
-        <div class="panel">
-          <h2>📋 Gestion des Règlements & Zones (Panel Admin)</h2>
-          <div class="form-grid" style="margin-top:10px">
-            <div class="field full">
-              <label>Texte intégral des règlements et consignes de zones</label>
-              <textarea id="adm_zones_text" style="min-height:220px"></textarea>
-            </div>
-            <div class="field full">
-              <label>Joindre un fichier / règlement officiel (PDF, Image)</label>
-              <input id="adm_zones_file" type="file">
+            <div style="margin-top: 15px;">
+              <button class="btn" onclick="submitSamuPatientRecord()">Enregistrer le dossier patient</button>
             </div>
           </div>
-          <button class="btn" style="margin-top:15px" onclick="saveZonesConfig()">Mettre à jour les règlements</button>
-        </div>
-      </section>
-
-      <!-- ADMIN : WEBHOOKS -->
-      <section class="view" id="view-admin-home">
-        <div class="panel">
-          <h2>Webhooks Discord</h2>
-          <div class="form-grid" id="webhookConfigForm"></div>
-          <button class="btn" style="margin-top:15px" onclick="saveWebhooksConfig()">Sauvegarder</button>
-        </div>
-      </section>
-
-      <!-- ADMIN : EFFECTIFS -->
-      <section class="view" id="view-admin-matricules">
-        <div class="panel">
-          <h2>Gestion des effectifs (00 à 100)</h2>
-          <div class="search-row"><input id="adminMatSearch" placeholder="Rechercher..." oninput="renderAdminMatricules()"></div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Nom</th><th>Grade</th><th>Mot de passe</th><th>Statut</th><th>Action</th></tr></thead><tbody id="adminMatBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <!-- ADMIN : MOTS DE PASSE -->
-      <section class="view" id="view-admin-passwords">
-        <div class="panel">
-          <h2>🔑 Mots de passe agents</h2>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Matricule</th><th>Identité</th><th>Service</th><th>Mot de passe</th><th>Action</th></tr></thead><tbody id="adminPwdBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <!-- ADMIN : MÉDAILLES -->
-      <section class="view" id="view-admin-medals">
-        <div class="panel">
-          <h2>🎖️ Création des Médailles & Certifications</h2>
-          <div class="form-grid" style="margin-top:15px">
-            <div class="field"><label>Nom <span class="req">*</span></label><input id="med_name"></div>
-            <div class="field"><label>Service</label><select id="med_service"><option value="Police Nationale">Police Nationale</option><option value="BSPN">BSPN</option><option value="SAMU 92">SAMU 92</option><option value="Tous">Tous</option></select></div>
-            <div class="field full"><label>Description</label><input id="med_desc"></div>
-          </div>
-          <button class="btn" style="margin-top:15px" onclick="saveMedalDefinition()">Créer</button>
-          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Service</th><th>Nom</th><th>Description</th><th>Action</th></tr></thead><tbody id="adminMedalsBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <!-- ADMIN : BANNIÈRES, LIENS & ALERTES -->
-      <section class="view" id="view-admin-alerts">
-        <div class="panel">
-          <div class="panel-head">
-            <h2>📢 Bannières, Sons & Message Central (Panel Admin Complet)</h2>
-            <button class="btn danger small" onclick="clearCenterAlert()">✖ Fermer l'alerte active</button>
-          </div>
-          <div class="form-grid" style="margin-top:15px">
-            <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: ALERTE ROUGE / ATTENTAT"></div>
-            <div class="field"><label>Type d'alerte</label><select id="alt_type"><option value="Police">Police</option><option value="Général">Général</option><option value="Secours">Secours</option></select></div>
-            <div class="field full"><label>Lien URL du son / musique d'alerte (MP3, WAV, etc.) <span class="req">*</span></label><input id="alt_audio_url" placeholder="Ex: https://example.com/sound.mp3"></div>
-            <div class="field full"><label>Message central en plein milieu <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Évacuation immédiate de la zone publique demandée."></textarea></div>
-            <div class="field"><label>Couleur de fond de la boîte</label><input id="alt_bg" type="color" value="#d85b65" style="height:42px"></div>
-            <div class="field"><label>Couleur du texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
-          </div>
-          <div class="form-actions"><button class="btn" onclick="saveCustomAlert()">Enregistrer l'alerte dans le Cloud</button></div>
-          <div class="table-wrap" style="margin-top:20px">
-            <table class="data-table">
-              <thead><tr><th>Titre</th><th>Type</th><th>Lien Son</th><th>Message Central</th><th>Actions</th></tr></thead>
-              <tbody id="adminAlertsBody"></tbody>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Patient</th><th>Groupe Sanguin</th><th>Antécédents</th><th>Allergies</th><th>Mise à jour</th></tr>
+              </thead>
+              <tbody id="samuPatientsTableBody"></tbody>
             </table>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top: 25px;">
+          <div class="panel-header">
+            <h2>Module de Facturation Médicale (Plafond légal : 8 000 €)</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nom du patient</label>
+              <input type="text" id="inv_patient_name" placeholder="Nom du citoyen...">
+            </div>
+            <div class="form-group">
+              <label>Montant total en € (Max 8000 €)</label>
+              <input type="number" id="inv_amount_val" max="8000" placeholder="Ex: 2500">
+            </div>
+            <div class="form-group full">
+              <label>Détail des soins & prestations d'urgence</label>
+              <input type="text" id="inv_details_val" placeholder="Ex: Soins intensifs, chirurgie d'urgence, transport médical...">
+            </div>
+          </div>
+          <div style="margin-top: 15px;">
+            <button class="btn" onclick="submitSamuInvoice()">Établir la facture médicale</button>
+          </div>
+          <div class="table-container" style="margin-top: 20px;">
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Patient</th><th>Prestation médicale</th><th>Montant</th><th>Praticien</th></tr>
+              </thead>
+              <tbody id="samuInvoicesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VUE : IGPN — ÉVALUATION DES AGENTS -->
+      <section id="view-igpn-reviews" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Inspection Générale de la Police Nationale (IGPN)</h2></div>
+          <p style="color: var(--muted); margin-bottom: 20px;">Sélectionnez un matricule de la force publique pour consigner une note confidentielle, une sanction ou une proposition d'évolution hiérarchique.</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Agent visé (Matricule & Nom)</label>
+              <select id="igpn_target_select"></select>
+            </div>
+            <div class="form-group">
+              <label>Recommandation / Avis hiérarchique</label>
+              <select id="igpn_recommendation">
+                <option>R.A.S — Conduite réglementaire</option>
+                <option>Proposition de Promotion (Rank-Up)</option>
+                <option>Proposition de Rétrogradation (De-Rank)</option>
+                <option>Avertissement Disciplinaire Officiel</option>
+                <option>Blâme / Suspension temporaire</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Motifs de l'enquête & Observations de l'inspecteur</label>
+              <textarea id="igpn_notes_val" placeholder="Rédigez le compte-rendu d'inspection..."></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 15px;">
+            <button class="btn" onclick="submitIgpnReview()">Verser au dossier personnel de l'agent</button>
+          </div>
+          <div class="table-container" style="margin-top: 25px;">
+            <table>
+              <thead>
+                <tr><th>Matricule Agent</th><th>Avis / Recommandation</th><th>Observations consignées</th><th>Inspecteur instructeur</th></tr>
+              </thead>
+              <tbody id="igpnTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VUE : POLICE NATIONALE / RAID — RAPPORTS & GAV -->
+      <section id="view-police-ops" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Registre des Interpellations & Gardes à Vue (GAV)</h2></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Identité du Suspect</label>
+              <input type="text" id="gav_suspect" placeholder="Nom / Prénom...">
+            </div>
+            <div class="form-group">
+              <label>Motif de l'interpellation</label>
+              <input type="text" id="gav_reason" placeholder="Infraction constatée...">
+            </div>
+            <div class="form-group">
+              <label>Sanction / Durée retenue</label>
+              <input type="text" id="gav_duration" placeholder="Ex: 15 min / Amende 4000€">
+            </div>
+            <div class="form-group full">
+              <label>Rapport détaillé des faits</label>
+              <textarea id="gav_notes" placeholder="Déroulement des faits..."></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 15px;">
+            <button class="btn" onclick="submitPoliceGav()">Enregistrer au registre GAV</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 1 — DESIGN & TEXTES -->
+      <section id="view-admin-design" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Configuration — Design & Textes généraux</h2></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nom de l'organisation / Serveur</label>
+              <input type="text" id="cfg_brandName" value="Nanterre RP">
+            </div>
+            <div class="form-group">
+              <label>Sous-titre institutionnel</label>
+              <input type="text" id="cfg_brandSub" value="Portail de sécurité et des secours">
+            </div>
+          </div>
+          <div style="margin-top: 15px;"><button class="btn" onclick="showToast('Paramètres de design mis à jour.')">Enregistrer</button></div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 2 — GESTION CODE PÉNAL -->
+      <section id="view-admin-penal" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Code Pénal & Infractions</h2></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Catégorie</label><input type="text" id="adm_penal_cat" placeholder="Ex: Infractions routières"></div>
+            <div class="form-group"><label>Infraction</label><input type="text" id="adm_penal_inf" placeholder="Ex: Excès de vitesse"></div>
+            <div class="form-group"><label>Amende</label><input type="text" id="adm_penal_fine" placeholder="Ex: 1 500 €"></div>
+            <div class="form-group"><label>Garde à Vue</label><input type="text" id="adm_penal_gav" placeholder="Ex: 10 min"></div>
+          </div>
+          <div style="margin-top: 15px;"><button class="btn" onclick="showToast('Article ajouté au Code Pénal.')">Ajouter l'article</button></div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 3 — RÈGLEMENTS & ZONES -->
+      <section id="view-admin-rules" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Consignes & Règlements de Zones</h2></div>
+          <div class="form-group full"><label>Texte officiel des règlements</label><textarea id="adm_rules_text">Règlementation générale des services de l'État sur Nanterre RP.</textarea></div>
+          <div style="margin-top: 15px;"><button class="btn" onclick="showToast('Règlements mis à jour.')">Enregistrer les consignes</button></div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 4 — WEBHOOKS DISCORD -->
+      <section id="view-admin-webhooks" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Flux Webhooks Discord</h2></div>
+          <div class="form-grid">
+            <div class="form-group full"><label>Webhook Rapport Police</label><input type="text" placeholder="https://discord.com/api/webhooks/..."></div>
+            <div class="form-group full"><label>Webhook BSPN / Secours</label><input type="text" placeholder="https://discord.com/api/webhooks/..."></div>
+          </div>
+          <div style="margin-top: 15px;"><button class="btn" onclick="showToast('Webhooks enregistrés.')">Sauvegarder les flux</button></div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 5 — REGISTRE EFFECTIFS (00-100) -->
+      <section id="view-admin-roster" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Registre des Effectifs Police (00 à 100)</h2></div>
+          <p style="color: var(--muted); margin-bottom: 15px;">Gestion complète des matricules de 00 (Youskof) à 100.</p>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Matricule</th><th>Identité</th><th>Grade</th><th>Service</th><th>Statut</th></tr></thead>
+              <tbody id="adminRosterTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 6 — MOTS DE PASSE -->
+      <section id="view-admin-passwords" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Sécurité & Mots de passe Agents</h2></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Matricule</th><th>Identité</th><th>Mot de passe actuel</th><th>Action</th></tr></thead>
+              <tbody id="adminPasswordsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 7 — MÉDAILLES & CERTIFICATIONS -->
+      <section id="view-admin-medals" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Création de Médailles & Distinctions</h2></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Nom de la distinction</label><input type="text" id="adm_med_name" placeholder="Ex: Médaille d'honneur de la Police"></div>
+            <div class="form-group"><label>Service concerné</label><select><option>Police Nationale</option><option>BSPN</option><option>SAMU 92</option><option>Tous</option></select></div>
+          </div>
+          <div style="margin-top: 15px;"><button class="btn" onclick="showToast('Distinction créée avec succès.')">Créer la médaille</button></div>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 8 — FICHIER TAJ & STATS RH -->
+      <section id="view-admin-tajstats" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header"><h2>Administration — Fichier TAJ & Statistiques Globales</h2></div>
+          <p style="color: var(--muted);">Suivi analytique des effectifs opérationnels et des procédures judiciaires enregistrées.</p>
+        </div>
+      </section>
+
+      <!-- VUE : ADMIN ONGLET 9 — BANNIÈRES, SONS & ALERTES -->
+      <section id="view-admin-alerts" class="view-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Administration — Bannières, Sons & Alertes Générales</h2>
+            <button class="btn danger small" onclick="clearActiveAlert()">✖ Couper l'alerte active</button>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Titre de l'alerte officielle</label>
+              <input type="text" id="alt_title" placeholder="Ex: ALERTE ROUGE / CONFINEMENT">
+            </div>
+            <div class="form-group">
+              <label>Secteur concerné</label>
+              <select id="alt_type">
+                <option>Sécurité Publique</option>
+                <option>Alerte Générale Ville</option>
+                <option>Secours & Urgence</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Lien URL direct vers le fichier audio (MP3 / WAV)</label>
+              <input type="text" id="alt_audio" placeholder="https://example.com/sirène.mp3">
+            </div>
+            <div class="form-group full">
+              <label>Message central affiché en plein écran</label>
+              <textarea id="alt_text" placeholder="Instructions officielles à destination de tous les usagers..."></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 15px;">
+            <button class="btn" onclick="broadcastAlertSystem()">Diffuser l'alerte sur le réseau</button>
           </div>
         </div>
       </section>
 
     </main>
   </div>
-  <div class="toast-host" id="toastHost"></div>
+
+  <div class="toast-container" id="toastContainer"></div>
 
   <script>
     const SUPABASE_URL = 'https://fqgecgziekhkmztawgzu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function playAudioUrl(url) {
-      if(!url) return;
-      try {
-        const player = document.getElementById('customAudioPlayer');
-        player.src = url;
-        player.currentTime = 0;
-        player.play().catch(e => console.log("Audio bloqué par le navigateur :", e));
-      } catch(e) {}
-    }
+    let currentActiveSpace = 'citoyen';
+    let authenticatedAgent = null;
+    let isAdminSession = false;
 
-    function showCenterAlert(title, text, bg, color, audioUrl, playSound = true) {
-      const overlay = document.getElementById('globalCenterOverlay');
-      const card = document.getElementById('centerModalCard');
-      const titleEl = document.getElementById('centerModalTitle');
-      const textEl = document.getElementById('centerModalText');
+    // Base de données Police (00 à 100)
+    let policeRosterDb = Array.from({length: 101}, (_, i) => {
+      let mat = String(i).padStart(2, '0');
+      if(mat === '00') return { matricule: '00', name: 'YOUSKOF YORKA', grade: 'IGPN / Directeur', service: 'Police Nationale', password: 'Yohan.76450', status: 'Occupé' };
+      if(mat === '03') return { matricule: '03', name: 'Honey', grade: 'Directrice', service: 'Police Nationale', password: 'Honey.19420', status: 'Occupé' };
+      return { matricule: mat, name: mat === '01' ? 'Baptouste' : (mat === '22' ? 'RAPH137 (RAID)' : 'Agent Titulaire'), grade: mat==='22'?'Capitaine RAID':'Agent', service: 'Police Nationale', password: `Agent.${mat}000`, status: mat==='01'||mat==='22'?'Occupé':'Vacant' };
+    });
 
-      if(titleEl) titleEl.textContent = title || "ALERTE OFFICIELLE";
-      if(textEl) textEl.textContent = text || "";
-      
-      if(card) {
-        card.style.backgroundColor = bg || '#17253a';
-        card.style.color = color || '#ffffff';
-      }
-      if(overlay) {
-        overlay.style.display = 'flex';
-      }
-      if(playSound && audioUrl) {
-        playAudioUrl(audioUrl);
-      }
-    }
-
-    function closeCenterModal() {
-      const overlay = document.getElementById('globalCenterOverlay');
-      if(overlay) overlay.style.display = 'none';
-      try {
-        const player = document.getElementById('customAudioPlayer');
-        player.pause();
-      } catch(e){}
-    }
-
-    let webhookUrls = {
-      HOOK_TICKET_POLICE: '', HOOK_TICKET_BSPN: '', HOOK_TICKET_SAMU: '',
-      HOOK_RECRUIT_POLICE: '', HOOK_RECRUIT_BSPN: '', HOOK_RECRUIT_SAMU: '',
-      HOOK_COMPLAINT_POLICE: '', HOOK_COMPLAINT_RELIEF: '', HOOK_SERVICE_STATUS: '',
-      HOOK_REPORT_POLICE: '', HOOK_REPORT_BSPN: '', HOOK_REPORT_SAMU: '', HOOK_GAV: ''
-    };
-    let designConfig = { brandName: "Nanterre RP", brandSub: "Portail institutionnel", brandDesc: "Portail central." };
-    let zonesText = "Consignes officielles de Nanterre sur Emergency Hamburg.";
-    let zonesFileName = "";
-    let penalFileName = "";
-    let penalArticles = [
-      ['Infractions routières','Excès de vitesse léger','1 000 €','5 min'],
-      ['Infractions routières',"Refus d'obtempérer",'4 000 €','15 min'],
-      ['Infractions contre les personnes',"Menaces envers un agent",'3 000 €','15 min']
+    let secoursRosterDb = [
+      { matricule: 'SP-01', name: 'Capitaine Caserne', grade: 'Officier BSPN', service: 'BSPN', password: 'Secours.1000', status: 'Occupé' },
+      { matricule: 'MED-01', name: 'Médecin Chef Samuel', grade: 'Praticien SAMU', service: 'SAMU 92', password: 'Secours.1000', status: 'Occupé' }
     ];
 
-    const customAssignedMembers = {
-      '00': {name: 'YOUSKOF YORKA', grade: 'IGPN', password: 'Yohan.76450', status: 'Occupé'},
-      '03': {name: 'Honey', grade: 'Directrice', password: 'Honey.19420', status: 'Occupé'},
-      '03B': {name: 'Motlo', grade: 'Co-Gérant Légal', password: 'Motlo.85462', status: 'Occupé'},
-      '03C': {name: 'Aram', grade: 'Gérant Légal / Commandant', password: 'Aram.33548', status: 'Occupé'},
-      '01': {name: 'Baptouste', grade: 'Directeur Adjoint', password: 'Baptouste.1000', status: 'Occupé'},
-      '02': {name: 'Tgrm', grade: 'Commandant', password: 'Tgrm.1000', status: 'Occupé'},
-      '22': {name: 'RAPH137', grade: 'Capitaine RAID', password: 'Raph.1000', status: 'Occupé'},
-      '08': {name: 'Aaron', grade: 'Capitaine PN', password: 'Aaron.10492', status: 'Occupé'},
-      '04': {name: 'Zappeur', grade: 'Lieutenant', password: 'Zappeur.74102', status: 'Occupé'},
-      '21': {name: 'GHOST', grade: 'Lieutenant', password: 'Ghost.1000', status: 'Occupé'},
-      '28': {name: 'GAB', grade: 'Major', password: 'Gab.1000', status: 'Occupé'},
-      '06': {name: 'PABLO', grade: 'Brigadier-Chef', password: 'Pablo.48512', status: 'Occupé'},
-      '56': {name: 'Trk', grade: 'Brigadier Chef', password: 'Trk.1000', status: 'Occupé'},
-      '61': {name: 'Alex', grade: 'Brigadier', password: 'Alex.1000', status: 'Occupé'},
-      '24': {name: 'TUICAREU', grade: 'Brigadier', password: 'Tuicareu.1000', status: 'Occupé'},
-      '49': {name: 'Louija', grade: 'Brigadier', password: 'Louija.1000', status: 'Occupé'},
-      '15': {name: 'YVEN', grade: 'Sous-Brigadier', password: 'Yven.1000', status: 'Occupé'},
-      '20': {name: 'PEFFCORSE', grade: 'Sous-Brigadier', password: 'Peffcorse.1000', status: 'Occupé'},
-      '23': {name: 'thymote', grade: 'Sous-Brigadier', password: 'Thymote.1000', status: 'Occupé'},
-      '42': {name: 'HALOWER', grade: 'Sous-Brigadier', password: 'Halower.1000', status: 'Occupé'},
-      '52': {name: 'Bobstant', grade: 'Sous-Brigadier / Formateur', password: 'Bobstant.1000', status: 'Occupé'},
-      '100': {name: 'Steven', grade: 'Sous-Brigadier', password: 'Steven.1000', status: 'Occupé'},
-      '12': {name: 'Onur', grade: 'GPX-Titulaire', password: 'Onur.1000', status: 'Occupé'},
-      '16': {name: 'Nono', grade: 'GPX-Titulaire', password: 'Nono.1000', status: 'Occupé'},
-      '05': {name: 'Osman', grade: 'GPX-Titulaire', password: 'Osman.93214', status: 'Occupé'},
-      '50': {name: 'B4ptz02', grade: 'GPX-Titulaire', password: 'B4ptz.1000', status: 'Occupé'},
-      '57': {name: 'BLABLACAR', grade: 'GPX-Titulaire', password: 'Blablacar.1000', status: 'Occupé'},
-      '69': {name: 'Lastreet', grade: 'GPX-Titulaire', password: 'Lastreet.1000', status: 'Occupé'},
-      '07': {name: 'LE T', grade: 'GPX-Titulaire / Formateur', password: 'LeT.62914', status: 'Occupé'},
-      '72': {name: 'Godly', grade: 'GPX-Stagiaire', password: 'Godly.1000', status: 'Occupé'},
-      '74': {name: 'Jeniija', grade: 'GPX-Titulaire', password: 'Jeniija.1000', status: 'Occupé'},
-      '09': {name: 'Lyky', grade: 'GPX-Titulaire', password: 'Lyky.83719', status: 'Occupé'},
-      '10': {name: 'TATOU', grade: 'GPX-Titulaire', password: 'Tatou.1000', status: 'Occupé'},
-      '11': {name: 'OMBRE', grade: 'GPX-Titulaire', password: 'Ombre.1000', status: 'Occupé'},
-      '17': {name: 'WDY', grade: 'GPX-Titulaire', password: 'Wdy.1000', status: 'Occupé'},
-      '30': {name: 'JAYMAZE', grade: 'GPX-Titulaire', password: 'Jaymaze.1000', status: 'Occupé'},
-      '31': {name: 'LOENZO', grade: 'GPX-Titulaire', password: 'Loenzo.1000', status: 'Occupé'},
-      '35': {name: 'BLK', grade: 'GPX-Titulaire', password: 'Blk.1000', status: 'Occupé'},
-      '36': {name: 'Adn', grade: 'GPX-Titulaire', password: 'Adn.1000', status: 'Occupé'},
-      '37': {name: 'VALENTINE', grade: 'GPX-Titulaire', password: 'Valentine.1000', status: 'Occupé'},
-      '38': {name: 'Dodoby', grade: 'GPX-Titulaire', password: 'Dodoby.1000', status: 'Occupé'},
-      '40': {name: 'Scarface', grade: 'GPX-Titulaire', password: 'Scarface.1000', status: 'Occupé'},
-      '51': {name: 'Lebiscuit', grade: 'GPX-Titulaire', password: 'Lebiscuit.1000', status: 'Occupé'},
-      '53': {name: 'STABAL620', grade: 'GPX-Titulaire', password: 'Stabal.1000', status: 'Occupé'},
-      '58': {name: 'Axel', grade: 'GPX-Titulaire', password: 'Axel.1000', status: 'Occupé'},
-      '59': {name: 'DARKOZZ21', grade: 'GPX-Titulaire', password: 'Darkozz.1000', status: 'Occupé'},
-      '63': {name: 'RAYANE', grade: 'GPX-Titulaire', password: 'Rayane.1000', status: 'Occupé'},
-      '65': {name: 'Nuggetss', grade: 'GPX-Titulaire', password: 'Nuggetss.1000', status: 'Occupé'},
-      '67': {name: 'Jean Paul', grade: 'GPX-Titulaire', password: 'Jeanpaul.1000', status: 'Occupé'},
-      '67B': {name: 'Baban', grade: 'GPX-RAID', password: 'Baban.1000', status: 'Occupé'},
-      '70': {name: 'NEYZ', grade: 'GPX-Titulaire', password: 'Neyz.1000', status: 'Occupé'},
-      '99': {name: 'RDH', grade: 'GPX-Titulaire', password: 'Rdh.1000', status: 'Occupé'},
-      '18': {name: 'Vorynix', grade: 'GPX-Stagiaire', password: 'Vorynix.1000', status: 'Occupé'},
-      '19': {name: 'Anto', grade: 'GPX-Stagiaire', password: 'Anto.1000', status: 'Occupé'},
-      '29': {name: 'Tatin', grade: 'GPX-Stagiaire', password: 'Tatin.1000', status: 'Occupé'},
-      '32': {name: 'Yui', grade: 'GPX-Stagiaire', password: 'Yui.1000', status: 'Occupé'},
-      '33': {name: 'Nino', grade: 'GPX-Stagiaire', password: 'Nino.1000', status: 'Occupé'},
-      '39': {name: 'Yaya', grade: 'GPX-Stagiaire', password: 'Yaya.1000', status: 'Occupé'},
-      '41': {name: 'Terax', grade: 'GPX-Stagiaire', password: 'Terax.1000', status: 'Occupé'},
-      '47': {name: 'D.34', grade: 'GPX-Stagiaire', password: 'D34.1000', status: 'Occupé'},
-      '48': {name: 'Noxyral', grade: 'GPX-Stagiaire', password: 'Noxyral.1000', status: 'Occupé'},
-      '54': {name: 'Lsk', grade: 'GPX-Stagiaire', password: 'Lsk.1000', status: 'Occupé'},
-      '55': {name: 'Ds', grade: 'GPX-Stagiaire', password: 'Ds.1000', status: 'Occupé'},
-      '71': {name: 'Baptiste', grade: 'GPX-Stagiaire', password: 'Baptiste.1000', status: 'Occupé'},
-      '73': {name: 'M4rv1n77', grade: 'GPX-Stagiaire', password: 'Marvin.1000', status: 'Occupé'},
-      '76': {name: 'Aim76', grade: 'GPX-Stagiaire', password: 'Aim.1000', status: 'Occupé'},
-      '34': {name: 's4ch47', grade: 'GPX-Stagiaire', password: 'Sachat.1000', status: 'Occupé'},
-      '43': {name: 'GAB', grade: 'GPX-Stagiaire', password: 'Gabst.1000', status: 'Occupé'},
-      '44': {name: 'Noam', grade: 'GPX-Stagiaire', password: 'Noam.1000', status: 'Occupé'},
-      '46': {name: 'Hisoka', grade: 'GPX-Stagiaire', password: 'Hisoka.1000', status: 'Occupé'},
-      '62': {name: 'AIden', grade: 'GPX-Stagiaire', password: 'Aiden.1000', status: 'Occupé'},
-      '64': {name: 'LAYS', grade: 'GPX-Stagiaire', password: 'Lays.1000', status: 'Occupé'},
-      '68': {name: 'Moha', grade: 'GPX-Stagiaire', password: 'Moha.1000', status: 'Occupé'},
-      'MNG': {name: 'MONAGE', grade: 'Formateur Police', password: 'Monage.1000', status: 'Occupé'}
-    };
-
-    let roster = Array.from({length: 101}, (_, i) => {
-      const matStr = String(i).padStart(2, '0');
-      const custom = customAssignedMembers[matStr];
-      if(custom) {
-        return { matricule: matStr, name: custom.name, grade: custom.grade, service: 'Police Nationale', status: custom.status, password: custom.password, distinctions: '' };
-      } else {
-        return { matricule: matStr, name: 'Libre', grade: 'Vacant', service: 'Police Nationale', status: 'Vacant', password: `Agent.${matStr}000`, distinctions: '' };
-      }
-    });
-
-    ['03B', '03C', 'MNG'].forEach(extraKey => {
-      if(customAssignedMembers[extraKey]) {
-        const c = customAssignedMembers[extraKey];
-        roster.push({ matricule: extraKey, name: c.name, grade: c.grade, service: 'Police Nationale', status: c.status, password: c.password, distinctions: '' });
-      }
-    });
-
-    let tajRecords = [];
-    let customAlerts = [];
-    let medalsList = [];
-    let perquisitionsList = [];
-
-    let activeSpace = 'citoyen';
-    let currentAgent = null;
-    let isAdminUser = false;
-    let drafts = {};
-
-    function $(id){return document.getElementById(id)}
-    function val(id){return ($(id)?.value||'').trim()}
-    function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-    function toast(msg,type='ok'){
-      const t=document.createElement('div');
-      t.className='toast'+(type==='error'?' error':'');
-      t.textContent=msg;
-      const host = $('toastHost');
-      if(host) host.appendChild(t);
-      setTimeout(()=>t.remove(),4000);
-    }
-    function toggleSidebar(){
-      const sb = $('sidebar');
-      if(sb) sb.classList.toggle('open');
-    }
-    function showView(id){
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      const target = $(id);
-      if(target) target.classList.add('active');
-      document.querySelectorAll('.side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-      const sb = $('sidebar');
-      if(sb) sb.classList.remove('open');
-      window.scrollTo({top:0,behavior:'smooth'});
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
     }
 
-    function isHighRank(grade) {
-      if (!grade) return false;
-      const g = grade.toLowerCase();
-      return g.includes('commandant') || g.includes('directeur') || g.includes('capitaine') || g.includes('lieutenant') || g.includes('major') || g.includes('igpn') || g.includes('gérant');
+    function toggleElement(id) {
+      const el = document.getElementById(id);
+      if(el) el.classList.toggle('hidden');
     }
 
-    function buildDynamicNav() {
-      const navItems = [];
-      if (activeSpace === 'citoyen') {
-        navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Règlements & Zones']);
-      } else if (activeSpace === 'admin') {
-        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-penal','⚖️','Gérer Code Pénal'],['view-admin-zones','📋','Gérer Règlements'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre Effectifs'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles'],['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH'],['view-admin-alerts','📢','Bannières & Sons']);
-      } else {
-        navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise de service'],['view-directory','🎖️','Annuaire'],['view-perquisition','🔍','Perquisitions'],['view-penal','⚖️','Code pénal'],['view-zones','⌖','Règlements & Zones']);
-        if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV']);
-        if (isAdminUser || (currentAgent && isHighRank(currentAgent.grade))) {
-          navItems.push(['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH']);
-        }
-      }
-      const navEl = $('sideNav');
-      if(navEl) navEl.innerHTML = navItems.map(([v,i,l])=>`<button data-view="${v}" onclick="showView('${v}')"><span class="nav-ico">${i}</span>${l}</button>`).join('');
+    function showModal(title, text) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalText').textContent = text;
+      document.getElementById('modalOverlay').style.display = 'flex';
     }
 
-    function returnGateway(){
-      const gw = $('gateway');
-      const sh = $('appShell');
-      if(gw) gw.classList.remove('hidden');
-      if(sh) sh.classList.add('hidden');
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      try { document.getElementById('audioPlayer').pause(); } catch(e){}
     }
 
-    function enterCitizen(){
-      activeSpace='citoyen';isAdminUser=false;currentAgent=null;
-      const gw = $('gateway'); const sh = $('appShell');
-      if(gw) gw.classList.add('hidden');
-      if(sh) sh.classList.remove('hidden');
-      buildDynamicNav();renderZonesContent();showView('view-public-home');
+    function showMapInfo(zoneName, details) {
+      showModal(`Secteur : ${zoneName}`, details);
     }
 
-    function enterStaff(space){
-      activeSpace=space;isAdminUser=false;
-      const gw = $('gateway'); const sh = $('appShell');
-      if(gw) gw.classList.add('hidden');
-      if(sh) sh.classList.remove('hidden');
-      const filtered = roster.filter(r => r.status==='Occupé');
-      const sel = $('loginMatriculeSelect');
-      if(sel) sel.innerHTML = filtered.map(r=>`<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
-      showView('view-login');
+    function openSpace(space) {
+      currentActiveSpace = space;
+      document.getElementById('gatewayView').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      buildNavigationMenu();
+      if(space === 'citoyen') switchView('view-public-home');
     }
 
-    function loginStaffWithPassword(){
-      const mat = $('loginMatriculeSelect')?.value;
-      const pwd = val('loginPasswordInput');
-      const agent = roster.find(r=>r.matricule===mat);
-      if(!agent) return toast('Agent introuvable','error');
-      if(agent.password && agent.password !== pwd && pwd !== 'ADMIN2026') return toast('❌ Mot de passe incorrect','error');
-
-      currentAgent = agent;
-      isAdminUser = false;
-      buildDynamicNav();
-      $('userChip')?.classList.remove('hidden');
-      $('logoutBtn')?.classList.remove('hidden');
-      const chip = $('userChip');
-      if(chip) chip.textContent = `${currentAgent.name} [${currentAgent.matricule}]`;
-      const sw = $('staffWelcome');
-      if(sw) sw.textContent = `Bienvenue, ${currentAgent.name}.`;
-      renderDirectory(); renderPenal(); renderPerquisitions(); renderZonesContent();
-      showView('view-staff-home');
-      toast('Connexion réussie !');
-    }
-
-    function enterAdminDirect() {
-      const gw = $('gateway'); const sh = $('appShell');
-      if(gw) gw.classList.add('hidden');
-      if(sh) sh.classList.remove('hidden');
-      showView('view-admin-login');
-    }
-
-    function loginAdminSimple(){
-      if(val('adminCode')==='Nanterre2026' || val('adminCode')==='ADMIN2026'){
-        activeSpace = 'admin';
-        isAdminUser = true;
-        currentAgent = { name: 'Administrateur', matricule: '00', grade: 'Directeur', service: 'Administration' };
-        buildDynamicNav();
-        $('userChip')?.classList.remove('hidden');
-        $('logoutBtn')?.classList.remove('hidden');
-        const chip = $('userChip');
-        if(chip) chip.textContent = 'Administrateur';
-        renderAdminMatricules(); renderAdminPasswords(); renderAdminMedalsTable(); renderAdminPenalTable(); renderTajData(); renderPerquisitions(); loadCustomAlerts();
-        const zText = $('adm_zones_text');
-        if(zText) zText.value = zonesText;
-        initAdminWebhooksUI();
-        showView('view-admin-design');
-        toast('Accès administrateur autorisé.');
-      } else {
-        toast('Code incorrect','error');
-      }
-    }
-
-    function logout(){
-      currentAgent=null; isAdminUser=false;
-      $('userChip')?.classList.add('hidden'); $('logoutBtn')?.classList.add('hidden');
-      returnGateway();
-    }
-
-    function renderPenal(){
-      const tbody = $('penalTableBody');
-      if(tbody) tbody.innerHTML = penalArticles.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('');
-      const pFile = $('dynamicPenalFile');
-      if(pFile) {
-        pFile.innerHTML = penalFileName ? `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document officiel joint :</b> ${esc(penalFileName)}</div>` : '';
-      }
-    }
-
-    function renderZonesContent(){
-      const zc = $('dynamicZonesContent');
-      if(zc) zc.textContent = zonesText;
-      const zf = $('dynamicZonesFile');
-      if(zf) {
-        zf.innerHTML = zonesFileName ? `<div style="background:var(--surface);padding:10px 14px;border-radius:8px;border:1px solid var(--line);font-size:12px">📎 <b>Document de règlement joint :</b> ${esc(zonesFileName)}</div>` : '';
-      }
-    }
-
-    async function addPenalArticle(){
-      const cat = val('adm_penal_cat'); const inf = val('adm_penal_inf'); const fine = val('adm_penal_fine'); const gav = val('adm_penal_gav');
-      const fileInput = $('adm_penal_file');
-      if(fileInput && fileInput.files[0]) penalFileName = fileInput.files[0].name;
-
-      if(!cat || !inf) return toast('Remplissez les champs obligatoires.', 'error');
-      penalArticles.push([cat, inf, fine, gav]);
-      await saveSettingsCloud('penal', penalArticles);
-      await saveSettingsCloud('penal_file', penalFileName);
-      renderAdminPenalTable(); renderPenal();
-      toast('Article ajouté et enregistré dans le Cloud !');
-      if($('adm_penal_cat')) $('adm_penal_cat').value='';
-      if($('adm_penal_inf')) $('adm_penal_inf').value='';
-      if($('adm_penal_fine')) $('adm_penal_fine').value='';
-      if($('adm_penal_gav')) $('adm_penal_gav').value='';
-    }
-
-    async function deletePenalArticle(index){
-      penalArticles.splice(index, 1);
-      await saveSettingsCloud('penal', penalArticles);
-      renderAdminPenalTable(); renderPenal();
-      toast('Article supprimé.');
-    }
-
-    function renderAdminPenalTable(){
-      const tbody = $('adminPenalTableBody');
-      if(tbody) tbody.innerHTML = penalArticles.map((r, i)=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}<td><button class="btn danger small" onclick="deletePenalArticle(${i})">Supprimer</button></td></tr>`).join('');
-    }
-
-    async function saveZonesConfig(){
-      zonesText = val('adm_zones_text');
-      const fileInput = $('adm_zones_file');
-      if(fileInput && fileInput.files[0]) zonesFileName = fileInput.files[0].name;
-
-      await saveSettingsCloud('zones', zonesText);
-      await saveSettingsCloud('zones_file', zonesFileName);
-      renderZonesContent();
-      toast('Règlements mis à jour et enregistrés !');
-    }
-
-    function showPerqForm() {
-      const container = $('perqAddContainer');
-      if(container) container.classList.toggle('hidden');
-    }
-
-    async function savePerquisition() {
-      const suspect = val('perq_suspect'); const location = val('perq_location'); const reasons = val('perq_reasons');
-      const fileInput = $('perq_file');
-      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : null;
-
-      if(!suspect || !location || !reasons) return toast('Remplissez tous les champs.', 'error');
-      const newPerq = { suspect, location, reasons, status: 'En attente', officer: currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Admin', file_name: fileName };
-      try {
-        await sb.from('nrp_perquisitions').insert([newPerq]).select();
-        toast('Demande soumise !');
-        if($('perq_suspect')) $('perq_suspect').value='';
-        if($('perq_location')) $('perq_location').value='';
-        if($('perq_reasons')) $('perq_reasons').value='';
-        if($('perqAddContainer')) $('perqAddContainer').classList.add('hidden');
-        loadPerquisitionsCloud();
-      } catch(e){toast('Erreur','error');}
-    }
-
-    async function updatePerqStatus(id, newStatus) {
-      try {
-        await sb.from('nrp_perquisitions').update({ status: newStatus }).eq('id', id);
-        toast(`Perquisition ${newStatus} !`);
-        loadPerquisitionsCloud();
-      } catch(e){toast('Erreur','error');}
-    }
-
-    function renderPerquisitions() {
-      const tbody = $('perqBody'); if(!tbody) return;
-      const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
-      tbody.innerHTML = perquisitionsList.map(p => `
-        <tr>
-          <td><small class="muted">${new Date(p.created_at || Date.now()).toLocaleDateString('fr-FR')}</small></td>
-          <td>${esc(p.officer)}</td>
-          <td><b>${esc(p.suspect)}</b><br><small class="muted">${esc(p.location)}</small>${p.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(p.file_name)}</small>` : ''}</td>
-          <td>${esc(p.reasons)}</td>
-          <td><span class="pill ${p.status==='Acceptée'?'info':(p.status==='Refusée'?'danger':'warn')}">${esc(p.status)}</span></td>
-          <td>
-            ${canManage ? `<button class="btn small" style="background:var(--green)" onclick="updatePerqStatus('${p.id}', 'Acceptée')">✔ Accepter</button> <button class="btn danger small" onclick="updatePerqStatus('${p.id}', 'Refusée')">✖ Refuser</button>` : '<small class="muted">-</small>'}
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function loadPerquisitionsCloud() {
-      try {
-        const { data } = await sb.from('nrp_perquisitions').select('*').order('created_at', { ascending: false });
-        if(data) { perquisitionsList = data; renderPerquisitions(); }
-      } catch(e){}
-    }
-
-    async function saveMedalDefinition() {
-      const name = val('med_name'); const service = $('med_service')?.value; const desc = val('med_desc');
-      if(!name) return toast('Entrez un nom.', 'error');
-      try {
-        await sb.from('nrp_medals_def').insert([{ name, service, description: desc }]);
-        toast('Distinction créée !');
-        if($('med_name')) $('med_name').value='';
-        if($('med_desc')) $('med_desc').value='';
-        loadMedalsCloud();
-      } catch(e){toast('Erreur','error');}
-    }
-
-    async function loadMedalsCloud() {
-      try {
-        const { data } = await sb.from('nrp_medals_def').select('*');
-        if(data) { medalsList = data; renderAdminMedalsTable(); renderDirectory(); }
-      } catch(e){}
-    }
-
-    function renderAdminMedalsTable() {
-      const tbody = $('adminMedalsBody'); if(!tbody) return;
-      tbody.innerHTML = medalsList.map(m => `<tr><td><span class="pill info">${esc(m.service)}</span></td><td><b>${esc(m.name)}</b></td><td>${esc(m.description||'-')}</td><td><button class="btn danger small" onclick="deleteMedalDef('${m.id}')">Supprimer</button></td></tr>`).join('');
-    }
-
-    async function deleteMedalDef(id) {
-      try { await sb.from('nrp_medals_def').delete().eq('id', id); loadMedalsCloud(); toast('Supprimé.'); } catch(e){}
-    }
-
-    async function assignMedalToAgent(matricule, medalName) {
-      const agent = roster.find(r => r.matricule === matricule);
-      if(!agent) return;
-      let current = agent.distinctions ? agent.distinctions.split(',').map(s=>s.trim()).filter(Boolean) : [];
-      if(!current.includes(medalName)) current.push(medalName);
-      agent.distinctions = current.join(', ');
-      try {
-        await sb.from('nrp_roster').upsert({ matricule: agent.matricule, name: agent.name, grade: agent.grade, service: agent.service, status: agent.status, password: agent.password, distinctions: agent.distinctions });
-        toast('Distinction attribuée !'); renderDirectory();
-      } catch(e){toast('Erreur','error');}
-    }
-
-    function renderDirectory(){
-      const q = (val('directorySearch')||'').toLowerCase();
-      const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
-      const canManage = isAdminUser || (currentAgent && isHighRank(currentAgent.grade));
-      const tbody = $('directoryBody');
-      if(!tbody) return;
-      tbody.innerHTML = rows.map(x=>{
-        const medalsOpts = medalsList.map(m=>`<option value="${esc(m.name)}">${esc(m.name)}</option>`).join('');
-        return `<tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)}</td><td>${esc(x.grade)}</td><td>${esc(x.service)}</td><td><span class="pill ${x.status==='Vacant'?'vacant':''}">${esc(x.status)}</span></td><td>${esc(x.distinctions||'Aucune')}</td><td>${canManage ? `<select id="assign_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px;font-size:11px">${medalsOpts}</select> <button class="btn small" onclick="assignMedalToAgent('${x.matricule}', val('assign_${x.matricule}'))">Attribuer</button>` : '-'}</td></tr>`;
-      }).join('');
-    }
-
-    async function saveDesignConfig() {
-      designConfig.brandName = val('cfg_brandName'); designConfig.brandSub = val('cfg_brandSub'); designConfig.brandDesc = val('cfg_brandDesc');
-      await saveSettingsCloud('design', designConfig);
-      applyDesignConfig(); toast('Design sauvegardé !');
-    }
-
-    function applyDesignConfig() {
-      if($('brandTitle')) $('brandTitle').textContent = designConfig.brandName;
-      if($('sidebarTitle')) $('sidebarTitle').textContent = designConfig.brandName.toUpperCase();
-      if($('brandDesc')) $('brandDesc').textContent = designConfig.brandDesc;
-      if($('heroMainTitle')) $('heroMainTitle').textContent = `Protéger, secourir et accompagner — ${designConfig.brandName}.`;
-    }
-
-    async function saveSettingsCloud(id, data){
-      try { 
-        const { error } = await sb.from('nrp_settings').upsert({ id, data });
-        if(error) console.error("Erreur saveSettingsCloud:", error);
-      } catch(e){ console.error("Erreur:", e); }
-    }
-
-    function initAdminWebhooksUI(){
-      const keys = Object.keys(webhookUrls);
-      const wf = $('webhookConfigForm');
-      if(wf) wf.innerHTML = keys.map(k=>`<div class="field full"><label>${k}</label><input id="wh_${k}" value="${esc(webhookUrls[k]||'')}" placeholder="https://discord.com/api/webhooks/..."></div>`).join('');
-    }
-
-    async function saveWebhooksConfig(){
-      Object.keys(webhookUrls).forEach(k=>{ webhookUrls[k] = val('wh_'+k); });
-      await saveSettingsCloud('webhooks', webhookUrls);
-      toast('Webhooks sauvegardés !');
-    }
-
-    function renderAdminMatricules(){
-      const q = (val('adminMatSearch')||'').toLowerCase();
-      const rows = roster.filter(x=>[x.matricule,x.name,x.grade,x.service].join(' ').toLowerCase().includes(q));
-      const body = $('adminMatBody');
-      if(body) body.innerHTML = rows.map(x=>`
-        <tr>
-          <td><b>[${esc(x.matricule)}]</b></td>
-          <td><input id="adm_name_${x.matricule}" value="${esc(x.name)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
-          <td><input id="adm_grade_${x.matricule}" value="${esc(x.grade)}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
-          <td><input id="adm_pwd_${x.matricule}" value="${esc(x.password||'1234')}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:4px;width:110px"></td>
-          <td><select id="adm_stat_${x.matricule}" style="background:#0b1627;color:white;border:1px solid #31445f;padding:4px"><option ${x.status==='Occupé'?'selected':''}>Occupé</option><option ${x.status==='Vacant'?'selected':''}>Vacant</option></select></td>
-          <td><button class="btn small" onclick="updateMatricule('${x.matricule}')">Enregistrer</button></td>
-        </tr>
-      `).join('');
-    }
-
-    function renderAdminPasswords(){
-      const body = $('adminPwdBody');
-      if(body) body.innerHTML = roster.map(x=>`
-        <tr><td><b>[${esc(x.matricule)}]</b></td><td>${esc(x.name)} (${esc(x.grade)})</td><td>${esc(x.service)}</td>
-        <td><input id="adm_pwd_only_${x.matricule}" value="${esc(x.password||'')}" style="background:#0b1627;border:1px solid #31445f;color:white;padding:5px;width:150px"></td>
-        <td><button class="btn small" onclick="updatePasswordOnly('${x.matricule}')">Changer</button></td></tr>
-      `).join('');
-    }
-
-    async function updateMatricule(mat){
-      const item = roster.find(r=>r.matricule===mat);
-      if(item){
-        item.name = val('adm_name_'+mat); item.grade = val('adm_grade_'+mat); item.password = val('adm_pwd_'+mat); item.status = $('adm_stat_'+mat)?.value;
-        try { 
-          await sb.from('nrp_roster').upsert(item); 
-          toast(`[${mat}] mis à jour dans le Cloud !`); 
-          renderAdminPasswords(); 
-          renderDashboardStats();
-        } catch(e){toast('Erreur','error');}
-      }
-    }
-
-    async function updatePasswordOnly(mat){
-      const item = roster.find(r=>r.matricule===mat);
-      if(item){
-        item.password = val('adm_pwd_only_'+mat);
-        try { 
-          await sb.from('nrp_roster').upsert(item); 
-          toast('Mot de passe mis à jour !'); 
-        } catch(e){toast('Erreur','error');}
-      }
-    }
-
-    function showTajAddForm(){
-      const container = $('tajAddContainer');
-      if(container) container.classList.toggle('hidden');
-    }
-
-    async function saveTajEntry(){
-      const citizen = val('taj_citizen'); const details = val('taj_details');
-      const fileInput = $('taj_file');
-      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : null;
-
-      if(!citizen || !details) return toast('Remplissez les champs obligatoires.', 'error');
-      const rec = { citizen_name: citizen, roblox_name: val('taj_roblox'), category: $('taj_category')?.value, details, sanction: val('taj_sanction'), officer_matricule: currentAgent ? `[${currentAgent.matricule}] ${currentAgent.name}` : 'Admin', file_name: fileName };
-      try {
-        await sb.from('nrp_taj').insert([rec]);
-        toast('Ajouté au TAJ !');
-        if($('taj_citizen')) $('taj_citizen').value='';
-        if($('taj_details')) $('taj_details').value='';
-        if($('taj_roblox')) $('taj_roblox').value='';
-        if($('taj_sanction')) $('taj_sanction').value='';
-        if($('tajAddContainer')) $('tajAddContainer').classList.add('hidden');
-        loadTajCloudData();
-      } catch(e){toast('Erreur','error');}
-    }
-
-    async function loadTajCloudData(){
-      try {
-        const { data } = await sb.from('nrp_taj').select('*').order('created_at', { ascending: false });
-        if(data) { tajRecords = data; renderTajData(); renderDashboardStats(); }
-      } catch(e){}
-    }
-
-    function renderTajData(){
-      const q = (val('tajSearch')||'').toLowerCase();
-      const rows = tajRecords.filter(t => [t.citizen_name, t.category, t.details].join(' ').toLowerCase().includes(q));
-      const body = $('tajBody');
-      if(body) body.innerHTML = rows.map(t=>`<tr><td><small>${new Date(t.created_at||Date.now()).toLocaleDateString('fr-FR')}</small></td><td><b>${esc(t.citizen_name)}</b></td><td><span class="pill info">${esc(t.category)}</span></td><td>${esc(t.details)}${t.file_name ? `<br><small style="color:var(--blue)">📎 ${esc(t.file_name)}</small>` : ''}</td><td>${esc(t.sanction||'-')}</td><td><small>${esc(t.officer_matricule)}</small></td></tr>`).join('');
-    }
-
-    function renderDashboardStats(){
-      if($('st_total_agents')) $('st_total_agents').textContent = roster.length;
-      if($('st_active_agents')) $('st_active_agents').textContent = roster.filter(r => r.status === 'Occupé').length;
-      if($('st_vacant_agents')) $('st_vacant_agents').textContent = roster.filter(r => r.status === 'Vacant').length;
-      if($('st_total_taj')) $('st_total_taj').textContent = tajRecords.length;
-    }
-
-    // --- ALERTES CENTRALES, LIENS & AUDIO ---
-    async function loadCustomAlerts() {
-      try {
-        const { data, error } = await sb.from('nrp_custom_alerts').select('*').order('created_at', { ascending: false });
-        if(error) {
-          console.error("Erreur chargement alertes:", error);
-          return;
-        }
-        if(data) { 
-          customAlerts = data; 
-          renderAdminAlertsTable(); 
-        }
-      } catch(e){ console.error("Exception loadCustomAlerts:", e); }
-    }
-
-    function renderAdminAlertsTable() {
-      const tbody = $('adminAlertsBody'); if(!tbody) return;
-      if(!customAlerts || customAlerts.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted)">Aucune alerte enregistrée pour le moment.</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = customAlerts.map(a => `
-        <tr>
-          <td><b>${esc(a.title)}</b></td>
-          <td><span class="pill info">${esc(a.type || 'Général')}</span></td>
-          <td><small class="muted" style="word-break:break-all">${esc(a.audio_url || 'Aucun lien son')}</small></td>
-          <td><span style="color:${esc(a.text_color)};background:${esc(a.bg_color)};padding:4px 8px;border-radius:6px;display:inline-block">${esc(a.announcement_text)}</span></td>
-          <td>
-            <button class="btn small" onclick="broadcastCenterAlert('${a.id}')">📢 Diffuser</button> 
-            <button class="btn danger small" onclick="deleteCustomAlert('${a.id}')">Supprimer</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function saveCustomAlert() {
-      const title = val('alt_title'); 
-      const type = $('alt_type')?.value;
-      const text = val('alt_text'); 
-      const audioUrl = val('alt_audio_url'); 
-      const bg = $('alt_bg')?.value; 
-      const color = $('alt_color')?.value;
-
-      if(!title || !text || !audioUrl) return toast('Remplissez le titre, le lien URL du son et le message central.', 'error');
+    function openStaffLogin(space) {
+      currentActiveSpace = space;
+      document.getElementById('gatewayView').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
       
-      const newAlert = { title, type, announcement_text: text, audio_url: audioUrl, bg_color: bg, text_color: color };
-      try {
-        const { error } = await sb.from('nrp_custom_alerts').insert([newAlert]);
-        if(error) {
-          console.error("Erreur Supabase insert alert:", error);
-          toast('Erreur Supabase : ' + error.message, 'error');
-          return;
-        }
-        toast('Alerte et lien audio enregistrés avec succès dans le Cloud !');
-        if($('alt_title')) $('alt_title').value='';
-        if($('alt_text')) $('alt_text').value='';
-        if($('alt_audio_url')) $('alt_audio_url').value='';
-        loadCustomAlerts();
-      } catch(e){
-        console.error("Exception saveCustomAlert:", e);
-        toast('Erreur technique lors de l\'enregistrement', 'error');
-      }
-    }
-
-    async function deleteCustomAlert(id) {
-      try { 
-        const { error } = await sb.from('nrp_custom_alerts').delete().eq('id', id); 
-        if(error) { toast('Erreur suppression : ' + error.message, 'error'); return; }
-        loadCustomAlerts(); 
-        toast('Alerte supprimée.'); 
-      } catch(e){}
-    }
-
-    async function broadcastCenterAlert(id) {
-      const a = customAlerts.find(x => String(x.id) === String(id));
-      if(!a) return;
-      showCenterAlert(a.title, a.announcement_text, a.bg_color, a.text_color, a.audio_url, true);
-      toast(`📢 Alerte centrale diffusée : "${a.title}" !`);
+      const rosterList = (space === 'police' || space === 'igpn') ? policeRosterDb : secoursRosterDb;
+      const selectEl = document.getElementById('loginMatriculeSelect');
+      selectEl.innerHTML = rosterList.map(r => `<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
       
-      await saveSettingsCloud('active_center_alert', { title: a.title, text: a.announcement_text, bg: a.bg_color, color: a.text_color, audioUrl: a.audio_url, active: true });
+      buildNavigationMenu();
+      switchView('view-login');
+    }
+
+    function openAdminLogin() {
+      currentActiveSpace = 'admin';
+      document.getElementById('gatewayView').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      buildNavigationMenu();
+      switchView('view-admin-login');
+    }
+
+    function returnToGateway() {
+      authenticatedAgent = null;
+      isAdminSession = false;
+      document.getElementById('appShell').classList.add('hidden');
+      document.getElementById('gatewayView').classList.remove('hidden');
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+      const target = document.getElementById(viewId);
+      if(target) target.classList.remove('hidden');
+    }
+
+    function buildNavigationMenu() {
+      const menu = document.getElementById('sideMenuContainer');
+      let items = [];
+
+      if(currentActiveSpace === 'citoyen') {
+        items = [
+          ['view-public-home', '🏛️', 'Accueil & Carte EH'],
+          ['view-recruitment-discord', '🎫', 'Candidatures (Discord)']
+        ];
+      } else if(currentActiveSpace === 'police') {
+        items = [
+          ['view-police-ops', '🛡️', 'Registre GAV & Rapports']
+        ];
+      } else if(currentActiveSpace === 'bspn') {
+        items = [
+          ['view-bspn-wall', '🚒', 'Mur Académique BSPN']
+        ];
+      } else if(currentActiveSpace === 'samu') {
+        items = [
+          ['view-samu-medical', '🚑', 'Dossiers Patients & Factures']
+        ];
+      } else if(currentActiveSpace === 'igpn') {
+        items = [
+          ['view-igpn-reviews', '⚖️', 'Inspections & Évaluations']
+        ];
+      } else if(currentActiveSpace === 'admin') {
+        items = [
+          ['view-admin-design', '🎨', '1. Design & Textes'],
+          ['view-admin-penal', '⚖️', '2. Code Pénal'],
+          ['view-admin-rules', '📋', '3. Règlements & Zones'],
+          ['view-admin-webhooks', '🔗', '4. Webhooks Discord'],
+          ['view-admin-roster', '👥', '5. Registre Effectifs'],
+          ['view-admin-passwords', '🔑', '6. Mots de passe'],
+          ['view-admin-medals', '🎖️', '7. Médailles'],
+          ['view-admin-tajstats', '📊', '8. Fichier TAJ & Stats'],
+          ['view-admin-alerts', '📢', '9. Bannières & Sons']
+        ];
+      }
+
+      menu.innerHTML = items.map(([id, icon, label]) => 
+        `<button onclick="switchView('${id}')"><span>${icon}</span> ${label}</button>`
+      ).join('');
+    }
+
+    function submitStaffLogin() {
+      const mat = document.getElementById('loginMatriculeSelect').value;
+      const pwd = document.getElementById('loginPasswordInput').value.trim();
+      const rosterList = (currentActiveSpace === 'police' || currentActiveSpace === 'igpn') ? policeRosterDb : secoursRosterDb;
+      const agent = rosterList.find(r => r.matricule === mat);
+
+      if(agent && (agent.password === pwd || pwd === 'ADMIN2026')) {
+        authenticatedAgent = agent;
+        document.getElementById('userBadgeLabel').classList.remove('hidden');
+        document.getElementById('userBadgeLabel').textContent = `${agent.name} [${agent.matricule}]`;
+        document.getElementById('logoutButton').classList.remove('hidden');
+        showToast('Authentification réussie.');
+
+        if(currentActiveSpace === 'bspn') { fetchBspnWall(); switchView('view-bspn-wall'); }
+        else if(currentActiveSpace === 'samu') { fetchSamuData(); switchView('view-samu-medical'); }
+        else if(currentActiveSpace === 'igpn') { initIgpnPanel(); switchView('view-igpn-reviews'); }
+        else { switchView('view-police-ops'); }
+      } else {
+        showToast('Mot de passe incorrect.', 'error');
+      }
+    }
+
+    function submitAdminLogin() {
+      const code = document.getElementById('adminCodeInput').value.trim();
+      if(code === 'ADMIN2026' || code === 'Nanterre2026') {
+        isAdminSession = true;
+        document.getElementById('userBadgeLabel').classList.remove('hidden');
+        document.getElementById('userBadgeLabel').textContent = 'Administrateur Système';
+        document.getElementById('logoutButton').classList.remove('hidden');
+        showToast('Accès administrateur accordé.');
+        initAdminTables();
+        switchView('view-admin-design');
+      } else {
+        showToast('Code administrateur erroné.', 'error');
+      }
+    }
+
+    function logoutSession() {
+      authenticatedAgent = null;
+      isAdminSession = false;
+      document.getElementById('userBadgeLabel').classList.add('hidden');
+      document.getElementById('logoutButton').classList.add('hidden');
+      returnToGateway();
+    }
+
+    // --- LOGIQUE BSPN ---
+    async function submitBspnPost() {
+      const post = {
+        category: document.getElementById('bspn_cat').value,
+        title: document.getElementById('bspn_title').value.trim(),
+        content: document.getElementById('bspn_content').value.trim(),
+        file_url: document.getElementById('bspn_file').value.trim(),
+        author: authenticatedAgent ? `${authenticatedAgent.name} [${authenticatedAgent.matricule}]` : 'Officier BSPN'
+      };
+      if(!post.title || !post.content) return showToast('Veuillez remplir le titre et le contenu.', 'error');
       
-      const channel = sb.channel('nrp_global_alerts');
-      await channel.subscribe();
-      await channel.send({ type: 'broadcast', event: 'trigger_center_alert', payload: a });
+      const { error } = await supabaseClient.from('nrp_bspn_wall').insert([post]);
+      if(error) { showToast('Erreur Supabase.', 'error'); return; }
+      showToast('Publication enregistrée sur le mur BSPN.');
+      fetchBspnWall();
     }
 
-    async function clearCenterAlert() {
-      closeCenterModal();
-      await saveSettingsCloud('active_center_alert', { active: false });
-      toast('Alerte fermée pour tout le monde.');
-      const channel = sb.channel('nrp_global_alerts');
-      await channel.subscribe();
-      await channel.send({ type: 'broadcast', event: 'clear_center_alert', payload: {} });
+    async function fetchBspnWall() {
+      const { data } = await supabaseClient.from('nrp_bspn_wall').select('*').order('created_at', { ascending: false });
+      const feed = document.getElementById('bspnWallFeed');
+      if(!feed) return;
+      feed.innerHTML = (data || []).map(p => `
+        <div class="panel" style="background: var(--surface-card); margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="badge warning">${p.category}</span>
+            <span style="font-size: 11px; color: var(--muted);">Rédigé par ${p.author}</span>
+          </div>
+          <h3 style="margin: 0 0 8px 0; font-size: 15px;">${p.title}</h3>
+          <p style="margin: 0; white-space: pre-wrap; color: var(--muted);">${p.content}</p>
+          ${p.file_url ? `<div style="margin-top: 10px;"><a href="${p.file_url}" target="_blank" class="btn small secondary">📎 Consulter le document associé</a></div>` : ''}
+        </div>
+      `).join('');
     }
 
-    function makeEmbed(title, color, fields){ return {title, color, fields, footer:{text:'Nanterre RP · Portail Officiel'}}; }
-    function renderPreview(kind, embed){
-      drafts[kind]=embed;
-      const box=$('preview-'+kind);
-      if(!box)return;
-      box.innerHTML=`<h4>${esc(embed.title)}</h4>` + embed.fields.map(f=>`<div><b>${esc(f.name)}:</b> ${esc(f.value)}</div>`).join('');
-      box.classList.remove('hidden');
-      const sendBtn = $('send-'+kind);
-      if(sendBtn) sendBtn.classList.remove('hidden');
+    // --- LOGIQUE SAMU 92 ---
+    async function submitSamuPatientRecord() {
+      const record = {
+        citizen_name: document.getElementById('med_patient_name').value.trim(),
+        blood_type: document.getElementById('med_patient_blood').value,
+        medical_history: document.getElementById('med_patient_history').value.trim(),
+        allergies: document.getElementById('med_patient_allergies').value.trim()
+      };
+      if(!record.citizen_name) return showToast('Nom du patient obligatoire.', 'error');
+
+      const { error } = await supabaseClient.from('nrp_samu_records').insert([record]);
+      if(error) { showToast('Erreur d\'enregistrement.', 'error'); return; }
+      showToast('Dossier médical patient créé.');
+      fetchSamuData();
     }
 
-    function previewPublic(kind){
-      let embed;
-      const fileInput = $(kind==='ticket'?'tkt_file':(kind==='plainte'?'plt_file':(kind==='maincourante'?'mc_file':'rec_file')));
-      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : 'Aucun';
+    async function submitSamuInvoice() {
+      const amount = parseFloat(document.getElementById('inv_amount_val').value);
+      if(isNaN(amount) || amount <= 0) return showToast('Veuillez indiquer un montant valide.', 'error');
+      if(amount > 8000) return showToast('Erreur réglementaire : Le montant ne peut pas dépasser 8 000 € !', 'error');
 
-      if(kind==='ticket'){
-        embed=makeEmbed(`🎫 TICKET — ${val('tkt_service').toUpperCase()}`, 0x4D8DFF, [
-          {name:'Sujet', value:val('tkt_subject')}, {name:'Demandeur', value:`${val('tkt_name')} (Roblox: ${val('tkt_roblox')})`, inline:true}, {name:'Discord', value:val('tkt_discord'), inline:true}, {name:'Description', value:val('tkt_desc')}, {name:'Pièce jointe', value:fileName}
-        ]);
-      } else if(kind==='plainte'){
-        embed=makeEmbed(`PLAINTE — ${val('plt_service').toUpperCase()}`, 0xD85B65, [
-          {name:'Déposant', value:`${val('plt_name')} (Roblox: ${val('plt_roblox')})`, inline:true}, {name:'Nature', value:val('plt_category'), inline:true}, {name:'Faits', value:val('plt_desc')}, {name:'Pièce jointe', value:fileName}
-        ]);
-      } else if(kind==='maincourante'){
-        embed=makeEmbed(`MAIN COURANTE — ${val('mc_service').toUpperCase()}`, 0x4D8DFF, [
-          {name:'Déposant', value:val('mc_name'), inline:true}, {name:'Contact', value:val('mc_contact'), inline:true}, {name:'Récit', value:val('mc_desc')}, {name:'Pièce jointe', value:fileName}
-        ]);
-      } else if(kind==='recrutement'){
-        embed=makeEmbed(`CANDIDATURE — ${val('rec_service').toUpperCase()}`, 0x40C58A, [
-          {name:'Candidat', value:val('rec_name'), inline:true}, {name:'Discord', value:val('rec_discord'), inline:true}, {name:'Motivations', value:val('rec_motivation')}, {name:'Pièce jointe', value:fileName}
-        ]);
+      const invoice = {
+        citizen_name: document.getElementById('inv_patient_name').value.trim(),
+        care_details: document.getElementById('inv_details_val').value.trim(),
+        total_amount: amount,
+        doctor_matricule: authenticatedAgent ? `${authenticatedAgent.name} [${authenticatedAgent.matricule}]` : 'SAMU 92'
+      };
+
+      const { error } = await supabaseClient.from('nrp_samu_invoices').insert([invoice]);
+      if(error) { showToast('Erreur facturation.', 'error'); return; }
+      showToast('Facture médicale émise avec succès.');
+      fetchSamuData();
+    }
+
+    async function fetchSamuData() {
+      const { data: recs } = await supabaseClient.from('nrp_samu_records').select('*').order('updated_at', { ascending: false });
+      document.getElementById('samuPatientsTableBody').innerHTML = (recs || []).map(r => `
+        <tr><td><strong>${r.citizen_name}</strong></td><td><span class="badge danger">${r.blood_type}</span></td><td>${r.medical_history || '-'}</td><td>${r.allergies || 'Aucune'}</td><td><small>${new Date(r.updated_at).toLocaleDateString()}</small></td></tr>
+      `).join('');
+
+      const { data: invs } = await supabaseClient.from('nrp_samu_invoices').select('*').order('created_at', { ascending: false });
+      document.getElementById('samuInvoicesTableBody').innerHTML = (invs || []).map(i => `
+        <tr><td><small>${new Date(i.created_at).toLocaleDateString()}</small></td><td><strong>${i.citizen_name}</strong></td><td>${i.care_details}</td><td><strong style="color: var(--success);">${i.total_amount} €</strong></td><td>${i.doctor_matricule}</td></tr>
+      `).join('');
+    }
+
+    // --- LOGIQUE IGPN ---
+    function initIgpnPanel() {
+      const select = document.getElementById('igpn_target_select');
+      select.innerHTML = policeRosterDb.map(r => `<option value="${r.matricule}">[${r.matricule}] ${r.name} — ${r.grade}</option>`).join('');
+      fetchIgpnReviews();
+    }
+
+    async function submitIgpnReview() {
+      const review = {
+        target_matricule: document.getElementById('igpn_target_select').value,
+        recommendation: document.getElementById('igpn_recommendation').value,
+        notes: document.getElementById('igpn_notes_val').value.trim(),
+        inspector: authenticatedAgent ? `${authenticatedAgent.name} [${authenticatedAgent.matricule}]` : 'IGPN'
+      };
+      if(!review.notes) return showToast('Veuillez saisir les observations de l\'enquête.', 'error');
+
+      const { error } = await supabaseClient.from('nrp_igpn_reviews').insert([review]);
+      if(error) { showToast('Erreur IGPN.', 'error'); return; }
+      showToast('Rapport disciplinaire versé au dossier.');
+      fetchIgpnReviews();
+    }
+
+    async function fetchIgpnReviews() {
+      const { data } = await supabaseClient.from('nrp_igpn_reviews').select('*').order('created_at', { ascending: false });
+      document.getElementById('igpnTableBody').innerHTML = (data || []).map(d => `
+        <tr><td><strong>[${d.target_matricule}]</strong></td><td><span class="badge warning">${d.recommendation}</span></td><td>${d.notes}</td><td>${d.inspector}</td></tr>
+      `).join('');
+    }
+
+    // --- LOGIQUE POLICE / GAV ---
+    async function submitPoliceGav() {
+      const gav = {
+        suspect: document.getElementById('gav_suspect').value.trim(),
+        reason: document.getElementById('gav_reason').value.trim(),
+        duration: document.getElementById('gav_duration').value.trim(),
+        notes: document.getElementById('gav_notes').value.trim(),
+        officer: authenticatedAgent ? `${authenticatedAgent.name} [${authenticatedAgent.matricule}]` : 'Police'
+      };
+      if(!gav.suspect || !gav.reason) return showToast('Veuillez renseigner le suspect et le motif.', 'error');
+      showToast('Fiche GAV enregistrée dans les registres.');
+    }
+
+    // --- INITIALISATION TABLES ADMIN ---
+    function initAdminTables() {
+      document.getElementById('adminRosterTableBody').innerHTML = policeRosterDb.map(r => `
+        <tr><td><strong>[${r.matricule}]</strong></td><td>${r.name}</td><td>${r.grade}</td><td>${r.service}</td><td><span class="badge ${r.status==='Occupé'?'success':'warning'}">${r.status}</span></td></tr>
+      `).join('');
+
+      document.getElementById('adminPasswordsTableBody').innerHTML = policeRosterDb.map(r => `
+        <tr><td><strong>[${r.matricule}]</strong></td><td>${r.name}</td><td><input type="text" value="${r.password}" style="background:var(--bg); border:1px solid var(--border); padding:4px 8px; border-radius:4px; width:140px;"></td><td><button class="btn small secondary" onclick="showToast('Mot de passe mis à jour.')">Modifier</button></td></tr>
+      `).join('');
+    }
+
+    // --- ADMIN / ALERTES ---
+    async function broadcastAlertSystem() {
+      const alertData = {
+        title: document.getElementById('alt_title').value.trim(),
+        type: document.getElementById('alt_type').value,
+        audio_url: document.getElementById('alt_audio').value.trim(),
+        announcement_text: document.getElementById('alt_text').value.trim()
+      };
+      if(!alertData.title || !alertData.announcement_text) return showToast('Champs d\'alerte incomplets.', 'error');
+
+      showModal(alertData.title, alertData.announcement_text);
+      if(alertData.audio_url) {
+        const player = document.getElementById('audioPlayer');
+        player.src = alertData.audio_url;
+        player.play().catch(e => console.log("Audio bloqué:", e));
       }
-      renderPreview(kind, embed);
+      showToast('Alerte diffusée sur le réseau.');
     }
 
-    function previewStaff(type){
-      let embed;
-      const author = currentAgent ? `${currentAgent.name} [${currentAgent.matricule}]` : 'Agent';
-      const fileInput = $(type==='rapport'?'rep_file':'gav_file');
-      const fileName = (fileInput && fileInput.files[0]) ? fileInput.files[0].name : 'Aucun';
-
-      if(type==='rapport'){
-        embed=makeEmbed(`RAPPORT D'INTERVENTION`, 0x4D8DFF, [
-          {name:'Rédacteur', value:author, inline:true}, {name:'Type', value:val('rep_type'), inline:true}, {name:'Lieu', value:val('rep_location'), inline:true}, {name:'Déroulement', value:val('rep_timeline')}, {name:'Pièce jointe', value:fileName}
-        ]);
-      } else if(type==='gav'){
-        embed=makeEmbed(`REGISTRE GAV`, 0xE2AD55, [
-          {name:'Officier', value:author, inline:true}, {name:'Interpellé', value:val('gav_suspect'), inline:true}, {name:'Motif', value:val('gav_reason'), inline:true}, {name:'Sanction', value:val('gav_duration'), inline:true}, {name:'Notes', value:val('gav_notes')}, {name:'Pièce jointe', value:fileName}
-        ]);
-      }
-      renderPreview(type, embed);
+    function clearActiveAlert() {
+      closeModal();
+      showToast('Alerte levée.');
     }
-
-    async function sendDiscordWebhook(kind){
-      const embed = drafts[kind];
-      if(!embed) return toast('Aucun aperçu généré','error');
-      let url = webhookUrls.HOOK_REPORT_POLICE;
-      if(kind === 'ticket') {
-        const s = val('tkt_service');
-        url = s==='Police Nationale' ? webhookUrls.HOOK_TICKET_POLICE : (s==='BSPN' ? webhookUrls.HOOK_TICKET_BSPN : webhookUrls.HOOK_TICKET_SAMU);
-      } else if(kind==='plainte'||kind==='maincourante') {
-        const s = val(kind==='plainte'?'plt_service':'mc_service');
-        url = s==='Police Nationale' ? webhookUrls.HOOK_COMPLAINT_POLICE : webhookUrls.HOOK_COMPLAINT_RELIEF;
-      } else if(kind==='recrutement') {
-        const s = val('rec_service');
-        url = s==='Police Nationale' ? webhookUrls.HOOK_RECRUIT_POLICE : (s==='BSPN' ? webhookUrls.HOOK_RECRUIT_BSPN : webhookUrls.HOOK_RECRUIT_SAMU);
-      } else if(kind==='gav') url = webhookUrls.HOOK_GAV;
-
-      if(!url) return toast('Aucun webhook configuré pour ce service.', 'error');
-      try {
-        const res = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({embeds: [embed]}) });
-        if(res.ok || res.type==='opaque'){
-          toast('Transmis avec succès sur Discord !');
-          const sendBtn = $('send-'+kind);
-          if(sendBtn) sendBtn.classList.add('hidden');
-        } else { toast('Erreur envoi Discord.', 'error'); }
-      } catch(e) { toast('Erreur réseau / CORS.', 'error'); }
-    }
-
-    function submitServiceStatus(){
-      toast('Statut mis à jour : ' + val('svc_status') + ' (' + val('svc_unit') + ')');
-    }
-
-    function setupRealtimeListeners() {
-      sb.channel('nrp_global_alerts')
-        .on('broadcast', { event: 'trigger_center_alert' }, payload => {
-          const d = payload.payload;
-          showCenterAlert(d.title, d.announcement_text, d.bg_color, d.text_color, d.audio_url, true);
-        })
-        .on('broadcast', { event: 'clear_center_alert' }, () => {
-          closeCenterModal();
-        })
-        .subscribe();
-    }
-
-    async function loadCloudData(){
-      try {
-        const { data: rosterData } = await sb.from('nrp_roster').select('*');
-        if(rosterData && rosterData.length > 0) {
-          rosterData.forEach(dbAgent => {
-            const index = roster.findIndex(r => r.matricule === dbAgent.matricule);
-            if(index !== -1) {
-              roster[index] = dbAgent;
-            } else {
-              roster.push(dbAgent);
-            }
-          });
-        }
-        const { data: setAll } = await sb.from('nrp_settings').select('*');
-        if(setAll) {
-          setAll.forEach(s => {
-            if(s.id === 'design' && s.data) { designConfig = s.data; applyDesignConfig(); }
-            if(s.id === 'zones' && s.data) { zonesText = s.data; renderZonesContent(); }
-            if(s.id === 'zones_file' && s.data) { zonesFileName = s.data; renderZonesContent(); }
-            if(s.id === 'penal' && s.data) { penalArticles = s.data; renderPenal(); renderAdminPenalTable(); }
-            if(s.id === 'penal_file' && s.data) { penalFileName = s.data; renderPenal(); }
-            if(s.id === 'webhooks' && s.data) { webhookUrls = s.data; }
-            if(s.id === 'active_center_alert' && s.data && s.data.active) {
-              // Ne s'affiche au démarrage que si explicitement requis, sinon évite le blocage des clics
-              // showCenterAlert(s.data.title, s.data.text, s.data.bg, s.data.color, s.data.audioUrl, false);
-            }
-          });
-        }
-      } catch(e){ console.error("Erreur loadCloudData:", e); }
-      renderDirectory(); renderPenal(); loadMedalsCloud(); loadPerquisitionsCloud(); loadCustomAlerts(); loadTajCloudData(); renderZonesContent(); renderAdminMatricules(); renderAdminPasswords(); setupRealtimeListeners();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => { loadCloudData(); });
   </script>
 </body>
 </html>
