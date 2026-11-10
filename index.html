@@ -50,7 +50,7 @@
     .toast-host{position:fixed;right:18px;bottom:18px;z-index:99999;display:grid;gap:8px;max-width:min(400px,calc(100vw - 36px))}
     .toast{background:#182940;border:1px solid #3d5879;border-radius:11px;padding:12px 15px;color:#eaf2fc;font-size:12px;box-shadow:var(--shadow)}
 
-    /* --- CENTRE MESSAGE VISUEL PLEIN MILIEU --- */
+    /* --- BOÎTE D'ALERTE CENTRALE EN PLEIN MILIEU --- */
     #globalCenterOverlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -95,7 +95,7 @@
   </style>
 </head>
 <body>
-  <!-- POPUP PLEIN MILIEU (ALERTE VISUELLE CENTRALE) -->
+  <!-- POPUP CENTRALE EN PLEIN MILIEU -->
   <div id="globalCenterOverlay">
     <div class="center-modal-box" id="centerModalCard">
       <h1 id="centerModalTitle">ALERTE OFFICIELLE</h1>
@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <!-- Audio player pour lien/fichier de son -->
+  <!-- Lecteur audio invisible pour les liens de sons / musiques -->
   <audio id="customAudioPlayer" style="display:none"></audio>
 
   <!-- PAGE D'ACCUEIL / GATEWAY -->
@@ -493,22 +493,23 @@
         </div>
       </section>
 
-      <!-- ADMIN : ALERTES VISUELLES & AUDIO (LIEN/FICHIER SON) -->
+      <!-- ADMIN : BANNIÈRES & ALERTES CENTRALES -->
       <section class="view" id="view-admin-alerts">
         <div class="panel">
           <div class="panel-head">
-            <h2>📢 Système d'Alerte Visuelle & Sonore (Par Lien/Fichier)</h2>
+            <h2>📢 Bannières, Sons & Message Central</h2>
             <button class="btn danger small" onclick="clearCenterAlert()">✖ Fermer l'alerte active</button>
           </div>
           <div class="form-grid" style="margin-top:15px">
-            <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: ALERTE ROUGE / ATTENTAT"></div>
-            <div class="field"><label>Lien URL du son / musique d'alerte (MP3, WAV, etc.)</label><input id="alt_audio_url" placeholder="Ex: https://example.com/sound.mp3"></div>
-            <div class="field full"><label>Message central en plein milieu <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Évacuation immédiate de la zone publique demandée."></textarea></div>
-            <div class="field"><label>Couleur de fond de la boîte</label><input id="alt_bg" type="color" value="#d85b65" style="height:42px"></div>
+            <div class="field"><label>Titre de l'alerte <span class="req">*</span></label><input id="alt_title" placeholder="Ex: ALERTE ROUGE"></div>
+            <div class="field"><label>Type d'alerte</label><select id="alt_type"><option value="police">Police</option><option value="general">Général</option></select></div>
+            <div class="field full"><label>Lien URL du son / musique d'alerte (MP3, WAV, etc.)</label><input id="alt_audio_url" placeholder="Ex: https://example.com/sound.mp3"></div>
+            <div class="field full"><label>Message affiché au milieu de l'écran <span class="req">*</span></label><textarea id="alt_text" placeholder="Ex: Évacuation immédiate de la zone publique demandée."></textarea></div>
+            <div class="field"><label>Couleur de fond</label><input id="alt_bg" type="color" value="#d85b65" style="height:42px"></div>
             <div class="field"><label>Couleur du texte</label><input id="alt_color" type="color" value="#ffffff" style="height:42px"></div>
           </div>
           <div class="form-actions"><button class="btn" onclick="saveCustomAlert()">Enregistrer dans la liste</button></div>
-          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Titre</th><th>Lien Son</th><th>Message central</th><th>Actions</th></tr></thead><tbody id="adminAlertsBody"></tbody></table></div>
+          <div class="table-wrap" style="margin-top:20px"><table class="data-table"><thead><tr><th>Titre</th><th>Lien Son</th><th>Message Central</th><th>Actions</th></tr></thead><tbody id="adminAlertsBody"></tbody></table></div>
         </div>
       </section>
 
@@ -521,7 +522,7 @@
     const SUPABASE_KEY = 'sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- GESTION AUDIO PAR LIEN / FICHIER ---
+    // --- LECTURE AUDIO VIA LIEN / FICHIER ---
     function playAudioUrl(url) {
       if(!url) return;
       try {
@@ -529,12 +530,12 @@
         player.src = url;
         player.currentTime = 0;
         player.play().catch(e => {
-          console.log("Lecture audio bloquée par les politiques du navigateur, interaction requise.", e);
+          console.log("Lecture audio bloquée ou lien invalide :", e);
         });
       } catch(e) {}
     }
 
-    // --- AFFICHAGE DE LA BOÎTE D'ALERTE AU MILIEU DE L'ÉCRAN ---
+    // --- BOÎTE D'ALERTE CENTRALE ---
     function showCenterAlert(title, text, bg, color, audioUrl, playSound = true) {
       const overlay = document.getElementById('globalCenterOverlay');
       const card = document.getElementById('centerModalCard');
@@ -643,7 +644,7 @@
       if (activeSpace === 'citoyen') {
         navItems.push(['view-public-home','⌂','Accueil public'],['view-ticket','🎫','Ouvrir un ticket'],['view-complaint','⚖','Dépôt de plainte'],['view-maincourante','▤','Main courante'],['view-recruitment','♙','Recrutement'],['view-zones','⌖','Règlements & Zones']);
       } else if (activeSpace === 'admin') {
-        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-penal','⚖️','Gérer Code Pénal'],['view-admin-zones','📋','Gérer Règlements'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles'],['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH'],['view-admin-alerts','📢','Alerte & Sons']);
+        navItems.push(['view-admin-design','🎨','Design & Textes'],['view-admin-penal','⚖️','Gérer Code Pénal'],['view-admin-zones','📋','Gérer Règlements'],['view-admin-home','↗','Webhooks Discord'],['view-admin-matricules','▤','Registre 00-100'],['view-admin-passwords','🔑','Mots de passe'],['view-admin-medals','🎖️','Médailles'],['view-taj','🗂️','Fichier TAJ'],['view-stats','📊','Stats RH'],['view-admin-alerts','📢','Bannières & Sons']);
       } else {
         navItems.push(['view-staff-home','▦','Tableau de bord'],['view-report','▤','Rapport d’intervention'],['view-service','◉','Prise de service'],['view-directory','🎖️','Annuaire'],['view-perquisition','🔍','Perquisitions'],['view-penal','⚖️','Code pénal'],['view-zones','⌖','Règlements & Zones']);
         if (activeSpace === 'police') navItems.push(['view-gav','⚖','GAV']);
@@ -1054,14 +1055,11 @@
     async function broadcastCenterAlert(id) {
       const a = customAlerts.find(x => String(x.id) === String(id));
       if(!a) return;
-      // 1. Affichage local
       showCenterAlert(a.title, a.announcement_text, a.bg_color, a.text_color, a.audio_url, true);
       toast(`📢 Alerte centrale diffusée : "${a.title}" !`);
       
-      // 2. Sauvegarde en BDD (persistant)
       await saveSettingsCloud('active_center_alert', { title: a.title, text: a.announcement_text, bg: a.bg_color, color: a.text_color, audioUrl: a.audio_url, active: true });
       
-      // 3. Temps réel Supabase
       const channel = sb.channel('nrp_global_alerts');
       await channel.subscribe();
       await channel.send({ type: 'broadcast', event: 'trigger_center_alert', payload: a });
