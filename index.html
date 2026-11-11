@@ -6,10 +6,6 @@
 <meta name="theme-color" content="#09111f">
 <meta name="description" content="Nanterre Services - portail institutionnel RP">
 <title>Nanterre Services | Portail institutionnel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
     --bg: #080f1c;
@@ -1726,6 +1722,34 @@ function setSyncState(state, label) {
 
     $("#syncLabel").textContent = label;
     $("#sidebarSyncText").textContent = label;
+}
+
+function loadSupabaseLibrary(timeoutMs = 5000) {
+    return new Promise(resolve => {
+        if (window.supabase && window.supabase.createClient) {
+            resolve(true);
+            return;
+        }
+
+        let finished = false;
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+        script.async = true;
+
+        const finish = result => {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(timer);
+            resolve(Boolean(result));
+        };
+
+        const timer = window.setTimeout(() => finish(false), timeoutMs);
+        script.onload = () => finish(
+            Boolean(window.supabase && window.supabase.createClient)
+        );
+        script.onerror = () => finish(false);
+        document.head.appendChild(script);
+    });
 }
 
 function initSupabase() {
@@ -3756,24 +3780,73 @@ function bindGlobalEvents() {
 }
 
 async function initializeApp() {
-    loadLocal();
-    validateData();
-    initSupabase();
-
-    if (cloudAvailable) {
-        await readCloud();
+    /*
+       IMPORTANT : l'interface locale doit s'afficher AVANT tout appel réseau.
+       Une requête Supabase lente ou bloquée ne doit jamais laisser le portail
+       sur l'écran "Chargement du portail".
+    */
+    try {
+        loadLocal();
+        validateData();
+        restoreSession();
+        bindGlobalEvents();
+        renderPage("home");
+    } catch (error) {
+        console.error("Erreur pendant le démarrage local du portail", error);
+        const page = document.getElementById("pageContent");
+        if (page) {
+            page.innerHTML = `
+                <section class="panel" style="max-width:760px;margin:30px auto;padding:24px">
+                    <h2>Le portail a rencontré une erreur au démarrage</h2>
+                    <p>La synchronisation réseau n'est pas en cause. Rechargez la page. Si le problème persiste, ouvrez la console du navigateur (F12) et transmettez le premier message rouge.</p>
+                    <button class="btn btn-primary" type="button" onclick="location.reload()">Recharger le portail</button>
+                </section>`;
+        }
+        setSyncState("error", "Erreur au démarrage");
+        return;
     }
 
-    validateData();
-    restoreSession();
-    bindGlobalEvents();
+    // L'interface est déjà affichée. Le chargement du SDK externe est
+    // facultatif et possède une limite de temps : il ne bloque plus le portail.
+    const libraryReady = await loadSupabaseLibrary(5000);
+    if (!libraryReady) {
+        setSyncState("offline", "Mode local — SDK cloud inaccessible");
+        showToast("Le portail fonctionne en mode local. Le serveur Supabase ou le CDN est inaccessible.", "error");
+        return;
+    }
 
-    renderPage("home");
-
-    if (cloudAvailable) {
-        setSyncState("online", "Synchronisé");
-    } else {
+    initSupabase();
+    if (!cloudAvailable) {
         setSyncState("offline", "Stockage local");
+        return;
+    }
+
+    setSyncState("offline", "Connexion au cloud…");
+
+    // On limite l'attente initiale à 7 secondes. Le site reste utilisable
+    // localement pendant ce temps et le résultat cloud est appliqué s'il arrive.
+    const cloudTask = readCloud().then(ok => {
+        if (ok) {
+            validateData();
+            renderPage(currentPage || "home");
+        }
+        return ok;
+    });
+
+    const timeoutTask = new Promise(resolve => {
+        window.setTimeout(() => resolve("timeout"), 7000);
+    });
+
+    const cloudResult = await Promise.race([cloudTask, timeoutTask]);
+
+    if (cloudResult === "timeout") {
+        setSyncState("error", "Cloud lent — mode local actif");
+        showToast("Le portail est ouvert en mode local. La connexion Supabase prend trop de temps.", "error");
+        // cloudTask reste surveillée : si la réponse arrive plus tard,
+        // readCloud appliquera les données et l'écran sera actualisé.
+    } else if (cloudResult === false) {
+        setSyncState("error", "Cloud indisponible — mode local");
+        showToast("Supabase est indisponible ou la table rp_v6_data n'est pas configurée. Le mode local reste utilisable.", "error");
     }
 }
 
