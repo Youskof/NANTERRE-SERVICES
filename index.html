@@ -161,6 +161,48 @@
       .hero-symbol { width: 54px; height: 54px; flex-basis: 54px; font-size: 24px; }
     }
     @media (max-width: 390px) { .service-grid { grid-template-columns: 1fr; } .status-pill { display: none; } }
+    .module-card {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 17px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: .2s;
+  min-height: 115px;
+}
+
+.module-card:hover {
+  background: rgba(77,145,255,.09);
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.module-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.module-card small {
+  color: var(--muted);
+}
+
+.module-icon {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.module-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.module-back {
+  margin-bottom: 18px;
+}
   </style>
 </head>
 <body>
@@ -214,6 +256,116 @@
     admin: ["Administration centrale", "Paramètres généraux et gestion du portail."]
   };
   const content = document.getElementById("content");
+  const adminModules = {
+  design: {
+    title: "Design et textes",
+    description: "Personnalisation générale du portail.",
+    icon: "▧"
+  },
+  penal: {
+    title: "Code pénal",
+    description: "Gestion des infractions, amendes et sanctions.",
+    icon: "§"
+  },
+  rules: {
+    title: "Règlements et zones",
+    description: "Gestion des règlements et des zones de la ville.",
+    icon: "▤"
+  },
+  webhooks: {
+    title: "Webhooks Discord",
+    description: "Configuration des notifications Discord.",
+    icon: "↗"
+  },
+  staff: {
+    title: "Gestion des effectifs",
+    description: "Matricules, grades, services et disponibilités.",
+    icon: "♧"
+  },
+  passwords: {
+    title: "Gestion des accès",
+    description: "Création et réinitialisation des accès agents.",
+    icon: "🔑"
+  },
+  medals: {
+    title: "Médailles",
+    description: "Création et attribution des distinctions.",
+    icon: "◈"
+  },
+  taj: {
+    title: "TAJ et statistiques",
+    description: "Gestion des fiches et statistiques.",
+    icon: "⌕"
+  },
+  alerts: {
+    title: "Alertes et sons",
+    description: "Gestion des annonces et alertes des services.",
+    icon: "⚑"
+  }
+};
+
+function moduleButton(id) {
+  const item = adminModules[id];
+
+  return `
+    <button class="module-card" data-module="${id}">
+      <div class="module-icon">${item.icon}</div>
+      <strong>${item.title}</strong>
+      <small>${item.description}</small>
+    </button>
+  `;
+}
+
+function renderModule(id) {
+  const item = adminModules[id];
+
+  if (!item) return;
+
+  document.getElementById("crumb").textContent = item.title;
+
+  content.innerHTML = `
+    <div class="welcome">
+      <div>
+        <div class="eyebrow">ADMINISTRATION CENTRALE</div>
+        <h1>${item.title}</h1>
+        <p class="sub">${item.description}</p>
+      </div>
+    </div>
+
+    <button class="btn secondary module-back" id="backAdmin">
+      ← Retour à l'administration
+    </button>
+
+    <div class="grid">
+      <section class="card span-12">
+        <div class="card-head">
+          <h2>${item.title}</h2>
+          <span class="tag amber">Connexion à configurer</span>
+        </div>
+
+        <div class="notice">
+          Cette rubrique est créée. Ses opérations seront raccordées
+          à la base de données et protégées par les permissions
+          administrateur.
+        </div>
+
+        <div id="moduleContent" style="margin-top:20px">
+          <div class="empty">
+            Interface de gestion en préparation.
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      NANTERRE SERVICES · ADMINISTRATION CENTRALE
+    </div>
+  `;
+
+  document.getElementById("backAdmin").addEventListener("click", () => {
+    render("admin");
+  });
+}
   const nav = document.getElementById("navigation");
   const crumb = document.getElementById("crumb");
   const toastBox = document.getElementById("toast");
@@ -317,25 +469,64 @@
         ${card("Accès confidentiel", `<div class="list"><div class="list-row"><span>Fiches IGPN</span><span class="tag amber">Protection à mettre en place</span></div><div class="list-row"><span>Journal d'audit</span><span class="tag amber">À connecter</span></div></div>`, "span-4")}
         ${card("Sécurité des dossiers", `<div class="notice">Les informations d'enquête et les évaluations individuelles nécessitent une authentification réelle, des permissions par rôle et une journalisation côté serveur.</div>`, "span-12")}
       </div>`;
-    } else if (page === "admin") {
-      html += `<div class="grid">
-        ${card("Administration centrale", `<div class="service-grid">
-          ${serviceButton("▧","Design et textes","Personnalisation du portail","admin")}
-          ${serviceButton("§","Code pénal","Gestion des infractions","admin")}
-          ${serviceButton("▤","Règlements et zones","Règles de la ville","admin")}
-          ${serviceButton("♧","Effectifs","Gestion des matricules","admin")}
-          ${serviceButton("◈","Médailles","Définition des distinctions","admin")}
-          ${serviceButton("⚑","Alertes et sons","Diffusion des annonces","admin")}
-        </div>`, "span-8")}
-        ${card("État de configuration", `<div class="list"><div class="list-row"><span>Interface V6</span><span class="tag green">Prête en démonstration</span></div><div class="list-row"><span>Base Supabase</span><span class="tag amber">Non raccordée</span></div><div class="list-row"><span>Comptes agents</span><span class="tag amber">À sécuriser</span></div><div class="list-row"><span>Permissions</span><span class="tag amber">À configurer</span></div></div>`, "span-4")}
-        ${card("Gestion du portail", `<p class="muted">Les outils d'administration seront activés progressivement après raccordement sécurisé de la base de données.</p><div class="toolbar"><button class="btn" id="demoLogin">Ouvrir la démonstration de connexion</button><button class="btn secondary" id="resetDemo">Réinitialiser l'affichage</button></div>`, "span-12")}
-      </div>`;
-    }
+   } else if (page === "admin") {
+  html += `<div class="grid">
+
+    ${card("Administration centrale", `
+      <p class="muted">
+        Centre de gestion des services et des paramètres
+        de Nanterre Services.
+      </p>
+
+      <div class="service-grid">
+        ${moduleButton("design")}
+        ${moduleButton("penal")}
+        ${moduleButton("rules")}
+        ${moduleButton("webhooks")}
+        ${moduleButton("staff")}
+        ${moduleButton("passwords")}
+        ${moduleButton("medals")}
+        ${moduleButton("taj")}
+        ${moduleButton("alerts")}
+      </div>
+    `, "span-8")}
+
+    ${card("État du portail", `
+      <div class="list">
+        <div class="list-row">
+          <span>Interface V6</span>
+          <span class="tag green">Disponible</span>
+        </div>
+
+        <div class="list-row">
+          <span>Base de données</span>
+          <span class="tag amber">À raccorder</span>
+        </div>
+
+        <div class="list-row">
+          <span>Authentification</span>
+          <span class="tag amber">À sécuriser</span>
+        </div>
+
+        <div class="list-row">
+          <span>Permissions</span>
+          <span class="tag amber">À configurer</span>
+        </div>
+      </div>
+    `, "span-4")}
+
+  </div>`;
+}
     html += `<div class="footer">NANTERRE SERVICES · PORTAIL INSTITUTIONNEL V6 · VERSION DE DÉMONSTRATION</div>`;
     content.innerHTML = html;
     const today = document.getElementById("today");
     if (today) today.textContent = new Intl.DateTimeFormat("fr-FR", {weekday:"long", day:"numeric", month:"long", year:"numeric"}).format(new Date());
     content.querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => render(el.dataset.go)));
+    content.querySelectorAll("[data-module]").forEach(el => {
+  el.addEventListener("click", () => {
+    renderModule(el.dataset.module);
+  });
+});
     const demoLogin = document.getElementById("demoLogin");
     if (demoLogin) demoLogin.addEventListener("click", showDemoLogin);
     const reset = document.getElementById("resetDemo");
