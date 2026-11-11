@@ -1,646 +1,3893 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1220">
-  <title>Nanterre Services — V6</title>
-  <style>
-    :root {
-      --bg: #0b1220;
-      --panel: #111c2e;
-      --panel-2: #16243a;
-      --panel-3: #1b2c45;
-      --line: rgba(157, 180, 212, .13);
-      --text: #edf3fc;
-      --muted: #91a2bb;
-      --blue: #4d91ff;
-      --blue-2: #276bd6;
-      --green: #38c995;
-      --amber: #f2b95f;
-      --red: #ed747b;
-      --radius: 17px;
-      --shadow: 0 18px 50px rgba(0,0,0,.22);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; color: var(--text);
-      background: radial-gradient(circle at 80% -10%, rgba(50,111,201,.18), transparent 35%), var(--bg);
-      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .app { display: flex; min-height: 100vh; }
-    .sidebar {
-      width: 258px; flex: 0 0 258px; padding: 24px 16px;
-      background: rgba(13,22,37,.94); border-right: 1px solid var(--line);
-      display: flex; flex-direction: column; gap: 26px;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; padding: 0 9px; }
-    .brand-mark {
-      width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
-      background: linear-gradient(145deg, #5aa2ff, #2358b5); font-weight: 900; letter-spacing: -.08em;
-      box-shadow: 0 8px 24px rgba(48,117,220,.3);
-    }
-    .brand strong { display: block; font-size: 14px; letter-spacing: .07em; }
-    .brand small { color: var(--muted); font-size: 11px; }
-    .nav-label { color: #71839e; font-size: 10px; font-weight: 800; letter-spacing: .13em; padding: 0 11px; margin-bottom: 8px; }
-    .nav { display: grid; gap: 5px; }
-    .nav button {
-      border: 1px solid transparent; color: #aebbd0; background: transparent; text-align: left;
-      padding: 11px 12px; border-radius: 11px; display: flex; align-items: center; gap: 12px;
-      transition: .18s ease;
-    }
-    .nav button:hover { background: rgba(255,255,255,.045); color: white; }
-    .nav button.active { background: linear-gradient(90deg, rgba(65,135,239,.2), rgba(65,135,239,.07)); border-color: rgba(80,145,255,.22); color: #fff; }
-    .nav-icon { width: 23px; text-align: center; font-size: 16px; }
-    .side-bottom { margin-top: auto; }
-    .demo-note { padding: 13px; border: 1px solid rgba(242,185,95,.2); border-radius: 12px; background: rgba(242,185,95,.06); color: #c9b58e; font-size: 11px; }
-    .main { flex: 1; min-width: 0; }
-    .topbar {
-      height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      padding: 0 34px; border-bottom: 1px solid var(--line); background: rgba(11,18,32,.68); backdrop-filter: blur(14px);
-      position: sticky; top: 0; z-index: 5;
-    }
-    .crumb { color: var(--muted); font-size: 12px; }
-    .crumb b { color: var(--text); font-weight: 650; }
-    .top-actions { display: flex; align-items: center; gap: 10px; }
-    .status-pill { border: 1px solid rgba(56,201,149,.22); background: rgba(56,201,149,.08); color: #72dfb7; padding: 7px 10px; border-radius: 999px; font-size: 11px; }
-    .avatar { width: 35px; height: 35px; border-radius: 50%; display: grid; place-items: center; background: #233b5d; color: #dceaff; font-weight: 800; }
-    .mobile-menu { display: none; border: 1px solid var(--line); background: var(--panel); color: white; border-radius: 10px; padding: 8px 11px; }
-    .content { max-width: 1450px; padding: 32px 34px 50px; margin: auto; }
-    .welcome { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 27px; }
-    .eyebrow { color: #73aaff; text-transform: uppercase; font-size: 10px; letter-spacing: .16em; font-weight: 800; }
-    h1 { margin: 7px 0 5px; font-size: clamp(25px, 3vw, 34px); letter-spacing: -.04em; line-height: 1.15; }
-    .sub { color: var(--muted); margin: 0; }
-    .date { color: var(--muted); font-size: 12px; white-space: nowrap; }
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-    .card {
-      background: linear-gradient(145deg, rgba(22,36,58,.96), rgba(16,27,44,.96));
-      border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
-      min-width: 0;
-    }
-    .span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-7 { grid-column: span 7; }
-    .span-6 { grid-column: span 6; } .span-5 { grid-column: span 5; } .span-4 { grid-column: span 4; }
-    .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .card h2 { margin: 0; font-size: 14px; letter-spacing: -.01em; }
-    .muted { color: var(--muted); }
-    .tiny { color: var(--muted); font-size: 11px; }
-    .hero {
-      background: radial-gradient(circle at 85% 20%, rgba(77,145,255,.23), transparent 32%), linear-gradient(120deg, #152b49, #142238 70%);
-      border-color: rgba(87,151,255,.2); padding: 25px;
-    }
-    .hero-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-    .hero h2 { font-size: 20px; margin: 5px 0 7px; }
-    .hero p { margin: 0; color: #aebed5; max-width: 610px; }
-    .hero-symbol { width: 76px; height: 76px; flex: 0 0 76px; border-radius: 22px; display: grid; place-items: center; font-size: 32px; background: rgba(80,145,255,.13); border: 1px solid rgba(112,168,255,.18); }
-    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
-    .stat { padding: 15px; background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 13px; }
-    .stat strong { display: block; font-size: 23px; letter-spacing: -.04em; }
-    .stat span { color: var(--muted); font-size: 11px; }
-    .service-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .service {
-      border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: rgba(255,255,255,.025);
-      color: var(--text); text-align: left; transition: .18s; min-height: 130px;
-    }
-    .service:hover { transform: translateY(-2px); border-color: rgba(77,145,255,.42); background: rgba(77,145,255,.07); }
-    .service .ico { font-size: 21px; margin-bottom: 12px; }
-    .service strong { display: block; margin-bottom: 4px; }
-    .service small { color: var(--muted); }
-    .list { display: grid; gap: 0; }
-    .list-row { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-top: 1px solid var(--line); }
-    .list-row:first-child { border-top: 0; padding-top: 0; }
-    .list-row:last-child { padding-bottom: 0; }
-    .tag { font-size: 10px; border-radius: 999px; padding: 4px 8px; white-space: nowrap; background: rgba(77,145,255,.1); color: #8dbaff; }
-    .tag.green { background: rgba(56,201,149,.1); color: #72dfb7; }
-    .tag.amber { background: rgba(242,185,95,.1); color: #f2c77e; }
-    .btn {
-      border: 1px solid rgba(90,155,255,.28); border-radius: 10px; padding: 9px 13px;
-      color: white; background: linear-gradient(135deg, #347fe8, #245dbb); font-weight: 700; font-size: 12px;
-    }
-    .btn.secondary { background: rgba(255,255,255,.04); border-color: var(--line); color: #d6e1f1; }
-    .btn:hover { filter: brightness(1.12); }
-    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; }
-    .empty { border: 1px dashed rgba(145,162,187,.25); border-radius: 13px; padding: 25px; text-align: center; color: var(--muted); }
-    .login-wrap { max-width: 480px; margin: 7vh auto; }
-    .login-card { padding: 28px; }
-    .field { display: grid; gap: 7px; margin: 15px 0; }
-    .field label { font-size: 11px; color: #aebbd0; font-weight: 700; }
-    .field input, .field select {
-      width: 100%; background: #0c1728; color: white; border: 1px solid var(--line); border-radius: 10px; padding: 12px;
-      outline: none;
-    }
-    .field input:focus, .field select:focus { border-color: var(--blue); }
-    .notice { border-radius: 11px; padding: 12px; font-size: 11px; background: rgba(242,185,95,.07); border: 1px solid rgba(242,185,95,.18); color: #d7c194; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 500px; font-size: 12px; }
-    th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; }
-    th { color: var(--muted); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
-    .footer { color: #687b96; font-size: 10px; text-align: center; padding: 25px 10px 0; }
-    .toast { position: fixed; bottom: 22px; right: 22px; z-index: 20; background: #1c304d; border: 1px solid rgba(100,160,255,.3); color: white; padding: 13px 17px; border-radius: 12px; box-shadow: var(--shadow); display: none; max-width: 330px; }
-    .toast.show { display: block; animation: appear .2s ease; }
-    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @media (max-width: 1000px) {
-      .sidebar { width: 225px; flex-basis: 225px; }
-      .span-8,.span-7,.span-5 { grid-column: span 12; }
-      .span-4 { grid-column: span 6; }
-    }
-    @media (max-width: 720px) {
-      .app { display: block; }
-      .sidebar { position: fixed; z-index: 10; inset: 0 auto 0 0; width: 270px; transform: translateX(-105%); transition: transform .2s; box-shadow: var(--shadow); }
-      .sidebar.open { transform: translateX(0); }
-      .mobile-menu { display: inline-block; }
-      .topbar { height: 65px; padding: 0 16px; }
-      .content { padding: 24px 16px 35px; }
-      .welcome { align-items: flex-start; flex-direction: column; }
-      .date { display: none; }
-      .stats { grid-template-columns: repeat(2,1fr); }
-      .service-grid { grid-template-columns: repeat(2,1fr); }
-      .span-4,.span-6 { grid-column: span 12; }
-      .hero-inner { align-items: flex-start; }
-      .hero-symbol { width: 54px; height: 54px; flex-basis: 54px; font-size: 24px; }
-    }
-    @media (max-width: 390px) { .service-grid { grid-template-columns: 1fr; } .status-pill { display: none; } }
-    .module-card {
-  background: rgba(255,255,255,.025);
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 17px;
-  color: var(--text);
-  text-align: left;
-  cursor: pointer;
-  transition: .2s;
-  min-height: 115px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09111f">
+<meta name="description" content="Nanterre Services - portail institutionnel RP">
+<title>Nanterre Services | Portail institutionnel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --bg: #080f1c;
+    --bg-soft: #0d1727;
+    --panel: #111e30;
+    --panel-2: #15243a;
+    --panel-3: #1b2c45;
+    --line: rgba(166,190,220,.13);
+    --line-strong: rgba(166,190,220,.23);
+    --text: #edf4fc;
+    --muted: #91a4bc;
+    --muted-2: #6e829e;
+    --blue: #4b9cff;
+    --blue-dark: #2775d7;
+    --blue-soft: rgba(75,156,255,.13);
+    --green: #43c58a;
+    --green-soft: rgba(67,197,138,.13);
+    --orange: #f2aa54;
+    --orange-soft: rgba(242,170,84,.13);
+    --red: #ef6b73;
+    --red-soft: rgba(239,107,115,.13);
+    --purple: #aa8bff;
+    --purple-soft: rgba(170,139,255,.13);
+    --shadow: 0 20px 55px rgba(0,0,0,.28);
+    --radius: 16px;
+    --sidebar-width: 260px;
+    --topbar-height: 76px;
 }
-
-.module-card:hover {
-  background: rgba(77,145,255,.09);
-  border-color: var(--blue);
-  transform: translateY(-2px);
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--bg);
+    font-family: "DM Sans",sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
 }
-
-.module-card strong {
-  display: block;
-  margin-bottom: 6px;
+button,input,textarea,select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .5; }
+a { color: inherit; text-decoration: none; }
+.app-shell { min-height: 100vh; }
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar-width);
+    padding: 22px 16px 18px;
+    overflow-y: auto;
+    background: #0b1524;
+    border-right: 1px solid var(--line);
 }
-
-.module-card small {
-  color: var(--muted);
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 23px;
+    border-bottom: 1px solid var(--line);
 }
-
-.module-icon {
-  font-size: 21px;
-  margin-bottom: 10px;
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(145deg,#3287eb,#174e9a);
+    box-shadow: 0 8px 24px rgba(39,117,215,.27);
+    font-family: Manrope,sans-serif;
+    font-size: 15px;
+    font-weight: 800;
 }
-
-.module-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 18px;
+.brand-copy strong {
+    display: block;
+    font-family: Manrope,sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .3px;
 }
-
-.module-back {
-  margin-bottom: 18px;
+.brand-copy span {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
 }
-  </style>
+.sidebar-section { margin-top: 23px; }
+.sidebar-label {
+    padding: 0 10px;
+    color: var(--muted-2);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.nav-list { display: grid; gap: 5px; margin-top: 10px; }
+.nav-button {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    min-height: 43px;
+    padding: 9px 11px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: #a9bad0;
+    background: transparent;
+    text-align: left;
+    transition: .18s ease;
+}
+.nav-button:hover { color: #fff; background: rgba(255,255,255,.045); }
+.nav-button.active {
+    color: #fff;
+    background: var(--blue-soft);
+    border-color: rgba(75,156,255,.2);
+}
+.nav-icon { display: grid; place-items: center; width: 22px; font-size: 16px; }
+.nav-name { flex: 1; font-weight: 600; }
+.nav-count {
+    min-width: 22px;
+    padding: 1px 6px;
+    border-radius: 20px;
+    color: #c6d9ee;
+    background: rgba(255,255,255,.07);
+    font-size: 10px;
+    text-align: center;
+}
+.sidebar-spacer { flex: 1; min-height: 22px; }
+.sidebar-status {
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+}
+.status-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.status-line strong { font-size: 11px; }
+.status-line span { color: var(--muted); font-size: 10px; }
+.status-indicator {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px var(--green-soft);
+}
+.sidebar-foot {
+    margin-top: 12px;
+    color: var(--muted-2);
+    font-size: 10px;
+    text-align: center;
+}
+.main-area { min-height: 100vh; margin-left: var(--sidebar-width); }
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--topbar-height);
+    padding: 12px 30px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(8,15,28,.88);
+    backdrop-filter: blur(16px);
+}
+.topbar-left { display: flex; align-items: center; gap: 15px; min-width: 0; }
+.mobile-menu {
+    display: none;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: #fff;
+    background: var(--panel);
+}
+.breadcrumbs { min-width: 0; }
+.breadcrumbs strong {
+    display: block;
+    overflow: hidden;
+    font-family: Manrope,sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.breadcrumbs span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+.topbar-actions { display: flex; align-items: center; gap: 9px; }
+.sync-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    color: var(--muted);
+    background: rgba(255,255,255,.025);
+    font-size: 10px;
+}
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
+.sync-pill.online .sync-dot { background: var(--green); }
+.sync-pill.error .sync-dot { background: var(--red); }
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 9px 5px 5px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    background: rgba(255,255,255,.025);
+}
+.avatar {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(145deg,#377fcb,#21456f);
+    font-size: 10px;
+    font-weight: 800;
+}
+.user-chip-copy strong {
+    display: block;
+    max-width: 130px;
+    overflow: hidden;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.user-chip-copy span { display: block; color: var(--muted); font-size: 9px; }
+.page-wrap { width: min(1480px,100%); margin: 0 auto; padding: 30px; }
+.page-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+.eyebrow {
+    margin-bottom: 6px;
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+}
+h1,h2,h3,p { margin-top: 0; }
+h1,h2,h3 { font-family: Manrope,sans-serif; }
+h1 {
+    margin-bottom: 5px;
+    font-size: clamp(23px,3vw,31px);
+    font-weight: 800;
+    letter-spacing: -.9px;
+}
+.page-description { max-width: 720px; margin: 0; color: var(--muted); font-size: 13px; }
+.heading-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    color: #dbe8f7;
+    background: var(--panel-2);
+    font-size: 11px;
+    font-weight: 700;
+    transition: .18s ease;
+}
+.btn:hover { border-color: rgba(75,156,255,.5); background: var(--panel-3); }
+.btn-primary { border-color: var(--blue-dark); color: #fff; background: var(--blue-dark); }
+.btn-primary:hover { border-color: #3d91f2; background: #3d91f2; }
+.btn-danger { border-color: rgba(239,107,115,.3); color: #ff9da3; background: var(--red-soft); }
+.btn-ghost { border-color: transparent; color: var(--muted); background: transparent; }
+.btn-small { min-height: 29px; padding: 5px 8px; font-size: 10px; }
+.grid { display: grid; gap: 16px; }
+.stats-grid { grid-template-columns: repeat(4,minmax(0,1fr)); margin-bottom: 18px; }
+.stat-card {
+    position: relative;
+    min-height: 128px;
+    padding: 17px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(145deg,rgba(21,36,58,.95),rgba(15,27,44,.95));
+}
+.stat-card::after {
+    position: absolute;
+    right: -22px;
+    bottom: -36px;
+    width: 110px;
+    height: 110px;
+    border: 1px solid rgba(75,156,255,.12);
+    border-radius: 50%;
+    content: "";
+}
+.stat-label { color: var(--muted); font-size: 11px; font-weight: 600; }
+.stat-value {
+    display: block;
+    margin-top: 11px;
+    font-family: Manrope,sans-serif;
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+.stat-foot { margin-top: 2px; color: var(--muted-2); font-size: 10px; }
+.content-grid { grid-template-columns: minmax(0,1.55fr) minmax(280px,.85fr); align-items: start; }
+.panel {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: 0 8px 28px rgba(0,0,0,.08);
+}
+.panel + .panel { margin-top: 16px; }
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+}
+.panel-title { margin: 0; font-family: Manrope,sans-serif; font-size: 13px; font-weight: 800; }
+.panel-subtitle { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+.panel-body { padding: 17px 18px; }
+.service-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.service-card {
+    position: relative;
+    min-height: 175px;
+    padding: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(145deg,#14243a,#101b2c);
+    transition: .2s ease;
+    cursor: pointer;
+}
+.service-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(75,156,255,.38);
+    box-shadow: var(--shadow);
+}
+.service-card-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    color: #91c5ff;
+    background: var(--blue-soft);
+    font-size: 19px;
+}
+.service-card h3 { margin: 0 0 5px; font-size: 14px; }
+.service-card p { max-width: 260px; margin: 0; color: var(--muted); font-size: 11px; }
+.service-card-arrow { position: absolute; right: 17px; bottom: 15px; color: var(--muted-2); font-size: 17px; }
+.shortcut-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.shortcut {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    color: #dbe7f5;
+    background: rgba(255,255,255,.018);
+    text-align: left;
+}
+.shortcut:hover { border-color: rgba(75,156,255,.35); background: var(--blue-soft); }
+.shortcut-icon {
+    display: grid;
+    place-items: center;
+    width: 31px;
+    height: 31px;
+    border-radius: 9px;
+    color: #9bcaff;
+    background: rgba(75,156,255,.1);
+}
+.shortcut strong { display: block; font-size: 11px; }
+.shortcut span { display: block; margin-top: 1px; color: var(--muted); font-size: 9px; }
+.list-stack { display: grid; gap: 9px; }
+.list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+}
+.list-item:last-child { border-bottom: 0; }
+.list-marker {
+    display: grid;
+    place-items: center;
+    width: 31px;
+    height: 31px;
+    flex: 0 0 31px;
+    border-radius: 9px;
+    color: #9bcaff;
+    background: var(--blue-soft);
+}
+.list-item-content { min-width: 0; flex: 1; }
+.list-item-content strong { display: block; font-size: 11px; }
+.list-item-content p { margin: 3px 0 0; color: var(--muted); font-size: 10px; overflow-wrap: anywhere; }
+.list-item-meta { color: var(--muted-2); font-size: 9px; white-space: nowrap; }
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: #b8c9dc;
+    background: rgba(255,255,255,.035);
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.tag.green { border-color: rgba(67,197,138,.25); color: #8ce3b9; background: var(--green-soft); }
+.tag.orange { border-color: rgba(242,170,84,.25); color: #f7c88f; background: var(--orange-soft); }
+.tag.red { border-color: rgba(239,107,115,.25); color: #ffa1a7; background: var(--red-soft); }
+.tag.blue { border-color: rgba(75,156,255,.25); color: #9bcaff; background: var(--blue-soft); }
+.tag.purple { border-color: rgba(170,139,255,.25); color: #c2afff; background: var(--purple-soft); }
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line);
+}
+.toolbar-left,.toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.search-box { position: relative; min-width: 210px; }
+.search-box input {
+    width: 100%;
+    min-height: 36px;
+    padding: 8px 11px 8px 33px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    outline: none;
+    color: var(--text);
+    background: #0d1828;
+    font-size: 11px;
+}
+.search-box input:focus,.field input:focus,.field textarea:focus,.field select:focus {
+    border-color: rgba(75,156,255,.65);
+    box-shadow: 0 0 0 3px rgba(75,156,255,.1);
+}
+.search-box::before {
+    position: absolute;
+    top: 7px;
+    left: 11px;
+    color: var(--muted-2);
+    content: "⌕";
+    font-size: 17px;
+}
+.filter-select {
+    min-height: 36px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    outline: none;
+    color: var(--muted);
+    background: #0d1828;
+    font-size: 10px;
+}
+.table-wrap { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+th {
+    padding: 11px 14px;
+    color: var(--muted-2);
+    background: rgba(255,255,255,.018);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-align: left;
+    text-transform: uppercase;
+}
+td {
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+    color: #d6e2f0;
+    font-size: 10px;
+    vertical-align: middle;
+}
+tbody tr:hover { background: rgba(255,255,255,.018); }
+.table-actions { display: flex; align-items: center; gap: 5px; }
+.icon-btn {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--muted);
+    background: transparent;
+}
+.icon-btn:hover { color: #fff; border-color: var(--line-strong); background: var(--panel-3); }
+.empty-state { padding: 42px 18px; color: var(--muted); text-align: center; }
+.empty-state-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    border-radius: 14px;
+    color: #8bbfff;
+    background: var(--blue-soft);
+    font-size: 21px;
+}
+.empty-state strong { display: block; color: #d5e2f1; font-size: 12px; }
+.empty-state p { max-width: 360px; margin: 5px auto 0; font-size: 10px; }
+.admin-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.admin-module {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-height: 105px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    background: var(--panel);
+    cursor: pointer;
+    transition: .18s ease;
+}
+.admin-module:hover { border-color: rgba(75,156,255,.4); transform: translateY(-2px); }
+.admin-module-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 11px;
+    color: #a4ccff;
+    background: var(--blue-soft);
+    font-size: 17px;
+}
+.admin-module h3 { margin: 0 0 4px; font-size: 12px; }
+.admin-module p { margin: 0; color: var(--muted); font-size: 10px; }
+.admin-module-count { display: inline-block; margin-top: 8px; color: var(--muted-2); font-size: 9px; }
+.notice {
+    display: flex;
+    gap: 11px;
+    padding: 13px 14px;
+    border: 1px solid rgba(75,156,255,.23);
+    border-radius: 11px;
+    color: #c5dcf8;
+    background: var(--blue-soft);
+    font-size: 10px;
+}
+.notice.warning { border-color: rgba(242,170,84,.25); color: #f2d0a7; background: var(--orange-soft); }
+.notice.danger { border-color: rgba(239,107,115,.25); color: #ffc1c5; background: var(--red-soft); }
+.notice strong { display: block; margin-bottom: 2px; font-size: 11px; }
+.notice p { margin: 0; }
+.field-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { color: #c0d0e3; font-size: 10px; font-weight: 700; }
+.field input,.field textarea,.field select {
+    width: 100%;
+    min-height: 39px;
+    padding: 9px 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    outline: none;
+    color: var(--text);
+    background: #0b1626;
+    font-size: 11px;
+}
+.field textarea { min-height: 100px; resize: vertical; }
+.field-help { color: var(--muted-2); font-size: 9px; }
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(2,7,14,.78);
+    backdrop-filter: blur(8px);
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+    width: min(650px,100%);
+    max-height: min(88vh,900px);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 17px;
+    background: #101d2e;
+    box-shadow: var(--shadow);
+}
+.modal.large { width: min(850px,100%); }
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 17px 20px;
+    border-bottom: 1px solid var(--line);
+}
+.modal-header h2 { margin: 0; font-size: 15px; }
+.modal-header p { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+.modal-body { max-height: calc(88vh - 135px); padding: 19px 20px; overflow-y: auto; }
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 13px 20px;
+    border-top: 1px solid var(--line);
+    background: rgba(255,255,255,.018);
+}
+.toast-host {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 200;
+    display: grid;
+    gap: 8px;
+}
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 240px;
+    max-width: min(420px,calc(100vw - 40px));
+    padding: 12px 15px;
+    border: 1px solid var(--line-strong);
+    border-radius: 11px;
+    color: #fff;
+    background: #17273d;
+    box-shadow: var(--shadow);
+    font-size: 11px;
+    animation: toast-in .2s ease;
+}
+.toast.success { border-color: rgba(67,197,138,.35); }
+.toast.error { border-color: rgba(239,107,115,.35); }
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.login-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(3,8,16,.82);
+    backdrop-filter: blur(10px);
+}
+.login-cover.show { display: flex; }
+.login-card {
+    width: min(420px,100%);
+    padding: 26px;
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: #111e30;
+    box-shadow: var(--shadow);
+}
+.login-logo {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    color: #fff;
+    background: linear-gradient(145deg,#3287eb,#174e9a);
+    font-family: Manrope,sans-serif;
+    font-weight: 800;
+}
+.login-card h2 { margin: 0 0 5px; font-size: 19px; }
+.login-card > p { margin: 0 0 20px; color: var(--muted); font-size: 11px; }
+.login-form { display: grid; gap: 13px; }
+.login-error {
+    display: none;
+    padding: 9px 11px;
+    border-radius: 8px;
+    color: #ffb0b4;
+    background: var(--red-soft);
+    font-size: 10px;
+}
+.login-error.show { display: block; }
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    display: none;
+    background: rgba(0,0,0,.55);
+}
+.drawer-backdrop.show { display: block; }
+.muted { color: var(--muted); }
+.small { font-size: 10px; }
+.separator { height: 1px; margin: 16px 0; background: var(--line); }
+.inline-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.two-column { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.three-column { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.subnav { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.subnav button {
+    min-height: 32px;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    background: var(--panel);
+    font-size: 10px;
+    font-weight: 700;
+}
+.subnav button.active { border-color: rgba(75,156,255,.35); color: #abd0ff; background: var(--blue-soft); }
+.record-preview { padding: 15px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.018); }
+.record-preview h3 { margin: 0 0 6px; font-size: 13px; }
+.record-preview p { margin: 0; color: var(--muted); font-size: 10px; white-space: pre-wrap; }
+.hero-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 190px;
+    margin-bottom: 18px;
+    padding: 25px;
+    overflow: hidden;
+    border: 1px solid rgba(75,156,255,.22);
+    border-radius: 18px;
+    background: linear-gradient(110deg,#142d4b,#102037 70%,#0e1c2e);
+}
+.hero-banner::after {
+    position: absolute;
+    top: -95px;
+    right: 7%;
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(110,177,255,.16);
+    border-radius: 50%;
+    box-shadow: 0 0 0 35px rgba(110,177,255,.025),0 0 0 70px rgba(110,177,255,.02);
+    content: "";
+}
+.hero-content { position: relative; z-index: 1; max-width: 650px; }
+.hero-content .eyebrow { color: #80baff; }
+.hero-content h1 { margin-bottom: 8px; font-size: clamp(24px,3.4vw,36px); }
+.hero-content p { max-width: 550px; margin: 0; color: #b3c6dd; font-size: 12px; }
+.hero-side {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 105px;
+    height: 105px;
+    flex: 0 0 105px;
+    border: 1px solid rgba(151,198,255,.25);
+    border-radius: 26px;
+    color: #9bcaff;
+    background: rgba(75,156,255,.11);
+    font-family: Manrope,sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+}
+.footer-note { padding: 18px 0 5px; color: var(--muted-2); font-size: 9px; text-align: center; }
+.hidden { display: none !important; }
+@media (max-width:1180px) {
+    .stats-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .service-grid,.admin-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:900px) {
+    :root { --sidebar-width: 0px; }
+    .sidebar { width: 260px; transform: translateX(-100%); transition: transform .2s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .mobile-menu { display: grid; place-items: center; }
+    .topbar { padding: 10px 18px; }
+    .page-wrap { padding: 23px 18px; }
+}
+@media (max-width:680px) {
+    .topbar { gap: 10px; }
+    .sync-pill { width: 34px; height: 34px; justify-content: center; padding: 0; overflow: hidden; font-size: 0; }
+    .sync-dot { flex: 0 0 7px; }
+    .user-chip-copy { display: none; }
+    .page-heading { align-items: flex-start; flex-direction: column; }
+    .content-grid,.two-column { grid-template-columns: 1fr; }
+    .service-grid,.admin-grid,.three-column { grid-template-columns: 1fr; }
+    .stats-grid { gap: 10px; }
+    .stat-card { min-height: 110px; padding: 13px; }
+    .stat-value { font-size: 24px; }
+    .toolbar { align-items: stretch; flex-direction: column; }
+    .toolbar-left,.toolbar-right { width: 100%; }
+    .search-box { min-width: 0; flex: 1; }
+    .field-grid { grid-template-columns: 1fr; }
+    .field.full { grid-column: auto; }
+    .hero-banner { min-height: 170px; padding: 20px; }
+    .hero-side { width: 65px; height: 65px; flex-basis: 65px; border-radius: 18px; font-size: 16px; }
+}
+@media print {
+    .sidebar,.topbar,.heading-actions,.toolbar,.table-actions,.footer-note { display: none !important; }
+    .main-area { margin: 0; }
+    .page-wrap { width: 100%; padding: 0; }
+    body { color: #111; background: #fff; }
+    .panel,.stat-card { border: 1px solid #ccc; color: #111; background: #fff; box-shadow: none; }
+    td,th { color: #111; }
+}
+</style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-mark">NS</div>
-      <div><strong>NANTERRE SERVICES</strong><small>Portail institutionnel · V6</small></div>
-    </div>
-    <div>
-      <div class="nav-label">NAVIGATION</div>
-      <nav class="nav" id="navigation">
-        <button class="active" data-page="home"><span class="nav-icon">▦</span>Tableau de bord</button>
-        <button data-page="citizen"><span class="nav-icon">⌂</span>Espace citoyen</button>
-        <button data-page="police"><span class="nav-icon">▣</span>Police nationale</button>
-        <button data-page="bspn"><span class="nav-icon">✚</span>BSPN</button>
-        <button data-page="samu"><span class="nav-icon">✚</span>SAMU 92</button>
-        <button data-page="igpn"><span class="nav-icon">◈</span>IGPN</button>
-      </nav>
-    </div>
-    <div class="side-bottom">
-      <div class="demo-note"><strong>Version de démonstration</strong><br>Les actions et données affichées ici sont locales à cette page. Aucun dossier réel n'est enregistré.</div>
-    </div>
-  </aside>
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-mark">NRP</div>
+            <div class="brand-copy">
+                <strong>NANTERRE SERVICES</strong>
+                <span>Portail institutionnel</span>
+            </div>
+        </div>
 
-  <main class="main">
-    <header class="topbar">
-      <div style="display:flex;align-items:center;gap:12px">
-        <button class="mobile-menu" id="menuToggle" aria-label="Ouvrir le menu">☰</button>
-        <div class="crumb">Portail / <b id="crumb">Tableau de bord</b></div>
-      </div>
-      <div class="top-actions">
-        <span class="status-pill">● Services disponibles</span>
-        <div class="avatar" id="avatar">NS</div>
-      </div>
-    </header>
-    <section class="content" id="content"></section>
-  </main>
+        <section class="sidebar-section">
+            <div class="sidebar-label">Navigation générale</div>
+            <nav class="nav-list" aria-label="Navigation générale">
+                <button class="nav-button active" data-page="home">
+                    <span class="nav-icon">⌂</span>
+                    <span class="nav-name">Tableau de bord</span>
+                </button>
+                <button class="nav-button" data-page="citizen">
+                    <span class="nav-icon">◉</span>
+                    <span class="nav-name">Espace citoyen</span>
+                </button>
+            </nav>
+        </section>
+
+        <section class="sidebar-section">
+            <div class="sidebar-label">Services municipaux</div>
+            <nav class="nav-list" aria-label="Services municipaux">
+                <button class="nav-button" data-page="police">
+                    <span class="nav-icon">⬟</span>
+                    <span class="nav-name">Police nationale</span>
+                </button>
+                <button class="nav-button" data-page="bspn">
+                    <span class="nav-icon">✚</span>
+                    <span class="nav-name">BSPN</span>
+                </button>
+                <button class="nav-button" data-page="samu">
+                    <span class="nav-icon">✚</span>
+                    <span class="nav-name">SAMU 92</span>
+                </button>
+                <button class="nav-button" data-page="igpn">
+                    <span class="nav-icon">▣</span>
+                    <span class="nav-name">IGPN</span>
+                </button>
+            </nav>
+        </section>
+
+        <section class="sidebar-section hidden" id="adminNavGroup">
+            <div class="sidebar-label">Administration</div>
+            <nav class="nav-list" aria-label="Administration">
+                <button class="nav-button" data-page="admin">
+                    <span class="nav-icon">⚙</span>
+                    <span class="nav-name">Panneau administrateur</span>
+                    <span class="nav-count">V6</span>
+                </button>
+            </nav>
+        </section>
+
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-status">
+            <div class="status-line">
+                <strong>État du portail</strong>
+                <span><i class="status-indicator"></i>Opérationnel</span>
+            </div>
+            <div class="status-line" style="margin-top:9px">
+                <span>Synchronisation</span>
+                <span id="sidebarSyncText">Locale</span>
+            </div>
+        </div>
+        <div class="sidebar-foot">Nanterre RP · Version 6.0</div>
+    </aside>
+
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu" id="mobileMenu" aria-label="Ouvrir le menu">☰</button>
+                <div class="breadcrumbs">
+                    <strong id="topTitle">Tableau de bord</strong>
+                    <span id="topSubtitle">Centre de coordination des services de Nanterre</span>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <div class="sync-pill" id="syncPill" title="État de la sauvegarde">
+                    <span class="sync-dot"></span>
+                    <span id="syncLabel">Stockage local</span>
+                </div>
+                <button class="btn btn-small" id="syncButton" title="Envoyer les modifications vers Supabase">↥</button>
+                <button class="btn btn-small" id="refreshButton" title="Récupérer les dernières données partagées">↻</button>
+                <button class="user-chip" id="userChip" title="Ouvrir la connexion">
+                    <span class="avatar" id="userAvatar">INV</span>
+                    <span class="user-chip-copy">
+                        <strong id="userName">Visiteur</strong>
+                        <span id="userRole">Session non connectée</span>
+                    </span>
+                </button>
+            </div>
+        </header>
+
+        <div class="page-wrap" id="pageContent">
+            <div class="empty-state">
+                <div class="empty-state-icon">⌛</div>
+                <strong>Chargement du portail</strong>
+                <p>Initialisation des espaces institutionnels…</p>
+            </div>
+        </div>
+    </main>
 </div>
-<div class="toast" id="toast" role="status"></div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="modalBox">
+        <div class="modal-header">
+            <div>
+                <h2 id="modalTitle">Fenêtre</h2>
+                <p id="modalSubtitle">Gestion de l'enregistrement</p>
+            </div>
+            <button class="icon-btn" id="modalClose" aria-label="Fermer">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer" id="modalFooter"></div>
+    </div>
+</div>
+
+<div class="login-cover" id="loginCover">
+    <div class="login-card">
+        <div class="login-logo">NRP</div>
+        <h2>Connexion au portail</h2>
+        <p>Connectez-vous avec votre matricule RP et votre code personnel.</p>
+        <form class="login-form" id="loginForm">
+            <div class="field">
+                <label for="loginMatricule">Matricule</label>
+                <input id="loginMatricule" name="matricule" autocomplete="username" placeholder="Ex. 00" required>
+            </div>
+            <div class="field">
+                <label for="loginPin">Code personnel</label>
+                <input id="loginPin" name="pin" type="password" autocomplete="current-password" placeholder="Votre code" required>
+            </div>
+            <div class="login-error" id="loginError">Matricule ou code incorrect, ou compte désactivé.</div>
+            <button class="btn btn-primary" type="submit" style="width:100%">Se connecter</button>
+            <button class="btn btn-ghost" type="button" id="loginCancel" style="width:100%">Continuer en visiteur</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast-host" id="toastHost" aria-live="polite"></div>
 
 <script>
-  const pageInfo = {
-    home: ["Tableau de bord", "Vue d'ensemble du portail institutionnel."],
-    citizen: ["Espace citoyen", "Informations et services destinés aux habitants."],
-    police: ["Police nationale", "Espace de travail et outils de la Police nationale."],
-    bspn: ["BSPN", "Brigade des sapeurs-pompiers de Nanterre."],
-    samu: ["SAMU 92", "Coordination et suivi des activités médicales."],
-    igpn: ["IGPN", "Inspection générale et suivi des contrôles internes."],
-    admin: ["Administration centrale", "Paramètres généraux et gestion du portail."]
-  };
-  const content = document.getElementById("content");
-  const adminModules = {
-  design: {
-    title: "Design et textes",
-    description: "Personnalisation générale du portail.",
-    icon: "▧"
-  },
-  penal: {
-    title: "Code pénal",
-    description: "Gestion des infractions, amendes et sanctions.",
-    icon: "§"
-  },
-  rules: {
-    title: "Règlements et zones",
-    description: "Gestion des règlements et des zones de la ville.",
-    icon: "▤"
-  },
-  webhooks: {
-    title: "Webhooks Discord",
-    description: "Configuration des notifications Discord.",
-    icon: "↗"
-  },
-  staff: {
-    title: "Gestion des effectifs",
-    description: "Matricules, grades, services et disponibilités.",
-    icon: "♧"
-  },
-  passwords: {
-    title: "Gestion des accès",
-    description: "Création et réinitialisation des accès agents.",
-    icon: "🔑"
-  },
-  medals: {
-    title: "Médailles",
-    description: "Création et attribution des distinctions.",
-    icon: "◈"
-  },
-  taj: {
-    title: "TAJ et statistiques",
-    description: "Gestion des fiches et statistiques.",
-    icon: "⌕"
-  },
-  alerts: {
-    title: "Alertes et sons",
-    description: "Gestion des annonces et alertes des services.",
-    icon: "⚑"
-  }
+"use strict";
+
+/* ================================================================
+   NANTERRE SERVICES V6
+   Application RP multi-services.
+   Les données peuvent être enregistrées localement ou via Supabase.
+   Le portail n'est pas un système de sécurité professionnel.
+   ================================================================ */
+
+/* ------------------------------------------------
+   A. PARAMÈTRES DE L'APPLICATION
+   ------------------------------------------------ */
+
+const APP_VERSION = "6.0.0";
+const LOCAL_DATA_KEY = "nanterre_services_v6_data";
+const USER_SESSION_KEY = "nanterre_services_v6_user";
+const ADMIN_SESSION_KEY = "nanterre_services_v6_admin";
+const ADMIN_ACCESS_CODE = "Nanterre2026";
+const CLOUD_ROW_ID = "main";
+
+const SUPABASE_CONFIG = {
+    url: "https://fqgecgziekhkmztawgzu.supabase.co",
+    publishableKey: "sb_publishable_igYz7YODtvNfaDKmlpxpEQ_GsJi3orG6"
 };
 
-function moduleButton(id) {
-  const item = adminModules[id];
+/* Clé publique uniquement : aucune clé service_role dans le HTML. */
 
-  return `
-    <button class="module-card" data-module="${id}">
-      <div class="module-icon">${item.icon}</div>
-      <strong>${item.title}</strong>
-      <small>${item.description}</small>
-    </button>
-  `;
+const PAGE_META = {
+    home: {
+        title: "Tableau de bord",
+        subtitle: "Centre de coordination des services de Nanterre"
+    },
+    citizen: {
+        title: "Espace citoyen",
+        subtitle: "Informations publiques et démarches RP"
+    },
+    police: {
+        title: "Police nationale",
+        subtitle: "Sécurité publique · Nanterre"
+    },
+    bspn: {
+        title: "BSPN",
+        subtitle: "Brigade des sapeurs-pompiers de Nanterre"
+    },
+    samu: {
+        title: "SAMU 92",
+        subtitle: "Service d'aide médicale urgente"
+    },
+    igpn: {
+        title: "IGPN",
+        subtitle: "Inspection générale de la Police nationale"
+    },
+    admin: {
+        title: "Administration générale",
+        subtitle: "Gestion centralisée du portail"
+    }
+};
+
+const SERVICE_NAMES = {
+    police: "Police nationale",
+    bspn: "BSPN",
+    samu: "SAMU 92",
+    igpn: "IGPN",
+    citizen: "Citoyens",
+    all: "Tous"
+};
+
+/* ------------------------------------------------
+   B. ÉTAT INITIAL ET VARIABLES
+   ------------------------------------------------ */
+
+function emptyDataModel() {
+    return {
+        version: APP_VERSION,
+        updatedAt: new Date().toISOString(),
+
+        roster: [],
+        policeReports: [],
+        taj: [],
+        gav: [],
+        perquisitions: [],
+        penalCode: [],
+        alerts: [],
+
+        bspnWall: [],
+        bspnCourses: [],
+        bspnHomework: [],
+        bspnAnnouncements: [],
+
+        samuRecords: [],
+        samuInvoices: [],
+
+        igpnReviews: [],
+        medals: [],
+
+        citizenNews: [],
+        safeZones: [],
+        elections: [],
+
+        webhooks: [],
+
+        settings: {
+            cityName: "Nanterre",
+            portalTitle: "Nanterre Services",
+            globalStatus: "Opérationnel",
+            activeAlert: "Aucune alerte générale active",
+            welcomeMessage: "Bienvenue sur le portail institutionnel de Nanterre RP.",
+            invoiceLimit: 8000
+        },
+
+        auditLogs: []
+    };
 }
 
-function renderModule(id) {
-  const item = adminModules[id];
-
-  if (!item) return;
-
-  document.getElementById("crumb").textContent = item.title;
-
-  content.innerHTML = `
-    <div class="welcome">
-      <div>
-        <div class="eyebrow">ADMINISTRATION CENTRALE</div>
-        <h1>${item.title}</h1>
-        <p class="sub">${item.description}</p>
-      </div>
-    </div>
-
-    <button class="btn secondary module-back" id="backAdmin">
-      ← Retour à l'administration
-    </button>
-
-    <div class="grid">
-      <section class="card span-12">
-        <div class="card-head">
-          <h2>${item.title}</h2>
-          <span class="tag amber">Connexion à configurer</span>
-        </div>
-
-        <div class="notice">
-          Cette rubrique est créée. Ses opérations seront raccordées
-          à la base de données et protégées par les permissions
-          administrateur.
-        </div>
-
-        <div id="moduleContent" style="margin-top:20px">
-          <div class="empty">
-            Interface de gestion en préparation.
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div class="footer">
-      NANTERRE SERVICES · ADMINISTRATION CENTRALE
-    </div>
-  `;
-
-  document.getElementById("backAdmin").addEventListener("click", () => {
-    render("admin");
-  });
-}
-  const nav = document.getElementById("navigation");
-  const crumb = document.getElementById("crumb");
-  const toastBox = document.getElementById("toast");
-  let toastTimer;
+let data = emptyDataModel();
+let currentPage = "home";
+let currentDataset = null;
+let currentUser = null;
 let adminUnlocked = false;
 
-const ADMIN_ACCESS_CODE = "Nanterre2026";
+let supabase = null;
+let cloudAvailable = false;
+let cloudWriting = false;
+let cloudWriteQueued = false;
+let realtimeChannel = null;
+let lastCloudUpdate = null;
 
-function requestAdminAccess() {
-  if (adminUnlocked) {
-    render("admin");
-    return;
-  }
+let autosaveTimer = null;
+let currentSearch = "";
+let currentFilter = "all";
 
-  content.innerHTML = `
-    ${header("admin")}
+/* ------------------------------------------------
+   C. CONFIGURATION DES MODULES ET CHAMPS
+   ------------------------------------------------ */
 
-    <div class="login-wrap">
-      <section class="card login-card">
-        <div class="eyebrow">ACCÈS RESTREINT</div>
-        <h2 style="font-size:21px;margin:8px 0">
-          Administration centrale
-        </h2>
+const MODULES = {
+    roster: {
+        title: "Effectifs et matricules",
+        singular: "agent",
+        icon: "♙",
+        description: "Comptes RP, matricules, grades et disponibilités.",
+        service: "all",
+        columns: ["matricule", "name", "service", "grade", "status", "active"],
+        primary: "name",
+        fields: [
+            ["matricule", "Matricule", "text", true],
+            ["name", "Nom et prénom RP", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["service", "Service", "select", false, ["Police nationale", "BSPN", "SAMU 92", "IGPN", "Mairie", "Citoyen"]],
+            ["grade", "Grade / fonction", "text", true],
+            ["role", "Permission", "select", false, ["agent", "officer", "igpn", "hc"]],
+            ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
+            ["pin", "Code personnel RP", "text"],
+            ["active", "Compte actif", "select", false, ["Oui", "Non"]],
+            ["notes", "Observations", "textarea", false, null, true]
+        ]
+    },
 
-        <p class="muted">
-          Veuillez saisir le code d'accès administrateur.
-        </p>
+    policeReports: {
+        title: "Rapports de police",
+        singular: "rapport",
+        icon: "▤",
+        description: "Rapports d'intervention, incidents et comptes rendus.",
+        service: "police",
+        columns: ["reference", "title", "category", "officer", "date", "status"],
+        primary: "title",
+        fields: [
+            ["reference", "Référence", "text"],
+            ["title", "Objet du rapport", "text", true],
+            ["category", "Catégorie", "select", false, ["Intervention", "Incident", "Contrôle", "Plainte", "Procédure", "Interservices", "Autre"]],
+            ["officer", "Agent rédacteur", "text"],
+            ["matricule", "Matricule", "text"],
+            ["date", "Date de l'événement", "date"],
+            ["location", "Lieu", "text"],
+            ["status", "État", "select", false, ["Brouillon", "En cours", "Transmis", "Clôturé"]],
+            ["content", "Compte rendu", "textarea", true, null, true],
+            ["attachments", "Lien ou référence de pièce", "text"]
+        ]
+    },
 
-        <div class="field">
-          <label for="adminAccessCode">Code d'accès</label>
-          <input
-            type="password"
-            id="adminAccessCode"
-            placeholder="Saisir le code"
-            autocomplete="off"
-          >
-        </div>
+    taj: {
+        title: "TAJ RP",
+        singular: "fiche TAJ",
+        icon: "⌕",
+        description: "Fiches fictives de personnes et d'événements RP.",
+        service: "police",
+        columns: ["citizenName", "robloxName", "category", "officer", "status"],
+        primary: "citizenName",
+        fields: [
+            ["citizenName", "Nom RP", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["category", "Catégorie", "select", false, ["Personne", "Véhicule", "Événement", "Objet", "Autre"]],
+            ["officer", "Agent référent", "text"],
+            ["offence", "Faits RP", "textarea", false, null, true],
+            ["sanction", "Suite RP", "text"],
+            ["status", "État", "select", false, ["Active", "À vérifier", "Archivée"]]
+        ]
+    },
 
-        <div id="adminError"></div>
+    gav: {
+        title: "Gardes à vue",
+        singular: "dossier GAV",
+        icon: "▣",
+        description: "Suivi des procédures de garde à vue RP.",
+        service: "police",
+        columns: ["person", "officer", "startAt", "reason", "status"],
+        primary: "person",
+        fields: [
+            ["person", "Personne concernée", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["officer", "Officier responsable", "text"],
+            ["startAt", "Début de GAV", "datetime-local"],
+            ["endAt", "Fin prévisionnelle", "datetime-local"],
+            ["reason", "Motif", "textarea", true, null, true],
+            ["rights", "Droits notifiés", "select", false, ["Oui", "Non", "Sans objet"]],
+            ["status", "État", "select", false, ["En cours", "Terminée", "Levée", "Transférée"]],
+            ["observations", "Observations", "textarea", false, null, true]
+        ]
+    },
 
-        <div class="toolbar">
-          <button class="btn" id="validateAdmin">
-            Accéder au panel
-          </button>
+    perquisitions: {
+        title: "Perquisitions",
+        singular: "perquisition",
+        icon: "⌂",
+        description: "Autorisations et comptes rendus de perquisitions RP.",
+        service: "police",
+        columns: ["suspect", "location", "officer", "date", "status"],
+        primary: "suspect",
+        fields: [
+            ["suspect", "Personne concernée", "text", true],
+            ["location", "Lieu RP", "text", true],
+            ["officer", "Agent responsable", "text"],
+            ["authorization", "Autorité / référence", "text"],
+            ["date", "Date prévue", "datetime-local"],
+            ["reasons", "Motifs RP", "textarea", true, null, true],
+            ["result", "Résultat", "textarea", false, null, true],
+            ["status", "État", "select", false, ["Demandée", "Autorisée", "Refusée", "En cours", "Terminée"]]
+        ]
+    },
 
-          <button class="btn secondary" id="cancelAdmin">
-            Retour
-          </button>
-        </div>
-      </section>
-    </div>
-  `;
+    penalCode: {
+        title: "Code pénal RP",
+        singular: "infraction",
+        icon: "§",
+        description: "Barème des infractions, amendes et peines RP.",
+        service: "police",
+        columns: ["category", "offence", "fine", "gav"],
+        primary: "offence",
+        fields: [
+            ["category", "Catégorie", "text", true],
+            ["offence", "Infraction", "text", true],
+            ["fine", "Amende", "text"],
+            ["gav", "Peine / GAV", "text"],
+            ["description", "Description", "textarea", false, null, true]
+        ]
+    },
 
-  document.getElementById("validateAdmin").addEventListener("click", () => {
-    const code = document.getElementById("adminAccessCode").value;
+    alerts: {
+        title: "Alertes et annonces globales",
+        singular: "alerte",
+        icon: "⚑",
+        description: "Alertes affichées dans les espaces concernés.",
+        service: "all",
+        columns: ["title", "type", "service", "startAt", "active"],
+        primary: "title",
+        fields: [
+            ["title", "Titre", "text", true],
+            ["type", "Niveau", "select", false, ["Information", "Vigilance", "Alerte", "Urgence"]],
+            ["service", "Service concerné", "select", false, ["Tous", "Police nationale", "BSPN", "SAMU 92", "IGPN", "Citoyens"]],
+            ["startAt", "Début", "datetime-local"],
+            ["endAt", "Fin", "datetime-local"],
+            ["active", "Diffusion", "select", false, ["Active", "Désactivée"]],
+            ["content", "Message", "textarea", true, null, true]
+        ]
+    },
 
-    if (code === ADMIN_ACCESS_CODE) {
-      adminUnlocked = true;
-      toast("Accès administrateur autorisé.");
-      render("admin");
-    } else {
-      document.getElementById("adminError").innerHTML = `
-        <div class="notice" style="color:#ed747b">
-          Code incorrect. Accès refusé.
-        </div>
-      `;
+    bspnWall: {
+        title: "Mur académique BSPN",
+        singular: "publication",
+        icon: "▤",
+        description: "Cours, procédures et publications internes BSPN.",
+        service: "bspn",
+        columns: ["title", "category", "author", "date"],
+        primary: "title",
+        fields: [
+            ["title", "Titre", "text", true],
+            ["category", "Catégorie", "select", false, ["Information", "Cours", "Procédure", "Consigne", "Document"]],
+            ["author", "Auteur", "text"],
+            ["date", "Date", "date"],
+            ["content", "Contenu", "textarea", true, null, true],
+            ["fileUrl", "Lien de document", "url"]
+        ]
+    },
+
+    bspnCourses: {
+        title: "Formations BSPN",
+        singular: "formation",
+        icon: "▣",
+        description: "Catalogue des formations et qualifications.",
+        service: "bspn",
+        columns: ["title", "level", "instructor", "date", "status"],
+        primary: "title",
+        fields: [
+            ["title", "Formation", "text", true],
+            ["level", "Niveau", "select", false, ["Initial", "Intermédiaire", "Avancé", "Chef d'agrès", "Encadrement"]],
+            ["instructor", "Formateur", "text"],
+            ["duration", "Durée", "text"],
+            ["date", "Date prévue", "date"],
+            ["status", "État", "select", false, ["Ouverte", "Complète", "Terminée", "Annulée"]],
+            ["description", "Programme", "textarea", false, null, true]
+        ]
+    },
+
+    bspnHomework: {
+        title: "Devoirs et évaluations BSPN",
+        singular: "évaluation",
+        icon: "✎",
+        description: "Travaux, exercices et évaluations des membres.",
+        service: "bspn",
+        columns: ["title", "target", "instructor", "dueDate", "status"],
+        primary: "title",
+        fields: [
+            ["title", "Intitulé", "text", true],
+            ["target", "Destinataire", "text"],
+            ["instructor", "Formateur", "text"],
+            ["dueDate", "Date limite", "date"],
+            ["status", "État", "select", false, ["À faire", "Rendu", "Corrigé", "En retard"]],
+            ["instructions", "Consignes", "textarea", false, null, true]
+        ]
+    },
+
+    bspnAnnouncements: {
+        title: "Annonces BSPN",
+        singular: "annonce BSPN",
+        icon: "▧",
+        description: "Communications officielles de la brigade.",
+        service: "bspn",
+        columns: ["title", "author", "priority", "date"],
+        primary: "title",
+        fields: [
+            ["title", "Titre", "text", true],
+            ["author", "Émetteur", "text"],
+            ["priority", "Priorité", "select", false, ["Normale", "Importante", "Urgente"]],
+            ["date", "Date", "date"],
+            ["content", "Message", "textarea", true, null, true]
+        ]
+    },
+
+    samuRecords: {
+        title: "Dossiers médicaux RP",
+        singular: "dossier médical RP",
+        icon: "✚",
+        description: "Dossiers fictifs de prise en charge RP uniquement.",
+        service: "samu",
+        columns: ["citizenName", "robloxName", "bloodType", "doctor", "updatedDate"],
+        primary: "citizenName",
+        fields: [
+            ["citizenName", "Identité RP", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["bloodType", "Groupe sanguin RP", "select", false, ["Inconnu", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]],
+            ["allergies", "Allergies RP", "textarea", false, null, true],
+            ["medicalHistory", "Antécédents RP", "textarea", false, null, true],
+            ["doctorNotes", "Notes de prise en charge", "textarea", false, null, true],
+            ["doctor", "Soignant référent", "text"],
+            ["updatedDate", "Date de mise à jour", "date"]
+        ]
+    },
+
+    samuInvoices: {
+        title: "Facturation SAMU 92",
+        singular: "facture",
+        icon: "€",
+        description: "Factures RP avec plafond paramétrable de 8 000 €.",
+        service: "samu",
+        columns: ["citizenName", "totalAmount", "doctorMatricule", "date", "status"],
+        primary: "citizenName",
+        fields: [
+            ["citizenName", "Personne concernée", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["careDetails", "Actes / détails", "textarea", true, null, true],
+            ["totalAmount", "Montant (€)", "number", true],
+            ["doctorMatricule", "Matricule soignant", "text"],
+            ["date", "Date de facture", "date"],
+            ["status", "État", "select", false, ["À régler", "Réglée", "Annulée", "Offerte"]]
+        ]
+    },
+
+    igpnReviews: {
+        title: "Inspections et dossiers IGPN",
+        singular: "dossier IGPN",
+        icon: "▣",
+        description: "Contrôles internes, observations et propositions RP.",
+        service: "igpn",
+        columns: ["targetName", "targetMatricule", "category", "inspector", "recommendation", "status"],
+        primary: "targetName",
+        fields: [
+            ["targetName", "Personne concernée", "text", true],
+            ["targetMatricule", "Matricule concerné", "text"],
+            ["inspector", "Inspecteur référent", "text"],
+            ["category", "Type de dossier", "select", false, ["Inspection", "Signalement", "Déontologie", "Proposition Rank-Up", "Proposition De-Rank", "Audit"]],
+            ["recommendation", "Recommandation", "select", false, ["Aucune", "Classement", "Rappel", "Avertissement", "Rank-Up", "De-Rank", "Enquête complémentaire"]],
+            ["status", "État", "select", false, ["Ouvert", "En examen", "Transmis", "Clôturé"]],
+            ["notes", "Observations", "textarea", true, null, true],
+            ["date", "Date", "date"]
+        ]
+    },
+
+    medals: {
+        title: "Médailles et distinctions",
+        singular: "distinction",
+        icon: "★",
+        description: "Référentiel des distinctions et attributions RP.",
+        service: "bspn",
+        columns: ["name", "service", "recipient", "date"],
+        primary: "name",
+        fields: [
+            ["name", "Nom de la distinction", "text", true],
+            ["service", "Service", "select", false, ["BSPN", "Police nationale", "SAMU 92", "IGPN", "Mairie"]],
+            ["recipient", "Bénéficiaire", "text"],
+            ["date", "Date d'attribution", "date"],
+            ["description", "Motif", "textarea", false, null, true]
+        ]
+    },
+
+    citizenNews: {
+        title: "Actualités municipales",
+        singular: "actualité",
+        icon: "▤",
+        description: "Publications visibles dans l'espace citoyen.",
+        service: "citizen",
+        columns: ["title", "category", "author", "date", "status"],
+        primary: "title",
+        fields: [
+            ["title", "Titre", "text", true],
+            ["category", "Rubrique", "select", false, ["Municipalité", "Sécurité", "Événement", "Travaux", "Information"]],
+            ["author", "Service émetteur", "text"],
+            ["date", "Date de publication", "date"],
+            ["status", "Publication", "select", false, ["Publiée", "Brouillon", "Archivée"]],
+            ["content", "Contenu", "textarea", true, null, true]
+        ]
+    },
+
+    safeZones: {
+        title: "Zones de sécurité",
+        singular: "zone",
+        icon: "⌖",
+        description: "Zones RP sûres, réglementées ou interdites.",
+        service: "citizen",
+        columns: ["name", "location", "type", "status"],
+        primary: "name",
+        fields: [
+            ["name", "Nom de la zone", "text", true],
+            ["location", "Localisation", "text", true],
+            ["type", "Type", "select", false, ["Zone sûre", "Zone réglementée", "Zone interdite", "Zone de secours", "Zone de rassemblement"]],
+            ["status", "État", "select", false, ["Active", "Suspendue", "Archivée"]],
+            ["description", "Consignes", "textarea", false, null, true]
+        ]
+    },
+
+    elections: {
+        title: "Élections et consultations",
+        singular: "consultation",
+        icon: "✓",
+        description: "Scrutins, consultations et sondages RP.",
+        service: "citizen",
+        columns: ["title", "kind", "startDate", "endDate", "status"],
+        primary: "title",
+        fields: [
+            ["title", "Intitulé", "text", true],
+            ["kind", "Type", "select", false, ["Élection", "Référendum", "Consultation", "Sondage RP"]],
+            ["startDate", "Ouverture", "date"],
+            ["endDate", "Clôture", "date"],
+            ["status", "État", "select", false, ["À venir", "En cours", "Clôturée", "Annulée"]],
+            ["description", "Informations", "textarea", false, null, true]
+        ]
+    },
+
+    webhooks: {
+        title: "Notifications Discord",
+        singular: "webhook",
+        icon: "◈",
+        description: "Destinations Discord utilisées pour les notifications RP.",
+        service: "all",
+        columns: ["name", "service", "active", "events"],
+        primary: "name",
+        fields: [
+            ["name", "Nom de la destination", "text", true],
+            ["service", "Service", "select", false, ["Tous", "Police nationale", "BSPN", "SAMU 92", "IGPN", "Citoyens"]],
+            ["url", "URL du webhook Discord", "url", true, null, true],
+            ["active", "Activation", "select", false, ["Oui", "Non"]],
+            ["events", "Événements", "text"]
+        ]
+    },
+
+    auditLogs: {
+        title: "Journal d'administration",
+        singular: "entrée de journal",
+        icon: "≋",
+        description: "Historique des opérations réalisées dans le portail.",
+        service: "admin",
+        columns: ["date", "actor", "action", "details"],
+        primary: "action",
+        readOnly: true,
+        fields: []
     }
-  });
+};
 
-  document.getElementById("adminAccessCode").addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      document.getElementById("validateAdmin").click();
+const ADMIN_GROUPS = [
+    {
+        title: "Administration générale",
+        description: "Identités, droits, paramètres et journalisation.",
+        modules: ["roster", "alerts", "webhooks", "auditLogs"]
+    },
+    {
+        title: "Police nationale",
+        description: "Procédures, rapports, TAJ, GAV et code pénal RP.",
+        modules: ["policeReports", "taj", "gav", "perquisitions", "penalCode"]
+    },
+    {
+        title: "BSPN",
+        description: "Mur académique, formations, évaluations et distinctions.",
+        modules: ["bspnWall", "bspnCourses", "bspnHomework", "bspnAnnouncements", "medals"]
+    },
+    {
+        title: "SAMU 92",
+        description: "Dossiers RP et facturation.",
+        modules: ["samuRecords", "samuInvoices"]
+    },
+    {
+        title: "IGPN",
+        description: "Inspections et recommandations hiérarchiques.",
+        modules: ["igpnReviews"]
+    },
+    {
+        title: "Citoyens et mairie",
+        description: "Actualités, zones de sécurité et consultations.",
+        modules: ["citizenNews", "safeZones", "elections"]
     }
-  });
+];
 
-  document.getElementById("cancelAdmin").addEventListener("click", () => {
-    render("home");
-  });
+/* ------------------------------------------------
+   D. OUTILS DE DOM, FORMATAGE ET ÉCHAPPEMENT
+   ------------------------------------------------ */
+
+function $(selector, root = document) {
+    return root.querySelector(selector);
 }
-  function toast(message) {
-    toastBox.textContent = message;
-    toastBox.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastBox.classList.remove("show"), 3200);
-  }
-  function header(page, label = "ESPACE INSTITUTIONNEL") {
-    return `<div class="welcome"><div><div class="eyebrow">${label}</div><h1>${pageInfo[page][0]}</h1><p class="sub">${pageInfo[page][1]}</p></div><div class="date" id="today"></div></div>`;
-  }
-  function card(title, body, span = "span-6", extra = "") {
-    return `<section class="card ${span}"><div class="card-head"><h2>${title}</h2>${extra}</div>${body}</section>`;
-  }
-  function serviceButton(icon, title, description, page) {
-    return `<button class="service" data-go="${page}"><div class="ico">${icon}</div><strong>${title}</strong><small>${description}</small></button>`;
-  }
-  function render(page = "home") {
 
-  if (page === "admin" && !adminUnlocked) {
-    requestAdminAccess();
-    return;
-  }
-
-  document.querySelectorAll("#navigation button").forEach(b =>
-    b.classList.toggle("active", b.dataset.page === page)
-  );
-
-  crumb.textContent = pageInfo[page][0];
-  document.getElementById("sidebar").classList.remove("open");
-
-  let html = header(page);
-
-  if (page === "home") {
-      html += `<div class="grid">
-        <section class="card hero span-12"><div class="hero-inner"><div><div class="eyebrow">PORTAIL DES SERVICES</div><h2>Bienvenue sur Nanterre Services</h2><p>Retrouvez les différents espaces institutionnels depuis une interface unique, claire et centralisée.</p><div class="toolbar" style="margin-top:18px"><button class="btn" data-go="citizen">Accéder aux services</button><button class="btn secondary" data-go="admin">Administration</button></div></div><div class="hero-symbol">⌘</div></div></section>
-        ${card("État général", `<div class="stats"><div class="stat"><strong>06</strong><span>Espaces</span></div><div class="stat"><strong>24/7</strong><span>Portail accessible</span></div><div class="stat"><strong>—</strong><span>Agents connectés</span></div><div class="stat"><strong>—</strong><span>Alertes actives</span></div></div>`, "span-12")}
-        ${card("Accès aux espaces", `<div class="service-grid">
-          ${serviceButton("⌂","Espace citoyen","Informations et démarches","citizen")}
-          ${serviceButton("▣","Police nationale","Outils et suivi opérationnel","police")}
-          ${serviceButton("✚","BSPN","Formation et annonces","bspn")}
-          ${serviceButton("✚","SAMU 92","Espace médical","samu")}
-          ${serviceButton("◈","IGPN","Contrôle et inspection","igpn")}
-          ${serviceButton("⚙","Administration","Gestion du portail","admin")}
-        </div>`, "span-8")}
-        ${card("Dernières informations", `<div class="list">
-          <div class="list-row"><div><strong>Nouvelle interface V6</strong><div class="tiny">Mise en place du portail modernisé</div></div><span class="tag green">Information</span></div>
-          <div class="list-row"><div><strong>Espaces institutionnels</strong><div class="tiny">Accès regroupés depuis le tableau de bord</div></div><span class="tag">Portail</span></div>
-          <div class="list-row"><div><strong>Maintenance des données</strong><div class="tiny">Les connexions réelles seront configurées ensuite</div></div><span class="tag amber">À venir</span></div>
-        </div>`, "span-4")}
-        ${card("À propos du portail", `<p class="muted" style="margin-top:0">Nanterre Services centralise les informations et les outils des différents services de la ville.</p><div class="notice">Cette version est une maquette interactive. Ne saisissez aucune information personnelle, médicale ou confidentielle.</div>`, "span-12")}
-      </div>`;
-    } else if (page === "citizen") {
-      html += `<div class="grid">
-        ${card("Services aux habitants", `<div class="service-grid">
-          ${serviceButton("▤","Actualités","Informations municipales","citizen")}
-          ${serviceButton("⌖","Carte de la ville","Points d'intérêt et zones","citizen")}
-          ${serviceButton("◉","État de la ville","Informations de situation","citizen")}
-        </div>`, "span-8")}
-        ${card("Informations publiques", `<div class="list"><div class="list-row"><span>Accueil du public</span><span class="tag green">Disponible</span></div><div class="list-row"><span>Demandes citoyennes</span><span class="tag amber">À configurer</span></div><div class="list-row"><span>Élections</span><span class="tag">Information</span></div></div>`, "span-4")}
-        ${card("Démarches et informations", `<div class="empty">Les actualités, démarches et cartes seront ajoutées dans cette rubrique.</div>`, "span-12")}
-      </div>`;
-    } else if (page === "police") {
-      html += `<div class="grid">
-        ${card("Outils Police nationale", `<div class="service-grid">
-          ${serviceButton("▤","Effectifs","Annuaire et disponibilité","police")}
-          ${serviceButton("▣","Rapports","Rédaction et consultation","police")}
-          ${serviceButton("⌕","TAJ","Consultation des fiches","police")}
-          ${serviceButton("§","Code pénal","Infractions et sanctions","police")}
-          ${serviceButton("⌂","GAV","Suivi des gardes à vue","police")}
-          ${serviceButton("⌑","Perquisitions","Suivi des opérations","police")}
-        </div>`, "span-8")}
-        ${card("État du service", `<div class="list"><div class="list-row"><span>Police nationale</span><span class="tag green">Espace actif</span></div><div class="list-row"><span>Effectifs synchronisés</span><span class="tag amber">À connecter</span></div><div class="list-row"><span>Outils opérationnels</span><span class="tag amber">À configurer</span></div></div>`, "span-4")}
-        ${card("Accès réservé", `<div class="notice">Les dossiers, rapports, identités et informations opérationnelles ne doivent être ajoutés qu'après mise en place d'une authentification sécurisée et de droits d'accès côté serveur.</div>`, "span-12")}
-      </div>`;
-    } else if (page === "bspn") {
-      html += `<div class="grid">
-        ${card("Espace BSPN", `<div class="service-grid">
-          ${serviceButton("▤","Mur académique","Cours et ressources","bspn")}
-          ${serviceButton("▣","Formations","Parcours et sessions","bspn")}
-          ${serviceButton("✓","Devoirs","Travaux et évaluations","bspn")}
-          ${serviceButton("◈","Médailles","Distinctions du personnel","bspn")}
-          ${serviceButton("▧","Annonces","Informations internes","bspn")}
-          ${serviceButton("♧","Effectifs","Annuaire du service","bspn")}
-        </div>`, "span-8")}
-        ${card("Informations du service", `<div class="list"><div class="list-row"><span>Mur académique</span><span class="tag amber">À connecter</span></div><div class="list-row"><span>Formations</span><span class="tag amber">À configurer</span></div><div class="list-row"><span>Effectifs</span><span class="tag amber">À connecter</span></div></div>`, "span-4")}
-        ${card("Espace de formation", `<div class="empty">Les cours, annonces et devoirs apparaîtront ici une fois la base de données raccordée.</div>`, "span-12")}
-      </div>`;
-    } else if (page === "samu") {
-      html += `<div class="grid">
-        ${card("Outils SAMU 92", `<div class="service-grid">
-          ${serviceButton("▤","Dossiers médicaux","Suivi des prises en charge","samu")}
-          ${serviceButton("€","Facturation","Suivi administratif","samu")}
-          ${serviceButton("♧","Personnel","Annuaire médical","samu")}
-        </div>`, "span-8")}
-        ${card("Paramètres prévus", `<div class="list"><div class="list-row"><span>Plafond de facturation global</span><strong>8 000 €</strong></div><div class="list-row"><span>Dossiers médicaux</span><span class="tag amber">Non connectés</span></div><div class="list-row"><span>Historique</span><span class="tag amber">À configurer</span></div></div>`, "span-4")}
-        ${card("Confidentialité médicale", `<div class="notice">Aucune donnée médicale réelle ne doit être saisie dans cette démonstration. Les dossiers devront être protégés par des permissions strictes et un contrôle serveur.</div>`, "span-12")}
-      </div>`;
-    } else if (page === "igpn") {
-      html += `<div class="grid">
-        ${card("Outils IGPN", `<div class="service-grid">
-          ${serviceButton("◈","Inspections","Suivi des contrôles","igpn")}
-          ${serviceButton("▤","Fiches confidentielles","Dossiers internes","igpn")}
-          ${serviceButton("↑","Propositions Rank-Up","Évolutions de grade","igpn")}
-          ${serviceButton("↓","Propositions De-Rank","Réexamens de grade","igpn")}
-          ${serviceButton("♧","Effectifs","Annuaire des services","igpn")}
-          ${serviceButton("▧","Historique","Journal des actions","igpn")}
-        </div>`, "span-8")}
-        ${card("Accès confidentiel", `<div class="list"><div class="list-row"><span>Fiches IGPN</span><span class="tag amber">Protection à mettre en place</span></div><div class="list-row"><span>Journal d'audit</span><span class="tag amber">À connecter</span></div></div>`, "span-4")}
-        ${card("Sécurité des dossiers", `<div class="notice">Les informations d'enquête et les évaluations individuelles nécessitent une authentification réelle, des permissions par rôle et une journalisation côté serveur.</div>`, "span-12")}
-      </div>`;
-   } else if (page === "admin") {
-  html += `<div class="grid">
-
-    ${card("Administration centrale", `
-      <p class="muted">
-        Centre de gestion des services et des paramètres
-        de Nanterre Services.
-      </p>
-
-      <div class="service-grid">
-        ${moduleButton("design")}
-        ${moduleButton("penal")}
-        ${moduleButton("rules")}
-        ${moduleButton("webhooks")}
-        ${moduleButton("staff")}
-        ${moduleButton("passwords")}
-        ${moduleButton("medals")}
-        ${moduleButton("taj")}
-        ${moduleButton("alerts")}
-      </div>
-    `, "span-8")}
-
-    ${card("État du portail", `
-      <div class="list">
-        <div class="list-row">
-          <span>Interface V6</span>
-          <span class="tag green">Disponible</span>
-        </div>
-
-        <div class="list-row">
-          <span>Base de données</span>
-          <span class="tag amber">À raccorder</span>
-        </div>
-
-        <div class="list-row">
-          <span>Authentification</span>
-          <span class="tag amber">À sécuriser</span>
-        </div>
-
-        <div class="list-row">
-          <span>Permissions</span>
-          <span class="tag amber">À configurer</span>
-        </div>
-      </div>
-    `, "span-4")}
-
-  </div>`;
+function $all(selector, root = document) {
+    return [...root.querySelectorAll(selector)];
 }
-    html += `<div class="footer">NANTERRE SERVICES · PORTAIL INSTITUTIONNEL V6 · VERSION DE DÉMONSTRATION</div>`;
-    content.innerHTML = html;
-    const today = document.getElementById("today");
-    if (today) today.textContent = new Intl.DateTimeFormat("fr-FR", {weekday:"long", day:"numeric", month:"long", year:"numeric"}).format(new Date());
-    content.querySelectorAll("[data-go]").forEach(el => el.addEventListener("click", () => render(el.dataset.go)));
-    content.querySelectorAll("[data-module]").forEach(el => {
-  el.addEventListener("click", () => {
-    renderModule(el.dataset.module);
-  });
-});
-    const demoLogin = document.getElementById("demoLogin");
-    if (demoLogin) demoLogin.addEventListener("click", showDemoLogin);
-    const reset = document.getElementById("resetDemo");
-    if (reset) reset.addEventListener("click", () => { document.getElementById("avatar").textContent = "NS"; toast("Affichage de démonstration réinitialisé."); });
-  }
-  function showDemoLogin() {
-    content.innerHTML = `${header("admin")}<div class="login-wrap"><section class="card login-card">
-      <div class="eyebrow">DÉMONSTRATION UNIQUEMENT</div><h2 style="font-size:21px;margin:8px 0">Accès agent</h2>
-      <p class="muted">Aucun compte réel n'est vérifié dans cette version.</p>
-      <div class="field"><label for="demoName">Nom d'affichage</label><input id="demoName" value="Youskof Yorka" autocomplete="off"></div>
-      <div class="field"><label for="demoService">Service</label><select id="demoService"><option>IGPN</option><option>Police nationale</option><option>BSPN</option><option>SAMU 92</option><option>Administration</option></select></div>
-      <div class="notice">Ne renseigne aucun vrai mot de passe. Cette connexion est purement visuelle et ne protège aucun espace.</div>
-      <div class="toolbar" style="margin-top:18px"><button class="btn" id="demoConnect">Entrer en démonstration</button><button class="btn secondary" id="demoCancel">Retour</button></div>
-    </section></div>`;
-    document.getElementById("demoConnect").addEventListener("click", () => {
-      const name = document.getElementById("demoName").value.trim() || "Agent de démonstration";
-      const service = document.getElementById("demoService").value;
-      document.getElementById("avatar").textContent = name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
-      toast(`Session de démonstration : ${name} · ${service}`);
-      render(service === "Police nationale" ? "police" : service === "BSPN" ? "bspn" : service === "SAMU 92" ? "samu" : service === "IGPN" ? "igpn" : "admin");
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function makeId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+    }
+    return `rp-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function formatDate(value, withTime = false) {
+    if (!value) return "—";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    const options = withTime
+        ? { dateStyle: "short", timeStyle: "short" }
+        : { dateStyle: "short" };
+    return new Intl.DateTimeFormat("fr-FR", options).format(date);
+}
+
+function money(value) {
+    return new Intl.NumberFormat("fr-FR", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+    }).format(Number(value || 0));
+}
+
+function initials(name) {
+    const words = String(name || "INV").trim().split(/\s+/).filter(Boolean);
+    return words.slice(0, 2).map(word => word[0].toUpperCase()).join("") || "INV";
+}
+
+function normalize(value) {
+    return String(value ?? "").trim();
+}
+
+function rowsFor(key) {
+    if (!Array.isArray(data[key])) data[key] = [];
+    return data[key];
+}
+
+function actorName() {
+    if (currentUser) {
+        return `${currentUser.name} (${currentUser.matricule})`;
+    }
+    return adminUnlocked ? "Administrateur RP" : "Visiteur";
+}
+
+function logAction(action, details = {}) {
+    if (!Array.isArray(data.auditLogs)) data.auditLogs = [];
+
+    data.auditLogs.unshift({
+        id: makeId(),
+        date: new Date().toISOString(),
+        actor: actorName(),
+        action,
+        details: JSON.stringify(details)
     });
-    document.getElementById("demoCancel").addEventListener("click", () => render("admin"));
-  }
-  nav.addEventListener("click", e => {
-    const button = e.target.closest("button[data-page]");
-    if (button) render(button.dataset.page);
-  });
-  document.getElementById("menuToggle").addEventListener("click", () => document.getElementById("sidebar").classList.toggle("open"));
-  document.addEventListener("keydown", e => { if (e.key === "Escape") document.getElementById("sidebar").classList.remove("open"); });
-  render("home");
+
+    data.auditLogs = data.auditLogs.slice(0, 500);
+}
+
+function showToast(message, type = "info") {
+    const host = $("#toastHost");
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+
+    const symbol = type === "success"
+        ? "✓"
+        : type === "error"
+            ? "!"
+            : "i";
+
+    toast.innerHTML = `<strong>${symbol}</strong><span>${escapeHTML(message)}</span>`;
+    host.appendChild(toast);
+
+    window.setTimeout(() => {
+        toast.remove();
+    }, 3800);
+}
+
+function askConfirmation(message) {
+    return window.confirm(message);
+}
+
+function emptyState(title, message, icon = "▤") {
+    return `
+        <div class="empty-state">
+            <div class="empty-state-icon">${escapeHTML(icon)}</div>
+            <strong>${escapeHTML(title)}</strong>
+            <p>${escapeHTML(message)}</p>
+        </div>
+    `;
+}
+
+function pageHeading(section, title, description, actions = "") {
+    return `
+        <div class="page-heading">
+            <div>
+                <div class="eyebrow">${escapeHTML(section)}</div>
+                <h1>${escapeHTML(title)}</h1>
+                <p class="page-description">${escapeHTML(description)}</p>
+            </div>
+            <div class="heading-actions">${actions}</div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------
+   E. STOCKAGE LOCAL ET COMPATIBILITÉ DU MODÈLE
+   ------------------------------------------------ */
+
+function normalizeData(source) {
+    const base = emptyDataModel();
+    const merged = { ...base, ...(source || {}) };
+
+    Object.keys(base).forEach(key => {
+        if (Array.isArray(base[key]) && !Array.isArray(merged[key])) {
+            merged[key] = [];
+        }
+    });
+
+    merged.settings = {
+        ...base.settings,
+        ...(source?.settings || {})
+    };
+
+    return merged;
+}
+
+function saveLocal() {
+    try {
+        data.updatedAt = new Date().toISOString();
+        localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(data));
+        return true;
+    } catch (error) {
+        console.error("Sauvegarde locale impossible", error);
+        showToast("Stockage local indisponible ou saturé.", "error");
+        return false;
+    }
+}
+
+function loadLocal() {
+    try {
+        const raw = localStorage.getItem(LOCAL_DATA_KEY);
+        if (!raw) return false;
+        data = normalizeData(JSON.parse(raw));
+        return true;
+    } catch (error) {
+        console.warn("Sauvegarde locale illisible", error);
+        data = emptyDataModel();
+        return false;
+    }
+}
+
+function validateData() {
+    Object.keys(MODULES).forEach(key => {
+        if (!Array.isArray(data[key])) data[key] = [];
+    });
+
+    const knownMatricules = new Set();
+
+    data.roster = data.roster.filter(member => {
+        const matricule = normalize(member.matricule);
+        if (!matricule) return true;
+        if (knownMatricules.has(matricule)) return false;
+        knownMatricules.add(matricule);
+        return true;
+    });
+
+    data.samuInvoices = data.samuInvoices.map(invoice => ({
+        ...invoice,
+        totalAmount: Math.min(8000, Math.max(0, Number(invoice.totalAmount || 0)))
+    }));
+
+    if (!data.settings || typeof data.settings !== "object") {
+        data.settings = emptyDataModel().settings;
+    }
+}
+
+/* ------------------------------------------------
+   F. CONNEXION SUPABASE ET SYNCHRONISATION
+   ------------------------------------------------ */
+
+function setSyncState(state, label) {
+    const pill = $("#syncPill");
+    pill.classList.remove("online", "error");
+
+    if (state === "online") pill.classList.add("online");
+    if (state === "error") pill.classList.add("error");
+
+    $("#syncLabel").textContent = label;
+    $("#sidebarSyncText").textContent = label;
+}
+
+function initSupabase() {
+    const validConfig = Boolean(
+        SUPABASE_CONFIG.url &&
+        SUPABASE_CONFIG.publishableKey
+    );
+
+    const libraryLoaded = Boolean(
+        window.supabase &&
+        window.supabase.createClient
+    );
+
+    if (!validConfig || !libraryLoaded) {
+        cloudAvailable = false;
+        setSyncState("offline", "Stockage local");
+        return;
+    }
+
+    try {
+        supabase = window.supabase.createClient(
+            SUPABASE_CONFIG.url,
+            SUPABASE_CONFIG.publishableKey,
+            {
+                auth: {
+                    persistSession: false,
+                    autoRefreshToken: false,
+                    detectSessionInUrl: false
+                }
+            }
+        );
+
+        cloudAvailable = true;
+        setSyncState("offline", "Connexion…");
+    } catch (error) {
+        console.error("Supabase non initialisé", error);
+        cloudAvailable = false;
+        setSyncState("error", "Configuration invalide");
+    }
+}
+
+async function readCloud() {
+    if (!cloudAvailable || !supabase) return false;
+
+    try {
+        const result = await supabase
+            .from("rp_v6_data")
+            .select("id,data,updated_at")
+            .eq("id", CLOUD_ROW_ID)
+            .maybeSingle();
+
+        if (result.error) throw result.error;
+
+        if (result.data && result.data.data) {
+            data = normalizeData(result.data.data);
+            lastCloudUpdate = result.data.updated_at || null;
+            saveLocal();
+        } else {
+            await writeCloud();
+        }
+
+        subscribeToCloudChanges();
+        setSyncState("online", "Synchronisé");
+        return true;
+    } catch (error) {
+        console.error("Lecture cloud impossible", error);
+        setSyncState("error", "Cloud indisponible");
+        return false;
+    }
+}
+
+async function writeCloud() {
+    if (!cloudAvailable || !supabase) return false;
+
+    if (cloudWriting) {
+        cloudWriteQueued = true;
+        return true;
+    }
+
+    cloudWriting = true;
+
+    try {
+        const payload = {
+            id: CLOUD_ROW_ID,
+            data,
+            updated_at: new Date().toISOString()
+        };
+
+        lastCloudUpdate = payload.updated_at;
+
+        const result = await supabase
+            .from("rp_v6_data")
+            .upsert(payload, { onConflict: "id" });
+
+        if (result.error) throw result.error;
+
+        cloudWriting = false;
+        setSyncState("online", "Synchronisé");
+
+        if (cloudWriteQueued) {
+            cloudWriteQueued = false;
+            window.setTimeout(writeCloud, 200);
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Écriture cloud impossible", error);
+        cloudWriting = false;
+        setSyncState("error", "Échec de synchronisation");
+        return false;
+    }
+}
+
+function subscribeToCloudChanges() {
+    if (!cloudAvailable || !supabase || realtimeChannel) return;
+
+    try {
+        realtimeChannel = supabase
+            .channel("nanterre-rp-v6-live")
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "rp_v6_data",
+                    filter: `id=eq.${CLOUD_ROW_ID}`
+                },
+                payload => {
+                    const incomingStamp = payload.new?.updated_at || null;
+
+                    if (!payload.new?.data || incomingStamp === lastCloudUpdate) {
+                        return;
+                    }
+
+                    if (cloudWriting) {
+                        cloudWriteQueued = true;
+                        return;
+                    }
+
+                    data = normalizeData(payload.new.data);
+                    lastCloudUpdate = incomingStamp;
+                    saveLocal();
+
+                    if (currentPage === "admin" && !adminUnlocked) {
+                        currentPage = "home";
+                    }
+
+                    renderPage(currentPage);
+                    showToast("Les données partagées viennent d'être actualisées.");
+                }
+            )
+            .subscribe(status => {
+                if (status === "SUBSCRIBED") {
+                    setSyncState("online", "Synchronisé");
+                }
+            });
+    } catch (error) {
+        console.warn("Synchronisation temps réel indisponible", error);
+    }
+}
+
+function scheduleSave() {
+    saveLocal();
+
+    if (!cloudAvailable) {
+        setSyncState("offline", "Stockage local");
+        return;
+    }
+
+    setSyncState("offline", "À synchroniser");
+    window.clearTimeout(autosaveTimer);
+
+    autosaveTimer = window.setTimeout(() => {
+        writeCloud();
+    }, 700);
+}
+
+async function syncNow() {
+    if (!cloudAvailable) {
+        showToast("Supabase n'est pas configuré. Les données restent dans ce navigateur.");
+        return;
+    }
+
+    setSyncState("offline", "Synchronisation…");
+    const ok = await writeCloud();
+
+    if (ok) {
+        showToast("Données envoyées vers Supabase.", "success");
+    } else {
+        showToast("Échec de synchronisation. La copie locale est conservée.", "error");
+    }
+}
+
+async function refreshCloud() {
+    if (!cloudAvailable) {
+        showToast("Aucune connexion Supabase active.", "error");
+        return;
+    }
+
+    const confirmed = askConfirmation(
+        "Recharger les données partagées depuis Supabase ? Les modifications locales non synchronisées pourraient être remplacées."
+    );
+
+    if (!confirmed) return;
+
+    const ok = await readCloud();
+
+    if (ok) {
+        renderPage(currentPage);
+        showToast("Données partagées rechargées.", "success");
+    } else {
+        showToast("Impossible de récupérer les données cloud.", "error");
+    }
+}
+
+/* ------------------------------------------------
+   G. CONNEXION RP, SESSION ET PERMISSIONS
+   ------------------------------------------------ */
+
+function restoreSession() {
+    try {
+        const savedUser = sessionStorage.getItem(USER_SESSION_KEY);
+
+        if (savedUser) {
+            const session = JSON.parse(savedUser);
+            const member = rowsFor("roster").find(
+                item => String(item.matricule) === String(session.matricule)
+            );
+
+            if (member && String(member.active ?? "Oui") !== "Non") {
+                currentUser = member;
+            }
+        }
+
+        adminUnlocked = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+    } catch (error) {
+        console.warn("Session non restaurée", error);
+        currentUser = null;
+        adminUnlocked = false;
+    }
+
+    updateUserChip();
+}
+
+function updateUserChip() {
+    const name = currentUser?.name ||
+        (adminUnlocked ? "Administrateur" : "Visiteur");
+
+    const role = currentUser
+        ? `${currentUser.service || "Service"} · ${currentUser.grade || "Agent"}`
+        : adminUnlocked
+            ? "Administration RP"
+            : "Session visiteur";
+
+    $("#userName").textContent = name;
+    $("#userRole").textContent = role;
+    $("#userAvatar").textContent = initials(name);
+
+    $("#adminNavGroup").classList.toggle("hidden", !adminUnlocked);
+}
+
+function openLogin() {
+    $("#loginError").classList.remove("show");
+    $("#loginMatricule").value = "";
+    $("#loginPin").value = "";
+    $("#loginCover").classList.add("show");
+    $("#loginMatricule").focus();
+}
+
+function closeLogin() {
+    $("#loginCover").classList.remove("show");
+}
+
+function connectMember(matricule, pin) {
+    const member = rowsFor("roster").find(item => {
+        const sameMatricule = String(item.matricule).trim() === String(matricule).trim();
+        const samePin = String(item.pin ?? "") === String(pin);
+        const active = String(item.active ?? "Oui") !== "Non";
+        return sameMatricule && samePin && active;
+    });
+
+    if (!member) return false;
+
+    currentUser = member;
+
+    sessionStorage.setItem(
+        USER_SESSION_KEY,
+        JSON.stringify({ matricule: member.matricule })
+    );
+
+    updateUserChip();
+    logAction("Connexion RP", {
+        matricule: member.matricule,
+        service: member.service
+    });
+
+    scheduleSave();
+    closeLogin();
+    showToast(`Bienvenue ${member.name}.`, "success");
+    renderPage(currentPage);
+
+    return true;
+}
+
+function disconnectMember() {
+    if (currentUser) {
+        logAction("Déconnexion RP", {
+            matricule: currentUser.matricule
+        });
+    }
+
+    currentUser = null;
+    sessionStorage.removeItem(USER_SESSION_KEY);
+    updateUserChip();
+    scheduleSave();
+    navigate("home");
+    showToast("Vous êtes déconnecté.");
+}
+
+function unlockAdministrator() {
+    if (adminUnlocked) {
+        navigate("admin");
+        return;
+    }
+
+    const enteredCode = window.prompt("Code d'accès administrateur RP :");
+
+    if (enteredCode === null) return;
+
+    if (enteredCode !== ADMIN_ACCESS_CODE) {
+        showToast("Code administrateur incorrect.", "error");
+        return;
+    }
+
+    adminUnlocked = true;
+    sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+
+    updateUserChip();
+    logAction("Ouverture panneau administrateur", {});
+    scheduleSave();
+
+    showToast("Accès administrateur RP activé.", "success");
+    navigate("admin");
+}
+
+function lockAdministrator() {
+    adminUnlocked = false;
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    updateUserChip();
+
+    if (currentPage === "admin") {
+        navigate("home");
+    }
+
+    showToast("Panneau administrateur verrouillé.");
+}
+
+function serviceKeyForCurrentUser() {
+    if (!currentUser) return "";
+
+    const service = String(currentUser.service || "").toLowerCase();
+
+    if (service.includes("police")) return "police";
+    if (service.includes("bspn") || service.includes("pompier")) return "bspn";
+    if (service.includes("samu") || service.includes("médical") || service.includes("medical")) return "samu";
+    if (service.includes("igpn")) return "igpn";
+    if (service.includes("mairie") || service.includes("citoyen")) return "citizen";
+
+    return "";
+}
+
+function mayEdit(key) {
+    if (adminUnlocked) return true;
+
+    const config = MODULES[key];
+
+    if (!config || config.readOnly || !currentUser) {
+        return false;
+    }
+
+    const role = String(currentUser.role || "agent").toLowerCase();
+
+    if (role === "hc") return true;
+
+    if (role === "igpn" && [
+        "roster",
+        "policeReports",
+        "taj",
+        "gav",
+        "perquisitions",
+        "igpnReviews",
+        "alerts"
+    ].includes(key)) {
+        return true;
+    }
+
+    if (config.service === "all") {
+        return role === "officer";
+    }
+
+    return config.service === serviceKeyForCurrentUser();
+}
+
+/* ------------------------------------------------
+   H. NAVIGATION ET ÉVÉNEMENTS DE PAGE
+   ------------------------------------------------ */
+
+function navigate(page) {
+    if (!PAGE_META[page]) {
+        page = "home";
+    }
+
+    if (page === "admin" && !adminUnlocked) {
+        unlockAdministrator();
+        return;
+    }
+
+    currentPage = page;
+    currentDataset = null;
+    currentSearch = "";
+    currentFilter = "all";
+
+    $all(".nav-button[data-page]").forEach(button => {
+        button.classList.toggle("active", button.dataset.page === page);
+    });
+
+    $("#topTitle").textContent = PAGE_META[page].title;
+    $("#topSubtitle").textContent = PAGE_META[page].subtitle;
+
+    $("#sidebar").classList.remove("open");
+    $("#drawerBackdrop").classList.remove("show");
+
+    renderPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderPage(page) {
+    switch (page) {
+        case "home":
+            renderHome();
+            break;
+        case "citizen":
+            renderCitizen();
+            break;
+        case "police":
+            renderPolice();
+            break;
+        case "bspn":
+            renderBspn();
+            break;
+        case "samu":
+            renderSamu();
+            break;
+        case "igpn":
+            renderIgpn();
+            break;
+        case "admin":
+            renderAdmin();
+            break;
+        default:
+            renderHome();
+            break;
+    }
+
+    bindPageEvents();
+}
+
+function navigateToDataset(key) {
+    if (!MODULES[key]) return;
+
+    currentDataset = key;
+    currentSearch = "";
+    currentFilter = "all";
+
+    renderDataset(key);
+}
+
+function navigateBackToService() {
+    renderPage(currentPage);
+
+    const page = PAGE_META[currentPage];
+
+    if (page) {
+        $("#topTitle").textContent = page.title;
+        $("#topSubtitle").textContent = page.subtitle;
+    }
+}
+
+function bindPageEvents(root = $("#pageContent")) {
+    $all("[data-go]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            const page = element.dataset.go;
+            const dataset = element.dataset.dataset;
+
+            navigate(page);
+
+            if (dataset) {
+                navigateToDataset(dataset);
+            }
+        });
+    });
+
+    $all("[data-open-module]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            navigateToDataset(element.dataset.openModule);
+        });
+    });
+
+    $all("[data-action]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            handleAction(element);
+        });
+    });
+
+    $all("[data-subpage]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            $all("[data-subpage]", root).forEach(button => {
+                button.classList.toggle("active", button === element);
+            });
+
+            if (element.dataset.subpage === "overview") {
+                renderServiceOverviewIntoPage();
+            }
+        });
+    });
+}
+function handleAction(button) {
+    const action = button.dataset.action;
+    const key = button.dataset.module || currentDataset;
+    const id = button.dataset.id;
+
+    switch (action) {
+        case "login":
+            openLogin();
+            break;
+        case "add":
+            openEditor(key);
+            break;
+        case "edit":
+            openEditor(key, id);
+            break;
+        case "delete":
+            deleteItem(key, id);
+            break;
+        case "print":
+            window.print();
+            break;
+        case "export":
+            exportJSON();
+            break;
+        case "import":
+            importJSON();
+            break;
+        case "lock":
+            lockAdministrator();
+            break;
+        case "settings":
+            editSettings();
+            break;
+        case "back":
+            navigateBackToService();
+            break;
+        case "sync":
+            syncNow();
+            break;
+        case "refresh-cloud":
+            refreshCloud();
+            break;
+        case "webhook-test":
+            testWebhook(id);
+            break;
+    }
+}
+
+/* ------------------------------------------------
+   I. TABLEAU DE BORD ET CARTES DE STATISTIQUES
+   ------------------------------------------------ */
+
+function statCard(label, value, note, icon) {
+    return `
+        <article class="stat-card">
+            <div class="status-line">
+                <span class="stat-label">${escapeHTML(label)}</span>
+                <span class="muted">${escapeHTML(icon)}</span>
+            </div>
+            <strong class="stat-value">${escapeHTML(value)}</strong>
+            <div class="stat-foot">${escapeHTML(note)}</div>
+        </article>
+    `;
+}
+
+function serviceCard(page, icon, title, description) {
+    return `
+        <article class="service-card" data-go="${escapeHTML(page)}">
+            <div class="service-card-icon">${escapeHTML(icon)}</div>
+            <h3>${escapeHTML(title)}</h3>
+            <p>${escapeHTML(description)}</p>
+            <span class="service-card-arrow">↗</span>
+        </article>
+    `;
+}
+
+function renderDashboardAlert(alert) {
+    const warning = alert.type === "Urgence" || alert.type === "Alerte";
+    const tag = warning ? "red" : "orange";
+
+    return `
+        <div class="list-item">
+            <div class="list-marker">⚑</div>
+            <div class="list-item-content">
+                <strong>${escapeHTML(alert.title)}</strong>
+                <p>${escapeHTML(alert.content || "")}</p>
+            </div>
+            <span class="tag ${tag}">${escapeHTML(alert.type || "Information")}</span>
+        </div>
+    `;
+}
+
+function renderDashboardNews(news) {
+    return `
+        <div class="list-item">
+            <div class="list-marker">▤</div>
+            <div class="list-item-content">
+                <strong>${escapeHTML(news.title || "Actualité")}</strong>
+                <p>${escapeHTML(news.content || "")}</p>
+            </div>
+            <span class="list-item-meta">${escapeHTML(formatDate(news.date || news.createdAt))}</span>
+        </div>
+    `;
+}
+
+function renderHome() {
+    const activeStaff = rowsFor("roster").filter(
+        member => String(member.active ?? "Oui") !== "Non"
+    );
+
+    const openReports = rowsFor("policeReports").filter(
+        report => !["Clôturé", "Transmis"].includes(report.status)
+    );
+
+    const activeGav = rowsFor("gav").filter(
+        record => record.status === "En cours"
+    );
+
+    const activeAlerts = rowsFor("alerts").filter(
+        alert => alert.active !== "Désactivée"
+    );
+
+    const news = rowsFor("citizenNews").slice(0, 4);
+
+    const alertHTML = activeAlerts.length
+        ? `
+            <section class="panel" style="margin-bottom:18px">
+                <div class="panel-body">
+                    <div class="inline-actions" style="margin-bottom:8px">
+                        <span class="tag orange">Information de service</span>
+                        <strong class="small">${activeAlerts.length} alerte(s)</strong>
+                    </div>
+                    <div class="list-stack">
+                        ${activeAlerts.slice(0, 3).map(renderDashboardAlert).join("")}
+                    </div>
+                </div>
+            </section>
+        `
+        : "";
+
+    $("#pageContent").innerHTML = `
+        <section class="hero-banner">
+            <div class="hero-content">
+                <div class="eyebrow">Portail officiel · Nanterre RP</div>
+                <h1>Bienvenue sur Nanterre Services</h1>
+                <p>${escapeHTML(data.settings.welcomeMessage || "Centre numérique des services de Nanterre RP.")}</p>
+                <div class="inline-actions" style="margin-top:17px">
+                    <button class="btn btn-primary" data-go="citizen">Espace citoyen →</button>
+                    <button class="btn" data-action="login">Connexion agent</button>
+                </div>
+            </div>
+            <div class="hero-side">NRP</div>
+        </section>
+
+        ${alertHTML}
+
+        <div class="grid stats-grid">
+            ${statCard("Effectifs enregistrés", activeStaff.length, "Comptes RP actifs", "♙")}
+            ${statCard("Rapports ouverts", openReports.length, "Police nationale", "▤")}
+            ${statCard("Gardes à vue actives", activeGav.length, "Procédures en cours", "▣")}
+            ${statCard("Alertes en diffusion", activeAlerts.length, "Tous services", "⚑")}
+        </div>
+
+        ${pageHeading("Accès rapide", "Vos services", "Sélectionnez un espace institutionnel pour consulter ses informations.")}
+
+        <div class="grid service-grid">
+            ${serviceCard("citizen", "◉", "Espace citoyen", "Actualités, informations municipales, zones sûres et consultations.")}
+            ${serviceCard("police", "⬟", "Police nationale", "Rapports, TAJ RP, GAV, perquisitions et code pénal.")}
+            ${serviceCard("bspn", "✚", "BSPN", "Mur académique, formations, évaluations et annonces.")}
+            ${serviceCard("samu", "✚", "SAMU 92", "Dossiers de prise en charge RP et facturation.")}
+            ${serviceCard("igpn", "▣", "IGPN", "Inspections, signalements et propositions hiérarchiques.")}
+            ${serviceCard("admin", "⚙", "Administration", "Gestion centralisée de tous les modules.")}
+        </div>
+
+        <div class="grid content-grid" style="margin-top:18px">
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Actualités municipales</h2>
+                        <p class="panel-subtitle">Dernières publications publiques</p>
+                    </div>
+                    <button class="btn btn-small" data-go="citizen">Tout voir</button>
+                </div>
+                <div class="panel-body">
+                    ${news.length
+                        ? `<div class="list-stack">${news.map(renderDashboardNews).join("")}</div>`
+                        : emptyState("Aucune actualité", "Les publications municipales apparaîtront ici.", "▤")}
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Outils rapides</h2>
+                        <p class="panel-subtitle">Accès aux rubriques les plus utilisées</p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="grid shortcut-grid">
+                        <button class="shortcut" data-go="police" data-dataset="policeReports">
+                            <span class="shortcut-icon">▤</span>
+                            <span><strong>Rapports</strong><span>Police nationale</span></span>
+                        </button>
+                        <button class="shortcut" data-go="bspn" data-dataset="bspnWall">
+                            <span class="shortcut-icon">✚</span>
+                            <span><strong>Mur BSPN</strong><span>Communications</span></span>
+                        </button>
+                        <button class="shortcut" data-go="samu" data-dataset="samuRecords">
+                            <span class="shortcut-icon">✚</span>
+                            <span><strong>Dossiers RP</strong><span>SAMU 92</span></span>
+                        </button>
+                        <button class="shortcut" data-go="igpn" data-dataset="igpnReviews">
+                            <span class="shortcut-icon">▣</span>
+                            <span><strong>Inspections</strong><span>IGPN</span></span>
+                        </button>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="status-line">
+                        <strong>État général</strong>
+                        <span class="tag green">${escapeHTML(data.settings.globalStatus || "Opérationnel")}</span>
+                    </div>
+                    <p class="small muted" style="margin:8px 0 0">
+                        ${escapeHTML(data.settings.activeAlert || "Aucune alerte générale active")}
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <div class="footer-note">
+            Nanterre Services V${APP_VERSION} · Plateforme de jeu de rôle · Dossiers fictifs uniquement.
+        </div>
+    `;
+}
+
+/* ------------------------------------------------
+   J. CARTES D'ALERTES ET ANNONCES
+   ------------------------------------------------ */
+
+function alertsFor(serviceName) {
+    return rowsFor("alerts").filter(alert => {
+        const active = alert.active !== "Désactivée";
+        const target = alert.service === "Tous" || alert.service === serviceName;
+        return active && target;
+    });
+}
+
+function renderAlertPanel(serviceName) {
+    const alerts = alertsFor(serviceName);
+
+    if (!alerts.length) return "";
+
+    return `
+        <section class="panel" style="margin-bottom:16px">
+            <div class="panel-body">
+                <div class="list-stack">
+                    ${alerts.map(renderDashboardAlert).join("")}
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+/* ------------------------------------------------
+   K. PAGES DES SERVICES
+   ------------------------------------------------ */
+
+function renderServiceOverviewIntoPage() {
+    const host = $("#serviceSubContent");
+
+    if (!host) return;
+
+    host.innerHTML = serviceOverview(currentPage);
+    bindPageEvents(host);
+}
+
+function serviceOverview(serviceKey) {
+    const modules = Object.entries(MODULES).filter(([key, config]) => {
+        if (key === "auditLogs") return false;
+        if (serviceKey === "police") return config.service === "police" || key === "roster" || key === "alerts";
+        if (serviceKey === "bspn") return config.service === "bspn" || key === "roster" || key === "alerts";
+        if (serviceKey === "samu") return config.service === "samu" || key === "roster" || key === "alerts";
+        if (serviceKey === "igpn") return config.service === "igpn" || key === "roster" || key === "alerts" || key === "policeReports";
+        if (serviceKey === "citizen") return config.service === "citizen" || key === "alerts";
+        return false;
+    });
+
+    const cards = modules.map(([key, config]) => `
+        <article class="admin-module" data-open-module="${escapeHTML(key)}">
+            <div class="admin-module-icon">${escapeHTML(config.icon)}</div>
+            <div>
+                <h3>${escapeHTML(config.title)}</h3>
+                <p>${escapeHTML(config.description)}</p>
+                <span class="admin-module-count">${rowsFor(key).length} enregistrement(s)</span>
+            </div>
+        </article>
+    `).join("");
+
+    const stats = `
+        <div class="grid stats-grid">
+            ${statCard("Effectifs", rowsFor("roster").length, "Membres enregistrés", "♙")}
+            ${statCard("Alertes", alertsFor(SERVICE_NAMES[serviceKey]).length, "En diffusion", "⚑")}
+            ${statCard("Dossiers", modules.reduce((total, [key]) => total + rowsFor(key).length, 0), "Enregistrements", "▣")}
+            ${statCard("Modules", modules.length, "Rubriques disponibles", "▤")}
+        </div>
+    `;
+
+    return `${stats}<div class="grid admin-grid">${cards}</div>`;
+}
+
+function servicePageHeader(section, title, description) {
+    return pageHeading(
+        section,
+        title,
+        description,
+        `<button class="btn" data-action="print">Imprimer</button>`
+    );
+}
+
+function renderServicePage(serviceKey) {
+    const header = PAGE_META[serviceKey];
+    const heading = servicePageHeader(
+        "Espace institutionnel",
+        header.title,
+        header.subtitle
+    );
+
+    const serviceLabel = SERVICE_NAMES[serviceKey];
+    const menuButtons = [];
+
+    Object.entries(MODULES).forEach(([key, config]) => {
+        const belongs = config.service === serviceKey ||
+            key === "roster" ||
+            key === "alerts" ||
+            (serviceKey === "igpn" && key === "policeReports");
+
+        if (belongs) {
+            menuButtons.push(`
+                <button data-open-module="${escapeHTML(key)}">
+                    ${escapeHTML(config.title)}
+                </button>
+            `);
+        }
+    });
+
+    $("#pageContent").innerHTML = `
+        ${heading}
+        ${renderAlertPanel(serviceLabel)}
+        <div class="subnav">
+            <button class="active" data-subpage="overview">Vue générale</button>
+            ${menuButtons.join("")}
+        </div>
+        <div id="serviceSubContent">
+            ${serviceOverview(serviceKey)}
+        </div>
+    `;
+}
+
+function renderPolice() {
+    renderServicePage("police");
+}
+
+function renderBspn() {
+    renderServicePage("bspn");
+}
+
+function renderSamu() {
+    $("#pageContent").innerHTML = `
+        ${servicePageHeader("Urgences médicales", "SAMU 92", PAGE_META.samu.subtitle)}
+        <div class="notice warning" style="margin-bottom:16px">
+            <span>ⓘ</span>
+            <div>
+                <strong>Environnement RP uniquement</strong>
+                <p>Les dossiers de cette plateforme sont fictifs. Aucune information médicale réelle ne doit être saisie.</p>
+            </div>
+        </div>
+        ${renderAlertPanel("SAMU 92")}
+        <div class="subnav">
+            <button class="active" data-subpage="overview">Vue générale</button>
+            <button data-open-module="samuRecords">Dossiers RP</button>
+            <button data-open-module="samuInvoices">Facturation</button>
+            <button data-open-module="roster">Effectifs</button>
+        </div>
+        <div id="serviceSubContent">${serviceOverview("samu")}</div>
+    `;
+}
+
+function renderIgpn() {
+    $("#pageContent").innerHTML = `
+        ${servicePageHeader("Contrôle interne", "IGPN", PAGE_META.igpn.subtitle)}
+        <div class="notice warning" style="margin-bottom:16px">
+            <span>ⓘ</span>
+            <div>
+                <strong>Confidentialité RP limitée</strong>
+                <p>Les données de la base RP partagée ne sont pas privées. Ne saisissez pas de vraies informations confidentielles.</p>
+            </div>
+        </div>
+        ${renderAlertPanel("IGPN")}
+        <div class="subnav">
+            <button class="active" data-subpage="overview">Vue générale</button>
+            <button data-open-module="igpnReviews">Inspections</button>
+            <button data-open-module="policeReports">Rapports transmis</button>
+            <button data-open-module="roster">Effectifs</button>
+        </div>
+        <div id="serviceSubContent">${serviceOverview("igpn")}</div>
+    `;
+}
+
+/* ------------------------------------------------
+   L. ESPACE CITOYEN
+   ------------------------------------------------ */
+
+function renderCitizen() {
+    const news = rowsFor("citizenNews").filter(item => item.status !== "Brouillon");
+    const zones = rowsFor("safeZones").filter(item => item.status !== "Archivée");
+    const consultations = rowsFor("elections");
+
+    const newsHTML = news.length
+        ? `<div class="list-stack">${news.map(renderDashboardNews).join("")}</div>`
+        : emptyState("Aucune actualité publiée", "Les communications municipales seront affichées ici.");
+
+    const zonesHTML = zones.length
+        ? `
+            <div class="list-stack">
+                ${zones.map(zone => `
+                    <div class="list-item">
+                        <div class="list-marker">⌖</div>
+                        <div class="list-item-content">
+                            <strong>${escapeHTML(zone.name)}</strong>
+                            <p>${escapeHTML(zone.location)} · ${escapeHTML(zone.description || "")}</p>
+                        </div>
+                        <span class="tag blue">${escapeHTML(zone.type)}</span>
+                    </div>
+                `).join("")}
+            </div>
+        `
+        : emptyState("Aucune zone référencée", "Aucune zone de sécurité n'est actuellement publiée.", "⌖");
+
+    const electionsHTML = consultations.length
+        ? `
+            <div class="grid shortcut-grid">
+                ${consultations.map(item => `
+                    <article class="record-preview">
+                        <h3>${escapeHTML(item.title)}</h3>
+                        <p>${escapeHTML(item.description || "")}</p>
+                        <div class="inline-actions" style="margin-top:10px">
+                            <span class="tag blue">${escapeHTML(item.kind)}</span>
+                            <span class="tag">${escapeHTML(item.status)}</span>
+                        </div>
+                    </article>
+                `).join("")}
+            </div>
+        `
+        : emptyState("Aucune consultation", "Les consultations seront publiées ici.", "✓");
+
+    $("#pageContent").innerHTML = `
+        ${pageHeading("Services à la population", "Espace citoyen", PAGE_META.citizen.subtitle,
+            `<button class="btn" data-action="print">Imprimer</button>`)}
+        ${renderAlertPanel("Citoyens")}
+        <div class="grid stats-grid">
+            ${statCard("Actualités", news.length, "Publications visibles", "▤")}
+            ${statCard("Zones", zones.length, "Informations territoriales RP", "⌖")}
+            ${statCard("Consultations", consultations.length, "Élections et sondages", "✓")}
+            ${statCard("État de la ville", data.settings.globalStatus, "Situation générale", "◉")}
+        </div>
+        <div class="grid content-grid">
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Actualités municipales</h2>
+                        <p class="panel-subtitle">Communications officielles de la ville</p>
+                    </div>
+                </div>
+                <div class="panel-body">${newsHTML}</div>
+            </section>
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Zones de sécurité</h2>
+                        <p class="panel-subtitle">Informations RP de circulation</p>
+                    </div>
+                </div>
+                <div class="panel-body">${zonesHTML}</div>
+            </section>
+        </div>
+        <section class="panel" style="margin-top:16px">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Élections et consultations</h2>
+                    <p class="panel-subtitle">Calendrier des consultations RP</p>
+                </div>
+            </div>
+            <div class="panel-body">${electionsHTML}</div>
+        </section>
+    `;
+}
+
+/* ------------------------------------------------
+   M. ADMINISTRATION GÉNÉRALE
+   ------------------------------------------------ */
+
+function moduleCount(key) {
+    return rowsFor(key).length;
+}
+
+function renderAdminGroup(group) {
+    return `
+        <section style="margin-bottom:24px">
+            <div class="page-heading" style="margin-bottom:13px">
+                <div>
+                    <h2 style="margin:0 0 3px;font-size:16px">${escapeHTML(group.title)}</h2>
+                    <p class="page-description">${escapeHTML(group.description)}</p>
+                </div>
+            </div>
+            <div class="grid admin-grid">
+                ${group.modules.map(key => {
+                    const module = MODULES[key];
+                    return `
+                        <article class="admin-module" data-open-module="${escapeHTML(key)}">
+                            <div class="admin-module-icon">${escapeHTML(module.icon)}</div>
+                            <div>
+                                <h3>${escapeHTML(module.title)}</h3>
+                                <p>${escapeHTML(module.description)}</p>
+                                <span class="admin-module-count">${moduleCount(key)} enregistrement(s)</span>
+                            </div>
+                        </article>
+                    `;
+                }).join("")}
+            </div>
+        </section>
+    `;
+}
+
+function renderAdmin() {
+    if (!adminUnlocked) {
+        $("#pageContent").innerHTML = emptyState(
+            "Accès administrateur verrouillé",
+            "Déverrouillez le panneau administrateur pour continuer.",
+            "⚙"
+        );
+        return;
+    }
+
+    const allKeys = Object.keys(MODULES).filter(key => key !== "auditLogs");
+    const totalRecords = allKeys.reduce((total, key) => total + moduleCount(key), 0);
+
+    const groups = ADMIN_GROUPS.map(renderAdminGroup).join("");
+
+    $("#pageContent").innerHTML = `
+        ${pageHeading(
+            "Contrôle central",
+            "Administration générale",
+            "Gestion des services, des effectifs, des contenus et des paramètres du portail.",
+            `
+                <button class="btn" data-action="export">Exporter JSON</button>
+                <button class="btn" data-action="import">Importer JSON</button>
+                <button class="btn btn-danger" data-action="lock">Verrouiller</button>
+            `
+        )}
+
+        <div class="notice warning" style="margin-bottom:16px">
+            <span>!</span>
+            <div>
+                <strong>Mode administrateur RP</strong>
+                <p>Le code est contrôlé dans le navigateur. Il ne constitue pas une protection réelle de la base partagée.</p>
+            </div>
+        </div>
+
+        <div class="grid stats-grid">
+            ${statCard("Enregistrements", totalRecords, "Données gérées", "▤")}
+            ${statCard("Effectifs", moduleCount("roster"), "Matricules configurés", "♙")}
+            ${statCard("Alertes", moduleCount("alerts"), "Alertes enregistrées", "⚑")}
+            ${statCard("Journal", moduleCount("auditLogs"), "Opérations suivies", "≋")}
+        </div>
+
+        <section class="panel" style="margin-bottom:19px">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Paramètres du portail</h2>
+                    <p class="panel-subtitle">Informations générales et configuration RP</p>
+                </div>
+                <button class="btn btn-primary btn-small" data-action="settings">Modifier</button>
+            </div>
+            <div class="panel-body">
+                <div class="grid three-column">
+                    <div>
+                        <div class="small muted">Nom de la ville</div>
+                        <strong>${escapeHTML(data.settings.cityName)}</strong>
+                    </div>
+                    <div>
+                        <div class="small muted">État général</div>
+                        <strong>${escapeHTML(data.settings.globalStatus)}</strong>
+                    </div>
+                    <div>
+                        <div class="small muted">Plafond facture</div>
+                        <strong>${escapeHTML(money(data.settings.invoiceLimit))}</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        ${groups}
+
+        <div class="footer-note">
+            Administration Nanterre Services V${APP_VERSION} · ${totalRecords} enregistrements gérés.
+        </div>
+    `;
+}
+
+/* ------------------------------------------------
+   N. PARAMÈTRES DU PORTAIL
+   ------------------------------------------------ */
+
+function editSettings() {
+    if (!adminUnlocked) return;
+
+    const settings = data.settings;
+
+    openModal(
+        "Paramètres du portail",
+        "Modifier les informations générales.",
+        `
+            <form id="settingsForm" class="field-grid">
+                <div class="field">
+                    <label for="settingCity">Nom de la ville</label>
+                    <input id="settingCity" name="cityName" value="${escapeHTML(settings.cityName)}" required>
+                </div>
+                <div class="field">
+                    <label for="settingTitle">Nom du portail</label>
+                    <input id="settingTitle" name="portalTitle" value="${escapeHTML(settings.portalTitle)}" required>
+                </div>
+                <div class="field">
+                    <label for="settingStatus">État général</label>
+                    <select id="settingStatus" name="globalStatus">
+                        ${["Opérationnel","Vigilance","Perturbé","Maintenance"].map(value =>
+                            `<option ${settings.globalStatus === value ? "selected" : ""}>${value}</option>`
+                        ).join("")}
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="settingLimit">Plafond de facture (€)</label>
+                    <input id="settingLimit" name="invoiceLimit" type="number" min="0" max="8000" value="${Number(settings.invoiceLimit || 8000)}">
+                </div>
+                <div class="field full">
+                    <label for="settingWelcome">Message d'accueil</label>
+                    <textarea id="settingWelcome" name="welcomeMessage">${escapeHTML(settings.welcomeMessage)}</textarea>
+                </div>
+                <div class="field full">
+                    <label for="settingAlert">Message d'alerte générale</label>
+                    <textarea id="settingAlert" name="activeAlert">${escapeHTML(settings.activeAlert)}</textarea>
+                </div>
+            </form>
+        `,
+        [
+            { label: "Annuler", className: "btn", onClick: closeModal },
+            { label: "Enregistrer", className: "btn btn-primary", onClick: saveSettings }
+        ]
+    );
+}
+
+function saveSettings() {
+    const form = $("#settingsForm");
+
+    if (!form || !form.reportValidity()) return;
+
+    const values = Object.fromEntries(new FormData(form).entries());
+    const limit = Math.min(8000, Math.max(0, Number(values.invoiceLimit || 8000)));
+
+    data.settings = {
+        ...data.settings,
+        cityName: normalize(values.cityName),
+        portalTitle: normalize(values.portalTitle),
+        globalStatus: normalize(values.globalStatus),
+        invoiceLimit: limit,
+        welcomeMessage: normalize(values.welcomeMessage),
+        activeAlert: normalize(values.activeAlert)
+    };
+
+    logAction("Modification des paramètres", {
+        cityName: data.settings.cityName
+    });
+
+    scheduleSave();
+    closeModal();
+    renderAdmin();
+    showToast("Paramètres enregistrés.", "success");
+}
+
+/* ------------------------------------------------
+   O. AFFICHAGE DES LISTES ET TABLEAUX
+   ------------------------------------------------ */
+
+function openModule(key) {
+    if (!MODULES[key]) return;
+
+    currentDataset = key;
+    currentSearch = "";
+    currentFilter = "all";
+
+    renderDataset(key);
+}
+
+function labelForField(key, name) {
+    const config = MODULES[key];
+    const field = (config.fields || []).find(entry => entry[0] === name);
+
+    if (field) return field[1];
+
+    const labels = {
+        date: "Date",
+        actor: "Auteur",
+        action: "Action",
+        details: "Détails",
+        reference: "Référence",
+        totalAmount: "Montant",
+        targetName: "Personne concernée",
+        targetMatricule: "Matricule"
+    };
+
+    return labels[name] || name;
+}
+
+function valueForCell(key, value) {
+    if (value === null || value === undefined || value === "") {
+        return `<span class="muted">—</span>`;
+    }
+
+    const dateFields = [
+        "date",
+        "createdAt",
+        "updatedAt",
+        "startAt",
+        "endAt",
+        "dueDate",
+        "startDate",
+        "endDate",
+        "updatedDate"
+    ];
+
+    if (dateFields.includes(key)) {
+        return escapeHTML(formatDate(value, String(value).includes("T")));
+    }
+
+    if (["totalAmount"].includes(key) && !Number.isNaN(Number(value))) {
+        return escapeHTML(money(value));
+    }
+
+    if (["status","active","priority","type","recommendation"].includes(key)) {
+        const text = String(value);
+        let color = "";
+
+        if (/active|publiée|disponible|réglée|autorisée|opérationnel/i.test(text)) {
+            color = "green";
+        } else if (/urgence|urgent|refusée|retard|absent/i.test(text)) {
+            color = "red";
+        } else if (/attente|cours|vigilance|brouillon|demandée/i.test(text)) {
+            color = "orange";
+        } else if (/rank|igpn/i.test(text)) {
+            color = "purple";
+        }
+
+        return `<span class="tag ${color}">${escapeHTML(text)}</span>`;
+    }
+
+    const text = String(value);
+    const shortText = text.length > 75
+        ? `${text.slice(0,72)}…`
+        : text;
+
+    return `<span title="${escapeHTML(text)}">${escapeHTML(shortText)}</span>`;
+}
+
+function filteredRows(key) {
+    const query = currentSearch.toLowerCase();
+
+    return rowsFor(key).filter(row => {
+        const searchable = Object.values(row).join(" ").toLowerCase();
+
+        if (query && !searchable.includes(query)) {
+            return false;
+        }
+
+        const status = String(row.status || row.active || "").toLowerCase();
+
+        if (currentFilter === "active") {
+            return ["active","oui","publiée","en service","autorisée"].some(
+                value => status.includes(value)
+            );
+        }
+
+        if (currentFilter === "pending") {
+            return ["cours","attente","demandée","examen","brouillon","à faire"].some(
+                value => status.includes(value)
+            );
+        }
+
+        if (currentFilter === "closed") {
+            return ["clôturé","terminée","archivée","réglée","corrigé"].some(
+                value => status.includes(value)
+            );
+        }
+
+        return true;
+    });
+}
+
+function renderDataset(key) {
+    const config = MODULES[key];
+
+    if (!config) return;
+
+    const canEdit = mayEdit(key);
+    const rows = filteredRows(key);
+
+    $("#topTitle").textContent = config.title;
+    $("#topSubtitle").textContent = config.description;
+
+    const addButton = canEdit && !config.readOnly
+        ? `<button class="btn btn-primary" data-action="add" data-module="${escapeHTML(key)}">＋ Ajouter</button>`
+        : "";
+
+    $("#pageContent").innerHTML = `
+        ${pageHeading(
+            "Gestion des données",
+            config.title,
+            config.description,
+            `
+                <button class="btn" data-action="print">Imprimer</button>
+                ${addButton}
+                <button class="btn btn-ghost" data-action="back">← Retour</button>
+            `
+        )}
+
+        <section class="panel">
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <div class="search-box">
+                        <input id="moduleSearch" placeholder="Rechercher…" value="${escapeHTML(currentSearch)}">
+                    </div>
+                    <select class="filter-select" id="moduleFilter">
+                        <option value="all">Tous les états</option>
+                        <option value="active">Actifs / publiés</option>
+                        <option value="pending">En cours / attente</option>
+                        <option value="closed">Terminés / clôturés</option>
+                    </select>
+                </div>
+                <div class="toolbar-right">
+                    <span class="tag blue" id="moduleCount">${rows.length} entrée(s)</span>
+                    ${addButton}
+                </div>
+            </div>
+            <div id="moduleTable">${renderTable(key, rows, canEdit)}</div>
+        </section>
+
+        <div class="footer-note">
+            ${escapeHTML(config.title)} · ${rows.length} entrée(s) · Nanterre RP.
+        </div>
+    `;
+
+    $("#moduleSearch").addEventListener("input", event => {
+        currentSearch = event.target.value;
+        refreshTable(key);
+    });
+
+    $("#moduleFilter").addEventListener("change", event => {
+        currentFilter = event.target.value;
+        refreshTable(key);
+    });
+
+    bindPageEvents();
+}
+
+function renderTable(key, rows, canEdit) {
+    const config = MODULES[key];
+
+    if (!rows.length) {
+        return emptyState(
+            "Aucun enregistrement",
+            "Ajoutez une entrée pour commencer à utiliser ce module.",
+            config.icon
+        );
+    }
+
+    const headers = config.columns.map(column => `
+        <th>${escapeHTML(labelForField(key, column))}</th>
+    `).join("");
+
+    const actionsHeader = canEdit && !config.readOnly
+        ? "<th>Actions</th>"
+        : "";
+
+    const body = rows.map(row => {
+        const cells = config.columns.map(column => `
+            <td>${valueForCell(column, row[column])}</td>
+        `).join("");
+
+        const actions = canEdit && !config.readOnly
+            ? `
+                <td>
+                    <div class="table-actions">
+                        <button
+                            class="icon-btn"
+                            title="Modifier"
+                            data-action="edit"
+                            data-module="${escapeHTML(key)}"
+                            data-id="${escapeHTML(row.id)}">✎</button>
+                        <button
+                            class="icon-btn"
+                            title="Supprimer"
+                            data-action="delete"
+                            data-module="${escapeHTML(key)}"
+                            data-id="${escapeHTML(row.id)}">⌫</button>
+                        ${key === "webhooks" ? `<button class="icon-btn" title="Tester le webhook" data-action="webhook-test" data-id="${escapeHTML(row.id)}">↗</button>` : ""}
+                    </div>
+                </td>
+            `
+            : "";
+
+        return `<tr>${cells}${actions}</tr>`;
+    }).join("");
+
+    return `
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>${headers}${actionsHeader}</tr>
+                </thead>
+                <tbody>${body}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function refreshTable(key) {
+    const host = $("#moduleTable");
+
+    if (!host) return;
+
+    const rows = filteredRows(key);
+
+    host.innerHTML = renderTable(key, rows, mayEdit(key));
+    bindPageEvents(host);
+
+    const count = $("#moduleCount");
+
+    if (count) {
+        count.textContent = `${rows.length} entrée(s)`;
+    }
+}
+
+/* ------------------------------------------------
+   P. CONSTRUCTION DES FORMULAIRES
+   ------------------------------------------------ */
+
+function openEditor(key, id = null) {
+    const config = MODULES[key];
+
+    if (!config || config.readOnly) return;
+
+    if (!mayEdit(key)) {
+        showToast("Vous ne disposez pas des droits pour modifier ce module.", "error");
+        return;
+    }
+
+    const existing = id
+        ? rowsFor(key).find(row => String(row.id) === String(id))
+        : null;
+
+    if (id && !existing) {
+        showToast("Enregistrement introuvable.", "error");
+        return;
+    }
+
+    const body = `
+        <form id="recordForm" class="field-grid">
+            ${config.fields.map(field => renderField(field, existing?.[field[0]])).join("")}
+        </form>
+    `;
+
+    openModal(
+        existing ? `Modifier : ${config.singular}` : `Ajouter : ${config.singular}`,
+        config.description,
+        body,
+        [
+            { label: "Annuler", className: "btn", onClick: closeModal },
+            {
+                label: existing ? "Enregistrer" : "Créer l'enregistrement",
+                className: "btn btn-primary",
+                onClick: () => saveRecord(key, id)
+            }
+        ],
+        true
+    );
+}
+
+function renderField(field, currentValue) {
+    const [
+        name,
+        label,
+        type,
+        required = false,
+        options = null,
+        full = false
+    ] = field;
+
+    const safeName = escapeHTML(name);
+    const safeLabel = escapeHTML(label);
+    const requiredAttribute = required ? "required" : "";
+    const value = currentValue ?? "";
+
+    let control = "";
+
+    if (type === "textarea") {
+        control = `
+            <textarea
+                id="field-${safeName}"
+                name="${safeName}"
+                ${requiredAttribute}>${escapeHTML(value)}</textarea>
+        `;
+    } else if (type === "select") {
+        const list = (options || []).map(option => {
+            const selected = String(value) === String(option)
+                ? "selected"
+                : "";
+
+            return `
+                <option value="${escapeHTML(option)}" ${selected}>
+                    ${escapeHTML(option)}
+                </option>
+            `;
+        }).join("");
+
+        control = `
+            <select
+                id="field-${safeName}"
+                name="${safeName}"
+                ${requiredAttribute}>
+                <option value="">— Sélectionner —</option>
+                ${list}
+            </select>
+        `;
+    } else {
+        const numberLimits = type === "number"
+            ? 'min="0" max="8000" step="1"'
+            : "";
+
+        control = `
+            <input
+                id="field-${safeName}"
+                name="${safeName}"
+                type="${escapeHTML(type || "text")}"
+                value="${escapeHTML(value)}"
+                ${requiredAttribute}
+                ${numberLimits}>
+        `;
+    }
+
+    return `
+        <div class="field ${full ? "full" : ""}">
+            <label for="field-${safeName}">
+                ${safeLabel}${required ? " *" : ""}
+            </label>
+            ${control}
+        </div>
+    `;
+}
+
+/* ------------------------------------------------
+   Q. ENREGISTREMENT, VALIDATION ET SUPPRESSION
+   ------------------------------------------------ */
+
+function saveRecord(key, id = null) {
+    const config = MODULES[key];
+    const form = $("#recordForm");
+
+    if (!config || !form || !form.reportValidity()) return;
+
+    const raw = Object.fromEntries(new FormData(form).entries());
+    const values = {};
+
+    for (const field of config.fields) {
+        const name = field[0];
+        const type = field[2];
+
+        let value = raw[name] ?? "";
+
+        if (type === "number" && value !== "") {
+            value = Number(value);
+
+            if (!Number.isFinite(value)) {
+                showToast(`Valeur incorrecte : ${field[1]}.`, "error");
+                return;
+            }
+        }
+
+        values[name] = typeof value === "string"
+            ? value.trim()
+            : value;
+    }
+
+    if (key === "samuInvoices") {
+        const maximum = Math.min(
+            8000,
+            Number(data.settings.invoiceLimit || 8000)
+        );
+
+        const amount = Number(values.totalAmount);
+
+        if (amount < 0 || amount > maximum) {
+            showToast(
+                `Le montant doit être compris entre 0 et ${money(maximum)}.`,
+                "error"
+            );
+            return;
+        }
+    }
+
+    if (key === "roster") {
+        const duplicate = rowsFor("roster").find(member => {
+            const sameMatricule = String(member.matricule) === String(values.matricule);
+            const sameRecord = String(member.id) === String(id || "");
+            return sameMatricule && !sameRecord;
+        });
+
+        if (duplicate) {
+            showToast("Ce matricule existe déjà.", "error");
+            return;
+        }
+    }
+
+    if (key === "penalCode") {
+        const duplicate = rowsFor("penalCode").find(item => {
+            const sameCategory = String(item.category).toLowerCase() === String(values.category).toLowerCase();
+            const sameOffence = String(item.offence).toLowerCase() === String(values.offence).toLowerCase();
+            const sameRecord = String(item.id) === String(id || "");
+            return sameCategory && sameOffence && !sameRecord;
+        });
+
+        if (duplicate) {
+            showToast("Cette infraction existe déjà dans cette catégorie.", "error");
+            return;
+        }
+    }
+
+    const collection = rowsFor(key);
+    const index = id
+        ? collection.findIndex(item => String(item.id) === String(id))
+        : -1;
+
+    const existing = index >= 0
+        ? collection[index]
+        : null;
+
+    const saved = {
+        ...(existing || {}),
+        ...values,
+        id: existing?.id || makeId(),
+        createdAt: existing?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+
+    if (!saved.author) {
+        saved.author = currentUser?.name || actorName();
+    }
+
+    if (index >= 0) {
+        collection[index] = saved;
+    } else {
+        collection.unshift(saved);
+    }
+
+    const actionName = index >= 0
+        ? "Modification d'un enregistrement"
+        : "Création d'un enregistrement";
+
+    logAction(actionName, {
+        module: config.title,
+        id: saved.id,
+        title: saved[config.primary] || saved.title || saved.name || saved.matricule || ""
+    });
+
+    scheduleSave();
+    closeModal();
+
+    if (currentPage === "admin") {
+        renderAdmin();
+    } else {
+        renderDataset(key);
+    }
+
+    showToast(
+        index >= 0 ? "Enregistrement modifié." : "Enregistrement créé.",
+        "success"
+    );
+
+    const notificationService = {
+        policeReports: "Police nationale",
+        taj: "Police nationale",
+        gav: "Police nationale",
+        perquisitions: "Police nationale",
+        bspnWall: "BSPN",
+        bspnCourses: "BSPN",
+        bspnHomework: "BSPN",
+        bspnAnnouncements: "BSPN",
+        samuRecords: "SAMU 92",
+        samuInvoices: "SAMU 92",
+        igpnReviews: "IGPN",
+        citizenNews: "Citoyens"
+    };
+
+    if (key === "alerts") {
+        notifyDiscord(saved.service || "Tous", saved);
+    } else if (notificationService[key]) {
+        notifyDiscord(notificationService[key], {
+            title: `Mise à jour : ${config.title}`,
+            content: saved[config.primary] || saved.title || saved.name || ""
+        });
+    }
+}
+
+function deleteItem(key, id) {
+    const config = MODULES[key];
+
+    if (!config || !mayEdit(key)) {
+        showToast("Suppression non autorisée.", "error");
+        return;
+    }
+
+    const collection = rowsFor(key);
+    const item = collection.find(row => String(row.id) === String(id));
+
+    if (!item) return;
+
+    const title = item[config.primary] ||
+        item.title ||
+        item.name ||
+        item.matricule ||
+        config.singular;
+
+    const confirmed = askConfirmation(
+        `Supprimer définitivement « ${title} » ? Cette action ne peut pas être annulée.`
+    );
+
+    if (!confirmed) return;
+
+    data[key] = collection.filter(
+        row => String(row.id) !== String(id)
+    );
+
+    logAction("Suppression d'un enregistrement", {
+        module: config.title,
+        id,
+        title
+    });
+
+    scheduleSave();
+
+    if (currentPage === "admin") {
+        renderAdmin();
+    } else {
+        renderDataset(key);
+    }
+
+    showToast("Enregistrement supprimé.", "success");
+}
+
+/* ------------------------------------------------
+   R. MODALES COMMUNES
+   ------------------------------------------------ */
+
+function openModal(title, subtitle, body, actions = [], large = false) {
+    $("#modalTitle").textContent = title;
+    $("#modalSubtitle").textContent = subtitle || "";
+    $("#modalBody").innerHTML = body;
+    $("#modalBox").classList.toggle("large", Boolean(large));
+
+    const footer = $("#modalFooter");
+    footer.innerHTML = "";
+
+    actions.forEach(action => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = action.className || "btn";
+        button.textContent = action.label;
+
+        button.addEventListener("click", action.onClick);
+        footer.appendChild(button);
+    });
+
+    $("#modalBackdrop").classList.add("show");
+}
+
+function closeModal() {
+    $("#modalBackdrop").classList.remove("show");
+    $("#modalBody").innerHTML = "";
+}
+
+/* ------------------------------------------------
+   S. EXPORT ET IMPORT DE SAUVEGARDE
+   ------------------------------------------------ */
+
+function exportJSON() {
+    const blob = new Blob(
+        [JSON.stringify(data, null, 2)],
+        { type: "application/json;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `nanterre-services-v6-${new Date().toISOString().slice(0,10)}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    logAction("Export JSON", {});
+    scheduleSave();
+    showToast("Export JSON préparé.", "success");
+}
+
+function importJSON() {
+    if (!adminUnlocked) return;
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+
+    input.addEventListener("change", async () => {
+        const file = input.files?.[0];
+
+        if (!file) return;
+
+        try {
+            const text = await file.text();
+            const parsed = JSON.parse(text);
+
+            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+                throw new Error("Structure incorrecte");
+            }
+
+            const confirmed = askConfirmation(
+                "Remplacer les données actuellement chargées par le contenu du fichier ? Faites un export avant de continuer."
+            );
+
+            if (!confirmed) return;
+
+            data = normalizeData(parsed);
+            logAction("Import JSON", { filename: file.name });
+            scheduleSave();
+            renderAdmin();
+            showToast("Données importées.", "success");
+        } catch (error) {
+            console.error("Import JSON refusé", error);
+            showToast("Le fichier JSON est invalide.", "error");
+        }
+    });
+
+    input.click();
+}
+
+/* ------------------------------------------------
+   T. NOTIFICATIONS DISCORD
+   ------------------------------------------------ */
+
+async function notifyDiscord(service, record) {
+    const routes = rowsFor("webhooks").filter(route => {
+        const enabled = String(route.active).toLowerCase() === "oui";
+        const matchingService = route.service === "Tous" || route.service === service;
+        const validURL = /^https:\/\/discord(?:app)?\.com\/api\/webhooks\//i.test(String(route.url || ""));
+
+        return enabled && matchingService && validURL;
+    });
+
+    if (!routes.length) return;
+
+    const title = record.title || record.name || "Nouvelle notification";
+    const content = record.content || record.message || "";
+
+    for (const route of routes) {
+        try {
+            await fetch(route.url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    content: `**${title}**\n${String(content).slice(0,1700)}`
+                })
+            });
+        } catch (error) {
+            console.warn("Webhook Discord inaccessible", error);
+        }
+    }
+}
+
+async function testWebhook(id) {
+    if (!adminUnlocked) return;
+
+    const route = rowsFor("webhooks").find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!route) return;
+
+    if (!/^https:\/\/discord(?:app)?\.com\/api\/webhooks\//i.test(String(route.url || ""))) {
+        showToast("L'URL du webhook ne semble pas valide.", "error");
+        return;
+    }
+
+    try {
+        const response = await fetch(route.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                content: `Test de notification Nanterre Services V${APP_VERSION} — ${route.name}`
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        showToast("Message de test envoyé sur Discord.", "success");
+    } catch (error) {
+        console.error("Échec webhook", error);
+        showToast("Échec du test webhook. Vérifiez l'URL.", "error");
+    }
+}
+
+/* ------------------------------------------------
+   U. ÉVÉNEMENTS GLOBAUX ET DÉMARRAGE
+   ------------------------------------------------ */
+
+function bindGlobalEvents() {
+    $all(".nav-button[data-page]").forEach(button => {
+        button.addEventListener("click", () => {
+            navigate(button.dataset.page);
+        });
+    });
+
+    $("#mobileMenu").addEventListener("click", () => {
+        $("#sidebar").classList.toggle("open");
+        $("#drawerBackdrop").classList.toggle("show");
+    });
+
+    $("#drawerBackdrop").addEventListener("click", () => {
+        $("#sidebar").classList.remove("open");
+        $("#drawerBackdrop").classList.remove("show");
+    });
+
+    $("#syncButton").addEventListener("click", syncNow);
+    $("#refreshButton").addEventListener("click", refreshCloud);
+
+    $("#userChip").addEventListener("click", () => {
+        if (currentUser) {
+            const disconnect = askConfirmation(
+                `Session : ${currentUser.name}\n\nOK : se déconnecter\nAnnuler : conserver la session`
+            );
+
+            if (disconnect) disconnectMember();
+        } else {
+            openLogin();
+        }
+    });
+
+    $("#loginCancel").addEventListener("click", closeLogin);
+
+    $("#loginForm").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const matricule = $("#loginMatricule").value;
+        const pin = $("#loginPin").value;
+
+        const success = connectMember(matricule, pin);
+
+        $("#loginError").classList.toggle("show", !success);
+    });
+
+    $("#modalClose").addEventListener("click", closeModal);
+
+    $("#modalBackdrop").addEventListener("click", event => {
+        if (event.target === $("#modalBackdrop")) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeModal();
+            closeLogin();
+
+            $("#sidebar").classList.remove("open");
+            $("#drawerBackdrop").classList.remove("show");
+        }
+    });
+
+    window.addEventListener("online", () => {
+        if (cloudAvailable) syncNow();
+    });
+}
+
+async function initializeApp() {
+    loadLocal();
+    validateData();
+    initSupabase();
+
+    if (cloudAvailable) {
+        await readCloud();
+    }
+
+    validateData();
+    restoreSession();
+    bindGlobalEvents();
+
+    renderPage("home");
+
+    if (cloudAvailable) {
+        setSyncState("online", "Synchronisé");
+    } else {
+        setSyncState("offline", "Stockage local");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", initializeApp);
+
+/* ------------------------------------------------
+   V. NOTES TECHNIQUES DE MAINTENANCE
+   ------------------------------------------------
+
+   Le portail utilise une structure de modules commune.
+   Les tableaux sont construits depuis MODULES.
+   Les formulaires sont construits depuis la propriété fields.
+   Les boutons d'action sont reliés aux fonctions globales.
+   Les données sont conservées dans un objet JSON principal.
+
+   Pour ajouter un module, suivre les étapes suivantes :
+
+   1. Ajouter le tableau dans emptyDataModel().
+   2. Créer la configuration dans MODULES.
+   3. Définir son titre, son icône et sa description.
+   4. Définir le service auquel le module appartient.
+   5. Définir les colonnes à afficher.
+   6. Définir le champ primaire de chaque enregistrement.
+   7. Définir les champs du formulaire.
+   8. Ajouter le module à ADMIN_GROUPS.
+   9. Ajouter un bouton d'accès dans le service concerné.
+   10. Adapter les règles de permission dans mayEdit().
+   11. Vérifier qu'une sauvegarde locale est créée.
+   12. Vérifier que Supabase reçoit les changements.
+
+   Types de champ actuellement pris en charge :
+
+   - text
+   - url
+   - date
+   - datetime-local
+   - number
+   - textarea
+   - select
+
+   Un champ obligatoire est déclaré avec true en quatrième position.
+   Un champ select reçoit sa liste de valeurs en cinquième position.
+   Un champ pleine largeur reçoit true en sixième position.
+
+   Exemple de champ simple :
+
+   ["title", "Titre", "text", true]
+
+   Exemple de liste déroulante :
+
+   ["status", "État", "select", false, ["Ouvert", "Clos"]]
+
+   Exemple de zone de texte pleine largeur :
+
+   ["content", "Contenu", "textarea", false, null, true]
+
+   Les modifications passent par saveRecord() ou deleteItem().
+   Ces fonctions ajoutent une ligne dans auditLogs.
+   Ces fonctions déclenchent scheduleSave().
+   scheduleSave() écrit d'abord dans localStorage.
+   scheduleSave() déclenche ensuite l'écriture Supabase.
+   Une panne cloud ne supprime pas la copie locale.
+
+   Les permissions sont des permissions de confort RP.
+   Un utilisateur connecté est identifié par son matricule.
+   Un compte désactivé ne peut pas se connecter.
+   Le rôle hc peut gérer tous les modules.
+   Le rôle igpn possède des autorisations de contrôle élargies.
+   Un agent standard ne peut gérer que son service.
+   Un visiteur peut consulter les pages publiques.
+
+   Les données de ce portail sont des données de jeu.
+   Les vrais dossiers judiciaires ne doivent pas y être saisis.
+   Les vrais dossiers médicaux ne doivent pas y être saisis.
+   Les vrais identifiants de connexion ne doivent pas y être saisis.
+   Les vraies coordonnées personnelles ne doivent pas y être saisies.
+   Les véritables secrets Discord ne doivent pas être stockés ici.
+
+   Le stockage partagé utilise une ligne JSON unique.
+   Cette architecture simplifie fortement les opérations d'un serveur RP.
+   Elle n'est pas adaptée à une application professionnelle à fort trafic.
+   Deux modifications simultanées peuvent se remplacer.
+   Il est recommandé de faire des exports JSON réguliers.
+   Un export peut être importé depuis le panneau administrateur.
+
+   La clé Supabase intégrée est une clé publishable.
+   Elle ne doit jamais être remplacée par une clé service_role.
+   La table publique doit être dédiée à cet environnement RP.
+   Ne pas réutiliser la table portail_data existante.
+   Ne pas supprimer les tables précédentes du projet.
+   Ne pas modifier les données présentes dans les anciens modules.
+
+   Les notifications Discord sont envoyées directement depuis le navigateur.
+   Un webhook configuré est donc visible par les utilisateurs.
+   Une personne malveillante pourrait l'utiliser pour spammer le salon.
+   N'utilisez que des webhooks de salons RP non sensibles.
+   Supprimez les webhooks en cas d'abus.
+   Pour une vraie protection, il faudrait un proxy serveur.
+
+   La connexion de membre présentée ici n'est pas un Auth Supabase.
+   Elle se base sur une liste de membres partagée.
+   Le code RP est enregistré dans le document de données.
+   Cette connexion n'offre pas de confidentialité réelle.
+   Elle permet uniquement une expérience de session RP simple.
+
+   Ce code est livré comme base fonctionnelle de portail V6.
+   Les demandes d'évolution peuvent être ajoutées module par module.
+   Toujours sauvegarder le fichier index.html avant modification.
+   Toujours faire un export des données avant import.
+   Toujours tester sur une copie du site avant publication générale.
+
+   ------------------------------------------------
+   FIN DES NOTES DE MAINTENANCE
+   ------------------------------------------------ */
 </script>
 </body>
 </html>
