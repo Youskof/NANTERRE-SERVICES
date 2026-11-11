@@ -221,7 +221,6 @@
         <button data-page="bspn"><span class="nav-icon">✚</span>BSPN</button>
         <button data-page="samu"><span class="nav-icon">✚</span>SAMU 92</button>
         <button data-page="igpn"><span class="nav-icon">◈</span>IGPN</button>
-        <button data-page="admin"><span class="nav-icon">⚙</span>Administration</button>
       </nav>
     </div>
     <div class="side-bottom">
@@ -370,7 +369,81 @@ function renderModule(id) {
   const crumb = document.getElementById("crumb");
   const toastBox = document.getElementById("toast");
   let toastTimer;
+let adminUnlocked = false;
 
+const ADMIN_ACCESS_CODE = "Nanterre2026";
+
+function requestAdminAccess() {
+  if (adminUnlocked) {
+    render("admin");
+    return;
+  }
+
+  content.innerHTML = `
+    ${header("admin")}
+
+    <div class="login-wrap">
+      <section class="card login-card">
+        <div class="eyebrow">ACCÈS RESTREINT</div>
+        <h2 style="font-size:21px;margin:8px 0">
+          Administration centrale
+        </h2>
+
+        <p class="muted">
+          Veuillez saisir le code d'accès administrateur.
+        </p>
+
+        <div class="field">
+          <label for="adminAccessCode">Code d'accès</label>
+          <input
+            type="password"
+            id="adminAccessCode"
+            placeholder="Saisir le code"
+            autocomplete="off"
+          >
+        </div>
+
+        <div id="adminError"></div>
+
+        <div class="toolbar">
+          <button class="btn" id="validateAdmin">
+            Accéder au panel
+          </button>
+
+          <button class="btn secondary" id="cancelAdmin">
+            Retour
+          </button>
+        </div>
+      </section>
+    </div>
+  `;
+
+  document.getElementById("validateAdmin").addEventListener("click", () => {
+    const code = document.getElementById("adminAccessCode").value;
+
+    if (code === ADMIN_ACCESS_CODE) {
+      adminUnlocked = true;
+      toast("Accès administrateur autorisé.");
+      render("admin");
+    } else {
+      document.getElementById("adminError").innerHTML = `
+        <div class="notice" style="color:#ed747b">
+          Code incorrect. Accès refusé.
+        </div>
+      `;
+    }
+  });
+
+  document.getElementById("adminAccessCode").addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      document.getElementById("validateAdmin").click();
+    }
+  });
+
+  document.getElementById("cancelAdmin").addEventListener("click", () => {
+    render("home");
+  });
+}
   function toast(message) {
     toastBox.textContent = message;
     toastBox.classList.add("show");
@@ -387,11 +460,22 @@ function renderModule(id) {
     return `<button class="service" data-go="${page}"><div class="ico">${icon}</div><strong>${title}</strong><small>${description}</small></button>`;
   }
   function render(page = "home") {
-    document.querySelectorAll("#navigation button").forEach(b => b.classList.toggle("active", b.dataset.page === page));
-    crumb.textContent = pageInfo[page][0];
-    document.getElementById("sidebar").classList.remove("open");
-    let html = header(page);
-    if (page === "home") {
+
+  if (page === "admin" && !adminUnlocked) {
+    requestAdminAccess();
+    return;
+  }
+
+  document.querySelectorAll("#navigation button").forEach(b =>
+    b.classList.toggle("active", b.dataset.page === page)
+  );
+
+  crumb.textContent = pageInfo[page][0];
+  document.getElementById("sidebar").classList.remove("open");
+
+  let html = header(page);
+
+  if (page === "home") {
       html += `<div class="grid">
         <section class="card hero span-12"><div class="hero-inner"><div><div class="eyebrow">PORTAIL DES SERVICES</div><h2>Bienvenue sur Nanterre Services</h2><p>Retrouvez les différents espaces institutionnels depuis une interface unique, claire et centralisée.</p><div class="toolbar" style="margin-top:18px"><button class="btn" data-go="citizen">Accéder aux services</button><button class="btn secondary" data-go="admin">Administration</button></div></div><div class="hero-symbol">⌘</div></div></section>
         ${card("État général", `<div class="stats"><div class="stat"><strong>06</strong><span>Espaces</span></div><div class="stat"><strong>24/7</strong><span>Portail accessible</span></div><div class="stat"><strong>—</strong><span>Agents connectés</span></div><div class="stat"><strong>—</strong><span>Alertes actives</span></div></div>`, "span-12")}
