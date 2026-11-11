@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#09111f">
 <meta name="description" content="Nanterre Services - portail institutionnel RP">
-<title>Nanterre Services | Portail institutionnel</title>
+<title>Nanterre Services | Portail institutionnel V6.1</title>
 <style>
 :root {
     --bg: #080f1c;
@@ -820,6 +820,170 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
     .panel,.stat-card { border: 1px solid #ccc; color: #111; background: #fff; box-shadow: none; }
     td,th { color: #111; }
 }
+
+/* ================================================================
+   V6.1 — ERGONOMIE, LISIBILITÉ ET ACCESSIBILITÉ
+   ================================================================ */
+:root {
+    --bg: #f3f6fa;
+    --bg-soft: #ffffff;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --panel-3: #edf2f7;
+    --line: #dce3eb;
+    --line-strong: #c6d0dc;
+    --text: #1f2937;
+    --muted: #526174;
+    --muted-2: #66758a;
+    --blue: #1769c2;
+    --blue-dark: #145ba8;
+    --blue-soft: #e8f1fc;
+    --green: #198754;
+    --green-soft: #e6f5ed;
+    --orange: #a85a00;
+    --orange-soft: #fff3df;
+    --red: #b4232d;
+    --red-soft: #fdebed;
+    --purple: #6741a5;
+    --purple-soft: #f1ebfb;
+    --shadow: 0 12px 32px rgba(20,35,55,.08);
+    --radius: 12px;
+    --sidebar-width: 244px;
+    --topbar-height: 70px;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.6; }
+.sidebar { background: #fff; border-right: 1px solid var(--line); color: var(--text); }
+.brand { border-bottom-color: var(--line); }
+.brand-copy strong { color: #182433; font-size: 15px; }
+.brand-copy span,.sidebar-label,.sidebar-foot { color: #526174; }
+.sidebar-label { font-size: 11px; letter-spacing: .7px; }
+.nav-button { min-height: 46px; color: #344256; font-size: 14px; }
+.nav-button:hover { color: #123b69; background: #f2f6fb; }
+.nav-button.active { color: #124f91; background: #e8f1fc; border-color: #c9def6; }
+.nav-count { color: #334155; background: #eef2f7; }
+.sidebar-status { background: #f7f9fc; border-color: var(--line); }
+.sidebar-status strong,.sidebar-status span { color: #344256 !important; font-size: 12px !important; }
+.sidebar-help { margin: 8px 0 0; color: #526174; font-size: 12px; }
+.topbar { background: rgba(255,255,255,.96); border-bottom-color: var(--line); }
+.breadcrumbs strong { color: #172334; font-size: 18px; }
+.breadcrumbs span { color: #526174; font-size: 12px; }
+.user-chip { border-color: var(--line); background: #fff; color: #263447; }
+.user-chip-copy span { color: #526174; font-size: 11px; }
+.page-wrap { padding: 26px clamp(16px,2.4vw,34px); }
+.page-heading { margin-bottom: 18px; }
+.page-heading h1 { color: #172334; font-size: clamp(23px,2.4vw,30px); line-height: 1.2; }
+.page-description { color: #526174; font-size: 14px; }
+.eyebrow { color: #145ba8; background: #e8f1fc; font-size: 11px; }
+.panel,.stat-card,.admin-module,.service-card { background: #fff; border-color: var(--line); box-shadow: 0 3px 14px rgba(20,35,55,.035); }
+.panel-title { color: #172334; font-size: 16px; }
+.panel-subtitle { color: #526174; font-size: 12px; }
+.panel-body { padding: 19px; }
+.stat-label,.stat-foot,.muted,.small { color: #526174; }
+.stat-value { color: #172334; font-size: 27px; }
+.service-card h3,.admin-module h3 { color: #172334; font-size: 15px; }
+.service-card p,.admin-module p { color: #526174; font-size: 13px; }
+.admin-module-count { color: #526174; font-size: 11px; }
+.btn { min-height: 40px; padding: 9px 14px; color: #27364a; background: #fff; border-color: #ccd6e2; font-size: 13px; }
+.btn:hover { color: #123b69; background: #f1f6fc; border-color: #9cb9d9; }
+.btn-primary { color: #fff; background: #1769c2; border-color: #1769c2; }
+.btn-primary:hover { color: #fff; background: #145ba8; }
+.btn-danger { color: #9e2029; background: #fff2f2; border-color: #f2c6ca; }
+.btn-small { min-height: 34px; padding: 7px 11px; font-size: 12px; }
+.field label { color: #263447; font-size: 13px; }
+.field input,.field textarea,.field select,.search-box input,.filter-select {
+    min-height: 42px; color: #1f2937; background: #fff; border-color: #cbd5e1; font-size: 14px;
+}
+.field textarea { min-height: 100px; }
+.search-box input { padding-left: 36px; }
+.filter-select { color: #344256; }
+.subnav { gap: 8px; margin-bottom: 18px; }
+.subnav button { min-height: 42px; padding: 8px 14px; color: #344256; background: #fff; border-color: #cbd5e1; font-size: 13px; }
+.subnav button.active { color: #124f91; background: #e8f1fc; border-color: #9fc4ec; }
+th { color: #526174; background: #f7f9fc; font-size: 11px; }
+td { color: #27364a; font-size: 13px; }
+.tag { color: #344256; background: #f5f7fa; border-color: #d8e0e9; font-size: 11px; }
+.tag.green { color: #17653f; background: #e6f5ed; border-color: #bde4ce; }
+.tag.orange { color: #8b4c00; background: #fff3df; border-color: #f4d6a7; }
+.tag.red { color: #9b1c27; background: #fdebed; border-color: #f3c2c6; }
+.tag.blue { color: #145ba8; background: #e8f1fc; border-color: #c5dcf5; }
+.empty-state { color: #526174; }
+.empty-state strong { color: #172334; font-size: 15px; }
+.empty-state p { font-size: 13px; }
+.notice { color: #24405e; background: #eef5fc; border-color: #cbdff4; font-size: 13px; }
+.notice.warning { color: #744400; background: #fff5e5; border-color: #f1d8ae; }
+.notice.danger { color: #8b1e27; background: #fff0f1; border-color: #f0c6ca; }
+.notice strong { font-size: 14px; }
+.toast { color: #fff; font-size: 13px; }
+.login-cover { background: rgba(15,25,40,.72); }
+.login-card { background: #fff; color: #1f2937; border-color: #d5dee8; }
+.login-card > p { color: #526174; font-size: 13px; }
+.login-card h2 { color: #172334; }
+.login-error { color: #98212b; background: #fdebed; font-size: 12px; }
+.modal { background: #fff; color: #1f2937; }
+.modal-header h2 { color: #172334; font-size: 18px; }
+.modal-header p { color: #526174; font-size: 12px; }
+.modal-footer { background: #f8fafc; }
+.footer-note { color: #66758a; font-size: 11px; }
+.sync-pill,#syncButton,#refreshButton { display: none !important; }
+.alert-overlay { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(8,15,28,.88); backdrop-filter: blur(7px); }
+.alert-overlay.show { display: flex; }
+.alert-overlay-card { width: min(760px,100%); padding: clamp(24px,5vw,48px); border: 3px solid #f3b33d; border-radius: 22px; background: #fff; color: #142033; text-align: center; box-shadow: 0 25px 90px rgba(0,0,0,.38); animation: alert-pulse 1.8s ease-in-out infinite; }
+.alert-overlay-card.level-urgent { border-color: #bd1e2d; }
+.alert-overlay-card.level-info { border-color: #1769c2; }
+.alert-overlay-kicker { margin-bottom: 14px; color: #7b2430; font-weight: 800; font-size: 13px; letter-spacing: 2px; }
+.alert-overlay-card h2 { margin: 0 0 16px; color: #15243a; font-size: clamp(30px,5vw,48px); line-height: 1.1; }
+.alert-overlay-card p { margin: 0 auto; max-width: 620px; white-space: pre-wrap; color: #344256; font-size: clamp(17px,2.2vw,22px); }
+.alert-overlay-service { margin-top: 18px; color: #526174; font-size: 14px; font-weight: 700; }
+.alert-audio-state { min-height: 24px; margin-top: 16px; color: #526174; font-size: 13px; }
+.alert-overlay-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+@keyframes alert-pulse { 50% { box-shadow: 0 25px 90px rgba(0,0,0,.38),0 0 0 8px rgba(243,179,61,.10); } }
+@media (max-width:680px) {
+    .page-wrap { padding: 18px 13px; }
+    .topbar { padding: 10px 13px; }
+    .breadcrumbs span { display: none; }
+    .panel-body { padding: 15px; }
+    .stats-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .stat-card { min-height: 90px; }
+    .alert-overlay-card { padding: 24px 18px; }
+    .alert-overlay-actions { flex-direction: column; }
+    .alert-overlay-actions .btn { width: 100%; }
+}
+
+
+.admin-tabs { position: sticky; top: var(--topbar-height); z-index: 10; padding: 8px 0; background: var(--bg); }
+.admin-category { width: 100%; min-height: 115px; color: var(--text); text-align: left; }
+.admin-category-copy { display: grid; gap: 4px; }
+.admin-category-copy strong { color: #172334; font-size: 15px; }
+.admin-category-copy span { color: #526174; font-size: 13px; }
+.admin-category-copy small { color: #66758a; font-size: 11px; }
+.admin-category-grid { margin-top: 10px; }
+.admin-settings-shortcut { margin-bottom: 18px; }
+.settings-subtitle { margin: 0; color: #172334; font-size: 16px; }
+.visual-preview-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.visual-preview-card { padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; }
+.visual-preview-card strong { color: #172334; font-size: 14px; }
+.visual-preview-card p { margin: 6px 0 0; color: #526174; font-size: 13px; }
+.citizen-hero { background: linear-gradient(110deg,#e9f2fc,#f8fbff 75%,#e6f2ff); border-color: #cddff2; }
+.citizen-hero .hero-content h1 { color: #17385d; }
+.citizen-hero .hero-content p { color: #40556d; font-size: 15px; }
+.citizen-hero .eyebrow { color: #145ba8; }
+.citizen-hero .hero-side { color: #145ba8; border-color: #c9def6; background: #fff; }
+.citizen-city-card { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; }
+.citizen-city-card h2 { margin: 4px 0; color: #172334; font-size: 24px; }
+.citizen-city-card p { margin: 0; color: #526174; }
+@media (max-width:760px) { .visual-preview-grid { grid-template-columns: 1fr; } .admin-tabs { position: static; } }
+
+button[data-action="print"], button[onclick*="print"] { display: none !important; }
+
+.hero-banner { background: #e9f2fc; border-color: #cddff2; box-shadow: none; }
+.hero-content h1 { color: #17385d; }
+.hero-content p { color: #40556d; }
+.hero-content .eyebrow { color: #145ba8; }
+.hero-side { color: #145ba8; border-color: #c9def6; background: #fff; }
+
+.admin-entry { display:flex; align-items:center; gap:10px; width:100%; min-height:38px; margin:0 0 10px; padding:7px 11px; border:1px solid #dce3eb; border-radius:9px; color:#526174; background:#f8fafc; font-size:12px; font-weight:600; text-align:left; cursor:pointer; }
+.admin-entry:hover { color:#145ba8; background:#eef5fc; border-color:#c9def6; }
 </style>
 </head>
 <body>
@@ -881,17 +1045,17 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
         </section>
 
         <div class="sidebar-spacer"></div>
+        <button class="nav-button admin-entry" type="button" data-page="admin" title="Accéder à l'administration avec un code">
+            <span aria-hidden="true">⚙</span><span>Accès administration</span>
+        </button>
         <div class="sidebar-status">
             <div class="status-line">
-                <strong>État du portail</strong>
-                <span><i class="status-indicator"></i>Opérationnel</span>
+                <strong>Portail institutionnel</strong>
+                <span><i class="status-indicator"></i>Disponible</span>
             </div>
-            <div class="status-line" style="margin-top:9px">
-                <span>Synchronisation</span>
-                <span id="sidebarSyncText">Locale</span>
-            </div>
+            <p class="sidebar-help">Choisissez simplement l'espace dont vous avez besoin.</p>
         </div>
-        <div class="sidebar-foot">Nanterre RP · Version 6.0</div>
+        <div class="sidebar-foot">Nanterre RP · Version 6.1</div>
     </aside>
 
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
@@ -906,17 +1070,11 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
                 </div>
             </div>
             <div class="topbar-actions">
-                <div class="sync-pill" id="syncPill" title="État de la sauvegarde">
-                    <span class="sync-dot"></span>
-                    <span id="syncLabel">Stockage local</span>
-                </div>
-                <button class="btn btn-small" id="syncButton" title="Envoyer les modifications vers Supabase">↥</button>
-                <button class="btn btn-small" id="refreshButton" title="Récupérer les dernières données partagées">↻</button>
                 <button class="user-chip" id="userChip" title="Ouvrir la connexion">
                     <span class="avatar" id="userAvatar">INV</span>
                     <span class="user-chip-copy">
                         <strong id="userName">Visiteur</strong>
-                        <span id="userRole">Session non connectée</span>
+                        <span id="userRole">Session visiteur</span>
                     </span>
                 </button>
             </div>
@@ -949,9 +1107,13 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
 <div class="login-cover" id="loginCover">
     <div class="login-card">
         <div class="login-logo">NRP</div>
-        <h2>Connexion au portail</h2>
-        <p>Connectez-vous avec votre matricule RP et votre code personnel.</p>
+        <h2 id="loginTitle">Connexion au portail</h2>
+        <p id="loginDescription">Saisissez le code du service, votre matricule et votre code personnel.</p>
         <form class="login-form" id="loginForm">
+            <div class="field" id="portalAccessField">
+                <label for="loginPortalCode">Code d'accès du portail</label>
+                <input id="loginPortalCode" name="portalCode" type="password" autocomplete="off" placeholder="Code communiqué par le service" required>
+            </div>
             <div class="field">
                 <label for="loginMatricule">Matricule</label>
                 <input id="loginMatricule" name="matricule" autocomplete="username" placeholder="Ex. 00" required>
@@ -966,6 +1128,21 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
         </form>
     </div>
 </div>
+
+<div class="alert-overlay" id="alertOverlay" role="alertdialog" aria-modal="true" aria-labelledby="alertOverlayTitle" aria-describedby="alertOverlayMessage">
+    <section class="alert-overlay-card" id="alertOverlayCard">
+        <div class="alert-overlay-kicker" id="alertOverlayKicker">ALERTE INSTITUTIONNELLE</div>
+        <h2 id="alertOverlayTitle">Alerte</h2>
+        <p id="alertOverlayMessage"></p>
+        <div class="alert-overlay-service" id="alertOverlayService"></div>
+        <div class="alert-audio-state" id="alertAudioState">Diffusion sonore en cours…</div>
+        <div class="alert-overlay-actions">
+            <button class="btn btn-primary" id="alertAudioEnable" type="button">Activer le son</button>
+            <button class="btn btn-danger" id="alertDismiss" type="button">Arrêter le son et fermer</button>
+        </div>
+    </section>
+</div>
+<audio id="alertAudio" preload="none"></audio>
 
 <div class="toast-host" id="toastHost" aria-live="polite"></div>
 
@@ -983,7 +1160,7 @@ tbody tr:hover { background: rgba(255,255,255,.018); }
    A. PARAMÈTRES DE L'APPLICATION
    ------------------------------------------------ */
 
-const APP_VERSION = "6.0.0";
+const APP_VERSION = "6.1.0";
 const LOCAL_DATA_KEY = "nanterre_services_v6_data";
 const USER_SESSION_KEY = "nanterre_services_v6_user";
 const ADMIN_SESSION_KEY = "nanterre_services_v6_admin";
@@ -1047,12 +1224,15 @@ function emptyDataModel() {
         updatedAt: new Date().toISOString(),
 
         roster: [],
+        bspnRoster: [],
+        samuRoster: [],
         policeReports: [],
         taj: [],
         gav: [],
         perquisitions: [],
         penalCode: [],
         alerts: [],
+        alertPresets: [],
 
         bspnWall: [],
         bspnCourses: [],
@@ -1077,7 +1257,14 @@ function emptyDataModel() {
             globalStatus: "Opérationnel",
             activeAlert: "Aucune alerte générale active",
             welcomeMessage: "Bienvenue sur le portail institutionnel de Nanterre RP.",
-            invoiceLimit: 8000
+            invoiceLimit: 8000,
+            portalAccessCodes: {
+                police: "POLICE-2026",
+                bspn: "BSPN-2026",
+                samu: "SAMU-2026",
+                igpn: "IGPN-2026",
+                admin: "Nanterre2026"
+            }
         },
 
         auditLogs: []
@@ -1100,6 +1287,11 @@ let lastCloudUpdate = null;
 let autosaveTimer = null;
 let currentSearch = "";
 let currentFilter = "all";
+let pendingPortal = null;
+let adminTab = "home";
+let citizenTab = "news";
+const knownAlertIds = new Set();
+let activeFullscreenAlertId = null;
 
 /* ------------------------------------------------
    C. CONFIGURATION DES MODULES ET CHAMPS
@@ -1118,11 +1310,53 @@ const MODULES = {
             ["matricule", "Matricule", "text", true],
             ["name", "Nom et prénom RP", "text", true],
             ["robloxName", "Pseudo Roblox", "text"],
-            ["service", "Service", "select", false, ["Police nationale", "BSPN", "SAMU 92", "IGPN", "Mairie", "Citoyen"]],
+            ["service", "Service historique", "select", false, ["Police nationale", "BSPN", "SAMU 92", "IGPN", "Mairie", "Citoyen"]],
             ["grade", "Grade / fonction", "text", true],
             ["role", "Permission", "select", false, ["agent", "officer", "igpn", "hc"]],
             ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
-            ["pin", "Code personnel RP", "text"],
+            ["pin", "Code personnel RP", "password"],
+            ["active", "Compte actif", "select", false, ["Oui", "Non"]],
+            ["notes", "Observations", "textarea", false, null, true]
+        ]
+    },
+
+    bspnRoster: {
+        title: "Effectifs et matricules BSPN",
+        singular: "membre BSPN",
+        icon: "✚",
+        description: "Registre indépendant des personnels de la brigade.",
+        service: "bspn",
+        columns: ["matricule", "name", "grade", "status", "active"],
+        primary: "name",
+        fields: [
+            ["matricule", "Matricule BSPN", "text", false],
+            ["name", "Nom et prénom RP", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["grade", "Grade / fonction", "text", true],
+            ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
+            ["role", "Permission", "select", false, ["agent", "officer", "hc"]],
+            ["pin", "Code personnel RP", "password"],
+            ["active", "Compte actif", "select", false, ["Oui", "Non"]],
+            ["notes", "Observations", "textarea", false, null, true]
+        ]
+    },
+
+    samuRoster: {
+        title: "Effectifs et matricules SAMU 92",
+        singular: "membre SAMU",
+        icon: "✚",
+        description: "Registre indépendant des personnels du SAMU 92.",
+        service: "samu",
+        columns: ["matricule", "name", "grade", "status", "active"],
+        primary: "name",
+        fields: [
+            ["matricule", "Matricule SAMU", "text", false],
+            ["name", "Nom et prénom RP", "text", true],
+            ["robloxName", "Pseudo Roblox", "text"],
+            ["grade", "Grade / fonction", "text", true],
+            ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
+            ["role", "Permission", "select", false, ["agent", "officer", "hc"]],
+            ["pin", "Code personnel RP", "password"],
             ["active", "Compte actif", "select", false, ["Oui", "Non"]],
             ["notes", "Observations", "textarea", false, null, true]
         ]
@@ -1242,7 +1476,27 @@ const MODULES = {
             ["startAt", "Début", "datetime-local"],
             ["endAt", "Fin", "datetime-local"],
             ["active", "Diffusion", "select", false, ["Active", "Désactivée"]],
+            ["audioUrl", "Lien audio direct (fichier Discord / MP3 / WAV / OGG)", "url", false, null, true],
             ["content", "Message", "textarea", true, null, true]
+        ]
+    },
+
+    alertPresets: {
+        title: "Alertes sonores prédéfinies",
+        singular: "alerte prédéfinie",
+        icon: "♫",
+        description: "Bibliothèque d'alertes à lancer en un clic sur tous les portails ouverts.",
+        service: "all",
+        columns: ["name", "type", "service", "active"],
+        primary: "name",
+        fields: [
+            ["name", "Nom de la prédéfinition", "text", true],
+            ["title", "Titre affiché", "text", true],
+            ["type", "Niveau", "select", false, ["Information", "Vigilance", "Alerte", "Urgence"]],
+            ["service", "Service concerné (l'alerte sera visible par tous)", "select", false, ["Tous", "Police nationale", "BSPN", "SAMU 92", "IGPN", "Citoyens"]],
+            ["audioUrl", "Lien du son (URL directe du fichier Discord ou audio)", "url", false, null, true],
+            ["content", "Message à afficher", "textarea", true, null, true],
+            ["active", "Prédéfinition active", "select", false, ["Oui", "Non"]]
         ]
     },
 
@@ -1453,7 +1707,7 @@ const MODULES = {
         icon: "◈",
         description: "Destinations Discord utilisées pour les notifications RP.",
         service: "all",
-        columns: ["name", "service", "active", "events"],
+        columns: ["name", "service", "url", "active", "events"],
         primary: "name",
         fields: [
             ["name", "Nom de la destination", "text", true],
@@ -1481,7 +1735,7 @@ const ADMIN_GROUPS = [
     {
         title: "Administration générale",
         description: "Identités, droits, paramètres et journalisation.",
-        modules: ["roster", "alerts", "webhooks", "auditLogs"]
+        modules: ["roster", "bspnRoster", "samuRoster", "alerts", "alertPresets", "webhooks", "auditLogs"]
     },
     {
         title: "Police nationale",
@@ -1491,12 +1745,12 @@ const ADMIN_GROUPS = [
     {
         title: "BSPN",
         description: "Mur académique, formations, évaluations et distinctions.",
-        modules: ["bspnWall", "bspnCourses", "bspnHomework", "bspnAnnouncements", "medals"]
+        modules: ["bspnRoster", "bspnWall", "bspnCourses", "bspnHomework", "bspnAnnouncements", "medals"]
     },
     {
         title: "SAMU 92",
         description: "Dossiers RP et facturation.",
-        modules: ["samuRecords", "samuInvoices"]
+        modules: ["samuRoster", "samuRecords", "samuInvoices"]
     },
     {
         title: "IGPN",
@@ -1653,7 +1907,11 @@ function normalizeData(source) {
 
     merged.settings = {
         ...base.settings,
-        ...(source?.settings || {})
+        ...(source?.settings || {}),
+        portalAccessCodes: {
+            ...base.settings.portalAccessCodes,
+            ...(source?.settings?.portalAccessCodes || {})
+        }
     };
 
     return merged;
@@ -1714,14 +1972,8 @@ function validateData() {
    ------------------------------------------------ */
 
 function setSyncState(state, label) {
-    const pill = $("#syncPill");
-    pill.classList.remove("online", "error");
-
-    if (state === "online") pill.classList.add("online");
-    if (state === "error") pill.classList.add("error");
-
-    $("#syncLabel").textContent = label;
-    $("#sidebarSyncText").textContent = label;
+    // État technique conservé en interne : aucun diagnostic cloud n'est affiché aux joueurs.
+    document.documentElement.dataset.portalSync = state || "unknown";
 }
 
 function loadSupabaseLibrary(timeoutMs = 5000) {
@@ -1804,7 +2056,10 @@ async function readCloud() {
         if (result.error) throw result.error;
 
         if (result.data && result.data.data) {
-            data = normalizeData(result.data.data);
+            const incoming = normalizeData(result.data.data);
+            processIncomingAlerts(incoming.alerts, true);
+            data = incoming;
+            seedKnownAlertIds();
             lastCloudUpdate = result.data.updated_at || null;
             saveLocal();
         } else {
@@ -1872,7 +2127,7 @@ function subscribeToCloudChanges() {
             .on(
                 "postgres_changes",
                 {
-                    event: "UPDATE",
+                    event: "*",
                     schema: "public",
                     table: "rp_v6_data",
                     filter: `id=eq.${CLOUD_ROW_ID}`
@@ -1889,15 +2144,21 @@ function subscribeToCloudChanges() {
                         return;
                     }
 
-                    data = normalizeData(payload.new.data);
+                    const incoming = normalizeData(payload.new.data);
+                    data = incoming;
                     lastCloudUpdate = incomingStamp;
+                    processIncomingAlerts(rowsFor("alerts"), false);
                     saveLocal();
 
                     if (currentPage === "admin" && !adminUnlocked) {
                         currentPage = "home";
                     }
 
-                    renderPage(currentPage);
+                    if (currentPage === "admin" && currentDataset && MODULES[currentDataset]) {
+                        renderDataset(currentDataset);
+                    } else {
+                        renderPage(currentPage);
+                    }
                     showToast("Les données partagées viennent d'être actualisées.");
                 }
             )
@@ -1975,12 +2236,12 @@ function restoreSession() {
 
         if (savedUser) {
             const session = JSON.parse(savedUser);
-            const member = rowsFor("roster").find(
-                item => String(item.matricule) === String(session.matricule)
-            );
-
+            const list = session.registry === "bspnRoster" ? rowsFor("bspnRoster")
+                : session.registry === "samuRoster" ? rowsFor("samuRoster")
+                : rowsFor("roster");
+            const member = list.find(item => String(item.matricule) === String(session.matricule));
             if (member && String(member.active ?? "Oui") !== "Non") {
-                currentUser = member;
+                currentUser = { ...member, __registry: session.registry || "roster" };
             }
         }
 
@@ -2011,47 +2272,108 @@ function updateUserChip() {
     $("#adminNavGroup").classList.toggle("hidden", !adminUnlocked);
 }
 
-function openLogin() {
-    $("#loginError").classList.remove("show");
+function openLogin(targetPage = currentPage) {
+    pendingPortal = targetPage || "police";
+    const requiresCode = ["police", "bspn", "samu", "igpn"].includes(pendingPortal);
+    const portalNames = { police: "Police nationale", bspn: "BSPN", samu: "SAMU 92", igpn: "IGPN" };
+    const portalTitle = portalNames[pendingPortal] || "Service institutionnel";
+    $("#loginTitle").textContent = `Accès ${portalTitle}`;
+    $("#loginDescription").textContent = requiresCode
+        ? "Saisissez le code du portail, votre matricule et votre code personnel."
+        : "Connectez-vous avec votre matricule RP et votre code personnel.";
+    $("#portalAccessField").classList.toggle("hidden", !requiresCode);
+    $("#loginPortalCode").required = requiresCode;
+    $("#loginPortalCode").value = "";
     $("#loginMatricule").value = "";
     $("#loginPin").value = "";
+    $("#loginError").classList.remove("show");
     $("#loginCover").classList.add("show");
-    $("#loginMatricule").focus();
+    if (requiresCode) $("#loginPortalCode").focus();
+    else $("#loginMatricule").focus();
 }
 
 function closeLogin() {
     $("#loginCover").classList.remove("show");
 }
 
-function connectMember(matricule, pin) {
-    const member = rowsFor("roster").find(item => {
+function serviceForPage(page) {
+    return ({ police: "police", bspn: "bspn", samu: "samu", igpn: "igpn" })[page] || "";
+}
+
+function membersForLogin() {
+    return [
+        ...rowsFor("roster").map(item => ({ ...item, __registry: "roster" })),
+        ...rowsFor("bspnRoster").map(item => ({ ...item, __registry: "bspnRoster" })),
+        ...rowsFor("samuRoster").map(item => ({ ...item, __registry: "samuRoster" }))
+    ];
+}
+
+function memberCanEnterPage(member, page) {
+    const role = String(member.role || "agent").toLowerCase();
+    if (role === "hc") return true;
+    const memberService = String(member.service || "").toLowerCase();
+    const targetService = serviceForPage(page);
+    if (page === "bspn") return memberService.includes("bspn") || memberService.includes("pompier") || member.__registry === "bspnRoster";
+    if (page === "samu") return memberService.includes("samu") || memberService.includes("médical") || memberService.includes("medical") || member.__registry === "samuRoster";
+    if (page === "igpn") return memberService.includes("igpn");
+    if (page === "police") return memberService.includes("police") || memberService.includes("igpn");
+    return Boolean(targetService);
+}
+
+function connectMember(matricule, pin, portalCode = "") {
+    const targetPage = pendingPortal || currentPage;
+    const targetService = serviceForPage(targetPage);
+    const configuredCode = data.settings.portalAccessCodes?.[targetService] || "";
+
+    if (targetService && String(portalCode) !== String(configuredCode)) {
+        showToast("Code d'accès du portail incorrect.", "error");
+        return false;
+    }
+
+    const member = membersForLogin().find(item => {
         const sameMatricule = String(item.matricule).trim() === String(matricule).trim();
         const samePin = String(item.pin ?? "") === String(pin);
         const active = String(item.active ?? "Oui") !== "Non";
-        return sameMatricule && samePin && active;
+        const assigned = String(item.status || "").toLowerCase() !== "vacant" && Boolean(String(item.name || "").trim());
+        return sameMatricule && samePin && active && assigned;
     });
 
-    if (!member) return false;
+    if (!member || (targetService && !memberCanEnterPage(member, targetPage))) return false;
 
     currentUser = member;
-
-    sessionStorage.setItem(
-        USER_SESSION_KEY,
-        JSON.stringify({ matricule: member.matricule })
-    );
+    const allowed = member.role === "hc"
+        ? ["police", "bspn", "samu", "igpn"]
+        : (targetPage ? [targetPage] : []);
+    sessionStorage.setItem("nanterre_portal_access", JSON.stringify(allowed));
+    sessionStorage.setItem(USER_SESSION_KEY, JSON.stringify({ matricule: member.matricule, registry: member.__registry || "roster" }));
 
     updateUserChip();
-    logAction("Connexion RP", {
-        matricule: member.matricule,
-        service: member.service
-    });
-
+    logAction("Connexion RP", { matricule: member.matricule, service: member.service || targetService });
     scheduleSave();
     closeLogin();
     showToast(`Bienvenue ${member.name}.`, "success");
-    renderPage(currentPage);
-
+    navigateAfterLogin(targetPage);
     return true;
+}
+
+function navigateAfterLogin(page) {
+    if (!PAGE_META[page]) page = "home";
+    currentPage = page;
+    currentDataset = null;
+    $("#topTitle").textContent = PAGE_META[page].title;
+    $("#topSubtitle").textContent = PAGE_META[page].subtitle;
+    renderPage(page);
+}
+
+function hasPortalAccess(page) {
+    if (!["police", "bspn", "samu", "igpn"].includes(page)) return true;
+    if (!currentUser || !memberCanEnterPage(currentUser, page)) return false;
+    try {
+        const allowed = JSON.parse(sessionStorage.getItem("nanterre_portal_access") || "[]");
+        return allowed.includes(page);
+    } catch (_) {
+        return false;
+    }
 }
 
 function disconnectMember() {
@@ -2063,6 +2385,7 @@ function disconnectMember() {
 
     currentUser = null;
     sessionStorage.removeItem(USER_SESSION_KEY);
+    sessionStorage.removeItem("nanterre_portal_access");
     updateUserChip();
     scheduleSave();
     navigate("home");
@@ -2079,7 +2402,8 @@ function unlockAdministrator() {
 
     if (enteredCode === null) return;
 
-    if (enteredCode !== ADMIN_ACCESS_CODE) {
+    const adminCode = data.settings.portalAccessCodes?.admin || ADMIN_ACCESS_CODE;
+    if (enteredCode !== adminCode) {
         showToast("Code administrateur incorrect.", "error");
         return;
     }
@@ -2146,6 +2470,10 @@ function mayEdit(key) {
         return true;
     }
 
+    if (["roster", "bspnRoster", "samuRoster"].includes(key)) {
+        return role === "officer";
+    }
+
     if (config.service === "all") {
         return role === "officer";
     }
@@ -2164,6 +2492,11 @@ function navigate(page) {
 
     if (page === "admin" && !adminUnlocked) {
         unlockAdministrator();
+        return;
+    }
+
+    if (["police", "bspn", "samu", "igpn"].includes(page) && !hasPortalAccess(page)) {
+        openLogin(page);
         return;
     }
 
@@ -2214,7 +2547,7 @@ function renderPage(page) {
             break;
     }
 
-    bindPageEvents();
+    if (!['admin', 'citizen'].includes(page)) bindPageEvents();
 }
 
 function navigateToDataset(key) {
@@ -2264,6 +2597,20 @@ function bindPageEvents(root = $("#pageContent")) {
         });
     });
 
+    $all("[data-admin-tab]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            adminTab = element.dataset.adminTab;
+            renderAdmin();
+        });
+    });
+
+    $all("[data-citizen-tab]", root).forEach(element => {
+        element.addEventListener("click", () => {
+            citizenTab = element.dataset.citizenTab;
+            renderCitizen();
+        });
+    });
+
     $all("[data-subpage]", root).forEach(element => {
         element.addEventListener("click", () => {
             $all("[data-subpage]", root).forEach(button => {
@@ -2294,15 +2641,6 @@ function handleAction(button) {
         case "delete":
             deleteItem(key, id);
             break;
-        case "print":
-            window.print();
-            break;
-        case "export":
-            exportJSON();
-            break;
-        case "import":
-            importJSON();
-            break;
         case "lock":
             lockAdministrator();
             break;
@@ -2320,6 +2658,9 @@ function handleAction(button) {
             break;
         case "webhook-test":
             testWebhook(id);
+            break;
+        case "trigger-alert":
+            triggerPresetAlert(id);
             break;
     }
 }
@@ -2555,8 +2896,8 @@ function serviceOverview(serviceKey) {
     const modules = Object.entries(MODULES).filter(([key, config]) => {
         if (key === "auditLogs") return false;
         if (serviceKey === "police") return config.service === "police" || key === "roster" || key === "alerts";
-        if (serviceKey === "bspn") return config.service === "bspn" || key === "roster" || key === "alerts";
-        if (serviceKey === "samu") return config.service === "samu" || key === "roster" || key === "alerts";
+        if (serviceKey === "bspn") return config.service === "bspn" || key === "bspnRoster" || key === "alerts";
+        if (serviceKey === "samu") return config.service === "samu" || key === "samuRoster" || key === "alerts";
         if (serviceKey === "igpn") return config.service === "igpn" || key === "roster" || key === "alerts" || key === "policeReports";
         if (serviceKey === "citizen") return config.service === "citizen" || key === "alerts";
         return false;
@@ -2575,7 +2916,7 @@ function serviceOverview(serviceKey) {
 
     const stats = `
         <div class="grid stats-grid">
-            ${statCard("Effectifs", rowsFor("roster").length, "Membres enregistrés", "♙")}
+            ${statCard("Effectifs", rowsFor(serviceKey === "bspn" ? "bspnRoster" : serviceKey === "samu" ? "samuRoster" : "roster").length, "Membres enregistrés", "♙")}
             ${statCard("Alertes", alertsFor(SERVICE_NAMES[serviceKey]).length, "En diffusion", "⚑")}
             ${statCard("Dossiers", modules.reduce((total, [key]) => total + rowsFor(key).length, 0), "Enregistrements", "▣")}
             ${statCard("Modules", modules.length, "Rubriques disponibles", "▤")}
@@ -2590,7 +2931,7 @@ function servicePageHeader(section, title, description) {
         section,
         title,
         description,
-        `<button class="btn" data-action="print">Imprimer</button>`
+        ``
     );
 }
 
@@ -2607,7 +2948,9 @@ function renderServicePage(serviceKey) {
 
     Object.entries(MODULES).forEach(([key, config]) => {
         const belongs = config.service === serviceKey ||
-            key === "roster" ||
+            (serviceKey === "bspn" && key === "bspnRoster") ||
+            (serviceKey === "samu" && key === "samuRoster") ||
+            (serviceKey !== "bspn" && serviceKey !== "samu" && key === "roster") ||
             key === "alerts" ||
             (serviceKey === "igpn" && key === "policeReports");
 
@@ -2656,7 +2999,7 @@ function renderSamu() {
             <button class="active" data-subpage="overview">Vue générale</button>
             <button data-open-module="samuRecords">Dossiers RP</button>
             <button data-open-module="samuInvoices">Facturation</button>
-            <button data-open-module="roster">Effectifs</button>
+            <button data-open-module="samuRoster">Effectifs SAMU</button>
         </div>
         <div id="serviceSubContent">${serviceOverview("samu")}</div>
     `;
@@ -2691,85 +3034,29 @@ function renderCitizen() {
     const news = rowsFor("citizenNews").filter(item => item.status !== "Brouillon");
     const zones = rowsFor("safeZones").filter(item => item.status !== "Archivée");
     const consultations = rowsFor("elections");
+    const citizenTabs = [
+        ["news", "Actualités"], ["zones", "Zones et sécurité"], ["elections", "Élections"], ["city", "Vie de la ville"]
+    ];
+    let panel = "";
 
-    const newsHTML = news.length
-        ? `<div class="list-stack">${news.map(renderDashboardNews).join("")}</div>`
-        : emptyState("Aucune actualité publiée", "Les communications municipales seront affichées ici.");
-
-    const zonesHTML = zones.length
-        ? `
-            <div class="list-stack">
-                ${zones.map(zone => `
-                    <div class="list-item">
-                        <div class="list-marker">⌖</div>
-                        <div class="list-item-content">
-                            <strong>${escapeHTML(zone.name)}</strong>
-                            <p>${escapeHTML(zone.location)} · ${escapeHTML(zone.description || "")}</p>
-                        </div>
-                        <span class="tag blue">${escapeHTML(zone.type)}</span>
-                    </div>
-                `).join("")}
-            </div>
-        `
-        : emptyState("Aucune zone référencée", "Aucune zone de sécurité n'est actuellement publiée.", "⌖");
-
-    const electionsHTML = consultations.length
-        ? `
-            <div class="grid shortcut-grid">
-                ${consultations.map(item => `
-                    <article class="record-preview">
-                        <h3>${escapeHTML(item.title)}</h3>
-                        <p>${escapeHTML(item.description || "")}</p>
-                        <div class="inline-actions" style="margin-top:10px">
-                            <span class="tag blue">${escapeHTML(item.kind)}</span>
-                            <span class="tag">${escapeHTML(item.status)}</span>
-                        </div>
-                    </article>
-                `).join("")}
-            </div>
-        `
-        : emptyState("Aucune consultation", "Les consultations seront publiées ici.", "✓");
+    if (citizenTab === "news") {
+        panel = news.length ? `<div class="list-stack">${news.map(renderDashboardNews).join("")}</div>` : emptyState("Aucune actualité", "Les informations de la ville apparaîtront ici.");
+    } else if (citizenTab === "zones") {
+        panel = zones.length ? `<div class="list-stack">${zones.map(zone => `<article class="record-preview"><h3>${escapeHTML(zone.name)}</h3><p>${escapeHTML(zone.location)} · ${escapeHTML(zone.description || "")}</p><div class="inline-actions" style="margin-top:10px"><span class="tag blue">${escapeHTML(zone.type)}</span><span class="tag">${escapeHTML(zone.status)}</span></div></article>`).join("")}</div>` : emptyState("Aucune zone publiée", "Les zones de sécurité seront affichées ici.", "⌖");
+    } else if (citizenTab === "elections") {
+        panel = consultations.length ? `<div class="grid two-column">${consultations.map(item => `<article class="record-preview"><h3>${escapeHTML(item.title)}</h3><p>${escapeHTML(item.description || "")}</p><div class="inline-actions" style="margin-top:10px"><span class="tag blue">${escapeHTML(item.kind)}</span><span class="tag">${escapeHTML(item.status)}</span></div></article>`).join("")}</div>` : emptyState("Aucune consultation", "Les élections et consultations seront publiées ici.", "✓");
+    } else {
+        panel = `<div class="citizen-city-card"><div><span class="eyebrow">SITUATION GÉNÉRALE</span><h2>${escapeHTML(data.settings.cityName || "Nanterre")}</h2><p>${escapeHTML(data.settings.welcomeMessage || "Bienvenue sur le portail citoyen.")}</p></div><span class="tag green">${escapeHTML(data.settings.globalStatus || "Opérationnel")}</span></div>`;
+    }
 
     $("#pageContent").innerHTML = `
-        ${pageHeading("Services à la population", "Espace citoyen", PAGE_META.citizen.subtitle,
-            `<button class="btn" data-action="print">Imprimer</button>`)}
+        ${pageHeading("Informations publiques", "Espace citoyen", "Les informations essentielles de la ville, simplement.")}
+        <section class="hero-banner citizen-hero"><div class="hero-content"><div class="eyebrow">PORTAIL PUBLIC</div><h1>Bienvenue à ${escapeHTML(data.settings.cityName || "Nanterre")}</h1><p>${escapeHTML(data.settings.welcomeMessage || "Retrouvez ici les informations utiles de la ville.")}</p></div><div class="hero-side">${escapeHTML(initials(data.settings.cityName || "NRP"))}</div></section>
+        <div class="subnav citizen-tabs">${citizenTabs.map(([key,label]) => `<button class="${citizenTab === key ? "active" : ""}" data-citizen-tab="${key}">${label}</button>`).join("")}</div>
         ${renderAlertPanel("Citoyens")}
-        <div class="grid stats-grid">
-            ${statCard("Actualités", news.length, "Publications visibles", "▤")}
-            ${statCard("Zones", zones.length, "Informations territoriales RP", "⌖")}
-            ${statCard("Consultations", consultations.length, "Élections et sondages", "✓")}
-            ${statCard("État de la ville", data.settings.globalStatus, "Situation générale", "◉")}
-        </div>
-        <div class="grid content-grid">
-            <section class="panel">
-                <div class="panel-header">
-                    <div>
-                        <h2 class="panel-title">Actualités municipales</h2>
-                        <p class="panel-subtitle">Communications officielles de la ville</p>
-                    </div>
-                </div>
-                <div class="panel-body">${newsHTML}</div>
-            </section>
-            <section class="panel">
-                <div class="panel-header">
-                    <div>
-                        <h2 class="panel-title">Zones de sécurité</h2>
-                        <p class="panel-subtitle">Informations RP de circulation</p>
-                    </div>
-                </div>
-                <div class="panel-body">${zonesHTML}</div>
-            </section>
-        </div>
-        <section class="panel" style="margin-top:16px">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Élections et consultations</h2>
-                    <p class="panel-subtitle">Calendrier des consultations RP</p>
-                </div>
-            </div>
-            <div class="panel-body">${electionsHTML}</div>
-        </section>
+        <section class="panel"><div class="panel-body">${panel}</div></section>
     `;
+    bindPageEvents();
 }
 
 /* ------------------------------------------------
@@ -2808,80 +3095,96 @@ function renderAdminGroup(group) {
     `;
 }
 
+const ADMIN_TABS = [
+    ["home", "Accueil"],
+    ["general", "Effectifs & codes"],
+    ["webhooks", "Liaisons Discord"],
+    ["alerts", "Alertes sonores"],
+    ["police", "Police nationale"],
+    ["bspn", "BSPN"],
+    ["samu", "SAMU 92"],
+    ["igpn", "IGPN"],
+    ["citizen", "Citoyens"],
+    ["visual", "Affichage"]
+];
+
+function adminTabsHTML() {
+    return `<nav class="subnav admin-tabs" aria-label="Catégories d'administration">${ADMIN_TABS.map(([key, label]) =>
+        `<button class="${adminTab === key ? "active" : ""}" data-admin-tab="${key}">${label}</button>`
+    ).join("")}</nav>`;
+}
+
+function adminCategoryCard(key, label, description, icon, count) {
+    return `<button type="button" class="admin-module admin-category" data-admin-tab="${key}">
+        <span class="admin-module-icon">${icon}</span><span class="admin-category-copy"><strong>${escapeHTML(label)}</strong><span>${escapeHTML(description)}</span><small>${count} entrée(s)</small></span>
+    </button>`;
+}
+
 function renderAdmin() {
+    currentDataset = null;
     if (!adminUnlocked) {
-        $("#pageContent").innerHTML = emptyState(
-            "Accès administrateur verrouillé",
-            "Déverrouillez le panneau administrateur pour continuer.",
-            "⚙"
-        );
+        $("#pageContent").innerHTML = emptyState("Accès administrateur verrouillé", "Déverrouillez le panneau administrateur pour continuer.", "⚙");
         return;
     }
 
     const allKeys = Object.keys(MODULES).filter(key => key !== "auditLogs");
     const totalRecords = allKeys.reduce((total, key) => total + moduleCount(key), 0);
+    let body = "";
 
-    const groups = ADMIN_GROUPS.map(renderAdminGroup).join("");
+    if (adminTab === "home") {
+        body = `
+            <div class="grid stats-grid">
+                ${statCard("Enregistrements", totalRecords, "Données RP gérées", "▤")}
+                ${statCard("Police", moduleCount("roster"), "Matricules historiques", "♙")}
+                ${statCard("BSPN", moduleCount("bspnRoster"), "Matricules BSPN", "✚")}
+                ${statCard("SAMU 92", moduleCount("samuRoster"), "Matricules SAMU", "✚")}
+            </div>
+            <div class="grid admin-grid admin-category-grid">
+                ${adminCategoryCard("general", "Effectifs et codes d'accès", "Matricules, comptes, grades et codes de portail", "♙", moduleCount("roster") + moduleCount("bspnRoster") + moduleCount("samuRoster"))}
+                ${adminCategoryCard("webhooks", "Liaisons Discord", "Liste enregistrée, visible et modifiable", "◈", moduleCount("webhooks"))}
+                ${adminCategoryCard("alerts", "Alertes sonores et visuelles", "Préparer et diffuser une alerte plein écran", "⚑", moduleCount("alerts") + moduleCount("alertPresets"))}
+                ${adminCategoryCard("police", "Police nationale", "Rapports, TAJ, GAV, perquisitions et code pénal", "⬟", ["policeReports","taj","gav","perquisitions","penalCode"].reduce((n,k)=>n+moduleCount(k),0))}
+                ${adminCategoryCard("bspn", "BSPN", "Effectifs, formations, mur académique et distinctions", "✚", ["bspnWall","bspnCourses","bspnHomework","bspnAnnouncements","medals"].reduce((n,k)=>n+moduleCount(k),0))}
+                ${adminCategoryCard("samu", "SAMU 92", "Effectifs, dossiers RP et facturation", "✚", ["samuRecords","samuInvoices"].reduce((n,k)=>n+moduleCount(k),0))}
+                ${adminCategoryCard("igpn", "IGPN", "Contrôles, inspections et recommandations", "▣", moduleCount("igpnReviews"))}
+                ${adminCategoryCard("citizen", "Espace citoyen", "Actualités, zones et consultations", "◉", ["citizenNews","safeZones","elections"].reduce((n,k)=>n+moduleCount(k),0))}
+                ${adminCategoryCard("visual", "Présentation du portail", "Lisibilité, couleurs et réglages d'affichage", "◐", 1)}
+            </div>
+        `;
+    } else if (adminTab === "general") {
+        body = `
+            <section class="panel admin-settings-shortcut"><div class="panel-header"><div><h2 class="panel-title">Codes d'accès et paramètres généraux</h2><p class="panel-subtitle">Modifiez les codes communiqués aux équipes. L'espace citoyen reste public.</p></div><button class="btn btn-primary" data-action="settings">Gérer les codes</button></div></section>
+            ${renderAdminGroup({title:"Registres de personnel",description:"Chaque service garde son propre registre et son format de matricule.",modules:["roster","bspnRoster","samuRoster"]})}
+            ${renderAdminGroup({title:"Journal et alertes générales",description:"Suivi administratif et configuration des diffusions.",modules:["alerts","auditLogs"]})}
+        `;
+    } else if (adminTab === "webhooks") {
+        body = renderAdminGroup({title:"Liaisons Discord enregistrées",description:"Ajoutez chaque destination une fois. La liste reste visible et modifiable ici.",modules:["webhooks"]});
+        body += `<div class="notice"><span>i</span><div><strong>À propos des liens Discord</strong><p>Utilisez des webhooks de salons RP. Les URL restent visibles dans le navigateur aux personnes qui inspectent le site.</p></div></div>`;
+    } else if (adminTab === "alerts") {
+        body = renderAdminGroup({title:"Alertes à diffuser",description:"Créez des modèles sonores puis utilisez Diffuser pour prévenir tous les portails ouverts.",modules:["alertPresets","alerts"]});
+        body += `<div class="notice warning"><span>!</span><div><strong>Lecture audio</strong><p>Pour la lecture automatique, chaque navigateur doit avoir interagi au moins une fois avec la page. Utilisez un lien direct vers le fichier audio, par exemple un lien CDN Discord se terminant par .mp3, .wav ou .ogg. Un lien vers un message Discord n'est pas un fichier audio direct.</p></div></div>`;
+    } else if (adminTab === "police") {
+        body = renderAdminGroup(ADMIN_GROUPS.find(g => g.title === "Police nationale"));
+    } else if (adminTab === "bspn") {
+        body = renderAdminGroup(ADMIN_GROUPS.find(g => g.title === "BSPN"));
+    } else if (adminTab === "samu") {
+        body = renderAdminGroup(ADMIN_GROUPS.find(g => g.title === "SAMU 92"));
+    } else if (adminTab === "igpn") {
+        body = renderAdminGroup(ADMIN_GROUPS.find(g => g.title === "IGPN"));
+    } else if (adminTab === "citizen") {
+        body = renderAdminGroup(ADMIN_GROUPS.find(g => g.title === "Citoyens et mairie"));
+    } else if (adminTab === "visual") {
+        body = `
+            <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Présentation simplifiée</h2><p class="panel-subtitle">Le portail utilise maintenant un fond clair, des contrastes renforcés, des textes plus grands et des rubriques courtes.</p></div><button class="btn btn-primary" data-action="settings">Paramètres généraux</button></div><div class="panel-body"><div class="visual-preview-grid"><div class="visual-preview-card"><strong>Navigation lisible</strong><p>Des espaces clairement nommés, sans informations techniques de synchronisation.</p></div><div class="visual-preview-card"><strong>Actions simplifiées</strong><p>Les outils sont rangés dans des onglets accessibles depuis l'administration.</p></div><div class="visual-preview-card"><strong>Alertes visibles</strong><p>Les alertes urgentes apparaissent au centre de l'écran, avec un son si le navigateur l'autorise.</p></div></div></div></section>
+        `;
+    }
 
     $("#pageContent").innerHTML = `
-        ${pageHeading(
-            "Contrôle central",
-            "Administration générale",
-            "Gestion des services, des effectifs, des contenus et des paramètres du portail.",
-            `
-                <button class="btn" data-action="export">Exporter JSON</button>
-                <button class="btn" data-action="import">Importer JSON</button>
-                <button class="btn btn-danger" data-action="lock">Verrouiller</button>
-            `
-        )}
-
-        <div class="notice warning" style="margin-bottom:16px">
-            <span>!</span>
-            <div>
-                <strong>Mode administrateur RP</strong>
-                <p>Le code est contrôlé dans le navigateur. Il ne constitue pas une protection réelle de la base partagée.</p>
-            </div>
-        </div>
-
-        <div class="grid stats-grid">
-            ${statCard("Enregistrements", totalRecords, "Données gérées", "▤")}
-            ${statCard("Effectifs", moduleCount("roster"), "Matricules configurés", "♙")}
-            ${statCard("Alertes", moduleCount("alerts"), "Alertes enregistrées", "⚑")}
-            ${statCard("Journal", moduleCount("auditLogs"), "Opérations suivies", "≋")}
-        </div>
-
-        <section class="panel" style="margin-bottom:19px">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Paramètres du portail</h2>
-                    <p class="panel-subtitle">Informations générales et configuration RP</p>
-                </div>
-                <button class="btn btn-primary btn-small" data-action="settings">Modifier</button>
-            </div>
-            <div class="panel-body">
-                <div class="grid three-column">
-                    <div>
-                        <div class="small muted">Nom de la ville</div>
-                        <strong>${escapeHTML(data.settings.cityName)}</strong>
-                    </div>
-                    <div>
-                        <div class="small muted">État général</div>
-                        <strong>${escapeHTML(data.settings.globalStatus)}</strong>
-                    </div>
-                    <div>
-                        <div class="small muted">Plafond facture</div>
-                        <strong>${escapeHTML(money(data.settings.invoiceLimit))}</strong>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        ${groups}
-
-        <div class="footer-note">
-            Administration Nanterre Services V${APP_VERSION} · ${totalRecords} enregistrements gérés.
-        </div>
+        ${pageHeading("Espace réservé", "Administration générale", "Choisissez une catégorie. Les outils sont regroupés pour éviter de surcharger l'écran.", `<button class="btn btn-danger" data-action="lock">Verrouiller</button>`)}
+        ${adminTabsHTML()}
+        ${body}
     `;
+    bindPageEvents();
 }
 
 /* ------------------------------------------------
@@ -2919,6 +3222,15 @@ function editSettings() {
                     <input id="settingLimit" name="invoiceLimit" type="number" min="0" max="8000" value="${Number(settings.invoiceLimit || 8000)}">
                 </div>
                 <div class="field full">
+                    <h3 class="settings-subtitle">Codes d'accès des portails</h3>
+                    <p class="small muted">Ces codes sont partagés avec les membres du service. L'espace citoyen reste libre d'accès.</p>
+                </div>
+                <div class="field"><label for="codePolice">Police nationale</label><input id="codePolice" name="codePolice" value="${escapeHTML(settings.portalAccessCodes?.police || "POLICE-2026")}" required></div>
+                <div class="field"><label for="codeBspn">BSPN</label><input id="codeBspn" name="codeBspn" value="${escapeHTML(settings.portalAccessCodes?.bspn || "BSPN-2026")}" required></div>
+                <div class="field"><label for="codeSamu">SAMU 92</label><input id="codeSamu" name="codeSamu" value="${escapeHTML(settings.portalAccessCodes?.samu || "SAMU-2026")}" required></div>
+                <div class="field"><label for="codeIgpn">IGPN</label><input id="codeIgpn" name="codeIgpn" value="${escapeHTML(settings.portalAccessCodes?.igpn || "IGPN-2026")}" required></div>
+                <div class="field"><label for="codeAdmin">Administration</label><input id="codeAdmin" name="codeAdmin" value="${escapeHTML(settings.portalAccessCodes?.admin || ADMIN_ACCESS_CODE)}" required></div>
+                <div class="field full">
                     <label for="settingWelcome">Message d'accueil</label>
                     <textarea id="settingWelcome" name="welcomeMessage">${escapeHTML(settings.welcomeMessage)}</textarea>
                 </div>
@@ -2950,7 +3262,14 @@ function saveSettings() {
         globalStatus: normalize(values.globalStatus),
         invoiceLimit: limit,
         welcomeMessage: normalize(values.welcomeMessage),
-        activeAlert: normalize(values.activeAlert)
+        activeAlert: normalize(values.activeAlert),
+        portalAccessCodes: {
+            police: normalize(values.codePolice),
+            bspn: normalize(values.codeBspn),
+            samu: normalize(values.codeSamu),
+            igpn: normalize(values.codeIgpn),
+            admin: normalize(values.codeAdmin)
+        }
     };
 
     logAction("Modification des paramètres", {
@@ -3102,7 +3421,6 @@ function renderDataset(key) {
             config.title,
             config.description,
             `
-                <button class="btn" data-action="print">Imprimer</button>
                 ${addButton}
                 <button class="btn btn-ghost" data-action="back">← Retour</button>
             `
@@ -3187,7 +3505,8 @@ function renderTable(key, rows, canEdit) {
                             data-action="delete"
                             data-module="${escapeHTML(key)}"
                             data-id="${escapeHTML(row.id)}">⌫</button>
-                        ${key === "webhooks" ? `<button class="icon-btn" title="Tester le webhook" data-action="webhook-test" data-id="${escapeHTML(row.id)}">↗</button>` : ""}
+                        ${key === "webhooks" ? `<button class="icon-btn" title="Tester la liaison Discord" data-action="webhook-test" data-id="${escapeHTML(row.id)}">↗</button>` : ""}
+                        ${key === "alertPresets" ? `<button class="btn btn-primary btn-small" title="Diffuser cette alerte à tous les portails" data-action="trigger-alert" data-id="${escapeHTML(row.id)}">Diffuser</button>` : ""}
                     </div>
                 </td>
             `
@@ -3284,6 +3603,9 @@ function renderField(field, currentValue) {
     const safeLabel = escapeHTML(label);
     const requiredAttribute = required ? "required" : "";
     const value = currentValue ?? "";
+    const matriculeHint = ["bspnRoster", "samuRoster"].includes(currentDataset) && field[0] === "matricule" && !value
+        ? `placeholder="Attribution automatique : ${currentDataset === "bspnRoster" ? "BSPN-001" : "SAMU-001"}"`
+        : "";
 
     let control = "";
 
@@ -3327,6 +3649,7 @@ function renderField(field, currentValue) {
                 name="${safeName}"
                 type="${escapeHTML(type || "text")}"
                 value="${escapeHTML(value)}"
+                ${matriculeHint}
                 ${requiredAttribute}
                 ${numberLimits}>
         `;
@@ -3345,6 +3668,21 @@ function renderField(field, currentValue) {
 /* ------------------------------------------------
    Q. ENREGISTREMENT, VALIDATION ET SUPPRESSION
    ------------------------------------------------ */
+
+
+function nextServiceMatricule(key) {
+    const prefix = key === "bspnRoster" ? "BSPN" : "SAMU";
+    const used = rowsFor(key).map(row => {
+        const match = String(row.matricule || "").match(/(\d+)$/);
+        return match ? Number(match[1]) : 0;
+    });
+    const next = Math.max(0, ...used) + 1;
+    return `${prefix}-${String(next).padStart(3, "0")}`;
+}
+
+function allRosterCollections() {
+    return ["roster", "bspnRoster", "samuRoster"];
+}
 
 function saveRecord(key, id = null) {
     const config = MODULES[key];
@@ -3392,17 +3730,33 @@ function saveRecord(key, id = null) {
         }
     }
 
-    if (key === "roster") {
-        const duplicate = rowsFor("roster").find(member => {
-            const sameMatricule = String(member.matricule) === String(values.matricule);
-            const sameRecord = String(member.id) === String(id || "");
-            return sameMatricule && !sameRecord;
-        });
+    if (key === "alertPresets") {
+        if (!values.active) values.active = "Oui";
+        if (!values.type) values.type = "Alerte";
+        if (!values.service) values.service = "Tous";
+    }
 
-        if (duplicate) {
-            showToast("Ce matricule existe déjà.", "error");
+    if (["roster", "bspnRoster", "samuRoster"].includes(key)) {
+        if (!normalize(values.matricule) && key !== "roster") {
+            values.matricule = nextServiceMatricule(key);
+        }
+        if (!normalize(values.matricule)) {
+            showToast("Le matricule est obligatoire.", "error");
             return;
         }
+        const duplicate = allRosterCollections().some(collectionKey =>
+            rowsFor(collectionKey).some(member => {
+                const sameMatricule = String(member.matricule).toUpperCase() === String(values.matricule).toUpperCase();
+                const sameRecord = collectionKey === key && String(member.id) === String(id || "");
+                return sameMatricule && !sameRecord;
+            })
+        );
+        if (duplicate) {
+            showToast("Ce matricule existe déjà. Choisissez un matricule unique.", "error");
+            return;
+        }
+        if (key === "bspnRoster") values.service = "BSPN";
+        if (key === "samuRoster") values.service = "SAMU 92";
     }
 
     if (key === "penalCode") {
@@ -3577,68 +3931,7 @@ function closeModal() {
    S. EXPORT ET IMPORT DE SAUVEGARDE
    ------------------------------------------------ */
 
-function exportJSON() {
-    const blob = new Blob(
-        [JSON.stringify(data, null, 2)],
-        { type: "application/json;charset=utf-8" }
-    );
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = `nanterre-services-v6-${new Date().toISOString().slice(0,10)}.json`;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
-
-    logAction("Export JSON", {});
-    scheduleSave();
-    showToast("Export JSON préparé.", "success");
-}
-
-function importJSON() {
-    if (!adminUnlocked) return;
-
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json,application/json";
-
-    input.addEventListener("change", async () => {
-        const file = input.files?.[0];
-
-        if (!file) return;
-
-        try {
-            const text = await file.text();
-            const parsed = JSON.parse(text);
-
-            if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-                throw new Error("Structure incorrecte");
-            }
-
-            const confirmed = askConfirmation(
-                "Remplacer les données actuellement chargées par le contenu du fichier ? Faites un export avant de continuer."
-            );
-
-            if (!confirmed) return;
-
-            data = normalizeData(parsed);
-            logAction("Import JSON", { filename: file.name });
-            scheduleSave();
-            renderAdmin();
-            showToast("Données importées.", "success");
-        } catch (error) {
-            console.error("Import JSON refusé", error);
-            showToast("Le fichier JSON est invalide.", "error");
-        }
-    });
-
-    input.click();
-}
+/* Export/import JSON volontairement retirés de l interface et du code actif. */
 
 /* ------------------------------------------------
    T. NOTIFICATIONS DISCORD
@@ -3708,6 +4001,119 @@ async function testWebhook(id) {
 }
 
 /* ------------------------------------------------
+   ALERTES PLEIN ÉCRAN — DIFFUSION EN TEMPS RÉEL
+   ------------------------------------------------ */
+
+function seedKnownAlertIds() {
+    rowsFor("alerts").forEach(alert => knownAlertIds.add(String(alert.id)));
+}
+
+function processIncomingAlerts(alertList, initialLoad = false) {
+    const now = Date.now();
+    for (const alert of Array.isArray(alertList) ? alertList : []) {
+        const id = String(alert.id || "");
+        if (!id || knownAlertIds.has(id)) continue;
+        knownAlertIds.add(id);
+        const created = new Date(alert.createdAt || alert.startAt || 0).getTime();
+        const recent = Number.isFinite(created) && now - created < 10 * 60 * 1000;
+        if (alert.broadcast === true && (!initialLoad || recent) && alert.active !== "Désactivée") {
+            showFullscreenAlert(alert);
+        }
+    }
+}
+
+function showFullscreenAlert(alert) {
+    if (!alert) return;
+    activeFullscreenAlertId = String(alert.id || makeId());
+    const type = String(alert.type || "Alerte").toLowerCase();
+    const card = $("#alertOverlayCard");
+    card.classList.toggle("level-urgent", type.includes("urgence"));
+    card.classList.toggle("level-info", type.includes("information"));
+    $("#alertOverlayKicker").textContent = type.includes("urgence") ? "ALERTE URGENTE" : "ALERTE INSTITUTIONNELLE";
+    $("#alertOverlayTitle").textContent = alert.title || "Alerte institutionnelle";
+    $("#alertOverlayMessage").textContent = alert.content || "Une information importante vient d'être diffusée.";
+    $("#alertOverlayService").textContent = `Service concerné : ${alert.service || "Tous"} · Visible sur tous les portails`;
+    $("#alertOverlay").classList.add("show");
+    document.body.style.overflow = "hidden";
+
+    const audio = $("#alertAudio");
+    const soundButton = $("#alertAudioEnable");
+    const state = $("#alertAudioState");
+    const url = String(alert.audioUrl || "").trim();
+    soundButton.classList.toggle("hidden", !url);
+    if (url) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = url;
+        audio.loop = true;
+        state.textContent = "Tentative de lecture du son…";
+        const play = audio.play();
+        if (play && typeof play.then === "function") {
+            play.then(() => {
+                state.textContent = "Son diffusé sur ce navigateur.";
+                soundButton.classList.add("hidden");
+            }).catch(() => {
+                state.textContent = "Le navigateur bloque la lecture automatique ou le lien n'est pas lisible. Appuyez sur « Activer le son ».";
+                soundButton.classList.remove("hidden");
+            });
+        }
+    } else {
+        audio.pause();
+        audio.removeAttribute("src");
+        state.textContent = "Aucun fichier sonore n'est associé à cette alerte.";
+    }
+}
+
+function enableAlertAudio() {
+    const audio = $("#alertAudio");
+    if (!audio.src) return;
+    audio.play().then(() => {
+        $("#alertAudioState").textContent = "Son diffusé sur ce navigateur.";
+        $("#alertAudioEnable").classList.add("hidden");
+    }).catch(() => {
+        $("#alertAudioState").textContent = "Impossible de lire ce fichier. Vérifiez le lien audio direct.";
+    });
+}
+
+function dismissFullscreenAlert() {
+    const audio = $("#alertAudio");
+    audio.pause();
+    audio.currentTime = 0;
+    $("#alertOverlay").classList.remove("show");
+    document.body.style.overflow = "";
+    activeFullscreenAlertId = null;
+}
+
+function triggerPresetAlert(id) {
+    if (!adminUnlocked) return;
+    const preset = rowsFor("alertPresets").find(item => String(item.id) === String(id));
+    if (!preset || preset.active === "Non") {
+        showToast("Cette alerte prédéfinie est désactivée.", "error");
+        return;
+    }
+    const alert = {
+        id: makeId(),
+        title: preset.title || preset.name || "Alerte institutionnelle",
+        type: preset.type || "Alerte",
+        service: preset.service || "Tous",
+        content: preset.content || "",
+        audioUrl: preset.audioUrl || "",
+        active: "Active",
+        broadcast: true,
+        createdAt: new Date().toISOString(),
+        startAt: new Date().toISOString()
+    };
+    rowsFor("alerts").unshift(alert);
+    knownAlertIds.add(String(alert.id));
+    logAction("Diffusion d'une alerte sonore et visuelle", { title: alert.title, service: alert.service });
+    scheduleSave();
+    showFullscreenAlert(alert);
+    notifyDiscord(alert.service, { title: `ALERTE — ${alert.title}`, content: alert.content });
+    showToast("Alerte diffusée aux portails connectés.", "success");
+}
+
+
+/* ------------------------------------------------
    U. ÉVÉNEMENTS GLOBAUX ET DÉMARRAGE
    ------------------------------------------------ */
 
@@ -3728,9 +4134,6 @@ function bindGlobalEvents() {
         $("#drawerBackdrop").classList.remove("show");
     });
 
-    $("#syncButton").addEventListener("click", syncNow);
-    $("#refreshButton").addEventListener("click", refreshCloud);
-
     $("#userChip").addEventListener("click", () => {
         if (currentUser) {
             const disconnect = askConfirmation(
@@ -3743,17 +4146,26 @@ function bindGlobalEvents() {
         }
     });
 
-    $("#loginCancel").addEventListener("click", closeLogin);
+    $("#loginCancel").addEventListener("click", () => {
+        const requested = pendingPortal;
+        closeLogin();
+        if (["police", "bspn", "samu", "igpn"].includes(requested)) navigate("home");
+    });
+
+    $("#alertDismiss").addEventListener("click", dismissFullscreenAlert);
+    $("#alertAudioEnable").addEventListener("click", enableAlertAudio);
 
     $("#loginForm").addEventListener("submit", event => {
         event.preventDefault();
 
         const matricule = $("#loginMatricule").value;
         const pin = $("#loginPin").value;
+        const portalCode = $("#loginPortalCode").value;
 
-        const success = connectMember(matricule, pin);
+        const success = connectMember(matricule, pin, portalCode);
 
         $("#loginError").classList.toggle("show", !success);
+        if (!success) $("#loginError").textContent = "Code du portail, matricule ou code personnel incorrect, ou compte non autorisé.";
     });
 
     $("#modalClose").addEventListener("click", closeModal);
@@ -3788,6 +4200,7 @@ async function initializeApp() {
     try {
         loadLocal();
         validateData();
+        seedKnownAlertIds();
         restoreSession();
         bindGlobalEvents();
         renderPage("home");
@@ -3810,8 +4223,7 @@ async function initializeApp() {
     // facultatif et possède une limite de temps : il ne bloque plus le portail.
     const libraryReady = await loadSupabaseLibrary(5000);
     if (!libraryReady) {
-        setSyncState("offline", "Mode local — SDK cloud inaccessible");
-        showToast("Le portail fonctionne en mode local. Le serveur Supabase ou le CDN est inaccessible.", "error");
+        setSyncState("offline", "Mode local");
         return;
     }
 
@@ -3840,13 +4252,11 @@ async function initializeApp() {
     const cloudResult = await Promise.race([cloudTask, timeoutTask]);
 
     if (cloudResult === "timeout") {
-        setSyncState("error", "Cloud lent — mode local actif");
-        showToast("Le portail est ouvert en mode local. La connexion Supabase prend trop de temps.", "error");
+        setSyncState("error", "Mode local");
         // cloudTask reste surveillée : si la réponse arrive plus tard,
         // readCloud appliquera les données et l'écran sera actualisé.
     } else if (cloudResult === false) {
-        setSyncState("error", "Cloud indisponible — mode local");
-        showToast("Supabase est indisponible ou la table rp_v6_data n'est pas configurée. Le mode local reste utilisable.", "error");
+        setSyncState("error", "Mode local");
     }
 }
 
