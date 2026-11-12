@@ -1291,6 +1291,7 @@ let realtimeChannel = null;
 let lastCloudUpdate = null;
 
 let autosaveTimer = null;
+let alertPollingTimer = null;
 let currentSearch = "";
 let currentFilter = "all";
 let pendingPortal = null;
@@ -2083,6 +2084,7 @@ async function readCloud() {
         }
 
         subscribeToCloudChanges();
+        startAlertPolling();
         setSyncState("online", "Synchronisé");
         return true;
     } catch (error) {
@@ -2134,6 +2136,38 @@ async function writeCloud() {
     }
 }
 
+/*
+   Secours de diffusion des alertes : Supabase Realtime peut ne pas être
+   activé dans la publication PostgreSQL du projet. Cette vérification
+   légère relit uniquement le document partagé et ne remplace pas les
+   données locales des autres modules.
+*/
+function startAlertPolling() {
+    if (alertPollingTimer || !cloudAvailable || !supabase) return;
+    alertPollingTimer = window.setInterval(() => {
+        if (document.visibilityState === "hidden") return;
+        pollCloudAlerts();
+    }, 3000);
+}
+
+async function pollCloudAlerts() {
+    if (!cloudAvailable || !supabase || document.visibilityState === "hidden") return;
+    try {
+        const result = await supabase
+            .from("rp_v6_data")
+            .select("data")
+            .eq("id", CLOUD_ROW_ID)
+            .maybeSingle();
+        if (result.error) throw result.error;
+        if (result.data && result.data.data) {
+            const cloudData = normalizeData(result.data.data);
+            processIncomingAlerts(cloudData.alerts, false);
+        }
+    } catch (error) {
+        console.warn("Vérification périodique des alertes impossible", error);
+    }
+}
+
 function subscribeToCloudChanges() {
     if (!cloudAvailable || !supabase || realtimeChannel) return;
 
@@ -2163,10 +2197,7 @@ function subscribeToCloudChanges() {
                     const incoming = normalizeData(payload.new.data);
                     data = incoming;
                     lastCloudUpdate = incomingStamp;
-                    
-                    // Permet d'intercepter l'alerte sur le poste des autres utilisateurs connectés
                     processIncomingAlerts(rowsFor("alerts"), false);
-
                     saveLocal();
 
                     if (currentPage === "admin" && !adminUnlocked) {
@@ -4085,11 +4116,8 @@ function processIncomingAlerts(alertList, initialLoad = false) {
         if (!id || knownAlertIds.has(id)) continue;
         knownAlertIds.add(id);
         const created = new Date(alert.createdAt || alert.startAt || 0).getTime();
-        const recent = Number.isFinite(created) && now - created < 30 * 1000; // Fenêtre élargie à 30 secondes pour le temps réel
-        
-        // Si l'alerte vient d'être créée par un admin et diffusée
+        const recent = Number.isFinite(created) && now - created < 10 * 60 * 1000;
         if (alert.broadcast === true && (!initialLoad || recent) && alert.active !== "Désactivée") {
-            // S'assure qu'un utilisateur standard ou un autre agent la reçoit aussi
             showFullscreenAlert(alert);
         }
     }
@@ -4157,7 +4185,7 @@ function dismissFullscreenAlert() {
     activeFullscreenAlertId = null;
 }
 
-async function triggerPresetAlert(id) {
+function triggerPresetAlert(id) {
     if (!adminUnlocked) return;
     const preset = rowsFor("alertPresets").find(item => String(item.id) === String(id));
     if (!preset || preset.active === "Non") {
@@ -4178,12 +4206,8 @@ async function triggerPresetAlert(id) {
     };
     rowsFor("alerts").unshift(alert);
     knownAlertIds.add(String(alert.id));
-    
     logAction("Diffusion d'une alerte sonore et visuelle", { title: alert.title, service: alert.service });
-    
-    // Écriture immédiate dans Supabase pour propager l'alerte aux autres navigateurs
-    await writeCloud();
-
+    scheduleSave();
     showFullscreenAlert(alert);
     notifyDiscord(alert.service, { title: `ALERTE — ${alert.title}`, content: alert.content });
     showToast("Alerte diffusée aux portails connectés.", "success");
