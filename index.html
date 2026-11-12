@@ -2163,7 +2163,10 @@ function subscribeToCloudChanges() {
                     const incoming = normalizeData(payload.new.data);
                     data = incoming;
                     lastCloudUpdate = incomingStamp;
+                    
+                    // AJOUTE CETTE LIGNE POUR DÉCLENCHER L'ALERTE CHEZ LES CLIENTS CONNECTÉS :
                     processIncomingAlerts(rowsFor("alerts"), false);
+
                     saveLocal();
 
                     if (currentPage === "admin" && !adminUnlocked) {
@@ -4082,8 +4085,11 @@ function processIncomingAlerts(alertList, initialLoad = false) {
         if (!id || knownAlertIds.has(id)) continue;
         knownAlertIds.add(id);
         const created = new Date(alert.createdAt || alert.startAt || 0).getTime();
-        const recent = Number.isFinite(created) && now - created < 10 * 60 * 1000;
+        const recent = Number.isFinite(created) && now - created < 30 * 1000; // Fenêtre élargie à 30 secondes pour le temps réel
+        
+        // Si l'alerte vient d'être créée par un admin et diffusée
         if (alert.broadcast === true && (!initialLoad || recent) && alert.active !== "Désactivée") {
+            // S'assure qu'un utilisateur standard ou un autre agent la reçoit aussi
             showFullscreenAlert(alert);
         }
     }
@@ -4151,7 +4157,7 @@ function dismissFullscreenAlert() {
     activeFullscreenAlertId = null;
 }
 
-function triggerPresetAlert(id) {
+async function triggerPresetAlert(id) {
     if (!adminUnlocked) return;
     const preset = rowsFor("alertPresets").find(item => String(item.id) === String(id));
     if (!preset || preset.active === "Non") {
@@ -4172,8 +4178,12 @@ function triggerPresetAlert(id) {
     };
     rowsFor("alerts").unshift(alert);
     knownAlertIds.add(String(alert.id));
+    
     logAction("Diffusion d'une alerte sonore et visuelle", { title: alert.title, service: alert.service });
-    scheduleSave();
+    
+    // Sauvegarde immédiate dans Supabase pour propager l'alerte en temps réel à tout le monde
+    await writeCloud();
+
     showFullscreenAlert(alert);
     notifyDiscord(alert.service, { title: `ALERTE — ${alert.title}`, content: alert.content });
     showToast("Alerte diffusée aux portails connectés.", "success");
