@@ -2164,7 +2164,7 @@ function subscribeToCloudChanges() {
                     data = incoming;
                     lastCloudUpdate = incomingStamp;
                     
-                    // AJOUTE CETTE LIGNE POUR DÉCLENCHER L'ALERTE CHEZ LES CLIENTS CONNECTÉS :
+                    // Permet d'intercepter l'alerte sur le poste des autres utilisateurs connectés
                     processIncomingAlerts(rowsFor("alerts"), false);
 
                     saveLocal();
@@ -4181,7 +4181,7 @@ async function triggerPresetAlert(id) {
     
     logAction("Diffusion d'une alerte sonore et visuelle", { title: alert.title, service: alert.service });
     
-    // Sauvegarde immédiate dans Supabase pour propager l'alerte en temps réel à tout le monde
+    // Écriture immédiate dans Supabase pour propager l'alerte aux autres navigateurs
     await writeCloud();
 
     showFullscreenAlert(alert);
