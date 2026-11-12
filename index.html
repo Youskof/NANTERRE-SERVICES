@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#09111f">
 <meta name="description" content="Nanterre Services - portail institutionnel RP">
-<title>Nanterre Services | Portail institutionnel V6.1</title>
+<title>Nanterre Services | Portail institutionnel V6.2</title>
 <style>
 :root {
     --bg: #080f1c;
@@ -984,6 +984,12 @@ button[data-action="print"], button[onclick*="print"] { display: none !important
 
 .admin-entry { display:flex; align-items:center; gap:10px; width:100%; min-height:38px; margin:0 0 10px; padding:7px 11px; border:1px solid #dce3eb; border-radius:9px; color:#526174; background:#f8fafc; font-size:12px; font-weight:600; text-align:left; cursor:pointer; }
 .admin-entry:hover { color:#145ba8; background:#eef5fc; border-color:#c9def6; }
+
+/* V6.2 — Gestion des permissions et des liaisons Discord */
+.webhook-help { margin: 0 0 16px; padding: 14px 16px; border: 1px solid #cbdff4; border-radius: 11px; background: #eef5fc; color: #24405e; font-size: 13px; }
+.webhook-help strong { display:block; margin-bottom:4px; }
+.permission-pill { display:inline-flex; padding:3px 8px; border-radius:20px; background:#e8f1fc; color:#145ba8; font-size:11px; font-weight:700; }
+
 </style>
 </head>
 <body>
@@ -1055,7 +1061,7 @@ button[data-action="print"], button[onclick*="print"] { display: none !important
             </div>
             <p class="sidebar-help">Choisissez simplement l'espace dont vous avez besoin.</p>
         </div>
-        <div class="sidebar-foot">Nanterre RP · Version 6.1</div>
+        <div class="sidebar-foot">Nanterre RP · Version 6.2</div>
     </aside>
 
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
@@ -1313,6 +1319,7 @@ const MODULES = {
             ["service", "Service historique", "select", false, ["Police nationale", "BSPN", "SAMU 92", "IGPN", "Mairie", "Citoyen"]],
             ["grade", "Grade / fonction", "text", true],
             ["role", "Permission", "select", false, ["agent", "officer", "igpn", "hc"]],
+            ["manageRoster", "Autorisé à gérer les effectifs de son service", "select", false, ["Non", "Oui"]],
             ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
             ["pin", "Code personnel RP", "password"],
             ["active", "Compte actif", "select", false, ["Oui", "Non"]],
@@ -1335,6 +1342,7 @@ const MODULES = {
             ["grade", "Grade / fonction", "text", true],
             ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
             ["role", "Permission", "select", false, ["agent", "officer", "hc"]],
+            ["manageRoster", "Autorisé à gérer les effectifs BSPN", "select", false, ["Non", "Oui"]],
             ["pin", "Code personnel RP", "password"],
             ["active", "Compte actif", "select", false, ["Oui", "Non"]],
             ["notes", "Observations", "textarea", false, null, true]
@@ -1356,6 +1364,7 @@ const MODULES = {
             ["grade", "Grade / fonction", "text", true],
             ["status", "Disponibilité", "select", false, ["Disponible", "En service", "Occupé", "Repos", "Absent", "Vacant"]],
             ["role", "Permission", "select", false, ["agent", "officer", "hc"]],
+            ["manageRoster", "Autorisé à gérer les effectifs SAMU 92", "select", false, ["Non", "Oui"]],
             ["pin", "Code personnel RP", "password"],
             ["active", "Compte actif", "select", false, ["Oui", "Non"]],
             ["notes", "Observations", "textarea", false, null, true]
@@ -1707,14 +1716,21 @@ const MODULES = {
         icon: "◈",
         description: "Destinations Discord utilisées pour les notifications RP.",
         service: "all",
-        columns: ["name", "service", "url", "active", "events"],
+        columns: ["name", "service", "channelLabel", "active", "events"],
         primary: "name",
         fields: [
-            ["name", "Nom de la destination", "text", true],
-            ["service", "Service", "select", false, ["Tous", "Police nationale", "BSPN", "SAMU 92", "IGPN", "Citoyens"]],
-            ["url", "URL du webhook Discord", "url", true, null, true],
-            ["active", "Activation", "select", false, ["Oui", "Non"]],
-            ["events", "Événements", "text"]
+            ["name", "Nom de la liaison (ex. Annonces Police)", "text", true],
+            ["service", "Service concerné", "select", true, ["Tous", "Police nationale", "BSPN", "SAMU 92", "IGPN", "Citoyens"]],
+            ["channelLabel", "Nom du salon Discord (repère)", "text"],
+            ["url", "Lien du webhook Discord", "url", true, null, true],
+            ["active", "Liaison activée", "select", false, ["Oui", "Non"]],
+            ["events", "Événements à transmettre (laisser vide = tous)", "text"],
+            ["embedTitle", "Titre de l'embed", "text"],
+            ["embedDescription", "Texte détaillé de l'embed", "textarea", false, null, true],
+            ["embedColor", "Couleur de l'embed (hexadécimal, ex. 1769C2)", "text"],
+            ["embedFooter", "Pied de message / signature", "text"],
+            ["botName", "Nom affiché du bot", "text"],
+            ["botAvatar", "URL de l'avatar du bot (facultatif)", "url"]
         ]
     },
 
@@ -2445,6 +2461,11 @@ function serviceKeyForCurrentUser() {
     return "";
 }
 
+const ADMIN_ONLY_MODULES = new Set([
+    "alerts", "alertPresets", "webhooks",
+    "bspnAnnouncements", "citizenNews"
+]);
+
 function mayEdit(key) {
     if (adminUnlocked) return true;
 
@@ -2453,6 +2474,9 @@ function mayEdit(key) {
     if (!config || config.readOnly || !currentUser) {
         return false;
     }
+
+    // Les annonces officielles, alertes et liaisons Discord sont pilotées uniquement par l'administration.
+    if (ADMIN_ONLY_MODULES.has(key)) return false;
 
     const role = String(currentUser.role || "agent").toLowerCase();
 
@@ -2471,7 +2495,10 @@ function mayEdit(key) {
     }
 
     if (["roster", "bspnRoster", "samuRoster"].includes(key)) {
-        return role === "officer";
+        const expectedService = key === "roster" ? "police" : key === "bspnRoster" ? "bspn" : "samu";
+        const userService = serviceKeyForCurrentUser();
+        const explicitPermission = String(currentUser.manageRoster || "Non").toLowerCase() === "oui";
+        return userService === expectedService && explicitPermission;
     }
 
     if (config.service === "all") {
@@ -3158,8 +3185,8 @@ function renderAdmin() {
             ${renderAdminGroup({title:"Journal et alertes générales",description:"Suivi administratif et configuration des diffusions.",modules:["alerts","auditLogs"]})}
         `;
     } else if (adminTab === "webhooks") {
-        body = renderAdminGroup({title:"Liaisons Discord enregistrées",description:"Ajoutez chaque destination une fois. La liste reste visible et modifiable ici.",modules:["webhooks"]});
-        body += `<div class="notice"><span>i</span><div><strong>À propos des liens Discord</strong><p>Utilisez des webhooks de salons RP. Les URL restent visibles dans le navigateur aux personnes qui inspectent le site.</p></div></div>`;
+        body = `<div class="webhook-help"><strong>Configuration guidée des liaisons Discord</strong>Crée une liaison par salon : donne-lui un nom, choisis le service, colle l'URL du webhook puis personnalise le titre, le texte, la couleur et la signature de l'embed. Les champs de présentation sont réutilisés pour les notifications du service. Utilise le bouton de test pour vérifier la destination.</div>` + renderAdminGroup({title:"Liaisons Discord enregistrées",description:"Toutes les destinations sont centralisées ici. Elles restent visibles, modifiables et testables par l'administration.",modules:["webhooks"]});
+        body += `<div class="notice warning"><span>!</span><div><strong>À savoir</strong><p>Les URL de webhook sont sensibles : elles sont accessibles depuis le navigateur. Utilise uniquement des salons RP et ne colle jamais de webhook privé ou professionnel.</p></div></div>`;
     } else if (adminTab === "alerts") {
         body = renderAdminGroup({title:"Alertes à diffuser",description:"Créez des modèles sonores puis utilisez Diffuser pour prévenir tous les portails ouverts.",modules:["alertPresets","alerts"]});
         body += `<div class="notice warning"><span>!</span><div><strong>Lecture audio</strong><p>Pour la lecture automatique, chaque navigateur doit avoir interagi au moins une fois avec la page. Utilisez un lien direct vers le fichier audio, par exemple un lien CDN Discord se terminant par .mp3, .wav ou .ogg. Un lien vers un message Discord n'est pas un fichier audio direct.</p></div></div>`;
@@ -3737,6 +3764,12 @@ function saveRecord(key, id = null) {
     }
 
     if (["roster", "bspnRoster", "samuRoster"].includes(key)) {
+        // Un responsable d'effectifs ne peut ni s'attribuer un grade ni déléguer des droits.
+        if (!adminUnlocked) {
+            const previousMember = id ? rowsFor(key).find(member => String(member.id) === String(id)) : null;
+            values.role = previousMember?.role || "agent";
+            values.manageRoster = previousMember?.manageRoster || "Non";
+        }
         if (!normalize(values.matricule) && key !== "roster") {
             values.matricule = nextServiceMatricule(key);
         }
@@ -3939,29 +3972,53 @@ function closeModal() {
 
 async function notifyDiscord(service, record) {
     const routes = rowsFor("webhooks").filter(route => {
-        const enabled = String(route.active).toLowerCase() === "oui";
+        const enabled = String(route.active ?? "Oui").toLowerCase() === "oui";
         const matchingService = route.service === "Tous" || route.service === service;
         const validURL = /^https:\/\/discord(?:app)?\.com\/api\/webhooks\//i.test(String(route.url || ""));
-
-        return enabled && matchingService && validURL;
+        const eventFilter = String(route.events || "").trim();
+        const eventName = String(record.event || record.type || "").toLowerCase();
+        const eventAllowed = !eventFilter || !eventName || eventFilter.split(/[;,]/).some(v => eventName.includes(v.trim().toLowerCase()));
+        return enabled && matchingService && validURL && eventAllowed;
     });
 
     if (!routes.length) return;
 
-    const title = record.title || record.name || "Nouvelle notification";
-    const content = record.content || record.message || "";
+    const serviceLabel = SERVICE_NAMES[String(service || "").toLowerCase()] || String(service || "Nanterre Services");
+    const title = String(record.title || record.name || "Nouvelle notification").slice(0, 256);
+    const description = String(record.content || record.message || record.description || "Une nouvelle information est disponible.").slice(0, 4000);
 
     for (const route of routes) {
         try {
-            await fetch(route.url, {
+            const embedTitle = String(route.embedTitle || title).replaceAll("{titre}", title).slice(0,256);
+            const embedDescription = String(route.embedDescription || description)
+                .replaceAll("{titre}", title)
+                .replaceAll("{message}", description)
+                .replaceAll("{service}", serviceLabel)
+                .slice(0,4000);
+            const rawColor = String(route.embedColor || "1769C2").replace(/^#/, "");
+            const color = /^[0-9a-f]{6}$/i.test(rawColor) ? parseInt(rawColor,16) : 0x1769C2;
+            const embed = {
+                title: embedTitle || title,
+                description: embedDescription || description,
+                color,
+                fields: [{ name: "Service", value: serviceLabel.slice(0,1024), inline: true }, { name: "Portail", value: "Nanterre Services RP", inline: true }],
+                timestamp: new Date().toISOString()
+            };
+            if (route.embedFooter) embed.footer = { text: String(route.embedFooter).slice(0,2048) };
+            const payload = {
+                username: route.botName || "Nanterre Services",
+                embeds: [embed],
+                allowed_mentions: { parse: [] }
+            };
+            if (route.botAvatar) payload.avatar_url = route.botAvatar;
+            const response = await fetch(route.url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    content: `**${title}**\n${String(content).slice(0,1700)}`
-                })
+                body: JSON.stringify(payload)
             });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
         } catch (error) {
-            console.warn("Webhook Discord inaccessible", error);
+            console.warn("Webhook Discord inaccessible", route.name, error);
         }
     }
 }
@@ -3985,7 +4042,17 @@ async function testWebhook(id) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                content: `Test de notification Nanterre Services V${APP_VERSION} — ${route.name}`
+                username: route.botName || "Nanterre Services",
+                ...(route.botAvatar ? { avatar_url: route.botAvatar } : {}),
+                embeds: [{
+                    title: route.embedTitle || "Test de liaison Discord",
+                    description: route.embedDescription || `La liaison **${route.name}** fonctionne correctement. Ceci est un message de test Nanterre Services.`,
+                    color: (() => { const c = String(route.embedColor || "1769C2").replace(/^#/, ""); return /^[0-9a-f]{6}$/i.test(c) ? parseInt(c,16) : 0x1769C2; })(),
+                    fields: [{ name: "Service", value: route.service || "Tous", inline: true }, { name: "Destination", value: route.channelLabel || route.name, inline: true }],
+                    ...(route.embedFooter ? { footer: { text: route.embedFooter } } : {}),
+                    timestamp: new Date().toISOString()
+                }],
+                allowed_mentions: { parse: [] }
             })
         });
 
@@ -4324,8 +4391,10 @@ document.addEventListener("DOMContentLoaded", initializeApp);
    Un utilisateur connecté est identifié par son matricule.
    Un compte désactivé ne peut pas se connecter.
    Le rôle hc peut gérer tous les modules.
-   Le rôle igpn possède des autorisations de contrôle élargies.
-   Un agent standard ne peut gérer que son service.
+   Les annonces, alertes et webhooks sont modifiables uniquement par l'administration.
+   Le champ manageRoster donne à un haut gradé le droit de gérer les matricules de son service.
+   Cette permission ne donne pas accès aux autres registres ni à l'administration générale.
+   Un agent standard consulte les données sans pouvoir les modifier.
    Un visiteur peut consulter les pages publiques.
 
    Les données de ce portail sont des données de jeu.
@@ -4349,6 +4418,7 @@ document.addEventListener("DOMContentLoaded", initializeApp);
    Ne pas supprimer les tables précédentes du projet.
    Ne pas modifier les données présentes dans les anciens modules.
 
+   Les notifications Discord utilisent des embeds personnalisables par liaison : titre, description, couleur, signature, nom et avatar du bot.
    Les notifications Discord sont envoyées directement depuis le navigateur.
    Un webhook configuré est donc visible par les utilisateurs.
    Une personne malveillante pourrait l'utiliser pour spammer le salon.
